@@ -1,1 +1,92 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Servicios de Consultoría y Capacitación</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF; /* Blanco */
+            color: #003B5C; /* Azul Oscuro */
+        }
+        header {
+            background-color: #FFB81C; /* Amarillo Minero */
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            background-color: #5C6B6B; /* Gris Acero */
+            padding: 10px;
+        }
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: center; /* Centrar elementos del menú */
+        }
+        nav li {
+            display: inline;
+            margin: 0 10px; /* Espacio entre elementos del menú */
+        }
+        nav a {
+            color: #FFFFFF; /* Blanco */
+            text-decoration: none;
+            padding: 5px 10px; /* Espacio alrededor del texto del enlace */
+        }
+        main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column; /* Organizar elementos verticalmente */
+            align-items: center; /* Centrar elementos horizontalmente */
+        }
+        .image-link {
+            display: block; /* Convertir la imagen en un enlace de bloque */
+            margin: 20px auto; /* Centrar la imagen horizontalmente */
+            max-width: 50%; /* Ajustar el ancho máximo de la imagen */
+        }
+        footer {
+            background-color: #003B5C; /* Azul Oscuro */
+            color: #FFFFFF; /* Blanco */
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="isotipo_anupro360.png" alt="Isotipo Anupro360" width="200">
+        <h1>Anupro360 Servicios de Consultoría y Capacitación</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="quienes_somos.html">Quiénes somos</a></li>
+            <li><a href="mision.html">Misión</a></li>
+            <li><a href="vision.html">Visión</a></li>
+            <li><a href="consultoria.html">Consultoría</a></li>
+            <li><a href="capacitacion.html">Capacitación</a></li>
+            <li><a href="contactenos.html">Contáctenos</a></li>
+        </ul>
+    </nav>
+    <main>
+        <img src="imagen_consultoria.jpg" alt="Consultoría" class="image-link" usemap="#consultoria_map">
+        <map name="consultoria_map">
+            <area shape="rect" coords="0,0,300,300" href="consultoria.html" alt="Consultoría">
+        </map>
+        <img src="imagen_capacitacion.jpg" alt="Capacitación" class="image-link" usemap="#capacitacion_map">
+        <map name="capacitacion_map">
+            <area shape="rect" coords="0,0,300,300" href="capacitacion.html" alt="Capacitación">
+        </map>
+    </main>
+    <footer>
+        <p>&copy; 2025 Anupro360 Servicios de Consultoría y Capacitación</p>
+    </footer>
+</body>
+</html><h2>Verificación de Autenticidad</h2>
+<form id="formulario">
+    <label for="codigo">Código:</label>
+    <input type="text" id="codigo" name="codigo">
+    <button type="submit">Verificar</button>
+</form>
+<div id="resultado"></div>
+<script src="script.js"></script>
