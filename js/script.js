@@ -1,5 +1,5 @@
 document.getElementById('formulario').addEventListener('submit', function(event) {
-    event.preventDefault();
+    event.preventDefault(); // Asegúrate de que esta línea esté presente
     const codigo = document.getElementById('codigo').value;
     console.log('Código ingresado:', codigo);
 
