@@ -1,10 +1,12 @@
 document.getElementById('formulario').addEventListener('submit', function(event) {
     event.preventDefault();
     const codigo = document.getElementById('codigo').value;
+    console.log('Código ingresado:', codigo);
 
-    fetch('URL_DE_TU_APPS_SCRIPT?codigo=' + codigo) // https://script.google.com/macros/s/AKfycbzXyjQySAS-dmkdqW_rpXWlbbIDNAgCM7nO_IawM6FyNl2NqzyjBU7qqSaAiPnqtT_w/exec
+    fetch('https://script.google.com/macros/s/AKfycbzXyjQySAS-dmkdqW_rpXWlbbIDNAgCM7nO_IawM6FyNl2NqzyjBU7qqSaAiPnqtT_w/exec?codigo=' + codigo)
         .then(response => response.json())
         .then(data => {
+            console.log('Datos recibidos:', data);
             const resultadoDiv = document.getElementById('resultado');
             if (data.error) {
                 resultadoDiv.textContent = data.error;
@@ -25,6 +27,7 @@ document.getElementById('formulario').addEventListener('submit', function(event)
         })
         .catch(error => {
             console.error("Error al obtener los datos:", error);
+            console.log('Error:', error);
             document.getElementById('resultado').textContent = 'Ocurrió un error al verificar el código.';
         });
 });
