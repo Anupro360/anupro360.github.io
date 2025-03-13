@@ -1,20 +1,30 @@
 document.getElementById('formulario').addEventListener('submit', function(event) {
     event.preventDefault();
     const codigo = document.getElementById('codigo').value;
-    const urlHojaCalculo = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpOcyDvHsUh8jtZDNt_jKXBuZBz9zms_KaUL0TfKCRvLfAkj5q17Ooudgyqq0RjWVTWDBjyCFFX7IS/pub?gid=0&single=true&output=csv";
 
-    fetch(urlHojaCalculo)
-        .then(response => response.text())
+    fetch('URL_DE_TU_APPS_SCRIPT?codigo=' + codigo) // https://script.google.com/macros/s/AKfycbzXyjQySAS-dmkdqW_rpXWlbbIDNAgCM7nO_IawM6FyNl2NqzyjBU7qqSaAiPnqtT_w/exec
+        .then(response => response.json())
         .then(data => {
-            const codigos = data.split("\n").map(codigo => codigo.trim());
-            if (codigos.includes(codigo)) {
-                document.getElementById('resultado').textContent = 'Código válido.';
+            const resultadoDiv = document.getElementById('resultado');
+            if (data.error) {
+                resultadoDiv.textContent = data.error;
             } else {
-                document.getElementById('resultado').textContent = 'Código inválido.';
+                resultadoDiv.innerHTML = `
+                    <p>Nombre: ${data.nombre}</p>
+                    <p>Rut: ${data.rut}</p>
+                    <p>Capacitación: ${data.capacitacion}</p>
+                    <p>Equipo 1: ${data.equipo1}</p>
+                    <p>Equipo 2: ${data.equipo2}</p>
+                    <p>Equipo 3: ${data.equipo3}</p>
+                    <p>Equipo 4: ${data.equipo4}</p>
+                    <p>Fecha inicio: ${data.fechaInicio}</p>
+                    <p>Fecha Termino: ${data.fechaTermino}</p>
+                    <p>Titulado: ${data.titulado}</p>
+                `;
             }
         })
         .catch(error => {
-            console.error("Error al cargar la hoja de cálculo:", error);
+            console.error("Error al obtener los datos:", error);
             document.getElementById('resultado').textContent = 'Ocurrió un error al verificar el código.';
         });
 });
