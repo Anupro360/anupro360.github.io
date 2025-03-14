@@ -7,7 +7,7 @@
 <body>
     <header>
         <img src="isotipo_anupro360.svg" alt="Isotipo Anupro360" width="200">
-        <h1>Anupro360 Servicios de Consultoría y Capacitación</h1>
+        <h1></h1>
     </header>
     <nav>
         <ul>
@@ -21,10 +21,10 @@
         </ul>
     </nav>
     <main>
-        <section>
+        <section class="vision-principal">
             <h2>Visión</h2>
-            <img src="imagen_vision.webp" alt="Imagen Visión" class="imagen-principal">
-            <article>
+            <img src="imagen_vision.webp" alt="Imagen Visión" class="imagen-vision-img">
+            <article class="vision-contenido">
                 <p>
                     En Anupro360, nuestra visión es ser reconocidos como líderes en la prestación de servicios de capacitación y consultoría en la industria minera y otros sectores productivos. Buscamos ser un referente en la formación de profesionales altamente competentes y en la entrega de soluciones innovadoras que impulsen el desarrollo y la eficiencia de nuestros clientes.
                 </p>
@@ -34,5 +34,15 @@
     <footer>
         <p>&copy; 2025 Anupro360 Servicios de Consultoría y Capacitación</p>
     </footer>
+    <section class="autenticidad">
+        <h2>Verificación de Autenticidad</h2>
+        <form id="formulario">
+            <label for="codigo">Código:</label>
+            <input type="text" id="codigo" name="codigo">
+            <button type="submit">Verificar</button>
+        </form>
+        <div id="resultado"></div>
+    </section>
+    <script src="script.js"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@
 <body>
     <header>
         <img src="isotipo_anupro360.svg" alt="Isotipo Anupro360" width="200">
-        <h1>Anupro360 Servicios de Consultoría y Capacitación</h1>
+        <h1></h1>
     </header>
     <nav>
         <ul>
@@ -21,12 +21,30 @@
         </ul>
     </nav>
     <main>
-        <section>
+        <section class="imagen-principal">
+            <h2>Consultoría</h2>
+            <img src="imagen_consultoria.webp" alt="Consultoría" usemap="#consultoria_map">
+            <map name="consultoria_map">
+                <area shape="rect" coords="0,0,300,300" href="consultoria.html" alt="Consultoría">
+            </map>
+        </section>
+        <section class="contenido-consultoria">
             <h2>En construcción. Disculpe las molestias.</h2>
+            <p>Estamos trabajando para ofrecerte la mejor información sobre nuestros servicios de consultoría. ¡Vuelve pronto!</p>
         </section>
     </main>
     <footer>
         <p>&copy; 2025 Anupro360 Servicios de Consultoría y Capacitación</p>
     </footer>
+    <section class="autenticidad">
+        <h2>Verificación de Autenticidad</h2>
+        <form id="formulario">
+            <label for="codigo">Código:</label>
+            <input type="text" id="codigo" name="codigo">
+            <button type="submit">Verificar</button>
+        </form>
+        <div id="resultado"></div>
+    </section>
+    <script src="script.js"></script>
 </body>
 </html>

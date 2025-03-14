@@ -7,7 +7,7 @@
 <body>
     <header>
         <img src="isotipo_anupro360.svg" alt="Isotipo Anupro360" width="200">
-        <h1>Anupro360 Servicios de Consultoría y Capacitación</h1>
+        <h1></h1>
     </header>
     <nav>
         <ul>
@@ -21,10 +21,10 @@
         </ul>
     </nav>
     <main>
-        <section>
+        <section class="quienes-somos-principal">
             <h2>Quiénes somos</h2>
-            <img src="imagen_quienes_somos.webp" alt="Imagen Quiénes somos" class="imagen-principal">
-            <article>
+            <img src="imagen_quienes_somos.webp" alt="Imagen Quiénes somos" class="imagen-quienes-somos-img">
+            <article class="quienes-somos-contenido">
                 <p>
                     En Anupro360, nos especializamos en la capacitación y consultoría para la industria minera y otros sectores productivos. Nuestro principal enfoque es la formación de operadores de equipos pesados, ofreciendo certificaciones alineadas con el Marco de Cualificación Minero y los estándares exigidos en la gran minería de Chile.
                 </p>
@@ -37,5 +37,15 @@
     <footer>
         <p>&copy; 2025 Anupro360 Servicios de Consultoría y Capacitación</p>
     </footer>
+    <section class="autenticidad">
+        <h2>Verificación de Autenticidad</h2>
+        <form id="formulario">
+            <label for="codigo">Código:</label>
+            <input type="text" id="codigo" name="codigo">
+            <button type="submit">Verificar</button>
+        </form>
+        <div id="resultado"></div>
+    </section>
+    <script src="script.js"></script>
 </body>
 </html>

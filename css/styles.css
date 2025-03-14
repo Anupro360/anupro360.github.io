@@ -1,61 +1,198 @@
+/* Estilos generales */
 body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #FFFFFF;
-    color: #003B5C;
+    background-color: #FFFFFF; /* Blanco */
+    color: #333; /* Gris oscuro para texto */
 }
 
+.container {
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+/* Encabezado */
 header {
-    background-color: #FFFFFF;
-    padding: 20px;
-    text-align: center;
+    background-color: #FFFFFF; /* Blanco */
+    color: #003B5C; /* Azul Oscuro para el texto del encabezado */
+    padding: 20px 0;
+    text-align: center; /* Centrar el contenido del encabezado */
 }
 
+header img {
+    max-width: 200px; /* Ajustar el tamaño del isotipo */
+    height: auto;
+}
+
+header h1 {
+    margin-top: 10px; /* Espacio entre el isotipo y el título */
+    font-size: 1.5em; /* Tamaño del título */
+}
+
+/* Navegación */
 nav {
-    background-color: #5C6B6B;
-    padding: 10px;
+    background-color: #003B5C; /* Azul Oscuro */
+    padding: 10px 0;
+    text-align: center;
 }
 
 nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    text-align: center;
 }
 
-nav li {
+nav ul li {
     display: inline;
-    margin: 0 10px;
+    margin: 0 15px;
 }
 
-nav a {
-    color: #FFFFFF;
+nav ul li a {
+    color: #FFFFFF; /* Blanco */
     text-decoration: none;
-    padding: 5px 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
+nav ul li a:hover {
+    background-color: #FFB81C; /* Amarillo Minero */
+    color: #003B5C; /* Azul Oscuro */
+}
+
+/* Secciones principales */
 main {
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .imagen-principal {
-    display: block;
-    margin: 20px auto;
-    max-width: 50%;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
+.imagen-principal h2 {
+    color: #003B5C; /* Azul Oscuro */
+    margin-bottom: 10px;
+}
+
+imagen-principal img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #5C6B6B; /* Gris Acero */
+}
+
+/* Pie de página */
 footer {
-    background-color: #003B5C;
-    color: #FFFFFF;
-    padding: 10px;
+    background-color: #003B5C; /* Azul Oscuro */
+    color: #FFFFFF; /* Blanco */
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Verificación de autenticidad */
+.autenticidad {
+    background-color: #F4F4F4; /* Gris claro */
+    padding: 20px;
     text-align: center;
 }
 
-.autenticidad {
-    margin-top: 20px;
+.autenticidad h2 {
+    color: #003B5C; /* Azul Oscuro */
+    margin-bottom: 15px;
+}
+
+.autenticidad form {
+    margin-bottom: 15px;
+}
+
+.autenticidad label {
+    display: block;
+    margin-bottom: 5px;
+    color: #5C6B6B; /* Gris Acero */
+}
+
+.autenticidad input[type="text"] {
+    padding: 8px;
+    border: 1px solid #5C6B6B; /* Gris Acero */
+    border-radius: 5px;
+}
+
+.autenticidad button {
+    background-color: #FFB81C; /* Amarillo Minero */
+    color: #003B5C; /* Azul Oscuro */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.autenticidad button:hover {
+    background-color: #FF5C00; /* Naranja */
+}
+
+#resultado {
+    color: #4B6F44; /* Verde Mineral */
+    font-weight: bold;
+}/* Estilos para la página de contacto */
+.contacto-principal {
     text-align: center;
+    padding: 20px;
+}
+
+.contacto-principal h2 {
+    color: #003B5C; /* Azul Oscuro */
+    margin-bottom: 15px;
+}
+
+.contacto-principal p {
+    color: #5C6B6B; /* Gris Acero */
+}
+
+.formulario-contacto {
+    width: 80%; /* Ajusta el ancho según sea necesario */
+    max-width: 600px; /* Ancho máximo para pantallas grandes */
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #5C6B6B; /* Gris Acero */
+    border-radius: 5px;
+}
+
+.formulario-contacto h2 {
+    color: #003B5C; /* Azul Oscuro */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.formulario-contacto label {
+    display: block;
+    margin-bottom: 5px;
+    color: #5C6B6B; /* Gris Acero */
+}
+
+.formulario-contacto input[type="text"],
+.formulario-contacto input[type="email"],
+.formulario-contacto textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #5C6B6B; /* Gris Acero */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.formulario-contacto button {
+    background-color: #FFB81C; /* Amarillo Minero */
+    color: #003B5C; /* Azul Oscuro */
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.formulario-contacto button:hover {
+    background-color: #FF5C00; /* Naranja */
 }
