@@ -70,6 +70,12 @@ nav ul li a:hover {
     color: #003B5C; /* Azul Oscuro */
 }
 
+/* Estilo específico para el último elemento del menú ("Inglés") */
+nav ul li:last-child a {
+    padding-left: 12px; /* Igual al padding derecho de los otros */
+    padding-right: 12px;
+}
+
 /* Secciones principales */
 main {
     padding: 20px;
@@ -205,100 +211,4 @@ footer {
     border: 1px solid #5C6B6B; /* Gris Acero */
     border-radius: 5px;
     box-sizing: border-box;
-    font-size: 0.9em;
-}
-
-.formulario-contacto button {
-    background-color: #FFB81C; /* Amarillo Minero */
-    color: #003B5C; /* Azul Oscuro */
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 0.9em;
-}
-
-.formulario-contacto button:hover {
-    background-color: #FF5C00; /* Naranja */
-}
-
-.contact-form {
-    width: 95%; /* Ajustar ancho para ocupar más espacio en pantallas pequeñas */
-    margin: 20px auto;
-}
-
-.contact-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 0.9em;
-}
-
-.contact-form input,
-.contact-form textarea {
-    width: calc(100% - 12px); /* Ajuste para el padding */
-    padding: 8px; /* Aumentar un poco el padding para mejor toque */
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
-    font-size: 0.9em;
-}
-
-.contact-form textarea {
-    height: 120px; /* Ajustar altura para pantallas más pequeñas */
-}
-
-.contact-form button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-}
-
-.contact-form button:hover {
-    background-color: #0056b3;
-}
-
-/* Estilos específicos para pantallas más pequeñas (ejemplo: 768px de ancho máximo) */
-@media (max-width: 768px) {
-    header {
-        padding: 15px 0; /* Reducir el padding del encabezado */
-    }
-
-    header img {
-        max-width: 150px; /* Reducir el tamaño del isotipo */
-        margin-bottom: 5px;
-    }
-
-    header h1 {
-        font-size: 1.2em; /* Reducir el tamaño del título */
-    }
-
-    nav ul {
-        flex-direction: column; /* Apila los elementos del menú verticalmente */
-        align-items: stretch; /* Los elementos ocupan todo el ancho */
-    }
-
-    nav ul li {
-        display: block; /* Cada elemento en una línea */
-        margin: 0;
-        border-bottom: 1px solid #5C6B6B; /* Separadores visuales */
-    }
-
-    nav ul li:last-child {
-        border-bottom: none; /* Sin borde en el último elemento */
-    }
-
-    nav ul li a {
-        padding: 10px 15px;
-        text-align: left; /* Alinear texto a la izquierda */
-    }
-
-    .imagen-principal h2 {
-        font-size: 1.1em; /* Reducir aún más el encabezado de la sección */
-    }
 }
