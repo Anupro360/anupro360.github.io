@@ -19,15 +19,19 @@ header {
     color: #003B5C; /* Azul Oscuro para el texto del encabezado */
     padding: 20px 0;
     text-align: center; /* Centrar el contenido del encabezado */
+    display: flex; /* Para alinear isotipo y título */
+    flex-direction: column; /* Apilar verticalmente en pantallas pequeñas */
+    align-items: center; /* Centrar elementos verticalmente */
 }
 
 header img {
     max-width: 200px; /* Ajustar el tamaño del isotipo */
     height: auto;
+    margin-bottom: 10px; /* Espacio debajo del isotipo */
 }
 
 header h1 {
-    margin-top: 10px; /* Espacio entre el isotipo y el título */
+    margin-top: 0; /* Eliminar margen superior innecesario en pantallas pequeñas */
     font-size: 1.5em; /* Tamaño del título */
 }
 
@@ -42,11 +46,14 @@ nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center; /* Centrar los elementos del menú horizontalmente por defecto */
+    flex-wrap: wrap; /* Permitir que los elementos pasen a la siguiente línea en pantallas pequeñas */
 }
 
 nav ul li {
     display: inline;
-    margin: 0 15px;
+    margin: 5px 10px; /* Reducir el margen para pantallas más pequeñas */
 }
 
 nav ul li a {
@@ -55,6 +62,7 @@ nav ul li a {
     padding: 8px 12px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    display: block; /* Hacer que el enlace ocupe todo el espacio del li para mejor toque */
 }
 
 nav ul li a:hover {
@@ -75,9 +83,10 @@ main {
 .imagen-principal h2 {
     color: #003B5C; /* Azul Oscuro */
     margin-bottom: 10px;
+    font-size: 1.3em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
 }
 
-imagen-principal img {
+.imagen-principal img {
     max-width: 100%;
     height: auto;
     border: 1px solid #5C6B6B; /* Gris Acero */
@@ -89,6 +98,7 @@ footer {
     color: #FFFFFF; /* Blanco */
     text-align: center;
     padding: 10px 0;
+    font-size: 0.9em; /* Reducir el tamaño de la fuente en el pie de página */
 }
 
 /* Verificación de autenticidad */
@@ -101,6 +111,7 @@ footer {
 .autenticidad h2 {
     color: #003B5C; /* Azul Oscuro */
     margin-bottom: 15px;
+    font-size: 1.2em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
 }
 
 .autenticidad form {
@@ -111,12 +122,15 @@ footer {
     display: block;
     margin-bottom: 5px;
     color: #5C6B6B; /* Gris Acero */
+    font-size: 0.95em;
 }
 
 .autenticidad input[type="text"] {
     padding: 8px;
     border: 1px solid #5C6B6B; /* Gris Acero */
     border-radius: 5px;
+    width: calc(100% - 16px); /* Ajustar ancho con padding */
+    box-sizing: border-box;
 }
 
 .autenticidad button {
@@ -127,6 +141,7 @@ footer {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 0.95em;
 }
 
 .autenticidad button:hover {
@@ -136,7 +151,10 @@ footer {
 #resultado {
     color: #4B6F44; /* Verde Mineral */
     font-weight: bold;
-}/* Estilos para la página de contacto */
+    font-size: 0.95em;
+}
+
+/* Estilos para la página de contacto */
 .contacto-principal {
     text-align: center;
     padding: 20px;
@@ -145,42 +163,49 @@ footer {
 .contacto-principal h2 {
     color: #003B5C; /* Azul Oscuro */
     margin-bottom: 15px;
+    font-size: 1.2em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
 }
 
 .contacto-principal p {
     color: #5C6B6B; /* Gris Acero */
+    font-size: 0.95em;
+    line-height: 1.6;
 }
 
 .formulario-contacto {
-    width: 80%; /* Ajusta el ancho según sea necesario */
+    width: 95%; /* Ajustar ancho para ocupar más espacio en pantallas pequeñas */
     max-width: 600px; /* Ancho máximo para pantallas grandes */
     margin: 20px auto;
     padding: 20px;
     border: 1px solid #5C6B6B; /* Gris Acero */
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .formulario-contacto h2 {
     color: #003B5C; /* Azul Oscuro */
     text-align: center;
     margin-bottom: 20px;
+    font-size: 1.1em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
 }
 
 .formulario-contacto label {
     display: block;
     margin-bottom: 5px;
     color: #5C6B6B; /* Gris Acero */
+    font-size: 0.9em;
 }
 
 .formulario-contacto input[type="text"],
 .formulario-contacto input[type="email"],
 .formulario-contacto textarea {
-    width: 100%;
+    width: calc(100% - 12px);
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #5C6B6B; /* Gris Acero */
     border-radius: 5px;
     box-sizing: border-box;
+    font-size: 0.9em;
 }
 
 .formulario-contacto button {
@@ -191,32 +216,37 @@ footer {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 0.9em;
 }
 
 .formulario-contacto button:hover {
     background-color: #FF5C00; /* Naranja */
-}.contact-form {
-    width: 80%;
+}
+
+.contact-form {
+    width: 95%; /* Ajustar ancho para ocupar más espacio en pantallas pequeñas */
     margin: 20px auto;
 }
 
 .contact-form label {
     display: block;
     margin-bottom: 5px;
+    font-size: 0.9em;
 }
 
 .contact-form input,
 .contact-form textarea {
     width: calc(100% - 12px); /* Ajuste para el padding */
-    padding: 6px;
+    padding: 8px; /* Aumentar un poco el padding para mejor toque */
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    font-size: 0.9em;
 }
 
 .contact-form textarea {
-    height: 150px;
+    height: 120px; /* Ajustar altura para pantallas más pequeñas */
 }
 
 .contact-form button {
@@ -226,8 +256,49 @@ footer {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 0.9em;
 }
 
 .contact-form button:hover {
     background-color: #0056b3;
+}
+
+/* Estilos específicos para pantallas más pequeñas (ejemplo: 768px de ancho máximo) */
+@media (max-width: 768px) {
+    header {
+        padding: 15px 0; /* Reducir el padding del encabezado */
+    }
+
+    header img {
+        max-width: 150px; /* Reducir el tamaño del isotipo */
+        margin-bottom: 5px;
+    }
+
+    header h1 {
+        font-size: 1.2em; /* Reducir el tamaño del título */
+    }
+
+    nav ul {
+        flex-direction: column; /* Apila los elementos del menú verticalmente */
+        align-items: stretch; /* Los elementos ocupan todo el ancho */
+    }
+
+    nav ul li {
+        display: block; /* Cada elemento en una línea */
+        margin: 0;
+        border-bottom: 1px solid #5C6B6B; /* Separadores visuales */
+    }
+
+    nav ul li:last-child {
+        border-bottom: none; /* Sin borde en el último elemento */
+    }
+
+    nav ul li a {
+        padding: 10px 15px;
+        text-align: left; /* Alinear texto a la izquierda */
+    }
+
+    .imagen-principal h2 {
+        font-size: 1.1em; /* Reducir aún más el encabezado de la sección */
+    }
 }
