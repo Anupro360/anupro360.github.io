@@ -19,7 +19,8 @@
             <li><a href="capacitacion.html">Capacitación</a></li>
             <li><a href="servicios.html">Servicios</a></li>
             <li><a href="contactenos.html">Contáctenos</a></li>
-            <li><a href="ingles.html">Inglés</a></li>
+            <li><a href="ingles.html" target="_blank">Inglés</a></li>
+            <li><a href="#" id="aula-virtual-link">Aula Virtual</a></li>
         </ul>
     </nav>
     <main>
@@ -27,11 +28,33 @@
             <div class="hero-text">
                 <h1>Anupro360: Impulsando el Crecimiento con Experiencia</h1>
                 <p>Soluciones de consultoría y programas de capacitación diseñados para tu éxito.</p>
-                </div>
+            </div>
         </div>
     </main>
     <footer>
         <p>&copy; 2025 Anupro360 Servicios de Consultoría y Capacitación</p>
     </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const aulaVirtualLink = document.getElementById('aula-virtual-link');
+
+        if (aulaVirtualLink) {
+          aulaVirtualLink.addEventListener('click', function(event) {
+            event.preventDefault(); // Evita que el enlace se abra directamente
+
+            const codigoClase = prompt('Por favor, ingresa el código de la clase:');
+
+            if (codigoClase) {
+              // Aquí deberías construir la URL de Google Classroom con el código
+              const classroomUrl = 'https://classroom.google.com/h?authuser=0&hl=es&classroomCode=' + codigoClase;
+              window.open(classroomUrl, '_blank'); // Abre Classroom en una nueva pestaña
+            } else {
+              alert('No ingresaste ningún código de clase.');
+            }
+          });
+        }
+      });
+    </script>
 </body>
 </html>
