@@ -16,6 +16,32 @@
             margin: 20px auto;
             max-width: 100%;
         }
+
+        /* Estilos para las migas de pan */
+        .breadcrumbs {
+            font-size: 0.9em;
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .breadcrumbs a {
+            color: #007bff; /* Un color azul como el de tus enlaces del menú */
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumbs .separator {
+            margin: 0 5px;
+            color: #ccc;
+        }
+
+        .breadcrumbs .current {
+            font-weight: bold;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -35,6 +61,13 @@
             <li><a href="contactenos.html">Contáctenos</a></li>
         </ul>
     </nav>
+    <div class="breadcrumbs">
+        <a href="index.html">Inicio</a>
+        <span class="separator">&gt;</span>
+        <a href="capacitacion.html">Capacitación</a>
+        <span class="separator">&gt;</span>
+        <span class="current">Curso de Operador de Camión de Extracción</span>
+    </div>
     <main>
         <section class="contenido-centrado">
             <h2>Curso de Operador de Camión de Extracción (CAEX)</h2>

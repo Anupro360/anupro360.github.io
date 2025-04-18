@@ -3,8 +3,8 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #FFFFFF; /* Blanco */
-    color: #333; /* Gris oscuro para texto */
+    background-color: #FFFFFF;
+    color: #5C6B6B;
 }
 
 .container {
@@ -15,31 +15,34 @@ body {
 
 /* Encabezado */
 header {
-    background-color: #FFFFFF; /* Blanco */
-    color: #003B5C; /* Azul Oscuro para el texto del encabezado */
+    background-color: #003B5C;
+    color: #FFB81C;
     padding: 20px 0;
-    text-align: center; /* Centrar el contenido del encabezado */
-    display: flex; /* Para alinear isotipo y título */
-    flex-direction: column; /* Apilar verticalmente en pantallas pequeñas */
-    align-items: center; /* Centrar elementos verticalmente */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 header img {
-    max-width: 200px; /* Ajustar el tamaño del isotipo */
+    max-width: 200px;
     height: auto;
-    margin-bottom: 10px; /* Espacio debajo del isotipo */
+    margin-bottom: 10px;
 }
 
 header h1 {
-    margin-top: 0; /* Eliminar margen superior innecesario en pantallas pequeñas */
-    font-size: 1.5em; /* Tamaño del título */
+    margin-top: 0;
+    font-size: 2em;
 }
 
 /* Navegación */
 nav {
-    background-color: #003B5C; /* Azul Oscuro */
+    background-color: rgba(92, 107, 107, 0.8); /* Gris Acero semi-transparente */
     padding: 10px 0;
     text-align: center;
+    position: sticky; /* Para que la navegación se quede fija al hacer scroll */
+    top: 0;
+    z-index: 100;
 }
 
 nav ul {
@@ -47,168 +50,135 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center; /* Centrar los elementos del menú horizontalmente por defecto */
-    flex-wrap: wrap; /* Permitir que los elementos pasen a la siguiente línea en pantallas pequeñas */
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 nav ul li {
     display: inline;
-    margin: 5px 10px; /* Reducir el margen para pantallas más pequeñas */
+    margin: 5px 10px;
+    position: relative; /* Para los separadores */
 }
 
 nav ul li a {
-    color: #FFFFFF; /* Blanco */
+    color: #FFFFFF;
     text-decoration: none;
-    padding: 8px 12px;
+    padding: 8px 15px;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
-    display: block; /* Hacer que el enlace ocupe todo el espacio del li para mejor toque */
+    transition: background-color 0.3s ease, color 0.3s ease, text-decoration 0.3s ease, transform 0.3s ease;
+    display: block;
 }
 
 nav ul li a:hover {
-    background-color: #FFB81C; /* Amarillo Minero */
-    color: #003B5C; /* Azul Oscuro */
+    background-color: #FFB81C;
+    color: #003B5C;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transform: scale(1.05);
+}
+
+/* Separadores visuales */
+nav ul li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 1.2em;
+    background-color: #FFFFFF;
 }
 
 /* Estilo específico para el último elemento del menú ("Inglés") */
 nav ul li:last-child a {
-    padding-left: 12px; /* Igual al padding derecho de los otros */
-    padding-right: 12px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
-/* Secciones principales */
+/* Hero Image Styles */
 main {
-    padding: 20px;
+    padding: 0; /* Eliminar el padding del main */
 }
 
-.imagen-principal {
+.hero-image {
+    background-image: url('tu_imagen_de_fondo.webp'); /* Reemplaza con el nombre exacto de tu archivo */
+    height: 100vh; /* Ocupa toda la altura del viewport */
+    background-size: cover; /* Cubre todo el fondo */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* No repetir la imagen */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
+    color: white; /* Color del texto sobre la imagen */
     text-align: center;
-    margin-bottom: 20px;
 }
 
-.imagen-principal h2 {
-    color: #003B5C; /* Azul Oscuro */
+.hero-text {
+    background-color: rgba(0, 59, 92, 0.7); /* Fondo semi-transparente azul oscuro para el texto */
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80%;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Añade una sombra al texto para mejorar la legibilidad */
+}
+
+.hero-text h1 {
+    font-size: 2.5em;
     margin-bottom: 10px;
-    font-size: 1.3em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
+    font-weight: bold; /* Resaltar el título */
 }
 
-.imagen-principal img {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #5C6B6B; /* Gris Acero */
+.hero-text p {
+    font-size: 1.2em;
+    line-height: 1.5; /* Mejor espaciado entre líneas */
 }
 
 /* Pie de página */
 footer {
-    background-color: #003B5C; /* Azul Oscuro */
-    color: #FFFFFF; /* Blanco */
+    background-color: #003B5C;
+    color: #FFFFFF;
     text-align: center;
-    padding: 10px 0;
-    font-size: 0.9em; /* Reducir el tamaño de la fuente en el pie de página */
-}
-
-/* Verificación de autenticidad */
-.autenticidad {
-    background-color: #F4F4F4; /* Gris claro */
-    padding: 20px;
-    text-align: center;
-}
-
-.autenticidad h2 {
-    color: #003B5C; /* Azul Oscuro */
-    margin-bottom: 15px;
-    font-size: 1.2em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
-}
-
-.autenticidad form {
-    margin-bottom: 15px;
-}
-
-.autenticidad label {
-    display: block;
-    margin-bottom: 5px;
-    color: #5C6B6B; /* Gris Acero */
-    font-size: 0.95em;
-}
-
-.autenticidad input[type="text"] {
-    padding: 8px;
-    border: 1px solid #5C6B6B; /* Gris Acero */
-    border-radius: 5px;
-    width: calc(100% - 16px); /* Ajustar ancho con padding */
-    box-sizing: border-box;
-}
-
-.autenticidad button {
-    background-color: #FFB81C; /* Amarillo Minero */
-    color: #003B5C; /* Azul Oscuro */
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 0.95em;
-}
-
-.autenticidad button:hover {
-    background-color: #FF5C00; /* Naranja */
-}
-
-#resultado {
-    color: #4B6F44; /* Verde Mineral */
-    font-weight: bold;
-    font-size: 0.95em;
-}
-
-/* Estilos para la página de contacto */
-.contacto-principal {
-    text-align: center;
-    padding: 20px;
-}
-
-.contacto-principal h2 {
-    color: #003B5C; /* Azul Oscuro */
-    margin-bottom: 15px;
-    font-size: 1.2em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
-}
-
-.contacto-principal p {
-    color: #5C6B6B; /* Gris Acero */
-    font-size: 0.95em;
-    line-height: 1.6;
-}
-
-.formulario-contacto {
-    width: 95%; /* Ajustar ancho para ocupar más espacio en pantallas pequeñas */
-    max-width: 600px; /* Ancho máximo para pantallas grandes */
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #5C6B6B; /* Gris Acero */
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.formulario-contacto h2 {
-    color: #003B5C; /* Azul Oscuro */
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.1em; /* Reducir el tamaño del encabezado en pantallas pequeñas */
-}
-
-.formulario-contacto label {
-    display: block;
-    margin-bottom: 5px;
-    color: #5C6B6B; /* Gris Acero */
+    padding: 15px 0;
     font-size: 0.9em;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+    position: static; /* Cambiado a static para que fluya con el contenido al tener 100vh en el hero */
 }
 
-.formulario-contacto input[type="text"],
-.formulario-contacto input[type="email"],
-.formulario-contacto textarea {
-    width: calc(100% - 12px);
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #5C6B6B; /* Gris Acero */
-    border-radius: 5px;
-    box-sizing: border-box;
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    .hero-text {
+        max-width: 95%;
+        padding: 15px;
+    }
+
+    .hero-text h1 {
+        font-size: 2em;
+    }
+
+    .hero-text p {
+        font-size: 1em;
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 5px 0;
+    }
+
+    nav ul li:not(:last-child)::after {
+        display: none;
+    }
+}
+
+/* Para pantallas medianas (tablets) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    nav ul {
+        justify-content: space-around;
+    }
 }
