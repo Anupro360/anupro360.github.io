@@ -5,20 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        .contenido-centrado {
-            text-align: justify;
+        .curso-detalle {
+            width: 80%;
             margin: 20px auto;
-            max-width: 800px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
 
-        .contenido-centrado img {
+        .curso-detalle h2 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .curso-detalle p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        .curso-detalle .info-item {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .curso-detalle .precio {
+            font-size: 1.5em;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .curso-detalle .caracteristicas li {
+            margin-bottom: 5px;
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .curso-detalle .imagen-curso {
+            width: 100%;
+            max-width: 400px; /* Ajusta el tamaño máximo de la imagen según necesites */
+            height: auto;
             display: block;
             margin: 20px auto;
-            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .contenido-texto {
-            text-align: justify;
+        .boton-inscripcion {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .boton-inscripcion:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilos para las migas de pan */
+        .breadcrumbs {
+            font-size: 0.9em;
+            color: #777;
+            margin: 15px auto;
+            max-width: 80%;
+        }
+
+        .breadcrumbs a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumbs .separator {
+            margin: 0 5px;
+            color: #ccc;
+        }
+
+        .breadcrumbs .current {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .curso-detalle h3 {
+            color: #333;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .curso-detalle h4 {
+            color: #555;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .curso-detalle ol {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .curso-detalle ol li {
+            margin-bottom: 8px;
+        }
+
+        .curso-detalle ol li ul {
+            margin-top: 5px;
+            margin-left: 20px;
+            list-style-type: disc;
         }
     </style>
 </head>
@@ -39,49 +139,64 @@
             <li><a href="contactenos.html">Contáctenos</a></li>
         </ul>
     </nav>
+    <div class="breadcrumbs">
+        <a href="index.html">Inicio</a>
+        <span class="separator">&gt;</span>
+        <a href="capacitacion.html">Capacitación</a>
+        <span class="separator">&gt;</span>
+        <span class="current">Curso de Operador de Pala Hidráulica</span>
+    </div>
     <main>
-        <section class="contenido-centrado">
-            <h2>Curso de Operador de Pala Hidráulica - Anupro360</h2>
-            <img src="imagen_pala_hidraulica.webp" alt="Pala Hidráulica">
-            <article class="contenido-texto">
-                <h3>Curso de Operador de Pala Hidráulica</h3>
-                <p><strong>Descripción del equipo:</strong></p>
-                <p>La pala hidráulica es un equipo fundamental en la industria minera, diseñado para realizar tareas de excavación y carga de material de manera eficiente. Su funcionamiento se basa en un sistema hidráulico que permite un control preciso de sus movimientos, garantizando altos niveles de productividad y seguridad en operaciones de gran escala.</p>
-                <p><strong>Objetivo del curso:</strong></p>
-                <p>Este curso tiene como finalidad capacitar a los participantes en la operación segura y eficiente de una pala hidráulica en entornos mineros. Los alumnos adquirirán conocimientos teóricos y prácticos sobre el funcionamiento del equipo, protocolos de seguridad, mantenimiento básico y mejores prácticas operativas.</p>
-                <p><strong>Contenido del curso:</strong></p>
-                <ul>
-                    <li>Introducción a la pala hidráulica: características y funciones.</li>
-                    <li>Seguridad en la operación y normativa vigente.</li>
-                    <li>Controles y componentes principales del equipo.</li>
-                    <li>Técnicas de excavación y carga.</li>
-                    <li>Mantenimiento preventivo y resolución de problemas comunes.</li>
-                    <li>Optimización del rendimiento en operaciones mineras.</li>
-                </ul>
-                <h3>Modalidades de Estudio</h3>
-                <p>El curso tiene una duración de 1 mes, con pagos divididos en dos cuotas: la primera al momento de la inscripción y la segunda al finalizar el curso. Las clases inician 5 días hábiles después del pago de la primera cuota.</p>
-                <ol>
-                    <li>
-                        <strong>Modalidad Mixta (Teams + Aula Virtual)</strong>
-                        <ul>
-                            <li>Clases en vivo por Microsoft Teams con un docente 2 días a elección del alumno (lunes a viernes).</li>
-                            <li>Acceso a materiales de estudio y evaluaciones en nuestra plataforma de aula virtual.</li>
-                            <li>Valor: $750.000 CLP (≈ 785 USD).</li>
-                            <li>Descuento especial: Si te inscribes dentro de los próximos 3 días y eres seguidor en TikTok, el curso tiene un 40% de descuento, quedando en $450.000 CLP (≈ 470 USD).</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <strong>Modalidad 100% Aula Virtual</strong>
-                        <ul>
-                            <li>Acceso a contenidos de estudio, evaluaciones y contacto con el docente a través de nuestra plataforma virtual.</li>
-                            <li>Valor: $500.000 CLP (≈ 525 USD).</li>
-                            <li>Descuento especial: Para seguidores de TikTok, el curso tendrá un 40% de descuento por 3 días, quedando en $300.000 CLP (≈ 315 USD).</li>
-                        </ul>
-                    </li>
-                </ol>
-                <h3>Certificación:</h3>
-                <p>Al finalizar el curso, los participantes recibirán un certificado con validez en la industria minera, cumpliendo con las competencias establecidas por el Consejo Minero.</p>
-            </article>
+        <section class="curso-detalle">
+            <h2>Curso de Operador de Pala Hidráulica</h2>
+            <img src="imagen_pala_hidraulica.webp" alt="Pala Hidráulica" class="imagen-curso">
+            <h3>Curso de Operador de Pala Hidráulica</h3>
+            <p class="info-item"><strong>Descripción del equipo:</strong></p>
+            <p>
+                La pala hidráulica es un equipo fundamental en la industria minera, diseñado para realizar tareas de excavación y carga de material de manera eficiente. Su funcionamiento se basa en un sistema hidráulico que permite un control preciso de sus movimientos, garantizando altos niveles de productividad y seguridad en operaciones de gran escala.
+            </p>
+            <p class="info-item"><strong>Objetivo del curso:</strong></p>
+            <p>
+                Este curso tiene como finalidad capacitar a los participantes en la operación segura y eficiente de una pala hidráulica en entornos mineros. Los alumnos adquirirán conocimientos teóricos y prácticos sobre el funcionamiento del equipo, protocolos de seguridad, mantenimiento básico y mejores prácticas operativas.
+            </p>
+            <p class="info-item"><strong>Contenido del curso:</strong></p>
+            <ul class="caracteristicas">
+                <li>Introducción a la pala hidráulica: características y funciones.</li>
+                <li>Seguridad en la operación y normativa vigente.</li>
+                <li>Controles y componentes principales del equipo.</li>
+                <li>Técnicas de excavación y carga.</li>
+                <li>Mantenimiento preventivo y resolución de problemas comunes.</li>
+                <li>Optimización del rendimiento en operaciones mineras.</li>
+            </ul>
+
+            <h3>Modalidades de Estudio</h3>
+            <p>
+                El curso tiene una duración de 1 mes, con pagos divididos en dos cuotas: la primera al momento de la inscripción y la segunda al finalizar el curso. Las clases inician 5 días hábiles después del pago de la primera cuota.
+            </p>
+            <ol>
+                <li>
+                    <strong>Modalidad Mixta (Teams + Aula Virtual)</strong>
+                    <ul>
+                        <li>Clases en vivo por Microsoft Teams con un docente 2 días a elección del alumno (lunes a viernes).</li>
+                        <li>Acceso a materiales de estudio y evaluaciones en nuestra plataforma de aula virtual.</li>
+                        <li class="info-item precio">Valor: USD $785 (Aproximado)</li>
+                        <li><strong>Descuento especial:</strong> Si te inscribes dentro de los próximos 3 días y eres seguidor en TikTok, el curso tiene un 40% de descuento, quedando en USD $471 (Aproximado).</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Modalidad 100% Aula Virtual</strong>
+                    <ul>
+                        <li>Acceso a contenidos de estudio, evaluaciones y contacto con el docente a través de nuestra plataforma virtual.</li>
+                        <li class="info-item precio">Valor: USD $525 (Aproximado)</li>
+                        <li><strong>Descuento especial:</strong> Para seguidores de TikTok, el curso tendrá un 40% de descuento por 3 días, quedando en USD $315 (Aproximado).</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>Certificación:</h3>
+            <p>Al finalizar el curso, los participantes recibirán un certificado con validez en la industria minera, cumpliendo con las competencias establecidas por el Consejo Minero.</p>
+
+            <a href="#" class="boton-inscripcion">Inscríbete Ahora</a>
         </section>
     </main>
     <footer>

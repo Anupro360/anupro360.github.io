@@ -2,52 +2,68 @@ body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #5C6B6B; /* Fondo de los cursos */
-    color: #e2e8f0; /* Texto claro */
+    background-color: #F4F4F4; /* Gris claro de fondo */
+    color: #5C6B6B; /* Gris Acero para el texto general */
 }
 
 header {
-    background-color: #003B5C; /* Fondo del encabezado */
-    color: white;
-    text-align: center;
-    padding: 20px 0;
-    position: relative;
+    background-color: #003B5C; /* Azul Oscuro para el encabezado */
+    color: #FFFFFF; /* Texto blanco en el encabezado */
+    padding: 1em 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row; /* Disposición horizontal en escritorio */
+    text-align: left; /* Alineación izquierda en escritorio */
 }
 
 .logo {
-    max-width: 200px;
-    margin-bottom: 20px;
+    max-height: 50px;
+    margin-right: 20px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 2em; /* Tamaño en escritorio */
+    flex-grow: 1; /* Ocupa el espacio restante */
+}
+
+.subtitulo-header {
+    color: #FFB81C; /* Amarillo Minero */
+    font-size: 1em;
+    margin-top: 0.5em;
+    display: none; /* Oculto en escritorio inicialmente */
 }
 
 .btn-inicio {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: #4a5568; /* Botón de inicio gris oscuro */
-    color: white;
-    padding: 10px 15px;
+    background-color: #FFB81C; /* Amarillo Minero */
+    color: #003B5C; /* Azul Oscuro */
+    padding: 0.8em 1.5em;
     text-decoration: none;
     border-radius: 5px;
-    font-size: 14px;
+    font-weight: bold;
+}
+
+.btn-inicio:hover {
+    background-color: #FF5C00; /* Naranja */
+    color: #FFFFFF;
 }
 
 .cursos-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     padding: 20px;
+    gap: 20px;
 }
 
 .curso {
-    width: 300px;
-    margin: 20px;
-    background-color: #2d3748; /* Cursos más oscuros */
+    background-color: #FFFFFF;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más sutil */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    display: flex; /* Añadido para alinear el contenido */
-    flex-direction: column; /* Añadido para alinear el contenido */
+    display: flex;
+    flex-direction: column;
 }
 
 .curso:hover {
@@ -56,47 +72,54 @@ header {
 
 .curso img {
     width: 100%;
-    height: 200px;
+    height: auto;
+    max-height: 200px;
     object-fit: cover;
 }
 
 .curso-info {
-    padding: 20px;
-    flex-grow: 1; /* Añadido para que el contenido info crezca y empuje el botón hacia abajo */
+    padding: 15px;
+    flex-grow: 1;
 }
 
 .curso-info h3 {
     margin-top: 0;
-    color: #cbd5e0; /* Títulos de cursos más claros */
+    color: #003B5C;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
 }
 
 .curso-info p {
-    color: #a0aec0; /* Descripción de cursos más clara */
-    margin-bottom: 20px;
+    color: #5C6B6B;
+    line-height: 1.5;
+    margin-bottom: 1em;
 }
 
 .btn-pago {
     display: inline-block;
-    background-color: #FFB81C; /* Botón de pago amarillo */
-    color: #000; /* Texto negro para mejor contraste */
-    padding: 10px 20px;
+    background-color: #4B6F44; /* Verde Mineral */
+    color: #FFFFFF;
+    padding: 0.8em 1.5em;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
     transition: background-color 0.3s ease;
-    align-self: flex-start; /* Alinea el botón al inicio del contenedor */
-    margin-top: auto; /* Empuja el botón hacia abajo */
+    align-self: flex-start;
+    margin-top: auto;
+    margin-bottom: 15px;
+    margin-left: 15px;
 }
 
 .btn-pago:hover {
-    background-color: #e5a819; /* Botón de pago amarillo oscuro */
+    background-color: #6B8E6A;
 }
 
 footer {
-    background-color: #003B5C; /* Pie de página */
-    color: #a0aec0; /* Texto del pie de página más claro */
+    background-color: #5C6B6B;
+    color: #FFFFFF;
     text-align: center;
-    padding: 20px 0;
+    padding: 1em 0;
+    margin-top: 20px;
 }
 
 .contactos {
@@ -105,10 +128,83 @@ footer {
 
 .contacto {
     display: inline-block;
-    background-color: #FF5C00; /* Botones de contacto naranjas */
-    color: white;
-    padding: 8px 15px;
+    background-color: #FF5C00;
+    color: #FFFFFF;
+    padding: 0.6em 1.2em;
     text-decoration: none;
     border-radius: 5px;
     margin: 0 5px;
+}
+
+.contacto:hover {
+    background-color: #E05100;
+}
+
+/* Media query para pantallas más pequeñas */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column; /* Apila logo, título y botón */
+        align-items: center;
+        text-align: center;
+        padding: 1em;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+        margin-right: 0;
+        max-height: 40px;
+    }
+
+    h1 {
+        font-size: 1.3em; /* Reduce el tamaño en móvil */
+        margin-bottom: 5px;
+    }
+
+    .subtitulo-header {
+        display: block; /* Muestra el subtítulo en móvil */
+        font-size: 0.9em;
+        margin-bottom: 10px;
+    }
+
+    .btn-inicio {
+        position: static; /* Remueve la posición absoluta */
+        margin-top: 10px;
+        font-size: 0.9em;
+        padding: 0.6em 1em;
+    }
+
+    .cursos-container {
+        padding: 10px;
+    }
+
+    .curso {
+        margin: 10px;
+    }
+
+    .curso-info {
+        padding: 10px;
+    }
+
+    .curso-info h3 {
+        font-size: 1.1em;
+        margin-bottom: 0.3em;
+    }
+
+    .curso-info p {
+        font-size: 0.95em;
+        margin-bottom: 0.8em;
+    }
+
+    .btn-pago {
+        font-size: 0.9em;
+        padding: 0.6em 1.2em;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+    .contacto {
+        font-size: 0.85em;
+        padding: 0.5em 1em;
+        margin: 0 3px;
+    }
 }

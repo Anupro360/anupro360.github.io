@@ -1,31 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Anupro360 - Curso Operador Camión de Extracción</title>
+    <title>Anupro360 - Curso Operador Camión de Extracción (CAEX)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
     <style>
-        .contenido-centrado {
-            text-align: justify; /* Cambiado a justificar */
+        .curso-detalle {
+            width: 80%;
             margin: 20px auto;
-            max-width: 800px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
 
-        .contenido-centrado img {
+        .curso-detalle h2 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .curso-detalle p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: justify; /* Añadido para justificar el texto */
+        }
+
+        .curso-detalle .info-item {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .curso-detalle .precio {
+            font-size: 1.5em;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .curso-detalle .caracteristicas li {
+            margin-bottom: 5px;
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .curso-detalle .imagen-curso {
+            width: 100%;
+            max-width: 400px; /* Ajusta el tamaño máximo de la imagen según necesites */
+            height: auto;
             display: block;
             margin: 20px auto;
-            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .boton-inscripcion {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .boton-inscripcion:hover {
+            background-color: #0056b3;
         }
 
         /* Estilos para las migas de pan */
         .breadcrumbs {
             font-size: 0.9em;
             color: #777;
-            margin-bottom: 15px;
+            margin: 15px auto; /* Centrado horizontal */
+            max-width: 80%; /* Ancho máximo igual al contenido principal */
         }
 
         .breadcrumbs a {
-            color: #007bff; /* Un color azul como el de tus enlaces del menú */
+            color: #007bff;
             text-decoration: none;
         }
 
@@ -69,45 +120,46 @@
         <span class="current">Curso de Operador de Camión de Extracción</span>
     </div>
     <main>
-        <section class="contenido-centrado">
+        <section class="curso-detalle">
             <h2>Curso de Operador de Camión de Extracción (CAEX)</h2>
-            <img src="imagen_camion_extraccion.webp" alt="Camión de Extracción">
-            <article>
-                <p>
-                    Este curso está dirigido a quienes desean aprender a operar camiones de extracción de alto tonelaje utilizados en la minería a cielo abierto. La formación cubre aspectos como:
-                </p>
-                <ul>
-                    <li>Fundamentos de operación segura y eficiente.</li>
-                    <li>Procedimientos de carga, acarreo y descarga.</li>
-                    <li>Normativas de seguridad en minería.</li>
-                    <li>Mantenimiento básico del equipo.</li>
-                    <li>Factores que afectan la productividad y eficiencia.</li>
-                </ul>
-                <p>
-                    <strong>Modalidades de Estudio</strong>
-                </p>
-                <p>
-                    Ambos cursos tienen una duración de 2 meses, con pagos divididos en dos cuotas: la primera en la inscripción y la segunda al finalizar el primer mes. Las clases inician 5 días hábiles después de la inscripción y el pago de la primera cuota.
-                </p>
-                <p>
-                    <strong>Modalidad Mixta (Teams + Aula Virtual):</strong> Clases en vivo por Microsoft Teams con un docente 2 días a elección del alumno (lunes a viernes), complementadas con estudio y evaluaciones en nuestra plataforma de aula virtual.
-                </p>
-                <p>
-                    Valor: $1.200.000 CLP (USD 1,080).
-                </p>
-                <p>
-                    Descuento especial: Si te inscribes dentro de los próximos 3 días y eres seguidor en TikTok, el curso tiene un 50% de descuento, quedando en $600.000 CLP (USD 643).
-                </p>
-                <p>
-                    <strong>Modalidad 100% Aula Virtual:</strong> El estudiante accede a los materiales de estudio, realiza evaluaciones y mantiene contacto con el docente a través de nuestra plataforma.
-                </p>
-                <p>
-                    Valor: $800.000 CLP (USD 857).
-                </p>
-                <p>
-                    Descuento especial: Para seguidores de TikTok, el curso tendrá un 50% de descuento por 3 días, quedando en $400.000 CLP (USD 428).
-                </p>
-            </article>
+            <img src="imagen_camion_extraccion.webp" alt="Camión de Extracción" class="imagen-curso">
+            <p>
+                Este curso está dirigido a quienes desean aprender a operar camiones de extracción de alto tonelaje utilizados en la minería a cielo abierto. La formación cubre aspectos como:
+            </p>
+
+            <h3>¿Qué aprenderás?</h3>
+            <ul class="caracteristicas">
+                <li>Fundamentos de operación segura y eficiente.</li>
+                <li>Procedimientos de carga, acarreo y descarga.</li>
+                <li>Normativas de seguridad en minería.</li>
+                <li>Mantenimiento básico del equipo.</li>
+                <li>Factores que afectan la productividad y eficiencia.</li>
+            </ul>
+
+            <h3>Modalidades de Estudio</h3>
+            <p>
+                Ambos cursos tienen una duración de 2 meses, con pagos divididos en dos cuotas: la primera en la inscripción y la segunda al finalizar el primer mes. Las clases inician 5 días hábiles después de la inscripción y el pago de la primera cuota.
+            </p>
+
+            <h4>Modalidad Mixta (Teams + Aula Virtual)</h4>
+            <p>
+                Clases en vivo por Microsoft Teams con un docente 2 días a elección del alumno (lunes a viernes), complementadas con estudio y evaluaciones en nuestra plataforma de aula virtual.
+            </p>
+            <div class="info-item precio">Valor: USD $1080 (Aproximado)</div>
+            <p>
+                <strong>Descuento especial:</strong> Si te inscribes dentro de los próximos 3 días y eres seguidor en TikTok, el curso tiene un 50% de descuento, quedando en USD $540 (Aproximado).
+            </p>
+
+            <h4>Modalidad 100% Aula Virtual</h4>
+            <p>
+                El estudiante accede a los materiales de estudio, realiza evaluaciones y mantiene contacto con el docente a través de nuestra plataforma.
+            </p>
+            <div class="info-item precio">Valor: USD $857 (Aproximado)</div>
+            <p>
+                <strong>Descuento especial:</strong> Para seguidores de TikTok, el curso tendrá un 50% de descuento por 3 días, quedando en USD $429 (Aproximado).
+            </p>
+
+            <a href="#" class="boton-inscripcion">Inscríbete Ahora</a>
         </section>
     </main>
     <footer>
