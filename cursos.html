@@ -8,147 +8,87 @@
     <meta name="keywords" content="cursos minería, operador CAEX, controlador terreno, ética laboral, trabajo en equipo, aprender a aprender, certificación minera, inglés para minería, curso secretaria, selección personal, desarrollo profesional, capacitación minera, anupro360">
     <link rel="stylesheet" href="cursos.css">
     <style>
-        /* Estilos en línea para aplicar los colores corporativos directamente - puedes mover esto a tu archivo CSS */
+        :root {
+            /* Define your color palette as CSS variables for easier changes */
+            --primary-dark-blue: #003B5C;
+            --primary-yellow: #FFB81C;
+            --primary-orange: #FF5C00;
+            --secondary-steel-gray: #5C6B6B;
+            --secondary-light-gray: #F4F4F4;
+            --button-green: #85CB33;
+            --button-green-hover: #67A32A;
+            --white: #FFFFFF;
+        }
+
+        /* General Styles */
+        body {
+            font-family: sans-serif; /* Specify a default font */
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
         header {
-            background-color: #003B5C; /* Azul Oscuro */
-            color: #FFFFFF; /* Blanco */
+            background-color: var(--primary-dark-blue);
+            color: var(--white);
             padding: 1em 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-direction: column; /* Apilamos logo y título inicialmente */
-            text-align: center; /* Centramos el texto inicialmente */
+            flex-direction: column;
+            text-align: center;
         }
 
         .logo {
-            max-height: 50px; /* Ajusta el tamaño según necesites */
-            margin-bottom: 0.5em; /* Espacio debajo del logo */
+            max-height: 50px;
+            margin-bottom: 0.5em;
         }
 
         h1 {
             margin: 0;
-            font-size: 1.5em; /* Tamaño inicial del título */
+            font-size: 1.5em;
         }
 
         .subtitulo-header {
-            color: #FFB81C; /* Amarillo Minero para destacar el subtítulo */
+            color: var(--primary-yellow);
             font-size: 1em;
             margin-top: 0.5em;
         }
 
         .btn-inicio {
-            background-color: #FFB81C; /* Amarillo Minero */
-            color: #003B5C; /* Azul Oscuro */
+            background-color: var(--primary-yellow);
+            color: var(--primary-dark-blue);
             padding: 0.8em 1.5em;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            margin-top: 1em; /* Espacio sobre el botón */
+            margin-top: 1em;
+            display: inline-block; /* Ensure consistent spacing */
         }
 
         .btn-inicio:hover {
-            background-color: #FF5C00; /* Naranja */
-            color: #FFFFFF;
+            background-color: var(--primary-orange);
+            color: var(--white);
         }
 
+        /* Course Container Styles */
         .cursos-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             padding: 20px;
             gap: 20px;
-            background-color: #F4F4F4; /* Un gris claro de fondo */
+            background-color: var(--secondary-light-gray);
         }
 
+        /* Course Card Styles */
         .curso {
-            background-color: #FFFFFF; /* Blanco para las tarjetas de curso */
+            background-color: var(--white);
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .curso img {
-            width: 100%;
-            display: block;
-            max-height: 200px; /* Altura máxima para las imágenes */
-            object-fit: cover; /* Para que las imágenes cubran el espacio sin deformarse */
-        }
-
-        .curso-info {
-            padding: 15px;
-        }
-
-        .curso-info h3 {
-            color: #003B5C; /* Azul Oscuro para los títulos de los cursos */
-            margin-top: 0;
-        }
-
-        .curso-info p {
-            color: #5C6B6B; /* Gris Acero para la descripción */
-            line-height: 1.5;
-        }
-
-        .btn-pago {
-            display: inline-block;
-            background-color: #85CB33; /* Verde Botón (tomado de la imagen) */
-            color: #FFFFFF;             /* Texto Blanco */
-            padding: 0.8em 1.5em;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-
-        .btn-pago:hover {
-            background-color: #67A32A; /* Verde más oscuro (opcional, para hover) */
-        }
-
-        footer {
-            background-color: #5C6B6B; /* Gris Acero */
-            color: #FFFFFF;
-            text-align: center;
-            padding: 1em 0;
-            margin-top: 20px;
-        }
-
-        .contactos a {
-            color: #FFB81C; /* Amarillo Minero para los enlaces de contacto */
-            margin: 0 10px;
-            text-decoration: none;
-        }
-
-        .contactos a:hover {
-            color: #FFFFFF;
-        }
-
-        /* Media query para pantallas más grandes */
-        @media (min-width: 769px) {
-            header {
-                flex-direction: row; /* Volvemos a la disposición horizontal */
-                align-items: center;
-                text-align: left; /* Alineamos el título a la izquierda */
-            }
-
-            .logo {
-                margin-bottom: 0; /* Removemos el margen inferior en escritorio */
-                margin-right: 20px; /* Espacio a la derecha del logo */
-            }
-
-            h1 {
-                font-size: 2em; /* Tamaño del título en escritorio */
-            }
-
-            .subtitulo-header {
-                display: none; /* Ocultamos el subtítulo en el header en escritorio */
-            }
-
-            .btn-inicio {
-                margin-top: 0; /* Removemos el margen superior en escritorio */
-            }
-        }
-
-        /* Styles for improved card interaction */
-        .curso {
             transition: transform 0.3s ease-in-out;
+            display: flex; /* Añadimos flex para controlar la altura del contenido */
+            flex-direction: column; /* Alineamos el contenido verticalmente */
         }
 
         .curso:hover {
@@ -157,27 +97,109 @@
         }
 
         .curso a {
-            text-decoration: none; /* Remove default link styles */
-            color: inherit; /* Inherit text color */
-            display: block; /* Make the whole card clickable */
+            text-decoration: none;
+            color: inherit;
+            display: flex; /* También flex para el enlace */
+            flex-direction: column; /* Alineamos el contenido del enlace verticalmente */
             height: 100%;
         }
 
+        .curso img {
+            width: 100%;
+            display: block;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
         .curso-info {
+            padding: 15px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            height: calc(100% - 200px); /* Adjust based on image height */
+            flex-grow: 1; /* Permite que .curso-info crezca para llenar el espacio */
+        }
+
+        .curso-info h3 {
+            color: var(--primary-dark-blue);
+            margin-top: 0;
+        }
+
+        .curso-info p {
+            color: var(--secondary-steel-gray);
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        .btn-pago {
+            display: inline-block;
+            background-color: var(--button-green);
+            color: var(--white);
+            padding: 0.8em 1.5em;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-pago:hover {
+            background-color: var(--button-green-hover);
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--secondary-steel-gray);
+            color: var(--white);
+            text-align: center;
+            padding: 1em 0;
+            margin-top: 20px;
+        }
+
+        .contactos a {
+            color: var(--primary-yellow);
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .contactos a:hover {
+            color: var(--white);
+        }
+
+        /* Media Query for Larger Screens */
+        @media (min-width: 769px) {
+            header {
+                flex-direction: row;
+                align-items: center;
+                text-align: left;
+            }
+
+            .logo {
+                margin-bottom: 0;
+                margin-right: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .subtitulo-header {
+                display: none; /* Hide subtitle on larger screens */
+            }
+
+            .btn-inicio {
+                margin-top: 0;
+            }
         }
     </style>
 </head>
 <body>
+
     <header>
         <img src="imagotipoblanco.webp" alt="Logo Anupro360" class="logo">
         <h1>Tu Plataforma Líder en Cursos para la Industria Minera y Desarrollo Profesional</h1>
         <p class="subtitulo-header">Adquiere las habilidades y certificaciones que necesitas para destacar en el sector minero y más.</p>
         <a href="index.html" class="btn-inicio">Inicio</a>
     </header>
+
     <main class="cursos-container">
         <section class="curso">
             <a href="curso_operador_camion_extraccion.html">
@@ -189,6 +211,7 @@
                 </div>
             </a>
         </section>
+
         <section class="curso">
             <a href="curso_controlador_terreno.html">
                 <img src="curso2.webp" alt="Curso Controlador de Terreno">
@@ -199,6 +222,7 @@
                 </div>
             </a>
         </section>
+
         <section class="curso">
             <a href="curso_operador_pala_hidraulica.html">
                 <img src="curso3.webp" alt="Curso Operador de Pala Hidráulica">
@@ -209,6 +233,7 @@
                 </div>
             </a>
         </section>
+
         <section class="curso">
             <a href="curso_grua_horquilla.html">
                 <img src="curso4.webp" alt="Curso Grúa Horquilla">
@@ -219,6 +244,7 @@
                 </div>
             </a>
         </section>
+
         <section class="curso">
             <a href="curso_secretaria.html">
                 <img src="curso5.webp" alt="Curso de Secretaria">
@@ -229,6 +255,7 @@
                 </div>
             </a>
         </section>
+
         <section class="curso">
             <a href="curso_aprender_aprender.html">
                 <img src="curso6.webp" alt="Curso Aprender a Aprender">
@@ -239,57 +266,63 @@
                 </div>
             </a>
         </section>
-         <section class="curso"> 
-         <a href="curso_liderazgo_laboral.html"> 
-         <img src="curso7.webp" alt="Curso Liderazgo Laboral"> 
-         <div class="curso-info"> 
-         <h3>Curso Liderazgo Laboral</h3> 
-         <p>"Certifica a tu equipo, impulsa tu mina. Operadores expertos, seguridad y eficiencia. <strong>Invierte en el futuro de tu equipo.</strong>"</p> 
-         <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Inscribirse Ahora</a> 
-         </div> 
-         </a> 
-         </section> 
-         <section class="curso"> 
-         <a href="curso_trabajo_equipo.html"> 
-         <img src="curso8.webp" alt="Curso de Trabajo en Equipo"> 
-         <div class="curso-info"> 
-         <h3>Curso de Trabajo en Equipo</h3> 
-         <p>"Inglés Nivel 1: Bases sólidas. Vocabulario clave, gramática esencial, habla fácil. ¡Empieza hoy! <strong>Abre puertas a nuevas oportunidades.</strong>"</p> 
-         <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Inscribirse Ahora</a> 
-         </div> 
-         </a> 
-         </section> 
-         <section class="curso"> 
-         <a href="curso_ingles_nivel1.html"> 
-         <img src="curso9.webp" alt="Curso de Inglés Nivel 1"> 
-         <div class="curso-info"> 
-         <h3>Curso de Inglés Nivel 1</h3> 
-         <p>"Secretaria Profesional: Domina la oficina. Organización, comunicación, herramientas clave. ¡Impulsa tu carrera! <strong>Conviértete en una profesional indispensable.</strong>"</p> 
-         <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Inscribirse Ahora</a> 
-         </div> 
-         </a> 
-         </section> 
-         <section class="curso"> 
-         <a href="curso_instructor_equipos_pesados.html"> 
-         <img src="curso10.webp" alt="Curso Instructor de Equipos Pesados"> 
-         <div class="curso-info"> 
-         <h3>Curso Instructor de Equipos Pesados</h3> 
-         <p>"Talento ideal, éxito seguro. Selección experta, candidatos top, crece tu equipo. ¡Contrata con confianza! <strong>Encuentra a los mejores talentos para tu empresa.</strong>"</p> 
-         <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Contratar Selección</a> 
-         </div> 
-         </a> 
-         </section> 
-         <section class="curso"> 
-         <a href="certificacion_operadores_equipos.html"> 
-         <img src="curso11.webp" alt="Certificación Operadores Equipos"> 
-         <div class="curso-info"> 
-         <h3>Certificación Operadores Equipos</h3> 
-         <p>"Talento ideal, éxito seguro. Selección experta, candidatos top, crece tu equipo. ¡Contrata con confianza! <strong>Encuentra a los mejores talentos para tu empresa.</strong>"</p> 
-         <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Contratar Selección</a> 
-         </div> 
-         </a> 
-         </section>
+
+        <section class="curso">
+            <a href="curso_liderazgo_laboral.html">
+                <img src="curso7.webp" alt="Curso Liderazgo Laboral">
+                <div class="curso-info">
+                    <h3>Curso Liderazgo Laboral</h3>
+                    <p>"Certifica a tu equipo, impulsa tu mina. Operadores expertos, seguridad y eficiencia. <strong>Invierte en el futuro de tu equipo.</strong>"</p>
+                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Inscribirse Ahora</a>
+                </div>
+            </a>
+        </section>
+
+        <section class="curso">
+            <a href="curso_trabajo_equipo.html">
+                <img src="curso8.webp" alt="Curso de Trabajo en Equipo">
+                <div class="curso-info">
+                    <h3>Curso de Trabajo en Equipo</h3>
+                    <p>"Inglés Nivel 1: Bases sólidas. Vocabulario clave, gramática esencial, habla fácil. ¡Empieza hoy! <strong>Abre puertas a nuevas oportunidades.</strong>"</p>
+                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Inscribirse Ahora</a>
+                </div>
+            </a>
+        </section>
+
+        <section class="curso">
+            <a href="curso_ingles_nivel1.html">
+                <img src="curso9.webp" alt="Curso de Inglés Nivel 1">
+                <div class="curso-info">
+                    <h3>Curso de Inglés Nivel 1</h3>
+                    <p>"Secretaria Profesional: Domina la oficina. Organización, comunicación, herramientas clave. ¡Impulsa tu carrera! <strong>Conviértete en una profesional indispensable.</strong>"</p>
+                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Inscribirse Ahora</a>
+                </div>
+            </a>
+        </section>
+
+        <section class="curso">
+            <a href="curso_instructor_equipos_pesados.html">
+                <img src="curso10.webp" alt="Curso Instructor de Equipos Pesados">
+                <div class="curso-info">
+                    <h3>Curso Instructor de Equipos Pesados</h3>
+                    <p>"Talento ideal, éxito seguro. Selección experta, candidatos top, crece tu equipo. ¡Contrata con confianza! <strong>Encuentra a los mejores talentos para tu empresa.</strong>"</p>
+                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Contratar Selección</a>
+                </div>
+            </a>
+        </section>
+
+        <section class="curso">
+            <a href="certificacion_operadores_equipos.html">
+                <img src="curso11.webp" alt="Certificación Operadores Equipos">
+                <div class="curso-info">
+                    <h3>Certificación Operadores Equipos</h3>
+                    <p>"Talento ideal, éxito seguro. Selección experta, candidatos top, crece tu equipo. ¡Contrata con confianza! <strong>Encuentra a los mejores talentos para tu empresa.</strong>"</p>
+                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago">Contratar Selección</a>
+                </div>
+            </a>
+        </section>
     </main>
+
     <footer>
         <p>&copy; 2025 Anupro360</p>
         <div class="contactos">
@@ -297,6 +330,7 @@
             <a href="mailto:contacto@anupro360.com" class="contacto">Correo Electrónico</a>
         </div>
     </footer>
+
     <script src="script.js"></script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=TU_ID_DE_SEGUIMIENTO"></script>
@@ -304,8 +338,8 @@
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-
         gtag('config', 'TU_ID_DE_SEGUIMIENTO');
     </script>
+
 </body>
 </html>
