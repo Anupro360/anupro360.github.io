@@ -50,27 +50,35 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: space-around; /* Distribución uniforme en pantallas grandes */
+    justify-content: space-around; /* Distribución uniforme */
+    flex-wrap: wrap; /* Permite el wrap en pantallas pequeñas */
+    gap: 10px; /* Espacio entre los elementos */
+}
+
+@media (min-width: 769px) {
+    nav ul {
+        flex-wrap: nowrap; /* Evita el wrap en pantallas más grandes */
+    }
 }
 
 nav ul li {
     display: inline;
-    margin: 0 10px; /* Ajuste de márgenes */
-    position: relative; /* Para los separadores */
+    margin: 0 10px;
+    position: relative;
 }
 
 nav ul li a {
     color: #FFFFFF; /* Blanco */
     text-decoration: none;
-    padding: 10px 15px; /* Aumento del padding horizontal */
+    padding: 10px 15px;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease, text-decoration 0.3s ease, transform 0.3s ease;
     display: block;
 }
 
 nav ul li a:hover {
-    background-color: #FFB81C; /* Amarillo Minero al pasar el ratón */
-    color: #003B5C; /* Azul Oscuro al pasar el ratón */
+    background-color: #FFB81C; /* Amarillo Minero */
+    color: #003B5C; /* Azul Oscuro */
     text-decoration: underline;
     text-underline-offset: 3px;
     transform: scale(1.05);
@@ -96,40 +104,40 @@ nav ul li:last-child a {
 
 /* Hero Image Styles */
 main {
-    padding: 0; /* Eliminar el padding del main */
+    padding: 0;
 }
 
 .hero-image {
-    background-image: url('tu_imagen_de_fondo.webp'); /* Reemplaza con el nombre exacto de tu archivo */
-    height: 100vh; /* Ocupa toda la altura del viewport */
-    background-size: cover; /* Cubre todo el fondo */
-    background-position: center; /* Centra la imagen */
-    background-repeat: no-repeat; /* No repetir la imagen */
+    background-image: url('tu_imagen_de_fondo.webp');
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centra el contenido verticalmente */
-    align-items: center; /* Centra el contenido horizontalmente */
-    color: white; /* Color del texto sobre la imagen */
+    justify-content: center;
+    align-items: center;
+    color: white;
     text-align: center;
 }
 
 .hero-text {
-    background-color: rgba(0, 59, 92, 0.7); /* Fondo semi-transparente Azul Oscuro para el texto */
+    background-color: rgba(0, 59, 92, 0.7); /* Azul Oscuro semi-transparente */
     padding: 20px;
     border-radius: 10px;
     max-width: 80%;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Añade una sombra al texto para mejorar la legibilidad */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 .hero-text h1 {
     font-size: 2.5em;
     margin-bottom: 10px;
-    font-weight: bold; /* Resaltar el título */
+    font-weight: bold;
 }
 
 .hero-text p {
     font-size: 1.2em;
-    line-height: 1.5; /* Mejor espaciado entre líneas */
+    line-height: 1.5;
 }
 
 /* Pie de página */
@@ -142,7 +150,7 @@ footer {
     bottom: 0;
     width: 100%;
     z-index: 100;
-    position: static; /* Cambiado a static para que fluya con el contenido al tener 100vh en el hero */
+    position: static;
 }
 
 /* Media Queries para Responsividad */
@@ -163,6 +171,7 @@ footer {
     nav ul {
         flex-direction: column;
         align-items: center;
+        gap: 5px; /* Reducimos el gap en pantallas pequeñas */
     }
 
     nav ul li {
@@ -178,13 +187,13 @@ footer {
 /* Para pantallas medianas (tablets) */
 @media (min-width: 769px) and (max-width: 1024px) {
     nav ul {
-        justify-content: space-around; /* Distribución uniforme en tablets */
+        justify-content: space-around;
     }
 }
 
 /* Para pantallas grandes (desktops) */
 @media (min-width: 1025px) {
     nav ul {
-        justify-content: space-around; /* Distribución uniforme en desktops */
+        justify-content: space-around;
     }
 }
