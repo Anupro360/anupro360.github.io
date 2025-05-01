@@ -169,10 +169,20 @@ footer {
     margin-bottom: 30px;
 }
 
+.servicios-destacados-contenedor-vertical {
+    display: flex; /* Para la disposición horizontal en pantallas grandes */
+    gap: 20px;
+    width: fit-content;
+    margin: 20px auto 0; /* Centrar el carrusel */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 15px;
+}
+
 .servicio-destacado-contenedor {
     flex-basis: calc(33.33% - 40px); /* Ancho base para el carrusel */
     flex-grow: 0;
-    margin: 20px;
+    margin: 0; /* Resetear márgenes individuales */
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 15px;
@@ -254,38 +264,29 @@ footer {
         white-space: nowrap; /* Evitar el salto de línea del texto del enlace */
     }
 
-    .servicios-destacados > div { /* Seleccionamos el contenedor del carrusel */
-        overflow-x: unset; /* Revertimos el overflow horizontal */
-        overflow-y: auto; /* Habilitamos el desplazamiento vertical */
-        display: flex;
-        flex-direction: column; /* Alinear los elementos verticalmente */
-        -webkit-overflow-scrolling: touch; /* Desplazamiento suave en iOS */
-        padding-bottom: 0; /* Ajustar el padding inferior */
-        max-height: 450px; /* Establecer una altura máxima para el carrusel */
-    }
-
-    .servicios-destacados > div > div { /* Seleccionamos el contenedor interno de los servicios */
-        flex-direction: column; /* Asegurar la disposición vertical de los hijos */
-        align-items: center; /* Centrar los elementos horizontalmente */
-        width: 100%; /* Ocupar todo el ancho */
-        width: fit-content; /* El ancho se ajusta al contenido */
+    .servicios-destacados-contenedor-vertical {
+        flex-direction: column; /* Disposición vertical en pantallas pequeñas */
+        overflow-x: unset; /* Deshabilitar el scroll horizontal */
+        overflow-y: auto; /* Habilitar el scroll vertical */
+        max-height: 450px; /* Altura máxima para el scroll vertical */
+        padding-bottom: 0;
+        align-items: center; /* Centrar los elementos */
     }
 
     .servicio-destacado-contenedor {
         flex-basis: auto; /* El alto se ajusta al contenido */
         width: 90%; /* Ocupar un ancho más grande */
-        margin: 15px auto; /* Márgenes superior, inferior y centrado horizontal */
+        margin: 15px 0; /* Márgenes superior e inferior */
     }
 
     .servicio-destacado-imagen {
         max-height: 150px; /* Limitar la altura de las imágenes */
-        object-fit: contain; /* Asegurar que la imagen se ajuste sin deformarse */
     }
 }
 
 /* Para pantallas aún más pequeñas (móviles) - Podemos refinar aún más si es necesario */
 @media (max-width: 480px) {
-    .servicios-destacados > div {
+    .servicios-destacados-contenedor-vertical {
         max-height: 600px; /* Aumentar la altura máxima si es necesario */
     }
 
