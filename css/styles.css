@@ -15,8 +15,8 @@ body {
 
 /* Encabezado */
 header {
-    background-color: #003B5C;
-    color: #FFB81C;
+    background-color: #003B5C; /* Azul Oscuro */
+    color: #FFB81C; /* Amarillo Minero */
     padding: 20px 0;
     text-align: center;
     display: flex;
@@ -50,28 +50,27 @@ nav ul {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: space-around; /* Distribución uniforme en pantallas grandes */
 }
 
 nav ul li {
     display: inline;
-    margin: 5px 10px;
+    margin: 0 10px; /* Ajuste de márgenes */
     position: relative; /* Para los separadores */
 }
 
 nav ul li a {
-    color: #FFFFFF;
+    color: #FFFFFF; /* Blanco */
     text-decoration: none;
-    padding: 8px 15px;
+    padding: 10px 15px; /* Aumento del padding horizontal */
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease, text-decoration 0.3s ease, transform 0.3s ease;
     display: block;
 }
 
 nav ul li a:hover {
-    background-color: #FFB81C;
-    color: #003B5C;
+    background-color: #FFB81C; /* Amarillo Minero al pasar el ratón */
+    color: #003B5C; /* Azul Oscuro al pasar el ratón */
     text-decoration: underline;
     text-underline-offset: 3px;
     transform: scale(1.05);
@@ -86,7 +85,7 @@ nav ul li:not(:last-child)::after {
     transform: translateY(-50%);
     width: 1px;
     height: 1.2em;
-    background-color: #FFFFFF;
+    background-color: #FFFFFF; /* Blanco */
 }
 
 /* Estilo específico para el último elemento del menú ("Inglés") */
@@ -115,7 +114,7 @@ main {
 }
 
 .hero-text {
-    background-color: rgba(0, 59, 92, 0.7); /* Fondo semi-transparente azul oscuro para el texto */
+    background-color: rgba(0, 59, 92, 0.7); /* Fondo semi-transparente Azul Oscuro para el texto */
     padding: 20px;
     border-radius: 10px;
     max-width: 80%;
@@ -135,8 +134,8 @@ main {
 
 /* Pie de página */
 footer {
-    background-color: #003B5C;
-    color: #FFFFFF;
+    background-color: #003B5C; /* Azul Oscuro */
+    color: #FFFFFF; /* Blanco */
     text-align: center;
     padding: 15px 0;
     font-size: 0.9em;
@@ -179,6 +178,13 @@ footer {
 /* Para pantallas medianas (tablets) */
 @media (min-width: 769px) and (max-width: 1024px) {
     nav ul {
-        justify-content: space-around;
+        justify-content: space-around; /* Distribución uniforme en tablets */
+    }
+}
+
+/* Para pantallas grandes (desktops) */
+@media (min-width: 1025px) {
+    nav ul {
+        justify-content: space-around; /* Distribución uniforme en desktops */
     }
 }
