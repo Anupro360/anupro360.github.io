@@ -194,6 +194,8 @@ footer {
     display: block;
     margin: 10px auto;
     border-radius: 5px;
+    object-fit: contain; /* Asegurar que la imagen se ajuste sin deformarse */
+    max-height: 150px; /* Altura máxima inicial */
 }
 
 .servicio-destacado-contenedor h3 {
@@ -224,16 +226,74 @@ footer {
 
 /* Estilos para pantallas más pequeñas (tablets y móviles) */
 @media (max-width: 768px) {
-    .servicio-destacado-contenedor {
-        flex-basis: calc(50% - 20px); /* Dos elementos por fila en tablets */
-        margin: 10px;
+    nav {
+        overflow-x: auto; /* Habilitar desplazamiento horizontal */
+        -webkit-overflow-scrolling: touch; /* Desplazamiento suave en iOS */
+        padding: 10px 15px; /* Añadir un poco de padding lateral */
     }
 
-    /* Para pantallas aún más pequeñas (móviles) */
-    @media (max-width: 480px) {
-        .servicio-destacado-contenedor {
-            flex-basis: 100%; /* Un elemento por fila en móviles */
-            margin: 10px 0;
-        }
+    nav ul {
+        display: flex; /* Alinear los elementos horizontalmente */
+        flex-wrap: nowrap; /* Evitar el salto de línea */
+        justify-content: flex-start; /* Alinear al inicio y permitir desplazamiento */
+        gap: 15px; /* Espacio entre los elementos */
+        width: fit-content; /* El ancho se ajusta al contenido */
+    }
+
+    nav ul li {
+        display: inline-block; /* Permitir margen y padding horizontal */
+        margin: 0; /* Resetear márgenes */
+    }
+
+    nav ul li:not(:last-child)::after {
+        display: none; /* Ocultar los separadores verticales */
+    }
+
+    nav ul li a {
+        padding: 10px; /* Reducir el padding */
+        white-space: nowrap; /* Evitar el salto de línea del texto del enlace */
+    }
+
+    .servicios-destacados > div { /* Seleccionamos el contenedor del carrusel */
+        overflow-x: unset; /* Revertimos el overflow horizontal */
+        overflow-y: auto; /* Habilitamos el desplazamiento vertical */
+        display: flex;
+        flex-direction: column; /* Alinear los elementos verticalmente */
+        -webkit-overflow-scrolling: touch; /* Desplazamiento suave en iOS */
+        padding-bottom: 0; /* Ajustar el padding inferior */
+        max-height: 450px; /* Establecer una altura máxima para el carrusel */
+    }
+
+    .servicios-destacados > div > div { /* Seleccionamos el contenedor interno de los servicios */
+        flex-direction: column; /* Asegurar la disposición vertical de los hijos */
+        align-items: center; /* Centrar los elementos horizontalmente */
+        width: 100%; /* Ocupar todo el ancho */
+        width: fit-content; /* El ancho se ajusta al contenido */
+    }
+
+    .servicio-destacado-contenedor {
+        flex-basis: auto; /* El alto se ajusta al contenido */
+        width: 90%; /* Ocupar un ancho más grande */
+        margin: 15px auto; /* Márgenes superior, inferior y centrado horizontal */
+    }
+
+    .servicio-destacado-imagen {
+        max-height: 150px; /* Limitar la altura de las imágenes */
+        object-fit: contain; /* Asegurar que la imagen se ajuste sin deformarse */
+    }
+}
+
+/* Para pantallas aún más pequeñas (móviles) - Podemos refinar aún más si es necesario */
+@media (max-width: 480px) {
+    .servicios-destacados > div {
+        max-height: 600px; /* Aumentar la altura máxima si es necesario */
+    }
+
+    .servicio-destacado-contenedor {
+        width: 95%;
+    }
+
+    .servicio-destacado-imagen {
+        max-height: 120px;
     }
 }
