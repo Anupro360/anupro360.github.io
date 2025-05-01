@@ -15,6 +15,19 @@
             margin: 10px auto;
             border-radius: 5px;
         }
+
+        .servicio-destacado-contenedor {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .servicio-destacado-contenedor:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -46,24 +59,26 @@
         <section style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
             <h2>Nuestros Servicios Destacados</h2>
             <p>Descubre cómo Anupro360 puede ayudarte a alcanzar tus objetivos.</p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
-                <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
-                    <h3>Curso Controlador Terreno</h3>
-                    <img src="controlador_terreno.webp" alt="Imagen del Curso Controlador Terreno" class="servicio-destacado-imagen">
-                    <p>Adquiere las habilidades necesarias para una gestión eficiente y segura de las operaciones en terreno. ¡Infórmate aquí!</p>
-                    <a href="curso_controlador_terreno.html" style="color: #003B5C; text-decoration: none;">Más información</a>
-                </div>
-                <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
-                    <h3>Curso Operador Camión Extracción</h3>
-                    <img src="operador_camion.webp" alt="Imagen del Curso Operador Camión Extracción" class="servicio-destacado-imagen">
-                    <p>Desarrolla las habilidades esenciales para operar camiones de extracción de forma segura y eficiente. ¡Inscríbete ahora!</p>
-                    <a href="curso_operador_camion_extraccion.html" style="display: inline-block; margin-top: 10px; color: #003B5C; text-decoration: none;">Más información</a>
-                </div>
-                <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
-                    <h3>Curso Instructor Equipos Pesados</h3>
-                    <img src="instructor_equipos_pesados.webp" alt="Imagen del Curso Instructor Equipos Pesados" class="servicio-destacado-imagen">
-                    <p>Forma instructores altamente capacitados para la operación segura y eficiente de equipos pesados. ¡Conoce más!</p>
-                    <a href="curso_instructor_equipos_pesados.html" style="display: inline-block; margin-top: 10px; color: #003B5C; text-decoration: none;">Más información</a>
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 20px; padding-bottom: 15px;">
+                <div style="display: flex; gap: 20px; width: fit-content;">
+                    <div class="servicio-destacado-contenedor">
+                        <h3>Curso Controlador Terreno</h3>
+                        <img src="controlador_terreno.webp" alt="Imagen del Curso Controlador Terreno" class="servicio-destacado-imagen">
+                        <p>Adquiere las habilidades necesarias para una gestión eficiente y segura de las operaciones en terreno. ¡Infórmate aquí!</p>
+                        <a href="curso_controlador_terreno.html" style="color: #003B5C; text-decoration: none;">Más información</a>
+                    </div>
+                    <div class="servicio-destacado-contenedor">
+                        <h3>Curso Operador Camión Extracción</h3>
+                        <img src="operador_camion.webp" alt="Imagen del Curso Operador Camión Extracción" class="servicio-destacado-imagen">
+                        <p>Desarrolla las habilidades esenciales para operar camiones de extracción de forma segura y eficiente. ¡Inscríbete ahora!</p>
+                        <a href="curso_operador_camion_extraccion.html" style="display: inline-block; margin-top: 10px; color: #003B5C; text-decoration: none;">Más información</a>
+                    </div>
+                    <div class="servicio-destacado-contenedor">
+                        <h3>Curso Instructor Equipos Pesados</h3>
+                        <img src="instructor_equipos_pesados.webp" alt="Imagen del Curso Instructor Equipos Pesados" class="servicio-destacado-imagen">
+                        <p>Forma instructores altamente capacitados para la operación segura y eficiente de equipos pesados. ¡Conoce más!</p>
+                        <a href="curso_instructor_equipos_pesados.html" style="display: inline-block; margin-top: 10px; color: #003B5C; text-decoration: none;">Más información</a>
+                    </div>
                 </div>
             </div>
         </section>
