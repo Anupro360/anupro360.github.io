@@ -221,3 +221,19 @@ footer {
 .servicio-destacado-contenedor a:hover {
     background-color: #0056b3;
 }
+
+/* Estilos para pantallas más pequeñas (tablets y móviles) */
+@media (max-width: 768px) {
+    .servicio-destacado-contenedor {
+        flex-basis: calc(50% - 20px); /* Dos elementos por fila en tablets */
+        margin: 10px;
+    }
+
+    /* Para pantallas aún más pequeñas (móviles) */
+    @media (max-width: 480px) {
+        .servicio-destacado-contenedor {
+            flex-basis: 100%; /* Un elemento por fila en móviles */
+            margin: 10px 0;
+        }
+    }
+}
