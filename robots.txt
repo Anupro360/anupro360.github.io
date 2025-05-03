@@ -4,5 +4,6 @@ Disallow: /wp-admin/
 Disallow: /readme.html
 Disallow: /trackback/
 Disallow: /xmlrpc.php
+Disallow: /tarjeta.html
 
 Sitemap: https://anupro360.com/sitemap.xml
