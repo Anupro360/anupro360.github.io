@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contacto | Guillermo Contreras</title>
+  <style>
+    :root {
+      --amarillo: #FFB81C;
+      --naranja: #FF5C00;
+      --gris: #5C6B6B;
+      --verde: #4B6F44;
+      --azul: #003B5C;
+      --blanco: #FFFFFF;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--blanco);
+      color: var(--gris);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background-color: var(--azul);
+      color: var(--blanco);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 400px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    .logo {
+      width: 150px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      margin: 0.5rem 0 0;
+      font-size: 1.5rem;
+    }
+
+    h2 {
+      margin: 0.2rem 0 1rem;
+      font-size: 1rem;
+      font-weight: normal;
+      color: var(--amarillo);
+    }
+
+    .contact-info a,
+    .button {
+      display: block;
+      background-color: var(--naranja);
+      color: var(--blanco);
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .contact-info a:hover,
+    .button:hover {
+      background-color: var(--amarillo);
+      color: var(--azul);
+    }
+
+    .social-icons {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .social-icons a {
+      color: var(--amarillo);
+      font-size: 1.5rem;
+      text-decoration: none;
+    }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="card">
+    <img src="https://anupro360.github.io/imagotipoblanco.webp" alt="Anupro360 Logo" class="logo">
+    <h1>Guillermo Antonio Contreras Muñoz</h1>
+    <h2>Director - Anupro360</h2>
+
+    <div class="contact-info">
+      <a href="mailto:guillermocontreras@anupro360.com">guillermocontreras@anupro360.com</a>
+      <a href="tel:+56951142625">Llamar: +56 9 5114 2625</a>
+      <a href="https://wa.me/56940523016">WhatsApp: +56 9 4052 3016</a>
+      <a class="button" href="guillermo-contreras.vcf" download>Guardar contacto (.vcf)</a>
+      <a class="button" href="https://www.anupro360.com">Sitio Web</a>
+    </div>
+
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/in/guillermocontrerasmu%C3%B1oz" target="_blank"><i class="fab fa-linkedin"></i></a>
+      <a href="https://www.instagram.com/anupro360" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://www.tiktok.com/@anupro360" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://www.facebook.com/share/1ARsrDbDqw" target="_blank"><i class="fab fa-facebook"></i></a>
+      <a href="https://x.com/Anupro360" target="_blank"><i class="fab fa-x-twitter"></i></a>
+    </div>
+  </div>
+</body>
+</html>
