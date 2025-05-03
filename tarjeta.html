@@ -2,102 +2,86 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guillermo Contreras | Anupro360</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papNK3FzYOGa+T2A8SeG/FhAj7V5S4GL0Fz3lmR4hqGUV20tp2WqXH5xA38WkE+I5m2rNUHzoRU4rQgfwEPb5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contacto | Guillermo Contreras</title>
+  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet"/>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #003B5C, #5C6B6B);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    .card {
-      background-color: #ffffff10;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      text-align: center;
-      animation: fadeIn 1s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    img.logo {
-      width: 140px;
-      margin-bottom: 1rem;
-    }
-    h1 {
-      font-size: 1.5rem;
-      margin: 0.5rem 0;
-    }
-    p.title {
-      color: #FFB81C;
-      font-weight: 600;
-      margin: 0.2rem 0 1rem;
-    }
-    .info {
-      margin: 1rem 0;
-      font-size: 0.95rem;
-    }
-    .info i {
-      margin-right: 8px;
-      color: #FFB81C;
-    }
-    a.button {
-      display: block;
-      background-color: #FF5C00;
-      color: white;
-      padding: 0.8rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a.button:hover {
-      background-color: #e65200;
-    }
-    .social-icons {
+      background-color: #ffffff;
       display: flex;
       justify-content: center;
-      gap: 0.8rem;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background-color: #003B5C;
+      color: #ffffff;
+      padding: 2rem;
+      border-radius: 1.5rem;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .logo {
+      max-width: 100px;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      margin: 0.5rem 0 0.2rem;
+    }
+    h4 {
+      color: #FFB81C;
+      margin-bottom: 1.5rem;
+    }
+    .btn {
+      display: block;
+      background-color: #FF5C00;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      margin: 0.4rem 0;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #e24e00;
+    }
+    .note {
+      font-size: 0.75rem;
+      color: #ccc;
+      margin-top: 0.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .social-icons {
       margin-top: 1rem;
     }
     .social-icons a {
-      color: white;
+      margin: 0 0.4rem;
+      color: #FFB81C;
       font-size: 1.4rem;
+      transition: color 0.3s;
     }
-    .note {
-      font-size: 0.8rem;
-      color: #cccccc;
-      margin-top: 0.5rem;
+    .social-icons a:hover {
+      color: #ffffff;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <img src="https://anupro360.github.io/imagotipoblanco.webp" alt="Logo Anupro360" class="logo" />
-    <h1>Guillermo Antonio Contreras Muñoz</h1>
-    <p class="title">Director | Anupro360</p>
+    <img src="https://anupro360.github.io/imagotipoblanco.webp" alt="Anupro360 Logo" class="logo" />
+    <h2>Guillermo Antonio Contreras Muñoz</h2>
+    <h4>Director - Anupro360</h4>
 
-    <div class="info">
-      <p><i class="fas fa-envelope"></i> guillermocontreras@anupro360.com</p>
-      <p><i class="fas fa-phone"></i> +56 9 5114 2625</p>
-      <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/56940523016" style="color: #25D366;">Contactar por WhatsApp</a></p>
-      <p><i class="fas fa-globe"></i> <a href="https://www.anupro360.com" style="color: #FFB81C;">anupro360.com</a></p>
-    </div>
-
-    <a class="button" href="guillermo-contreras.vcf" download>
-      ➕ Guardar contacto
-    </a>
-    <p class="note">📲 Si el contacto no se guarda automáticamente, abre el archivo descargado y selecciona “Guardar como nuevo contacto”.</p>
+    <a class="btn" href="mailto:guillermocontreras@anupro360.com">guillermocontreras@anupro360.com</a>
+    <a class="btn" href="tel:+56951142625">Llamar: +56 9 5114 2625</a>
+    <a class="btn" href="https://wa.me/56940523016">WhatsApp: +56 9 4052 3016</a>
+    <a class="btn" href="guillermo-contreras.vcf" download>Guardar contacto</a>
+    <div class="note">📲 Si el contacto no se guarda automáticamente, abre el archivo descargado y selecciona ‘Guardar como nuevo contacto’.</div>
+    <a class="btn" href="https://www.anupro360.com">Sitio Web</a>
 
     <div class="social-icons">
       <a href="https://www.linkedin.com/in/guillermocontrerasmu%C3%B1oz" target="_blank"><i class="fab fa-linkedin"></i></a>
