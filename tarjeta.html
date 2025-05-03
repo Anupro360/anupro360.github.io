@@ -10,64 +10,66 @@
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #003B5C, #5C6B6B); /* Un gradiente diagonal sutil */
-            color: #e0e0e0; /* Un gris claro para mejor contraste */
+            background: linear-gradient(135deg, #003B5C, #5C6B6B);
+            color: #e0e0e0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* Centrado verticalmente también */
-            min-height: 100vh; /* Para que el fondo ocupe toda la pantalla */
+            justify-content: center;
+            min-height: 100vh;
             padding: 2rem 1rem;
         }
         .card {
-            background-color: rgba(255, 255, 255, 0.05); /* Fondo translúcido */
+            background-color: rgba(255, 255, 255, 0.05);
             border-radius: 1rem;
-            padding: 2.5rem; /* Un poco más de espacio interior */
+            padding: 2.5rem;
             width: 100%;
-            max-width: 420px; /* Ligero aumento del ancho máximo */
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Sombra más pronunciada y suave */
+            max-width: 420px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             text-align: center;
-            animation: fadeIn 0.8s ease-out; /* Animación más rápida y suave */
-            backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+            animation: fadeIn 0.8s ease-out;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         img.logo {
-            width: 120px; /* Ligeramente más pequeño */
+            width: 120px;
             margin-bottom: 1.5rem;
-            border-radius: 50%; /* Logo circular */
+            border-radius: 50%;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            object-fit: contain; /* Asegura que la imagen se ajuste sin distorsionarse */
+            height: auto; /* Permite que la altura se ajuste proporcionalmente */
         }
         h1 {
-            font-size: 1.7rem; /* Un poco más grande */
+            font-size: 1.7rem;
             margin: 0.6rem 0;
-            font-weight: 500; /* Ligeramente más delgado */
+            font-weight: 500;
         }
         p.title {
             color: #FFB81C;
-            font-weight: 700; /* Más énfasis */
+            font-weight: 700;
             margin: 0.3rem 0 1.2rem;
-            letter-spacing: 0.5px; /* Un poco de espacio entre letras */
+            letter-spacing: 0.5px;
         }
         .info {
             margin: 1.2rem 0;
             font-size: 1rem;
         }
         .info p {
-            margin: 0.6rem 0; /* Más espacio entre líneas de información */
+            margin: 0.6rem 0;
         }
         .info i {
             margin-right: 10px;
             color: #FFB81C;
-            width: 1.2rem; /* Asegura un tamaño uniforme para los iconos */
-            display: inline-block; /* Para alinear bien el texto */
+            width: 1.2rem;
+            display: inline-block;
             text-align: center;
         }
         .info a {
-            color: #e0e0e0; /* Color del texto de los enlaces */
+            color: #e0e0e0;
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -75,15 +77,15 @@
             color: #FFB81C;
         }
         a.button {
-            display: inline-block; /* Para poder aplicar padding horizontal */
+            display: inline-block;
             background-color: #FF5C00;
             color: white;
-            padding: 1rem 2rem; /* Más padding */
+            padding: 1rem 2rem;
             margin: 0.7rem 0;
-            border-radius: 10px; /* Bordes más redondeados */
+            border-radius: 10px;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease; /* Transición suave */
+            transition: background-color 0.3s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.15);
         }
         a.button:hover {
@@ -92,23 +94,23 @@
         .social-icons {
             display: flex;
             justify-content: center;
-            gap: 1rem; /* Más espacio entre iconos */
+            gap: 1rem;
             margin-top: 1.5rem;
         }
         .social-icons a {
             color: white;
-            font-size: 1.6rem; /* Iconos un poco más grandes */
-            transition: color 0.3s ease, transform 0.3s ease; /* Transiciones para hover */
+            font-size: 1.6rem;
+            transition: color 0.3s ease, transform 0.3s ease;
         }
         .social-icons a:hover {
             color: #FFB81C;
-            transform: scale(1.1); /* Ligeramente más grandes al pasar el ratón */
+            transform: scale(1.1);
         }
         .note {
             font-size: 0.85rem;
             color: #b0b0b0;
             margin-top: 1rem;
-            line-height: 1.4; /* Mejor legibilidad */
+            line-height: 1.4;
         }
     </style>
 </head>
