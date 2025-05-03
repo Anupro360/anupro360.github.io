@@ -1,112 +1,142 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guillermo Contreras | Anupro360</title>
-  <link rel="icon" href="https://anupro360.github.io/favicon.png" type="image/png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papNK3FzYOGa+T2A8SeG/FhAj7V5S4GL0Fz3lmR4hqGUV20tp2WqXH5xA38WkE+I5m2rNUHzoRU4rQgfwEPb5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #003B5C, #5C6B6B);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    .card {
-      background-color: #ffffff10;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      text-align: center;
-      animation: fadeIn 1s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    img.logo {
-      width: 140px;
-      margin-bottom: 1rem;
-    }
-    h1 {
-      font-size: 1.5rem;
-      margin: 0.5rem 0;
-    }
-    p.title {
-      color: #FFB81C;
-      font-weight: 600;
-      margin: 0.2rem 0 1rem;
-    }
-    .info {
-      margin: 1rem 0;
-      font-size: 0.95rem;
-    }
-    .info i {
-      margin-right: 8px;
-      color: #FFB81C;
-    }
-    a.button {
-      display: block;
-      background-color: #FF5C00;
-      color: white;
-      padding: 0.8rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a.button:hover {
-      background-color: #e65200;
-    }
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 0.8rem;
-      margin-top: 1rem;
-    }
-    .social-icons a {
-      color: white;
-      font-size: 1.4rem;
-    }
-    .note {
-      font-size: 0.8rem;
-      color: #cccccc;
-      margin-top: 0.5rem;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guillermo Contreras | Anupro360</title>
+    <link rel="icon" href="https://anupro360.github.io/favicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-papNK3FzYOGa+T2A8SeG/FhAj7V5S4GL0Fz3lmR4hqGUV20tp2WqXH5xA38WkE+I5m2rNUHzoRU4rQgfwEPb5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #003B5C, #5C6B6B); /* Un gradiente diagonal sutil */
+            color: #e0e0e0; /* Un gris claro para mejor contraste */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centrado verticalmente también */
+            min-height: 100vh; /* Para que el fondo ocupe toda la pantalla */
+            padding: 2rem 1rem;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.05); /* Fondo translúcido */
+            border-radius: 1rem;
+            padding: 2.5rem; /* Un poco más de espacio interior */
+            width: 100%;
+            max-width: 420px; /* Ligero aumento del ancho máximo */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Sombra más pronunciada y suave */
+            text-align: center;
+            animation: fadeIn 0.8s ease-out; /* Animación más rápida y suave */
+            backdrop-filter: blur(10px); /* Efecto de desenfoque para el fondo */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        img.logo {
+            width: 120px; /* Ligeramente más pequeño */
+            margin-bottom: 1.5rem;
+            border-radius: 50%; /* Logo circular */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 1.7rem; /* Un poco más grande */
+            margin: 0.6rem 0;
+            font-weight: 500; /* Ligeramente más delgado */
+        }
+        p.title {
+            color: #FFB81C;
+            font-weight: 700; /* Más énfasis */
+            margin: 0.3rem 0 1.2rem;
+            letter-spacing: 0.5px; /* Un poco de espacio entre letras */
+        }
+        .info {
+            margin: 1.2rem 0;
+            font-size: 1rem;
+        }
+        .info p {
+            margin: 0.6rem 0; /* Más espacio entre líneas de información */
+        }
+        .info i {
+            margin-right: 10px;
+            color: #FFB81C;
+            width: 1.2rem; /* Asegura un tamaño uniforme para los iconos */
+            display: inline-block; /* Para alinear bien el texto */
+            text-align: center;
+        }
+        .info a {
+            color: #e0e0e0; /* Color del texto de los enlaces */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .info a:hover {
+            color: #FFB81C;
+        }
+        a.button {
+            display: inline-block; /* Para poder aplicar padding horizontal */
+            background-color: #FF5C00;
+            color: white;
+            padding: 1rem 2rem; /* Más padding */
+            margin: 0.7rem 0;
+            border-radius: 10px; /* Bordes más redondeados */
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease; /* Transición suave */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        a.button:hover {
+            background-color: #e65200;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem; /* Más espacio entre iconos */
+            margin-top: 1.5rem;
+        }
+        .social-icons a {
+            color: white;
+            font-size: 1.6rem; /* Iconos un poco más grandes */
+            transition: color 0.3s ease, transform 0.3s ease; /* Transiciones para hover */
+        }
+        .social-icons a:hover {
+            color: #FFB81C;
+            transform: scale(1.1); /* Ligeramente más grandes al pasar el ratón */
+        }
+        .note {
+            font-size: 0.85rem;
+            color: #b0b0b0;
+            margin-top: 1rem;
+            line-height: 1.4; /* Mejor legibilidad */
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <img src="https://anupro360.github.io/imagotipoblanco.webp" alt="Logo Anupro360" class="logo" />
-    <h1>Guillermo Antonio Contreras Muñoz</h1>
-    <p class="title">Director | Anupro360</p>
+    <div class="card">
+        <img src="https://anupro360.github.io/imagotipoblanco.webp" alt="Logo Anupro360" class="logo" />
+        <h1>Guillermo Antonio Contreras Muñoz</h1>
+        <p class="title">Director | Anupro360</p>
 
-    <div class="info">
-      <p><i class="fas fa-envelope"></i> guillermocontreras@anupro360.com</p>
-      <p><i class="fas fa-phone"></i> +56 9 5114 2625</p>
-      <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/56940523016" style="color: #25D366;">Contactar por WhatsApp</a></p>
-      <p><i class="fas fa-globe"></i> <a href="https://www.anupro360.com" style="color: #FFB81C;">anupro360.com</a></p>
+        <div class="info">
+            <p><i class="fas fa-envelope"></i> <a href="mailto:guillermocontreras@anupro360.com">guillermocontreras@anupro360.com</a></p>
+            <p><i class="fas fa-phone"></i> <a href="tel:+56951142625">+56 9 5114 2625</a></p>
+            <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/56940523016" style="color: #25D366;">Contactar por WhatsApp</a></p>
+            <p><i class="fas fa-globe"></i> <a href="https://www.anupro360.com" style="color: #FFB81C;">anupro360.com</a></p>
+        </div>
+
+        <a class="button" href="guillermo-contreras.vcf" download>
+            <i class="fas fa-download" style="margin-right: 0.5rem;"></i> Guardar contacto
+        </a>
+        <p class="note">📲 Si el contacto no se guarda automáticamente, abre el archivo descargado y selecciona “Guardar como nuevo contacto”.</p>
+
+        <div class="social-icons">
+            <a href="https://www.linkedin.com/in/guillermocontrerasmu%C3%B1oz" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.instagram.com/anupro360" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.tiktok.com/@anupro360" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://www.facebook.com/share/1ARsrDbDqw/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://x.com/Anupro360" target="_blank"><i class="fab fa-x-twitter"></i></a>
+        </div>
     </div>
-
-    <a class="button" href="guillermo-contreras.vcf" download>
-      ➕ Guardar contacto
-    </a>
-    <p class="note">📲 Si el contacto no se guarda automáticamente, abre el archivo descargado y selecciona “Guardar como nuevo contacto”.</p>
-
-    <div class="social-icons">
-      <a href="https://www.linkedin.com/in/guillermocontrerasmu%C3%B1oz" target="_blank"><i class="fab fa-linkedin"></i></a>
-      <a href="https://www.instagram.com/anupro360" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.tiktok.com/@anupro360" target="_blank"><i class="fab fa-tiktok"></i></a>
-      <a href="https://www.facebook.com/share/1ARsrDbDqw/" target="_blank"><i class="fab fa-facebook"></i></a>
-      <a href="https://x.com/Anupro360" target="_blank"><i class="fab fa-x-twitter"></i></a>
-    </div>
-  </div>
 </body>
 </html>
