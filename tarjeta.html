@@ -1,95 +1,105 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contacto | Guillermo Contreras</title>
-  <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet"/>
-  <style>
+<style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f4f4f4; /* Un fondo gris claro moderno */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
     }
+
     .card {
-      background-color: #003B5C;
-      color: #ffffff;
-      padding: 2rem;
-      border-radius: 1.5rem;
-      max-width: 380px;
-      width: 90%;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      text-align: center;
+        background-color: #003B5C;
+        color: #ffffff;
+        padding: 2rem;
+        border-radius: 1.5rem;
+        max-width: 90%; /* Ocupa un buen porcentaje en móviles */
+        width: 380px; /* Ancho máximo para no verse demasiado estirado en tablets pequeñas */
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Sombra más pronunciada para dar elevación */
+        text-align: center;
     }
+
     .logo {
-      max-width: 100px;
-      margin-bottom: 1rem;
+        max-width: 120px; /* Ligeramente más grande para mejor visibilidad */
+        margin-bottom: 1.5rem;
     }
+
     h2 {
-      margin: 0.5rem 0 0.2rem;
+        margin: 0.75rem 0 0.3rem;
+        font-size: 1.8rem; /* Tamaño de fuente legible en móvil */
     }
+
     h4 {
-      color: #FFB81C;
-      margin-bottom: 1.5rem;
+        color: #FFB81C;
+        margin-bottom: 1.8rem;
+        font-size: 1.1rem; /* Tamaño de fuente legible en móvil */
     }
+
     .btn {
-      display: block;
-      background-color: #FF5C00;
-      color: #fff;
-      text-decoration: none;
-      padding: 0.8rem;
-      border-radius: 0.5rem;
-      margin: 0.4rem 0;
-      font-weight: bold;
-      transition: background 0.3s;
+        display: block;
+        background-color: #FF5C00;
+        color: #fff;
+        text-decoration: none;
+        padding: 1rem; /* Aumento el padding para mejor interacción táctil */
+        border-radius: 0.75rem; /* Bordes más redondeados para un look moderno */
+        margin: 0.6rem 0;
+        font-weight: bold;
+        font-size: 1rem; /* Tamaño de fuente legible en botón */
+        transition: background 0.3s, transform 0.2s ease-in-out; /* Transiciones suaves */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Pequeña sombra para dar profundidad */
     }
+
     .btn:hover {
-      background-color: #e24e00;
+        background-color: #e24e00;
+        transform: scale(1.02); /* Pequeño efecto de "pop" al tocar (o al pasar el ratón en escritorio) */
     }
+
     .note {
-      font-size: 0.75rem;
-      color: #ccc;
-      margin-top: 0.2rem;
-      margin-bottom: 1.5rem;
+        font-size: 0.8rem;
+        color: #aaa; /* Color gris más claro */
+        margin-top: 0.4rem;
+        margin-bottom: 2rem;
     }
+
     .social-icons {
-      margin-top: 1rem;
+        margin-top: 1.5rem;
+        display: flex; /* Uso flexbox para alinear los iconos */
+        justify-content: center; /* Centrar los iconos */
     }
+
     .social-icons a {
-      margin: 0 0.4rem;
-      color: #FFB81C;
-      font-size: 1.4rem;
-      transition: color 0.3s;
+        margin: 0 0.8rem; /* Más espacio entre iconos */
+        color: #FFB81C;
+        font-size: 1.6rem; /* Iconos ligeramente más grandes */
+        transition: color 0.3s, transform 0.2s ease-in-out;
     }
+
     .social-icons a:hover {
-      color: #ffffff;
+        color: #ffffff;
+        transform: translateY(-2px); /* Pequeño efecto de elevación al tocar */
     }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <img src="https://anupro360.github.io/imagotipoblanco.webp" alt="Anupro360 Logo" class="logo" />
-    <h2>Guillermo Antonio Contreras Muñoz</h2>
-    <h4>Director - Anupro360</h4>
 
-    <a class="btn" href="mailto:guillermocontreras@anupro360.com">guillermocontreras@anupro360.com</a>
-    <a class="btn" href="tel:+56951142625">Llamar: +56 9 5114 2625</a>
-    <a class="btn" href="https://wa.me/56940523016">WhatsApp: +56 9 4052 3016</a>
-    <a class="btn" href="guillermo-contreras.vcf" download>Guardar contacto</a>
-    <div class="note">📲 Si el contacto no se guarda automáticamente, abre el archivo descargado y selecciona ‘Guardar como nuevo contacto’.</div>
-    <a class="btn" href="https://www.anupro360.com">Sitio Web</a>
+    /* Estilos futuristas adicionales (opcional - puedes experimentar con más) */
+    .btn {
+        background: linear-gradient(135deg, #FF5C00 0%, #e24e00 100%); /* Degradado sutil */
+        border: none; /* Eliminar bordes por defecto */
+        position: relative;
+        overflow: hidden; /* Para efectos de "onda" */
+    }
 
-    <div class="social-icons">
-      <a href="https://www.linkedin.com/in/guillermocontrerasmu%C3%B1oz" target="_blank"><i class="fab fa-linkedin"></i></a>
-      <a href="https://www.instagram.com/anupro360" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.tiktok.com/@anupro360" target="_blank"><i class="fab fa-tiktok"></i></a>
-      <a href="https://www.facebook.com/share/1ARsrDbDqw/" target="_blank"><i class="fab fa-facebook"></i></a>
-      <a href="https://x.com/Anupro360" target="_blank"><i class="fab fa-x-twitter"></i></a>
-    </div>
-  </div>
-</body>
-</html>
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.1); /* Efecto de brillo */
+        transition: left 0.4s ease-in-out;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+</style>
