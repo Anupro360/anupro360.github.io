@@ -1,336 +1,351 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anupro360: Cursos Minería, Operador CAEX, Certificación y Desarrollo Profesional</title>
-    <meta name="description" content="Impulsa tu carrera en la minería y otros sectores con los cursos especializados de Anupro360 en Iquique. Certificaciones para operador CAEX, controlador terreno, liderazgo, inglés y más. ¡Inscríbete!">
-    <meta name="keywords" content="cursos minería Iquique, operador CAEX, controlador terreno, ética laboral, trabajo en equipo, aprender a aprender, certificación minera, inglés para minería, curso secretaria, selección personal, desarrollo profesional, capacitación minera, anupro360">
-    <link rel="stylesheet" href="cursos.css">
-    <style>
-        :root {
-            /* Define your color palette as CSS variables for easier changes */
-            --primary-dark-blue: #003B5C;
-            --primary-yellow: #FFB81C;
-            --primary-orange: #FF5C00;
-            --secondary-steel-gray: #5C6B6B;
-            --secondary-light-gray: #F4F4F4;
-            --button-green: #85CB33;
-            --button-green-hover: #67A32A;
-            --white: #FFFFFF;
-        }
+ <html lang="es">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anupro360: Cursos Minería, Operador CAEX, Certificación y Desarrollo Profesional</title>
+  <meta name="description" content="Impulsa tu carrera en la minería y otros sectores con los cursos especializados de Anupro360 en Iquique. Certificaciones para operador CAEX, controlador terreno, liderazgo, inglés y más. ¡Inscríbete!">
+  <meta name="keywords" content="cursos minería Iquique, operador CAEX, controlador terreno, ética laboral, trabajo en equipo, aprender a aprender, certificación minera, inglés para minería, curso secretaria, selección personal, desarrollo profesional, capacitación minera, anupro360">
+  <link rel="stylesheet" href="cursos.css">
+  <link rel="canonical" href="https://www.anupro360.com/cursos-mineria-desarrollo-profesional.html">
 
-        /* General Styles */
-        body {
-            font-family: sans-serif; /* Specify a default font */
-            margin: 0;
-            line-height: 1.6;
-        }
+  <meta property="og:title" content="Anupro360: Cursos Minería, Operador CAEX, Certificación y Desarrollo Profesional" />
+  <meta property="og:description" content="Impulsa tu carrera en la minería y otros sectores con los cursos especializados de Anupro360 en Iquique. Certificaciones para operador CAEX, controlador terreno, liderazgo, inglés y más. ¡Inscríbete!" />
+  <meta property="og:url" content="https://www.anupro360.com/cursos-mineria-desarrollo-profesional.html" />
+  <meta property="og:image" content="URL_DE_TU_IMAGEN_PRINCIPAL" />
+  <meta property="og:type" content="website" />
 
-        /* Header Styles */
-        header {
-            background-color: var(--primary-dark-blue);
-            color: var(--white);
-            padding: 1em 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-direction: column;
-            text-align: center;
-        }
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Anupro360: Cursos Minería, Operador CAEX, Certificación y Desarrollo Profesional" />
+  <meta name="twitter:description" content="Impulsa tu carrera en la minería y otros sectores con los cursos especializados de Anupro360 en Iquique. Certificaciones para operador CAEX, controlador terreno, liderazgo, inglés y más. ¡Inscríbete!" />
+  <meta name="twitter:image" content="URL_DE_TU_IMAGEN_PRINCIPAL" />
 
-        .logo {
-            max-height: 50px;
-            margin-bottom: 0.5em;
-        }
+  <style>
+  :root {
+  /* Define your color palette as CSS variables for easier changes */
+  --primary-dark-blue: #003B5C;
+  --primary-yellow: #FFB81C;
+  --primary-orange: #FF5C00;
+  --secondary-steel-gray: #5C6B6B;
+  --secondary-light-gray: #F4F4F4;
+  --button-green: #85CB33;
+  --button-green-hover: #67A32A;
+  --white: #FFFFFF;
+  }
 
-        h1 {
-            margin: 0;
-            font-size: 1.5em;
-        }
+  /* General Styles */
+  body {
+  font-family: sans-serif; /* Specify a default font */
+  margin: 0;
+  line-height: 1.6;
+  }
 
-        .subtitulo-header {
-            color: var(--primary-yellow);
-            font-size: 1em;
-            margin-top: 0.5em;
-        }
+  /* Header Styles */
+  header {
+  background-color: var(--primary-dark-blue);
+  color: var(--white);
+  padding: 1em 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  text-align: center;
+  }
 
-        .btn-inicio {
-            background-color: var(--primary-yellow);
-            color: var(--primary-dark-blue);
-            padding: 0.8em 1.5em;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 1em;
-            display: inline-block; /* Ensure consistent spacing */
-        }
+  .logo {
+  max-height: 50px;
+  margin-bottom: 0.5em;
+  }
 
-        .btn-inicio:hover {
-            background-color: var(--primary-orange);
-            color: var(--white);
-        }
+  h1 {
+  margin: 0;
+  font-size: 1.5em;
+  }
 
-        /* Course Container Styles */
-        .cursos-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            padding: 20px;
-            gap: 20px;
-            background-color: var(--secondary-light-gray);
-        }
+  .subtitulo-header {
+  color: var(--primary-yellow);
+  font-size: 1em;
+  margin-top: 0.5em;
+  }
 
-        /* Course Card Styles */
-        .curso {
-            background-color: var(--white);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-            display: flex; /* Añadimos flex para controlar la altura del contenido */
-            flex-direction: column; /* Alineamos el contenido verticalmente */
-        }
+  .btn-inicio {
+  background-color: var(--primary-yellow);
+  color: var(--primary-dark-blue);
+  padding: 0.8em 1.5em;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 1em;
+  display: inline-block; /* Ensure consistent spacing */
+  }
 
-        .curso:hover {
-            transform: scale(1.03);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+  .btn-inicio:hover {
+  background-color: var(--primary-orange);
+  color: var(--white);
+  }
 
-        .curso a {
-            text-decoration: none;
-            color: inherit;
-            display: flex; /* También flex para el enlace */
-            flex-direction: column; /* Alineamos el contenido del enlace verticalmente */
-            height: 100%;
-        }
+  /* Course Container Styles */
+  .cursos-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  padding: 20px;
+  gap: 20px;
+  background-color: var(--secondary-light-gray);
+  }
 
-        .curso img {
-            width: 100%;
-            display: block;
-            max-height: 200px;
-            object-fit: cover;
-        }
+  /* Course Card Styles */
+  .curso {
+  background-color: var(--white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  display: flex; /* Añadimos flex para controlar la altura del contenido */
+  flex-direction: column; /* Alineamos el contenido verticalmente */
+  }
 
-        .curso-info {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1; /* Permite que .curso-info crezca para llenar el espacio */
-        }
+  .curso:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 
-        .curso-info h3 {
-            color: var(--primary-dark-blue);
-            margin-top: 0;
-        }
+  .curso a {
+  text-decoration: none;
+  color: inherit;
+  display: flex; /* También flex para el enlace */
+  flex-direction: column; /* Alineamos el contenido del enlace verticalmente */
+  height: 100%;
+  }
 
-        .curso-info p {
-            color: var(--secondary-steel-gray);
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
+  .curso img {
+  width: 100%;
+  display: block;
+  max-height: 200px;
+  object-fit: cover;
+  }
 
-        .btn-pago {
-            display: inline-block;
-            background-color: var(--button-green);
-            color: var(--white);
-            padding: 0.8em 1.5em;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
+  .curso-info {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1; /* Permite que .curso-info crezca para llenar el espacio */
+  }
 
-        .btn-pago:hover {
-            background-color: var(--button-green-hover);
-        }
+  .curso-info h3 {
+  color: var(--primary-dark-blue);
+  margin-top: 0;
+  }
 
-        /* Footer Styles */
-        footer {
-            background-color: var(--secondary-steel-gray);
-            color: var(--white);
-            text-align: center;
-            padding: 1em 0;
-            margin-top: 20px;
-        }
+  .curso-info p {
+  color: var(--secondary-steel-gray);
+  line-height: 1.5;
+  margin-bottom: 10px;
+  }
 
-        .contactos a {
-            color: var(--primary-yellow);
-            margin: 0 10px;
-            text-decoration: none;
-        }
+  .btn-pago {
+  display: inline-block;
+  background-color: var(--button-green);
+  color: var(--white);
+  padding: 0.8em 1.5em;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 10px;
+  }
 
-        .contactos a:hover {
-            color: var(--white);
-        }
+  .btn-pago:hover {
+  background-color: var(--button-green-hover);
+  }
 
-        /* Media Query for Larger Screens */
-        @media (min-width: 769px) {
-            header {
-                flex-direction: row;
-                align-items: center;
-                text-align: left;
-            }
+  /* Footer Styles */
+  footer {
+  background-color: var(--secondary-steel-gray);
+  color: var(--white);
+  text-align: center;
+  padding: 1em 0;
+  margin-top: 20px;
+  }
 
-            .logo {
-                margin-bottom: 0;
-                margin-right: 20px;
-            }
+  .contactos a {
+  color: var(--primary-yellow);
+  margin: 0 10px;
+  text-decoration: none;
+  }
 
-            h1 {
-                font-size: 2em;
-            }
+  .contactos a:hover {
+  color: var(--white);
+  }
 
-            .subtitulo-header {
-                display: none; /* Hide subtitle on larger screens */
-            }
+  /* Media Query for Larger Screens */
+  @media (min-width: 769px) {
+  header {
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  }
 
-            .btn-inicio {
-                margin-top: 0;
-            }
-        }
-    </style>
-</head>
-<body>
+  .logo {
+  margin-bottom: 0;
+  margin-right: 20px;
+  }
 
-    <header>
-        <img src="imagotipoblanco.webp" alt="Logo Anupro360" class="logo">
-        <h1>Tu Plataforma Líder en Cursos para la Industria Minera y Desarrollo Profesional</h1>
-        <p class="subtitulo-header">Adquiere las habilidades y certificaciones que necesitas para destacar en el sector minero y más.</p>
-        <a href="index.html" class="btn-inicio" title="Volver a la página principal de Anupro360">Inicio</a>
-    </header>
+  h1 {
+  font-size: 2em;
+  }
 
-    <main class="cursos-container">
-        <section class="curso">
-            <a href="curso_operador_camion_extraccion.html" title="Ver detalles del Curso de Operador de Camión de Extracción">
-                <img src="curso1.webp" alt="Imagen del Curso Operador de Camión de Extracción">
-                <div class="curso-info">
-                    <h3>Curso Operador de Camión de Extracción</h3>
-                    <p>¡Conviértete en un experto! Curso completo de Operador de Camión de Extracción. Aprende operación segura, mantenimiento básico y maximiza tu potencial en la industria minera. <strong>¡Inscríbete ahora y obtén tu certificación!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Operador de Camión de Extracción">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  .subtitulo-header {
+  display: none; /* Hide subtitle on larger screens */
+  }
 
-        <section class="curso">
-            <a href="curso_controlador_terreno.html" title="Ver detalles del Curso Controlador de Terreno">
-                <img src="curso2.webp" alt="Imagen del Curso Controlador de Terreno">
-                <div class="curso-info">
-                    <h3>Curso Controlador de Terreno</h3>
-                    <p>Prepárate para el futuro de la minería. Curso online de Controlador de Terreno (Operador Camión Extracción Autónomo). Domina la supervisión remota y las tecnologías de vanguardia. <strong>¡Certifícate y lidera la nueva era!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Controlador de Terreno">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  .btn-inicio {
+  margin-top: 0;
+  }
+  }
+  </style>
+ </head>
+ <body>
 
-        <section class="curso">
-            <a href="curso_operador_pala_hidraulica.html" title="Ver detalles del Curso Operador de Pala Hidráulica">
-                <img src="curso3.webp" alt="Imagen del Curso Operador de Pala Hidráulica">
-                <div class="curso-info">
-                    <h3>Curso Operador de Pala Hidráulica</h3>
-                    <p>Domina la excavación a gran escala. Curso de Operador de Pala. Aprende técnicas eficientes, seguridad y mantenimiento preventivo. <strong>¡Impulsa tu carrera en la construcción y minería! ¡Inscríbete hoy!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Operador de Pala Hidráulica">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  <header>
+  <a href="index.html" aria-label="Volver a la página principal de Anupro360">
+  <img src="imagotipoblanco.webp" alt="Logo Anupro360" class="logo">
+  </a>
+  <h1>Tu Plataforma Líder en Cursos para la Industria Minera y Desarrollo Profesional</h1>
+  <p class="subtitulo-header">Adquiere las habilidades y certificaciones que necesitas para destacar en el sector minero y más.</p>
+  <a href="index.html" class="btn-inicio" title="Volver a la página principal de Anupro360">Inicio</a>
+  </header>
 
-        <section class="curso">
-            <a href="curso_grua_horquilla.html" title="Ver detalles del Curso Grúa Horquilla">
-                <img src="curso4.webp" alt="Imagen del Curso Grúa Horquilla">
-                <div class="curso-info">
-                    <h3>Curso Grúa Horquilla</h3>
-                    <p>Maniobra cargas con precisión. Curso de Operador de Grúa Horquilla. Aprende normas de seguridad, operación experta y mantenimiento básico. <strong>¡Certifícate y destaca en logística y bodegaje!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Grúa Horquilla">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  <main class="cursos-container">
+  <section class="curso">
+  <a href="curso_operador_camion_extraccion.html" title="Ver detalles del Curso de Operador de Camión de Extracción">
+  <img src="curso1.webp" alt="Imagen del Curso Operador de Camión de Extracción" title="Curso Operador de Camión de Extracción">
+  <div class="curso-info">
+  <h3>Curso Operador de Camión de Extracción</h3>
+  <p>¡Conviértete en un experto! Curso completo de Operador de Camión de Extracción. Aprende operación segura, mantenimiento básico y maximiza tu potencial en la industria minera. <strong>¡Inscríbete ahora y obtén tu certificación!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Operador de Camión de Extracción">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-        <section class="curso">
-            <a href="curso_secretaria.html" title="Ver detalles del Curso de Secretaria">
-                <img src="curso5.webp" alt="Imagen del Curso de Secretaria">
-                <div class="curso-info">
-                    <h3>Curso de Secretaria</h3>
-                    <p>Organización y eficiencia al máximo nivel. Curso de Secretaria. Desarrolla habilidades clave en gestión de documentos, comunicación y herramientas de oficina. <strong>¡Impulsa tu carrera administrativa! ¡Inscríbete!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Secretaria">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  <section class="curso">
+  <a href="curso_controlador_terreno.html" title="Ver detalles del Curso Controlador de Terreno">
+  <img src="curso2.webp" alt="Imagen del Curso Controlador de Terreno" title="Curso Controlador de Terreno">
+  <div class="curso-info">
+  <h3>Curso Controlador de Terreno</h3>
+  <p>Prepárate para el futuro de la minería. Curso online de Controlador de Terreno (Operador Camión Extracción Autónomo). Domina la supervisión remota y las tecnologías de vanguardia. <strong>¡Certifícate y lidera la nueva era!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Controlador de Terreno">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-        <section class="curso">
-            <a href="curso_aprender_aprender.html" title="Ver detalles del Curso Aprender a Aprender">
-                <img src="curso6.webp" alt="Imagen del Curso Aprender a Aprender">
-                <div class="curso-info">
-                    <h3>Curso Aprender a Aprender</h3>
-                    <p>Desbloquea tu potencial de aprendizaje. Curso "Aprender a Aprender". Descubre estrategias efectivas, mejora tu concentración y optimiza tu estudio. <strong>¡Transforma tu forma de aprender!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso Aprender a Aprender">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  <section class="curso">
+  <a href="curso_operador_pala_hidraulica.html" title="Ver detalles del Curso Operador de Pala Hidráulica">
+  <img src="curso3.webp" alt="Imagen del Curso Operador de Pala Hidráulica" title="Curso Operador de Pala Hidráulica">
+  <div class="curso-info">
+  <h3>Curso Operador de Pala Hidráulica</h3>
+  <p>Domina la excavación a gran escala. Curso de Operador de Pala. Aprende técnicas eficientes, seguridad y mantenimiento preventivo. <strong>¡Impulsa tu carrera en la construcción y minería! ¡Inscríbete hoy!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Operador de Pala Hidráulica">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-        <section class="curso">
-            <a href="curso_liderazgo_laboral.html" title="Ver detalles del Curso Liderazgo Laboral">
-                <img src="curso7.webp" alt="Imagen del Curso Liderazgo Laboral">
-                <div class="curso-info">
-                    <h3>Curso Liderazgo Laboral</h3>
-                    <p>Lidera con impacto. Curso de Liderazgo Laboral. Desarrolla habilidades de comunicación, motivación y gestión de equipos. <strong>¡Inspira y alcanza tus metas profesionales!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso Liderazgo Laboral">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  <section class="curso">
+  <a href="curso_grua_horquilla.html" title="Ver detalles del Curso Grúa Horquilla">
+  <img src="curso4.webp" alt="Imagen del Curso Grúa Horquilla" title="Curso Grúa Horquilla">
+  <div class="curso-info">
+  <h3>Curso Grúa Horquilla</h3>
+  <p>Maniobra cargas con precisión. Curso de Operador de Grúa Horquilla. Aprende normas de seguridad, operación experta y mantenimiento básico. <strong>Certifícate y destaca en logística y bodegaje!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Grúa Horquilla">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-        <section class="curso">
-            <a href="curso_trabajo_equipo.html" title="Ver detalles del Curso de Trabajo en Equipo">
-                <img src="curso8.webp" alt="Imagen del Curso de Trabajo en Equipo">
-                <div class="curso-info">
-                    <h3>Curso de Trabajo en Equipo</h3>
-                    <p>Potencia la colaboración y el éxito colectivo. Curso de Trabajo en Equipo. Aprende a comunicarte eficazmente, resolver conflictos y alcanzar objetivos comunes. <strong>¡Inscríbete y fortalece tus habilidades!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Trabajo en Equipo">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  <section class="curso">
+  <a href="curso_secretaria.html" title="Ver detalles del Curso de Secretaria">
+  <img src="curso5.webp" alt="Imagen del Curso de Secretaria" title="Curso de Secretaria">
+  <div class="curso-info">
+  <h3>Curso de Secretaria</h3>
+  <p>Organización y eficiencia al máximo nivel. Curso de Secretaria. Desarrolla habilidades clave en gestión de documentos, comunicación y herramientas de oficina. <strong>¡Impulsa tu carrera administrativa! ¡Inscríbete!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Secretaria">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-        <section class="curso">
-            <a href="curso_ingles_nivel1.html" title="Ver detalles del Curso de Inglés Nivel 1">
-                <img src="curso9.webp" alt="Imagen del Curso de Inglés Nivel 1">
-                <div class="curso-info">
-                    <h3>Curso de Inglés Nivel 1</h3>
-                    <p>¡Empieza tu camino al inglés! Curso Nivel 1. Aprende vocabulario básico, gramática esencial y mejora tu pronunciación. <strong>¡Comunícate con confianza! ¡Inscríbete ahora!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Inglés Nivel 1">Inscribirse Ahora</a>
-                </div>
-            </a>
-        </section>
+  <section class="curso">
+  <a href="curso_aprender_aprender.html" title="Ver detalles del Curso Aprender a Aprender">
+  <img src="curso6.webp" alt="Imagen del Curso Aprender a Aprender" title="Curso Aprender a Aprender">
+  <div class="curso-info">
+  <h3>Curso Aprender a Aprender</h3>
+  <p>Desbloquea tu potencial de aprendizaje. Curso "Aprender a Aprender". Descubre estrategias efectivas, mejora tu concentración y optimiza tu estudio. <strong>¡Transforma tu forma de aprender!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso Aprender a Aprender">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-        <section class="curso">
-            <a href="curso_instructor_equipos_pesados.html" title="Ver detalles del Curso Instructor de Equipos Pesados">
-                <img src="curso10.webp" alt="Imagen del Curso Instructor de Equipos Pesados">
-                <div class="curso-info">
-                    <h3>Curso Instructor de Equipos Pesados</h3>
-                    <p>Forma a los futuros operadores. Curso de Instructor de Equipos Pesados. Domina técnicas de enseñanza, evaluación y seguridad. <strong>¡Comparte tu experiencia y certifica profesionales!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Contactar para el Curso Instructor de Equipos Pesados">Contratar Selección</a>
-                </div>
-            </a>
-        </section>
+  <section class="curso">
+  <a href="curso_liderazgo_laboral.html" title="Ver detalles del Curso Liderazgo Laboral">
+  <img src="curso7.webp" alt="Imagen del Curso Liderazgo Laboral" title="Curso Liderazgo Laboral">
+  <div class="curso-info">
+  <h3>Curso Liderazgo Laboral</h3>
+  <p>Lidera con impacto. Curso de Liderazgo Laboral. Desarrolla habilidades de comunicación, motivación y gestión de equipos. <strong>¡Inspira y alcanza tus metas profesionales!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso Liderazgo Laboral">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-        <section class="curso">
-            <a href="certificacion_operadores_equipos.html" title="Ver detalles de la Certificación de Operadores de Equipos">
-                <img src="curso11.webp" alt="Imagen de la Certificación de Operadores de Equipos">
-                <div class="curso-info">
-                    <h3>Certificación Operadores Equipos</h3>
-                    <p>Valida tus habilidades. Certificación de Operadores de Equipos Pesados. Demuestra tu experiencia y conocimientos según los estándares de la industria. <strong>¡Impulsa tu carrera y obtén reconocimiento!</strong></p>
-                    <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Contactar para la Certificación de Operadores de Equipos">Contratar Selección</a>
-                </div>
-            </a>
-        </section>
-    </main>
+  <section class="curso">
+  <a href="curso_trabajo_equipo.html" title="Ver detalles del Curso de Trabajo en Equipo">
+  <img src="curso8.webp" alt="Imagen del Curso de Trabajo en Equipo" title="Curso de Trabajo en Equipo">
+  <div class="curso-info">
+  <h3>Curso de Trabajo en Equipo</h3>
+  <p>Potencia la colaboración y el éxito colectivo. Curso de Trabajo en Equipo. Aprende a comunicarte eficazmente, resolver conflictos y alcanzar objetivos comunes. <strong>¡Inscríbete y fortalece tus habilidades!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Trabajo en Equipo">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-    <footer>
-        <p>&copy; 2025 Anupro360</p>
-        <div class="contactos">
-            <a href="https://wa.me/56940523016" target="_blank" class="contacto" title="Contactar por WhatsApp">WhatsApp</a>
-            <a href="mailto:contacto@anupro360.com" class="contacto" title="Enviar un correo electrónico">Correo Electrónico</a>
-        </div>
-    </footer>
+  <section class="curso">
+  <a href="curso_ingles_nivel1.html" title="Ver detalles del Curso de Inglés Nivel 1">
+  <img src="curso9.webp" alt="Imagen del Curso de Inglés Nivel 1" title="Curso de Inglés Nivel 1">
+  <div class="curso-info">
+  <h3>Curso de Inglés Nivel 1</h3>
+  <p>¡Empieza tu camino al inglés! Curso Nivel 1. Aprende vocabulario básico, gramática esencial y mejora tu pronunciación. <strong>¡Comunícate con confianza! ¡Inscríbete ahora!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Inscribirse al Curso de Inglés Nivel 1">Inscribirse Ahora</a>
+  </div>
+  </a>
+  </section>
 
-    <script src="script.js"></script>
+  <section class="curso">
+  <a href="curso_instructor_equipos_pesados.html" title="Ver detalles del Curso Instructor de Equipos Pesados">
+  <img src="curso10.webp" alt="Imagen del Curso Instructor de Equipos Pesados" title="Curso Instructor de Equipos Pesados">
+  <div class="curso-info">
+  <h3>Curso Instructor de Equipos Pesados</h3>
+  <p>Forma a los futuros operadores. Curso de Instructor de Equipos Pesados. Domina técnicas de enseñanza, evaluación y seguridad. <strong>Comparte tu experiencia y certifica profesionales!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Contactar para el Curso Instructor de Equipos Pesados">Contratar Selección</a>
+  </div>
+  </a>
+  </section>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=TU_ID_
+  <section class="curso">
+  <a href="certificacion_operadores_equipos.html" title="Ver detalles de la Certificación de Operadores de Equipos">
+  <img src="curso11.webp" alt="Imagen de la Certificación de Operadores de Equipos" title="Certificación de Operadores de Equipos">
+  <div class="curso-info">
+  <h3>Certificación Operadores Equipos</h3>
+  <p>Valida tus habilidades. Certificación de Operadores de Equipos Pesados. Demuestra tu experiencia y conocimientos según los estándares de la industria. <strong>¡Impulsa tu carrera y obtén reconocimiento!</strong></p>
+  <a href="https://link.mercadopago.cl/anupro360" class="btn-pago" title="Contactar para la Certificación de Operadores de Equipos">Contratar Selección</a>
+  </div>
+  </a>
+  </section>
+  </main>
+
+  <footer>
+  <p>&copy; 2025 Anupro360</p>
+  <div class="contactos">
+  <a href="https://wa.me/56940523016" target="_blank" class="contacto" title="Contactar por WhatsApp">WhatsApp</a>
+  <a href="mailto:contacto@anupro360.com" class="contacto" title="Enviar un correo electrónico">Correo Electrónico</a>
+  </div>
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=TU_ID_
