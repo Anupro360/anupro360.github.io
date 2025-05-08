@@ -13,25 +13,19 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.anupro360.com/mision.html</loc>
-    <lastmod>2025-05-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
     <loc>https://www.anupro360.com/servicios.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.anupro360.com/consultoria.html</loc>
+    <loc>https://www.anupro360.com/mision.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://www.anupro360.com/vision.html</loc>
+    <loc>https://www.anupro360.com/consultoria.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -79,13 +73,13 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.anupro360.com/consulting.html</loc>
+    <loc>https://www.anupro360.com/contact_us.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.anupro360.com/contact_us.html</loc>
+    <loc>https://www.anupro360.com/consulting.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -97,19 +91,25 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.anupro360.com/vision.html</loc>
+    <lastmod>2025-05-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.anupro360.com/hydraulic_shovel_course.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.anupro360.com/extraction_truck_course.html</loc>
+    <loc>https://www.anupro360.com/terrain_controller_course.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.anupro360.com/terrain_controller_course.html</loc>
+    <loc>https://www.anupro360.com/extraction_truck_course.html</loc>
     <lastmod>2025-05-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
