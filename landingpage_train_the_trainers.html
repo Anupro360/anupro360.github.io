@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train the Trainers - Anupro360 | Forma Instructores de Élite</title>
+    <meta name="description" content="Convierte a tu equipo en instructores profesionales con nuestro curso Train the Trainers. Metodología experiencial, doble certificación y herramientas completas.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter as requested */
+            line-height: 1.6;
+            color: #0D1821;
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px; /* Adjust height as needed */
+            width: auto;
+            display: block;
+        }
+        
+        .cta-header {
+            background: linear-gradient(135deg, #F18F01 0%, #E07A00 100%);
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(241, 143, 1, 0.3);
+        }
+        
+        .cta-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(241, 143, 1, 0.4);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2E86AB 0%, #A23B72 100%);
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px; /* Space for fixed header */
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(241, 143, 1, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(162, 59, 114, 0.2) 0%, transparent 50%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero-text .subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            opacity: 0.95;
+            font-weight: 300;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        .hero-text p {
+            font-size: 1.2rem;
+            margin-bottom: 32px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #F18F01 0%, #E07A00 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(241, 143, 1, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(241, 143, 1, 0.5);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 18px 40px;
+            border: 2px solid rgba(255,255,255,0.8);
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+        
+        .hero-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+        
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.1);
+            padding: 16px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .hero-feature-icon {
+            font-size: 1.8rem;
+        }
+        
+        .hero-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center the card vertically */
+            animation: fadeInRight 1s ease-out 0.4s both;
+        }
+        
+        .hero-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        
+        .hero-card-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .hero-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        
+        .hero-card p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Urgency Banner */
+        .urgency-banner {
+            background: linear-gradient(135deg, #F18F01 0%, #E07A00 100%);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .urgency-banner::before {
+            content: '⚡';
+            position: absolute;
+            left: 20px;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite;
+        }
+        
+        .urgency-banner::after {
+            content: '⚡';
+            position: absolute;
+            right: 20px;
+            font-size: 1.5rem;
+            animation: pulse 2s infinite 1s;
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            padding: 100px 0;
+            background: #F4F3EE;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+            color: #2E86AB;
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        
+        .benefit-card {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(46, 134, 171, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #2E86AB 0%, #A23B72 100%);
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 24px;
+            display: block;
+        }
+        
+        .benefit-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #2E86AB;
+        }
+        
+        .benefit-card p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 30px;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #F18F01;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        /* Program Section */
+        .program {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #2E86AB 0%, #A23B72 100%);
+            color: white;
+        }
+        
+        .program-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        
+        .program-module {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .program-module h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .program-module ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .program-module li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.9;
+        }
+        
+        .program-module li::before {
+            content: '✓';
+            color: #F18F01;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Requirements Section */
+        .requirements {
+            padding: 80px 0;
+            background: #F4F3EE;
+        }
+        
+        .requirements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .requirement-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .requirement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .requirement-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2E86AB, #A23B72);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: white;
+        }
+        
+        .requirement-card:nth-child(2) .requirement-icon {
+            background: linear-gradient(135deg, #A23B72, #F18F01);
+        }
+        
+        .requirement-card:nth-child(3) .requirement-icon {
+            background: linear-gradient(135deg, #F18F01, #2E86AB);
+        }
+        
+        .requirement-card h3 {
+            color: #2E86AB;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .requirement-card:nth-child(2) h3 {
+            color: #A23B72;
+        }
+        
+        .requirement-card:nth-child(3) h3 {
+            color: #F18F01;
+        }
+        
+        .requirement-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background: #F4F3EE;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        
+        .testimonial-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            font-size: 4rem;
+            color: #2E86AB;
+            font-family: serif;
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            color: #555;
+            font-style: italic;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .testimonial-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2E86AB, #A23B72);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .testimonial-info h4 {
+            font-weight: 700;
+            color: #2E86AB;
+            margin-bottom: 4px;
+        }
+        
+        .testimonial-info p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #0D1821 0%, #2E86AB 100%);
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+        
+        .cta-content p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .cta-guarantee {
+            background: rgba(241, 143, 1, 0.2);
+            border: 2px solid #F18F01;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .cta-guarantee h3 {
+            color: #F18F01;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background: #0D1821;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            color: #F18F01;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: #F18F01;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+        
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            width: 70px;
+            height: 70px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 2rem;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            animation: bounce 2s infinite;
+        }
+        
+        .whatsapp-float:hover {
+            background-color: #1ebe57;
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.6);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+            .hero-visual {
+                order: -1; /* Move visual above text on smaller screens */
+            }
+            .hero-text h1 {
+                font-size: 3rem;
+            }
+            .hero-cta {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-features {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .cta-content h2 {
+                font-size: 2.2rem;
+            }
+            
+            .benefits-grid,
+            .program-grid,
+            .testimonials-grid,
+            .requirements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+            
+            .btn-primary,
+            .btn-secondary {
+                padding: 14px 24px;
+                font-size: 1rem;
+            }
+
+            .whatsapp-float {
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="https://www.anupro360.com/Isologo_horizontal.png" alt="Anupro360 Logo">
+            </div>
+            <a href="#final-cta" class="cta-header">¡Inscríbete Ahora!</a>
+        </nav>
+    </header>
+
+    <div class="urgency-banner">
+        🔥 Solo para Empresas - Mínimo 10 Participantes - Cupos Limitados 🔥
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Forma Instructores de Élite en tu Empresa</h1>
+                    <div class="subtitle">Train the Trainers - Metodología Experiencial</div>
+                    <p>Desarrolla instructores internos, reduce costos de capacitación en 70% y aprovecha el conocimiento interno de tus profesionales con nuestra metodología única.</p>
+                    
+                    <div class="hero-cta">
+                        <a href="#final-cta" class="btn-primary">¡Quiero Transformar mi Equipo!</a>
+                        <a href="#programa" class="btn-secondary">Ver Programa</a>
+                    </div>
+                    
+                    <div class="hero-features">
+                        <div class="hero-feature">
+                            <span class="hero-feature-icon">🏆</span>
+                            <span>Doble Certificación</span>
+                        </div>
+                        <div class="hero-feature">
+                            <span class="hero-feature-icon">🎯</span>
+                            <span>Metodología Experiencial</span>
+                        </div>
+                        <div class="hero-feature">
+                            <span class="hero-feature-icon">📚</span>
+                            <span>Maletín de Herramientas</span>
+                        </div>
+                        <div class="hero-feature">
+                            <span class="hero-feature-icon">💻</span>
+                            <span>Presencial o Streaming</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <span class="hero-card-icon">🎓</span>
+                        <h3>8 Horas de Transformación</h3>
+                        <p>De empleados a instructores profesionales con certificación CREE Chile</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">¿Por Qué Train the Trainers de Anupro360?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <span class="benefit-icon">💰</span>
+                    <h3>Reduce Costos en 70%</h3>
+                    <p>Deja de depender de consultores externos caros. Desarrolla instructores internos y ahorra miles en capacitación externa.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <span class="benefit-icon">🎯</span>
+                    <h3>Metodología Full Experiencial</h3>
+                    <p>Dinámicas aplicadas, gamificación, casos colaborativos y técnicas lúdicas para un aprendizaje efectivo y duradero.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <span class="benefit-icon">🏆</span>
+                    <h3>Doble Certificación CREE</h3>
+                    <p>Certificación respaldada por CREE Chile y CREE Capacitaciones con validez profesional reconocida.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <span class="benefit-icon">📚</span>
+                    <h3>Maletín Completo Incluido</h3>
+                    <p>Kit completo de herramientas pedagógicas aplicables inmediatamente en tus procesos formativos.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <span class="benefit-icon">🎭</span>
+                    <h3>Habilidades Comunicacionales</h3>
+                    <p>Desarrollo de oratoria, manejo de voz, lenguaje corporal y técnicas de presentación efectiva.</p>
+                </div>
+                
+                <div class="benefit-card">
+                    <span class="benefit-icon">⚡</span>
+                    <h3>Formación Disponible 24/7</h3>
+                    <p>Tus instructores internos estarán siempre disponibles para capacitar cuando lo necesites.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">70%</span>
+                    <span class="stat-label">Reducción de Costos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Horas de Transformación</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Metodología Experiencial</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2</span>
+                    <span class="stat-label">Certificaciones Incluidas</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="program" id="programa">
+        <div class="container">
+            <h2 class="section-title">Programa del Curso (8 Horas)</h2>
+            <div class="program-grid">
+                <div class="program-module">
+                    <h3>📚 Unidad 1: Fundamentos</h3>
+                    <ul>
+                        <li>Diferencias entre formación e información</li>
+                        <li>Habilidades comunicacionales esenciales</li>
+                        <li>Pedagogía vs Andragogía</li>
+                        <li>Técnicas para crear interés y atención</li>
+                    </ul>
+                </div>
+                
+                <div class="program-module">
+                    <h3>🎤 Unidad 2: Comunicación</h3>
+                    <ul>
+                        <li>La voz como herramienta fundamental</li>
+                        <li>Matices, énfasis, tonos y volumen</li>
+                        <li>Lenguaje corporal y su impacto</li>
+                        <li>Cómo manejar objeciones y preguntas difíciles</li>
+                    </ul>
+                </div>
+
+                <div class="program-module">
+                    <h3>💡 Unidad 3: Diseño Instruccional</h3>
+                    <ul>
+                        <li>Identificación de necesidades de capacitación</li>
+                        <li>Diseño de objetivos de aprendizaje claros</li>
+                        <li>Estructuración de contenidos efectivos</li>
+                        <li>Creación de actividades didácticas</li>
+                    </ul>
+                </div>
+
+                <div class="program-module">
+                    <h3>🛠️ Unidad 4: Herramientas y Dinámicas</h3>
+                    <ul>
+                        <li>Uso de gamificación en la capacitación</li>
+                        <li>Técnicas lúdicas para el engagement</li>
+                        <li>Casos prácticos y trabajo colaborativo</li>
+                        <li>Evaluación del aprendizaje y feedback</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="requirements">
+        <div class="container">
+            <h2 class="section-title">¿Quiénes Deben Participar?</h2>
+            <div class="requirements-grid">
+                <div class="requirement-card">
+                    <div class="requirement-icon">👨‍🏫</div>
+                    <h3>Profesionales con Experiencia</h3>
+                    <p>Expertos en su área que desean compartir su conocimiento con otros colegas.</p>
+                </div>
+                <div class="requirement-card">
+                    <div class="requirement-icon">📈</div>
+                    <h3>Líderes y Jefes de Equipo</h3>
+                    <p>Aquellos que buscan mejorar las habilidades de su equipo a través de la formación interna.</p>
+                </div>
+                <div class="requirement-card">
+                    <div class="requirement-icon">💡</div>
+                    <h3>Futuros Capacitadores Internos</h3>
+                    <p>Colaboradores con potencial para convertirse en instructores y replicar el conocimiento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Lo Que Dicen Nuestros Clientes</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"El curso Train the Trainers transformó la forma en que capacitamos a nuestro personal. Ahora tenemos instructores internos altamente calificados, ahorrando tiempo y dinero."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JD</div>
+                        <div class="testimonial-info">
+                            <h4>Juan Díaz</h4>
+                            <p>Gerente de RRHH, Empresa XYZ</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"La metodología experiencial es increíble. Mis equipos están más comprometidos y el aprendizaje es mucho más dinámico y efectivo. ¡Recomendado 100%!"</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">MP</div>
+                        <div class="testimonial-info">
+                            <h4>María Pérez</h4>
+                            <p>Directora de Capacitación, InnovaCorp</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"La doble certificación es un gran plus. Nos dio la confianza y el respaldo profesional que necesitábamos para implementar nuestros programas de formación interna."</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">CA</div>
+                        <div class="testimonial-info">
+                            <h4>Carlos Álvarez</h4>
+                            <p>Jefe de Operaciones, GlobalTech</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta" id="final-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>¡No Dejes Pasar Esta Oportunidad!</h2>
+                <p>Invierte en el desarrollo de tu equipo y transforma la capacidad de capacitación interna de tu empresa. ¡Cupos limitados para empresas!</p>
+                <div class="cta-guarantee">
+                    <h3>Garantía Anupro360</h3>
+                    <p>Estamos seguros de que este curso superará tus expectativas. Si no estás completamente satisfecho, te ofrecemos una garantía de satisfacción.</p>
+                </div>
+                <a href="https://wa.me/+56942940280?text=Hola%2C%20quiero%20más%20información%20sobre%20el%20curso%20Train%20the%20Trainers%20para%20mi%20empresa." target="_blank" class="btn-primary">¡Solicita Información y Reserva Tu Cupo!</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Anupro360</h3>
+                    <p>Formando líderes y transformando organizaciones a través de la capacitación de élite.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces Rápidos</h3>
+                    <p><a href="#hero">Inicio</a></p>
+                    <p><a href="#benefits">Beneficios</a></p>
+                    <p><a href="#programa">Programa</a></p>
+                    <p><a href="#testimonials">Testimonios</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <p>Email: <a href="mailto:contacto@anupro360.com">contacto@anupro360.com</a></p>
+                    <p>Teléfono: <a href="tel:+56942940280">+56 9 4294 0280</a></p>
+                    <p>Dirección: Santiago, Chile</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Síguenos</h3>
+                    <p><a href="https://www.linkedin.com/company/anupro360" target="_blank">LinkedIn</a></p>
+                    <p><a href="https://www.facebook.com/anupro360" target="_blank">Facebook</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Anupro360. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/+56942940280?text=Hola%2C%20quiero%20más%20información%20sobre%20el%20curso%20Train%20the%20Trainers%20para%20mi%20empresa." class="whatsapp-float" target="_blank">
+        &#x1F4AC; </a>
+</body>
+</html>
