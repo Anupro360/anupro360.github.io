@@ -1,96 +1,543 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Contacto | Guillermo Contreras</title>
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet"/>
-    <meta name="robots" content="noindex, nofollow">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guillermo Contreras - Tarjeta Digital</title>
     <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #ffffff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-    .card {
-        background-color: #003B5C;
-        color: #ffffff;
-        padding: 2rem;
-        border-radius: 1.5rem;
-        max-width: 380px;
-        width: 90%;
-        box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        text-align: center;
-    }
-    .logo {
-        max-width: 100px;
-        margin-bottom: 1rem;
-    }
-    h2 {
-        margin: 0.5rem 0 0.2rem;
-    }
-    h4 {
-        color: #FFB81C;
-        margin-bottom: 1.5rem;
-    }
-    .btn {
-        display: block;
-        background-color: #FF5C00;
-        color: #fff;
-        text-decoration: none;
-        padding: 0.8rem;
-        border-radius: 0.5rem;
-        margin: 0.4rem 0;
-        font-weight: bold;
-        transition: background 0.3s;
-    }
-    .btn:hover {
-        background-color: #e24e00;
-    }
-    .note {
-        font-size: 0.75rem;
-        color: #ccc;
-        margin-top: 0.2rem;
-        margin-bottom: 1.5rem;
-    }
-    .social-icons {
-        margin-top: 1rem;
-    }
-    .social-icons a {
-        margin: 0 0.4rem;
-        color: #FFB81C;
-        font-size: 1.4rem;
-        transition: color 0.3s;
-    }
-    .social-icons a:hover {
-        color: #ffffff;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { width: 4px; height: 4px; top: 20%; left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 3px; height: 3px; top: 60%; left: 80%; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 5px; height: 5px; top: 80%; left: 20%; animation-delay: 4s; }
+        .particle:nth-child(4) { width: 2px; height: 2px; top: 30%; left: 70%; animation-delay: 1s; }
+        .particle:nth-child(5) { width: 4px; height: 4px; top: 50%; left: 50%; animation-delay: 3s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Main container */
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Header card */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 30px 25px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: rotate 8s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 15px 40px rgba(0, 255, 255, 0.5); }
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .title {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        /* Download button */
+        .download-btn {
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Instructions */
+        .instructions {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 12px;
+            line-height: 1.4;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Contact section */
+        .contact-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            color: #00ffff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .contact-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.3);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+        }
+
+        .contact-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.2);
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-value {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Social section */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .social-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .social-item:hover::before {
+            left: 100%;
+        }
+
+        .social-item:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 18px;
+            background: linear-gradient(135deg, #00ffff, #0080ff);
+            color: #000;
+            box-shadow: 0 4px 12px rgba(0, 255, 255, 0.2);
+        }
+
+        .social-label {
+            font-size: 12px;
+            color: #fff;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .profile-card {
+                padding: 25px 20px;
+            }
+            
+            .name {
+                font-size: 22px;
+            }
+            
+            .contact-section {
+                padding: 20px;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 255, 255, 0.3);
+            border-top: 3px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <img src="https://anupro360.github.io/imagotipoblanco.webp" alt="Anupro360 Logo" class="logo" />
-        <h2>Guillermo Antonio Contreras Muñoz</h2>
-        <h4>Director - Anupro360</h4>
+    <!-- Loading screen -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
+    </div>
 
-        <a class="btn" href="mailto:guillermocontreras@anupro360.com">guillermocontreras@anupro360.com</a>
-        <a class="btn" href="tel:+56951142625">Llamar: +56 9 5114 2625</a>
-        <a class="btn" href="https://wa.me/56940523016">WhatsApp: +56 9 4052 3016</a>
-        <a class="btn" href="guillermo-contreras.vcf" download>Guardar contacto</a>
-        <div class="note">📲 Si el contacto no se guarda automáticamente, abre el archivo descargado y selecciona ‘Guardar como nuevo contacto’.</div>
-        <a class="btn" href="https://www.anupro360.com">Sitio Web</a>
+    <!-- Animated background -->
+    <div class="bg-animation">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
 
-        <div class="social-icons">
-            <a href="https://www.linkedin.com/in/guillermocontrerasmu%C3%B1oz" target="_blank"><i class="fab fa-linkedin"></i></a>
-            <a href="https://www.instagram.com/anupro360" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.tiktok.com/@anupro360" target="_blank"><i class="fab fa-tiktok"></i></a>
-            <a href="https://www.facebook.com/share/1ARsrDbDqw/" target="_blank"><i class="fab fa-facebook"></i></a>
-            <a href="https://x.com/Anupro360" target="_blank"><i class="fab fa-x-twitter"></i></a>
+    <div class="container">
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="avatar">GC</div>
+            <div class="name">Guillermo Contreras Muñoz</div>
+            <div class="title">Director General de Anupro360</div>
+            <button class="download-btn" onclick="downloadVCard()">
+                📱 Guardar Contacto
+            </button>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            💡 Si el contacto no se guarda automáticamente, abre el archivo descargado y selecciona 'Guardar como nuevo contacto'.
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-section">
+            <div class="section-title">💼 Contacto</div>
+            
+            <a href="tel:+56951142325" class="contact-item">
+                <div class="contact-icon">📞</div>
+                <div class="contact-info">
+                    <div class="contact-label">Teléfono</div>
+                    <div class="contact-value">+56 9 5114 2325</div>
+                </div>
+            </a>
+
+            <a href="https://wa.me/message/NOJ67WHD7AZUL1" class="contact-item" target="_blank">
+                <div class="contact-icon">💬</div>
+                <div class="contact-info">
+                    <div class="contact-label">WhatsApp</div>
+                    <div class="contact-value">Enviar mensaje</div>
+                </div>
+            </a>
+
+            <a href="mailto:guillermocontreras@anupro360.com" class="contact-item">
+                <div class="contact-icon">✉️</div>
+                <div class="contact-info">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">guillermocontreras@anupro360.com</div>
+                </div>
+            </a>
+
+            <a href="https://www.anupro360.com" class="contact-item" target="_blank">
+                <div class="contact-icon">🌐</div>
+                <div class="contact-info">
+                    <div class="contact-label">Sitio Web</div>
+                    <div class="contact-value">www.anupro360.com</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Social Media -->
+        <div class="contact-section">
+            <div class="section-title">🚀 Redes Sociales</div>
+            <div class="social-grid">
+                <a href="https://www.linkedin.com/in/anupro360" class="social-item" target="_blank">
+                    <div class="social-icon">💼</div>
+                    <div class="social-label">LinkedIn</div>
+                </a>
+
+                <a href="https://www.instagram.com/anupro360?utm_source=qr&igsh=MWljOW8xbGc3eW12dw==" class="social-item" target="_blank">
+                    <div class="social-icon">📸</div>
+                    <div class="social-label">Instagram</div>
+                </a>
+
+                <a href="https://www.tiktok.com/@anupro360?_t=ZM-8vOTqpeWoNB&_r=1" class="social-item" target="_blank">
+                    <div class="social-icon">🎵</div>
+                    <div class="social-label">TikTok</div>
+                </a>
+
+                <a href="https://www.facebook.com/share/1ARsrDbDqw/" class="social-item" target="_blank">
+                    <div class="social-icon">👥</div>
+                    <div class="social-label">Facebook</div>
+                </a>
+
+                <a href="https://x.com/Anupro360?s=09" class="social-item" target="_blank">
+                    <div class="social-icon">🐦</div>
+                    <div class="social-label">X (Twitter)</div>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <img src="https://www.anupro360.com/imagotipoblanco.webp" alt="Anupro360 Logo" style="max-width: 120px; height: auto; opacity: 0.8;">
         </div>
     </div>
+
+    <script>
+        // Loading animation
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+            }, 1000);
+        });
+
+        // VCard download function
+        function downloadVCard() {
+            const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:Guillermo Contreras Muñoz
+N:Contreras Muñoz;Guillermo;;;
+TEL;TYPE=CELL:+56951142325
+EMAIL:guillermocontreras@anupro360.com
+URL:https://www.anupro360.com
+URL;TYPE=LinkedIn:https://www.linkedin.com/in/anupro360
+URL;TYPE=Instagram:https://www.instagram.com/anupro360
+URL;TYPE=TikTok:https://www.tiktok.com/@anupro360
+URL;TYPE=Facebook:https://www.facebook.com/share/1ARsrDbDqw/
+URL;TYPE=Twitter:https://x.com/Anupro360?s=09
+URL;TYPE=WhatsApp:https://wa.me/message/NOJ67WHD7AZUL1
+END:VCARD`;
+
+            const blob = new Blob([vCardData], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'guillermo-contreras.vcf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '✅ ¡Descargado!';
+            btn.style.background = 'linear-gradient(135deg, #00ff00, #00cc00)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'linear-gradient(135deg, #00ffff, #0080ff)';
+            }, 2000);
+        }
+
+        // Add touch feedback for mobile
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.closest('.contact-item, .social-item, .download-btn')) {
+                e.target.closest('.contact-item, .social-item, .download-btn').style.transform = 'scale(0.98)';
+            }
+        });
+
+        document.addEventListener('touchend', function(e) {
+            if (e.target.closest('.contact-item, .social-item, .download-btn')) {
+                setTimeout(() => {
+                    e.target.closest('.contact-item, .social-item, .download-btn').style.transform = '';
+                }, 100);
+            }
+        });
+
+        // Prevent zoom on double tap for iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
 </body>
 </html>
