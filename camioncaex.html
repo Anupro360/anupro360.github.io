@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curso Operador de Camión de Extracción (CAEX) - Anupro360</title>
+    <meta name="description" content="Capacitación profesional online para convertirte en Operador de Camión de Extracción. Modalidades flexibles, certificación válida y contenido práctico. Inscríbete ahora y aprovecha nuestra oferta limitada.">
+    <meta name="keywords" content="Operador de Camión de Extracción, curso minero, capacitación minería, curso online, certificación minera, empleo minero, entrenamiento operador, maquinaria pesada, minería chile, operador camión extracción">
+    
+    <link rel="icon" href="favicono.png" type="image/png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <style>
+        /* Variables de colores */
+        :root {
+            --amarillo: #FFB81C;
+            --naranja: #FF5C00;
+            --gris-oscuro: #5C6B6B;
+            --verde: #4B6F44;
+            --azul-oscuro: #003B5C;
+            --blanco: #FFFFFF;
+            --fondo-oscuro: #0a192f;
+            --fondo-intermedio: #112240;
+        }
+
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: var(--fondo-oscuro);
+            color: var(--blanco);
+            overflow-x: hidden;
+        }
+
+        /* Header fijo */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: rgba(10, 25, 47, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            height: 50px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 1rem;
+        }
+
+        nav ul li a {
+            color: var(--blanco);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--amarillo);
+            transform: translateY(-2px);
+        }
+
+        .btn-menu {
+            background-color: var(--amarillo);
+            color: var(--azul-oscuro);
+            padding: 0.7rem 1.8rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-menu:hover {
+            transform: translateY(-3px);
+            background-color: #FFCD4B;
+            box-shadow: 0 5px 15px rgba(255, 184, 28, 0.4);
+        }
+
+        /* Menú hamburguesa para móvil */
+        .hamburger {
+            display: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--blanco);
+            z-index: 1001;
+            transition: color 0.3s ease;
+        }
+        .hamburger:hover {
+            color: var(--amarillo);
+        }
+
+        .nav-mobile {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            height: 100%;
+            background-color: var(--fondo-intermedio);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: right 0.4s ease-in-out;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-mobile.active {
+            right: 0;
+            display: flex;
+        }
+
+        .nav-mobile ul {
+            flex-direction: column;
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-mobile ul li {
+            margin: 1.5rem 0;
+        }
+
+        .nav-mobile ul li a {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Sección Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, var(--fondo-oscuro) 0%, var(--fondo-intermedio) 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 0 5%;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://www.anupro360.com/operador_camion.webp');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: var(--amarillo);
+            animation: fadeInDown 1s ease;
+            max-width: 900px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 1s ease 0.3s forwards;
+            opacity: 0;
+            max-width: 800px;
+        }
+
+        .btn-hero {
+            background-color: var(--naranja);
+            color: var(--blanco);
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            animation: fadeInUp 1s ease 0.6s forwards;
+            opacity: 0;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-5px);
+            background-color: #FF7B33;
+            box-shadow: 0 10px 20px rgba(255, 92, 0, 0.3);
+        }
+
+        /* Sección "¿Qué aprenderás?" - CORRECCIÓN DE DISEÑO Y ESTRUCTURA */
+        .que-aprenderas {
+            padding: 5rem 5%;
+            background-color: var(--fondo-intermedio);
+        }
+
+        .que-aprenderas h2 {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--amarillo);
+            font-size: 2.2rem;
+        }
+
+        .temas {
+            display: grid;
+            /* Asegura que haya 3 columnas en desktop y se ajuste en móviles */
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            justify-content: center; /* Centra los elementos si no llenan todas las columnas */
+        }
+
+        .tema {
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 2.5rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex; /* Añadido para mejor alineación vertical si el contenido varía */
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .tema:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .tema i {
+            font-size: 3.5rem;
+            color: var(--amarillo);
+            margin-bottom: 1.5rem;
+        }
+
+        .tema h3 {
+            margin-bottom: 1rem;
+            color: var(--blanco);
+            font-size: 1.3rem;
+        }
+
+        .tema p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            flex-grow: 1; /* Permite que el párrafo ocupe el espacio disponible */
+        }
+
+        /* Sección de modalidades */
+        .modalidades {
+            padding: 5rem 5%;
+            background-color: var(--fondo-oscuro);
+        }
+
+        .modalidades h2 {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--amarillo);
+            font-size: 2.2rem;
+        }
+
+        .modalidades-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .modalidad {
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 3rem;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .modalidad:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .modalidad h3 {
+            margin-bottom: 0.8rem;
+            color: var(--blanco);
+            font-size: 1.6rem;
+            text-align: center;
+        }
+
+        .modalidad > p {
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .modalidad .precio-container {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .modalidad .precio-original {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: line-through;
+            margin-right: 0.5rem;
+        }
+
+        .modalidad .precio-descuento {
+            font-size: 2rem;
+            color: var(--amarillo);
+            font-weight: bold;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .modalidad .descuento-tag {
+            background-color: var(--naranja);
+            color: var(--blanco);
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 1rem;
+            font-weight: bold;
+            font-size: 0.9rem;
+            animation: bounceIn 0.8s forwards;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        /* Sección de beneficios */
+        .beneficios {
+            padding: 5rem 5%;
+            background-color: var(--fondo-intermedio);
+        }
+
+        .beneficios h2 {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--amarillo);
+            font-size: 2.2rem;
+        }
+
+        .beneficios-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .beneficio {
+            display: flex;
+            align-items: flex-start;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .beneficio:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .beneficio i {
+            color: var(--verde);
+            font-size: 2rem;
+            margin-right: 1.2rem;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .beneficio h3 {
+            margin-bottom: 0.5rem;
+            color: var(--blanco);
+            font-size: 1.15rem;
+        }
+
+        .beneficio p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Sección de testimonios */
+        .testimonios {
+            padding: 5rem 5%;
+            background-color: var(--fondo-oscuro);
+        }
+
+        .testimonios h2 {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--amarillo);
+            font-size: 2.2rem;
+        }
+
+        .testimonios-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .testimonio {
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 2.5rem;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .testimonio:hover {
+            transform: translateY(-8px);
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .testimonio::before {
+            content: '\201C';
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-family: Georgia, serif;
+            line-height: 1;
+            z-index: 0;
+        }
+
+        .testimonio p {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 1.2rem;
+            font-style: italic;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .testimonio .autor {
+            font-weight: bold;
+            color: var(--amarillo);
+            font-size: 0.95rem;
+            display: flex; /* Para alinear la foto y el nombre */
+            align-items: center;
+            margin-top: 1rem;
+        }
+        .testimonio .autor img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--amarillo);
+        }
+
+        /* Sección de FAQ */
+        .faq {
+            padding: 5rem 5%;
+            background-color: var(--fondo-intermedio);
+        }
+
+        .faq h2 {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: var(--amarillo);
+            font-size: 2.2rem;
+        }
+
+        .faq-container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1.2rem;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .faq-question {
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .faq-question h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: var(--blanco);
+        }
+
+        .faq-question i {
+            font-size: 1.2rem;
+            color: var(--amarillo);
+            transition: transform 0.3s ease;
+        }
+        .faq-question.open i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 2rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .faq-answer.active {
+            padding: 1.5rem 2rem;
+            max-height: 500px;
+        }
+
+        /* Sección de llamado a la acción final */
+        .cta-final {
+            padding: 6rem 5%;
+            background: linear-gradient(135deg, var(--fondo-oscuro) 0%, #050d1a 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--naranja);
+        }
+
+        .cta-final::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMTg0LDI4LDAuMSkiLz48L2Rhbm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjcGF0dGVybikiLz48L3N2Zz4=');
+            opacity: 0.3;
+        }
+
+        .cta-final h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--blanco);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-cta {
+            background-color: var(--azul-oscuro);
+            color: var(--blanco);
+            padding: 1.2rem 2.8rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            animation: pulse 2s infinite;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-cta:hover {
+            transform: scale(1.05);
+            background-color: #004F7A;
+            box-shadow: 0 10px 20px rgba(0, 59, 92, 0.4);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 59, 92, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(0, 59, 92, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 59, 92, 0);
+            }
+        }
+
+        /* Contador regresivo */
+        .contador-regresivo {
+            background-color: var(--naranja);
+            color: var(--blanco);
+            padding: 0.8rem 1.8rem;
+            border-radius: 6px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 10px rgba(255, 92, 0, 0.3);
+        }
+        .contador-regresivo span {
+            font-size: 1.3rem;
+            color: var(--azul-oscuro);
+        }
+
+        /* Sección de contacto directo (unificada y mejorada) */
+        .contacto-form {
+            padding: 5rem 5%;
+            background-color: var(--fondo-oscuro);
+            text-align: center;
+        }
+
+        .contacto-form h2 {
+            margin-bottom: 3rem;
+            color: var(--amarillo);
+            font-size: 2.2rem;
+        }
+
+        .contact-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-form-container label {
+            display: block;
+            text-align: left;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: var(--blanco);
+        }
+
+        .contact-form-container input[type="text"],
+        .contact-form-container input[type="email"],
+        .contact-form-container input[type="tel"],
+        .contact-form-container textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--blanco);
+            font-size: 1rem;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        .contact-form-container input::placeholder,
+        .contact-form-container textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .contact-form-container input:focus,
+        .contact-form-container textarea:focus {
+            outline: none;
+            border-color: var(--amarillo);
+            box-shadow: 0 0 0 3px rgba(255, 184, 28, 0.3);
+        }
+
+        .contact-form-container button {
+            background-color: var(--verde);
+            color: var(--blanco);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .contact-form-container button:hover {
+            background-color: #5AA051;
+            transform: translateY(-2px);
+        }
+
+        /* Sección de redes sociales */
+        .redes-sociales {
+            padding: 3rem 5%;
+            background-color: var(--fondo-intermedio);
+        }
+
+        .redes-sociales h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--amarillo);
+            font-size: 1.8rem;
+        }
+
+        .redes-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .red-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 55px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+        }
+
+        .red-social:hover {
+            transform: translateY(-7px) scale(1.1);
+            background-color: var(--amarillo);
+        }
+        .red-social:hover i {
+            color: var(--azul-oscuro);
+        }
+
+        .red-social i {
+            font-size: 1.8rem;
+            color: var(--blanco);
+            transition: color 0.3s ease;
+        }
+
+        /* Botón de WhatsApp */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25D366;
+            color: white;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+            z-index: 999;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-size: 2.2rem;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.6);
+        }
+
+        /* Pie de página */
+        footer {
+            background-color: #050d1a;
+            padding: 2.5rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 5%;
+            }
+            .logo {
+                height: 45px;
+            }
+            nav ul {
+                display: none;
+            }
+            .btn-menu {
+                display: none;
+            }
+            .hamburger {
+                display: block;
+                margin-left: auto;
+            }
+
+            .hero {
+                height: auto;
+                min-height: 80vh;
+                padding: 100px 5% 50px;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .btn-hero {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .que-aprenderas, .modalidades, .beneficios, .testimonios, .faq, .cta-final, .contacto-form, .redes-sociales {
+                padding: 4rem 5%;
+            }
+
+            .que-aprenderas h2, .modalidades h2, .beneficios h2, .testimonios h2, .faq h2, .cta-final h2, .contacto-form h2, .redes-sociales h2 {
+                font-size: 1.8rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .temas, .modalidades-container, .beneficios-list, .testimonios-container {
+                grid-template-columns: 1fr;
+            }
+
+            .tema, .modalidad, .testimonio {
+                padding: 2rem;
+            }
+
+            .modalidad .precio-original {
+                font-size: 1.2rem;
+            }
+            .modalidad .precio-descuento {
+                font-size: 1.8rem;
+            }
+            .modalidad .descuento-tag {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .testimonio::before {
+                font-size: 4rem;
+            }
+
+            .faq-question {
+                padding: 1.2rem 1.5rem;
+            }
+            .faq-question h3 {
+                font-size: 1rem;
+            }
+            .faq-answer.active {
+                padding: 1rem 1.5rem;
+            }
+
+            .cta-final h2 {
+                font-size: 1.8rem;
+            }
+            .btn-cta {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            .contador-regresivo {
+                font-size: 0.9rem;
+                padding: 0.6rem 1.2rem;
+            }
+            .contador-regresivo span {
+                font-size: 1.1rem;
+            }
+
+            .whatsapp-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.anupro360.com/imagotipoblanco.webp" alt="Logo Anupro360" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#curso">Curso</a></li>
+                <li><a href="#modalidades">Modalidades</a></li>
+                <li><a href="#beneficios">Beneficios</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#faq">Preguntas</a></li>
+                <li><a href="#contacto-form">Inscripción</a></li>
+            </ul>
+        </nav>
+        <a href="#contacto-form" class="btn-menu">Inscríbete ahora</a>
+        <div class="hamburger" id="hamburger-icon">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <div class="nav-mobile" id="mobile-menu">
+        <div class="hamburger" id="close-hamburger">
+            <i class="fas fa-times"></i>
+        </div>
+        <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#curso">Curso</a></li>
+            <li><a href="#modalidades">Modalidades</a></li>
+            <li><a href="#beneficios">Beneficios</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#faq">Preguntas</a></li>
+            <li><a href="#contacto-form">Inscripción</a></li>
+        </ul>
+    </div>
+
+    <section class="hero" id="inicio">
+        <h1>Conviértete en Operador CAEX Certificado: Tu camino al éxito en la minería chilena comienza aquí.</h1>
+        <p>Obtén la capacitación online más completa y la **certificación reconocida por la industria** en solo **2 meses** para acceder a oportunidades laborales con alta demanda y excelentes proyecciones.</p>
+        <a href="#contacto-form" class="btn-hero">¡Inscríbete Ahora y Asegura Tu Futuro!</a>
+    </section>
+
+    <section class="que-aprenderas" id="curso">
+        <h2>¿Qué aprenderás en nuestro programa?</h2>
+        <div class="temas">
+            <div class="tema">
+                <i class="fas fa-truck-moving"></i>
+                <h3>Fundamentos de operación segura y eficiente</h3>
+                <p>Aprende las bases esenciales para operar equipos pesados con seguridad y **minimizar riesgos en el entorno minero**, cumpliendo con los protocolos de la industria.</p>
+            </div>
+            <div class="tema">
+                <i class="fas fa-box"></i>
+                <h3>Procedimientos de carga, acarreo y descarga</h3>
+                <p>Domina las técnicas profesionales para el manejo de cargas pesadas, optimizando el rendimiento y la eficiencia en **operaciones críticas de extracción**.</p>
+            </div>
+            <div class="tema">
+                <i class="fas fa-hard-hat"></i>
+                <h3>Normativas de seguridad minera y medioambiente</h3>
+                <p>Conoce y aplica las reglamentaciones vigentes en la industria, asegurando un ambiente de trabajo seguro y **responsable con el entorno**.</p>
+            </div>
+            <div class="tema">
+                <i class="fas fa-wrench"></i>
+                <h3>Mantenimiento básico de equipos</h3>
+                <p>Aprende a realizar revisiones preventivas y corregir pequeños fallos, **prolongando la vida útil de la maquinaria** y evitando paradas innecesarias.</p>
+            </div>
+            <div class="tema">
+                <i class="fas fa-chart-line"></i>
+                <h3>Factores de productividad y eficiencia</h3>
+                <p>Maximiza el rendimiento y reduce costos en operaciones mineras, aplicando estrategias para una **producción más rentable y sostenible**.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="modalidades" id="modalidades">
+        <h2>Elige tu modalidad de estudio ideal</h2>
+        <div class="modalidades-container">
+            <div class="modalidad">
+                <h3>Modalidad Mixta</h3>
+                <p>Ideal para trabajadores sin tiempo</p>
+                <p>Experimenta un aprendizaje dinámico con **clases en vivo** impartidas por nuestros docentes expertos a través de **Microsoft Teams**, 2 días a la semana (a elección del alumno, de lunes a viernes). Esta modalidad combina la interacción en tiempo real con la flexibilidad de actividades de estudio y evaluaciones asincrónicas realizadas en nuestra moderna plataforma de aula virtual. Ideal para quienes buscan un equilibrio entre acompañamiento directo y estudio autónomo.</p>
+                <p>Duración del curso: **2 meses**.</p>
+                <div class="precio-container">
+                    <span class="precio-original">USD $1.080</span>
+                    <span class="precio-descuento">USD $540</span>
+                    <div class="descuento-tag">50% OFF - ¡Oferta Limitada!</div>
+                </div>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">*Promoción válida si te inscribes en los próximos días y sigues a @Anupro360 en TikTok.</p>
+            </div>
+            <div class="modalidad">
+                <h3>Modalidad 100% Aula Virtual</h3>
+                <p>Estudia a tu ritmo, con flexibilidad total</p>
+                <p>Accede a todos los materiales de estudio, videos, lecturas y realiza las evaluaciones a tu propio ritmo, desde cualquier dispositivo. Mantén contacto con el docente a través de nuestra plataforma virtual para resolver dudas y recibir retroalimentación. Esta modalidad te ofrece **flexibilidad total** para adaptar el estudio a tu horario, sin compromisos de asistencia a clases fijas.</p>
+                <p>Contacto con docente vía plataforma. Duración del curso: **2 meses**.</p>
+                <div class="precio-container">
+                    <span class="precio-original">USD $857</span>
+                    <span class="precio-descuento">USD $428.50</span>
+                    <div class="descuento-tag">50% OFF - ¡Aprovecha ya!</div>
+                </div>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem;">*Promoción válida si te inscribes en los próximos días y sigues a @Anupro360 en TikTok.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="beneficios" id="beneficios">
+        <h2>Por qué Anupro360 es tu mejor elección</h2>
+        <div class="beneficios-list">
+            <div class="beneficio">
+                <i class="fas fa-award"></i>
+                <div>
+                    <h3>Certificación válida y reconocida</h3>
+                    <p>Nuestros certificados, emitidos por Anupro360, están diseñados bajo los estándares del **Consejo Minero de Chile**, lo que asegura su **reconocimiento y validez a nivel nacional** en la industria minera.</p>
+                </div>
+            </div>
+            <div class="beneficio">
+                <i class="fas fa-user-graduate"></i>
+                <div>
+                    <h3>Sin experiencia previa necesaria</h3>
+                    <p>Diseñado para quienes inician: **no necesitas experiencia previa**. Nuestro currículo paso a paso te guía desde cero hasta convertirte en un operador competente, ideal para trabajadores y dueñas de casa.</p>
+                </div>
+            </div>
+            <div class="beneficio">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                    <h3>Flexibilidad completa para tu horario</h3>
+                    <p>Estudia donde y cuando quieras, desde cualquier dispositivo y a tu propio ritmo. Nuestro modelo online se adapta a tu vida, permitiéndote **avanzar sin presiones**.</p>
+                </div>
+            </div>
+            <div class="beneficio">
+                <i class="fas fa-mobile-alt"></i>
+                <div>
+                    <h3>Acceso desde cualquier dispositivo</h3>
+                    <p>Puedes estudiar cómodamente desde tu **celular (Android o iPhone), tablet, notebook o PC**, garantizando que el aprendizaje esté siempre al alcance de tu mano.</p>
+                </div>
+            </div>
+            <div class="beneficio">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <div>
+                    <h3>Soporte docente constante y experto</h3>
+                    <p>Accede a un equipo de **docentes expertos en minería** que te guiarán y resolverán tus dudas en todo momento, asegurando un aprendizaje efectivo y personalizado.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonios" id="testimonios">
+        <h2>¿Qué dicen nuestros egresados y clientes?</h2>
+        <div class="testimonios-container">
+            <div class="testimonio">
+                <p>Gracias al curso de Anupro360 pude conseguir trabajo en una minera importante. La formación fue excelente y muy práctica.</p>
+                <div class="autor"><img src="https://via.placeholder.com/50/FFB81C/FFFFFF?text=LA" alt="Foto de Luis A."> Luis A., Operador de Camión</div>
+            </div>
+            <div class="testimonio">
+                <p>El contenido del curso es muy completo y actualizado. Los instructores tienen mucha experiencia en el campo minero.</p>
+                <div class="autor"><img src="https://via.placeholder.com/50/FF5C00/FFFFFF?text=MP" alt="Foto de María P."> María P., Gerente de Operaciones</div>
+            </div>
+            <div class="testimonio">
+                <p>La flexibilidad del curso me permitió estudiar mientras trabajaba. Ahora estoy listo para dar el siguiente paso en mi carrera.</p>
+                <div class="autor"><img src="https://via.placeholder.com/50/4B6F44/FFFFFF?text=CR" alt="Foto de Carlos R."> Carlos R., Técnico Minero</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq" id="faq">
+        <h2>Preguntas frecuentes sobre el curso</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>¿El certificado está reconocido por la industria minera?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Sí, nuestros certificados cumplen con los estándares del Marco de Cualificaciones del Consejo Minero de Chile, lo que garantiza su validez y reconocimiento a nivel nacional. Además, incorporan mecanismos de verificación de autenticidad.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>¿Necesito experiencia previa para inscribirme?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>No, el curso está diseñado para principiantes. No se requiere experiencia previa en el sector minero. ¡Te guiaremos desde cero!</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>¿El curso incluye práctica en simuladores o equipos reales?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>La capacitación se enfoca en el conocimiento teórico y práctico a través de nuestra aula virtual y sesiones en Teams. Para práctica con equipos reales o simuladores, esto debe coordinarse directamente con empresas o centros de entrenamiento específicos, lo cual no está incluido en este curso base. Sin embargo, nuestros conocimientos te preparan con una base sólida para esa etapa.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>¿Cómo obtengo el descuento del 50%?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Es muy sencillo: solo tienes que seguir a **@Anupro360 en TikTok** y **registrarte dentro de los próximos 3 días** para acceder al 50% de descuento en ambas modalidades de estudio.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>¿Puedo pagar el curso en cuotas?</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Sí, ofrecemos opciones de pago flexibles en cuotas **sin intereses** para que tu formación sea más accesible. Contacta con nosotros para consultar los detalles y planes de pago disponibles.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-final">
+        <h2>Estudia desde donde estés y prepárate para la minería del futuro. ¡Cupos limitados!</h2>
+        <a href="#contacto-form" class="btn-cta">¡Quiero ser un Operador CAEX!</a>
+        <div class="contador-regresivo">
+            Oferta disponible solo por <span id="dias">3</span> días
+        </div>
+    </section>
+
+    <section class="contacto-form" id="contacto-form">
+        <h2>Inscríbete hoy y transforma tu carrera</h2>
+        <div class="contact-form-container">
+            <form action="https://script.google.com/macros/s/AKfycbyJGv8DviO1U-n_qnQbPTzVC7j6ngQX-QQCPUb4OzX09qC3FEKVsEZUFRG4ogly16XJ/exec" method="POST" target="_blank">
+                <label for="nombre">Nombre completo:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellido" required>
+
+                <label for="email">Correo electrónico:</label>
+                <input type="email" id="email" name="email" placeholder="tu_correo@ejemplo.com" required>
+
+                <label for="telefono">Número de teléfono:</label>
+                <input type="tel" id="telefono" name="telefono" placeholder="+56 9 XXXXXXXX" pattern="[0-9]{9,15}" required>
+
+                <label for="mensaje">Tu mensaje (opcional):</label>
+                <textarea id="mensaje" name="mensaje" rows="4" placeholder="¿Tienes alguna pregunta específica?"></textarea>
+
+                <button type="submit">Enviar mi Inscripción</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="redes-sociales">
+        <h2>Síguenos y conecta con la comunidad Anupro360</h2>
+        <div class="redes-container">
+            <a href="https://www.linkedin.com/in/guillermocontrerasmuñoz?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="red-social" target="_blank" aria-label="LinkedIn de Anupro360">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="https://www.instagram.com/anupro360?utm_source=qr&igsh=MWljOW8xbGc3eW12dw==" class="red-social" target="_blank" aria-label="Instagram de Anupro360">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.tiktok.com/@anupro360?_t=ZM-8vOTqpeWoNB&_r=1" class="red-social" target="_blank" aria-label="TikTok de Anupro360">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://www.facebook.com/share/1ARsrDbDqw/" class="red-social" target="_blank" aria-label="Facebook de Anupro360">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="https://x.com/Anupro360?s=09" class="red-social" target="_blank" aria-label="Twitter (X) de Anupro360">
+                <i class="fab fa-x-twitter"></i>
+            </a>
+        </div>
+    </section>
+
+    <a href="https://api.whatsapp.com/send?phone=+56940523016&text=Hola!%20Estoy%20interesado%20en%20el%20curso%20de%20Operador%20CAEX." class="whatsapp-btn" target="_blank" aria-label="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2025 Anupro360. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Animación de scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                }
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animación de contador regresivo
+        let dias = 3;
+        const diasElement = document.getElementById('dias');
+        const countdown = setInterval(() => {
+            dias--;
+            if (dias < 0) {
+                dias = 0;
+            }
+            diasElement.textContent = dias;
+            if (dias <= 0) {
+                clearInterval(countdown);
+                diasElement.textContent = '0';
+                diasElement.style.textDecoration = 'line-through';
+                diasElement.style.color = 'red';
+                diasElement.parentElement.title = '¡Oferta finalizada!';
+            }
+        }, 86400000); // Cada 24 horas
+
+        // Accordeón FAQ
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i');
+                const isActive = answer.classList.contains('active');
+                
+                // Cerrar todas las respuestas y resetear iconos
+                document.querySelectorAll('.faq-answer').forEach(item => {
+                    item.classList.remove('active');
+                    item.previousElementSibling.classList.remove('open');
+                    item.previousElementSibling.querySelector('i').style.transform = 'rotate(0deg)';
+                });
+                
+                // Abrir/Cerrar la respuesta actual
+                if (!isActive) {
+                    answer.classList.add('active');
+                    question.classList.add('open');
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+
+        // Funcionalidad del menú hamburguesa
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeHamburgerIcon = document.getElementById('close-hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        hamburgerIcon.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+
+        closeHamburgerIcon.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        // Opcional: Cerrar menú móvil al hacer clic en un enlace de navegación
+        document.querySelectorAll('.nav-mobile ul li a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+            });
+        });
+
+    </script>
+
+    </body>
+</html>
