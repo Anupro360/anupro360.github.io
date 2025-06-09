@@ -178,7 +178,7 @@
             background-image: url('https://www.anupro360.com/tu_imagen_de_fondo.webp');
             background-size: cover;
             background-position: center;
-            opacity: 0.3;
+            opacity: 0.3; /* Ajusta la opacidad si la imagen es muy oscura/clara */
             z-index: -1;
         }
 
@@ -219,7 +219,7 @@
             box-shadow: 0 10px 20px rgba(255, 92, 0, 0.3);
         }
 
-        /* Sección "¿Qué aprenderás?" - CORRECCIÓN DE DISEÑO Y ESTRUCTURA */
+        /* Sección "¿Qué aprenderás?" */
         .que-aprenderas {
             padding: 5rem 5%;
             background-color: var(--fondo-intermedio);
@@ -234,10 +234,9 @@
 
         .temas {
             display: grid;
-            /* Asegura que haya 3 columnas en desktop y se ajuste en móviles */
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2.5rem;
-            justify-content: center; /* Centra los elementos si no llenan todas las columnas */
+            justify-content: center;
         }
 
         .tema {
@@ -247,7 +246,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            display: flex; /* Añadido para mejor alineación vertical si el contenido varía */
+            display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
@@ -273,7 +272,7 @@
         .tema p {
             font-size: 0.95rem;
             color: rgba(255, 255, 255, 0.8);
-            flex-grow: 1; /* Permite que el párrafo ocupe el espacio disponible */
+            flex-grow: 1;
         }
 
         /* Sección de modalidades */
@@ -472,7 +471,7 @@
             font-weight: bold;
             color: var(--amarillo);
             font-size: 0.95rem;
-            display: flex; /* Para alinear la foto y el nombre */
+            display: flex;
             align-items: center;
             margin-top: 1rem;
         }
@@ -753,7 +752,8 @@
         .whatsapp-btn {
             position: fixed;
             bottom: 30px;
-            right: 30px;
+            /* Ajustado de 'right' a 'left' y valor aumentado */
+            right: 100px; /* Aumentado de 30px a 100px para evitar el chatbot */
             background-color: #25D366;
             color: white;
             width: 65px;
@@ -764,7 +764,7 @@
             align-items: center;
             text-decoration: none;
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
-            z-index: 999;
+            z-index: 999; /* Asegurar que esté debajo del chatbot si es necesario, aunque el 'right' lo separará */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             font-size: 2.2rem;
         }
@@ -895,7 +895,8 @@
                 height: 55px;
                 font-size: 1.8rem;
                 bottom: 20px;
-                right: 20px;
+                /* Ajuste también para móviles */
+                right: 80px; /* Separado del borde derecho para no chocar con el chatbot */
             }
         }
     </style>
