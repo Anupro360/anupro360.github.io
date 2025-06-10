@@ -3,13 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Curso Operador de Camión de Extracción (CAEX) - Anupro360</title>
-    <meta name="description" content="Capacitación profesional online para convertirte en Operador de Camión de Extracción. Modalidades flexibles, certificación válida y contenido práctico. Inscríbete ahora y aprovecha nuestra oferta limitada.">
-    <meta name="keywords" content="Operador de Camión de Extracción, curso minero, capacitación minería, curso online, certificación minera, empleo minero, entrenamiento operador, maquinaria pesada, minería chile, operador camión extracción">
+    <title>Curso Operador de Camión de Extracción (CAEX) Online Chile - Anupro360</title>
+    <meta name="description" content="Capacitación profesional online para convertirte en Operador de Camión de Extracción (CAEX) en Chile. Obtén certificación reconocida, estudia a tu ritmo y accede a empleos en minería con alta demanda. ¡Inscríbete en Anupro360 y asegura tu futuro!">
+    <meta name="keywords" content="Operador de Camión de Extracción, curso CAEX, capacitación minería Chile, curso online minero, certificación minera, empleo minero, entrenamiento operador maquinaria pesada, minería Iquique, operador camión extracción sin experiencia, curso minería online">
     
     <link rel="icon" href="https://www.anupro360.com/favicon.png" type="image/png">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Anupro360 - Curso Operador CAEX",
+      "image": "https://www.anupro360.com/imagotipoblanco.webp",
+      "url": "https://www.anupro360.com/camioncaex.html",
+      "telephone": "+56940523016",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Iquique, Tarapacá", 
+        "addressLocality": "Iquique",
+        "addressRegion": "Tarapacá",
+        "addressCountry": "CL"
+      },
+      "priceRange": "$428.50 - $540",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/guillermocontrerasmuñoz",
+        "https://www.instagram.com/anupro360",
+        "https://www.tiktok.com/@anupro360",
+        "https://www.facebook.com/share/1ARsrDbDqw/",
+        "https://x.com/Anupro360"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿El certificado está reconocido por la industria minera?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, nuestros certificados cumplen con los estándares del Marco de Cualificaciones del Consejo Minero de Chile, lo que garantiza su validez y reconocimiento a nivel nacional. Además, incorporan mecanismos de verificación de autenticidad."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Necesito experiencia previa para inscribirme?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No, el curso está diseñado para principiantes. No se requiere experiencia previa en el sector minero. ¡Te guiaremos desde cero!"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿El curso incluye práctica en simuladores o equipos reales?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La capacitación se enfoca en el conocimiento teórico y práctico a través de nuestra aula virtual y sesiones en Teams. Para práctica con equipos reales o simuladores, esto debe coordinarse directamente con empresas o centros de entrenamiento específicos, lo cual no está incluido en este curso base. Sin embargo, nuestros conocimientos te preparan con una base sólida para esa etapa."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo obtengo el descuento del 50%?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Es muy sencillo: solo tienes que seguir a @Anupro360 en TikTok y registrarte dentro de los próximos 3 días para acceder al 50% de descuento en ambas modalidades de estudio."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Puedo pagar el curso en cuotas?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, ofrecemos opciones de pago flexibles en cuotas sin intereses para que tu formación sea más accesible. Contacta con nosotros para consultar los detalles y planes de pago disponibles."
+          }
+        }
+      ]
+    }
+    </script>
     
     <style>
         /* Variables de colores */
@@ -29,13 +119,27 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            /* Si usas Google Fonts, cambia 'Arial' a tu fuente */
+            font-family: 'Arial', sans-serif; 
         }
 
         body {
             background-color: var(--fondo-oscuro);
             color: var(--blanco);
             overflow-x: hidden;
+            /* Desplazamiento suave para todos los enlaces */
+            scroll-behavior: smooth; 
+        }
+
+        /* Particles.js Container */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -2; /* Detrás de la imagen de fondo y el contenido */
+            background-color: var(--fondo-oscuro); /* Color de fondo si no hay imagen */
         }
 
         /* Header fijo */
@@ -56,6 +160,7 @@
         .logo {
             height: 50px;
             transition: transform 0.3s ease;
+            /* La carga perezosa se maneja en el HTML, no aquí en CSS */
         }
 
         .logo:hover {
@@ -154,7 +259,6 @@
 
         /* Sección Hero */
         .hero {
-            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -163,23 +267,30 @@
             background: linear-gradient(135deg, var(--fondo-oscuro) 0%, var(--fondo-intermedio) 100%);
             position: relative;
             overflow: hidden;
-            padding: 0 5%;
-            padding-top: 80px;
+            padding: 120px 5% 80px; /* Ajustado el padding para espacio alrededor del texto */
         }
 
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Imagen de fondo del Hero corregida a 'tu_imagen_de_fondo.webp' */
-            background-image: url('https://www.anupro360.com/tu_imagen_de_fondo.webp');
-            background-size: cover;
+            /* Centrar verticalmente la imagen detrás del texto */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%; /* Ajusta el ancho de la imagen según necesites */
+            height: auto; /* Mantener la proporción de la imagen */
+            max-height: 60vh; /* Limitar la altura máxima de la imagen */
+            background-image: url('https://www.anupro360.com/image_a647f4.jpg'); /* Tu imagen de fondo principal */
+            background-size: contain; /* Para que la imagen completa se vea dentro del contenedor */
+            background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.3; /* Ajusta la opacidad si la imagen es muy oscura/clara */
+            opacity: 0.2; /* Ajusta la opacidad */
             z-index: -1;
+        }
+
+        .hero > * { /* Asegurar que los elementos hijos estén por encima de la imagen */
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
@@ -211,12 +322,32 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
             animation: fadeInUp 1s ease 0.6s forwards;
             opacity: 0;
+            margin-bottom: 30px; /* Espacio debajo del botón y antes de la nueva imagen */
         }
 
         .btn-hero:hover {
             transform: translateY(-5px);
             background-color: #FF7B33;
             box-shadow: 0 10px 20px rgba(255, 92, 0, 0.3);
+        }
+
+        /* Estilos para la nueva imagen en la sección hero */
+        .hero-image-bottom {
+            width: 100%;
+            max-width: 1200px; /* Ancho máximo de la imagen */
+            height: auto; /* Mantener la proporción */
+            border-radius: 10px; /* Bordes redondeados, opcional */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Sombra, opcional */
+            margin-top: 30px; /* Espacio arriba de la imagen */
+            display: block; /* Asegura que no haya espacio extra debajo */
+            object-fit: cover; /* Recorta si es necesario para cubrir el espacio */
+            animation: fadeIn 1.5s ease-out 0.8s forwards; /* Animación de aparición */
+            opacity: 0; /* Inicialmente oculta para la animación */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Sección "¿Qué aprenderás?" */
@@ -482,6 +613,7 @@
             object-fit: cover;
             margin-right: 10px;
             border: 2px solid var(--amarillo);
+            /* La carga perezosa se maneja en el HTML, no aquí en CSS */
         }
 
         /* Sección de FAQ */
@@ -549,7 +681,7 @@
 
         .faq-answer.active {
             padding: 1.5rem 2rem;
-            max-height: 500px;
+            max-height: 500px; /* Ajustar según sea necesario */
         }
 
         /* Sección de llamado a la acción final */
@@ -617,17 +749,18 @@
         /* Contador regresivo */
         .contador-regresivo {
             background-color: var(--naranja);
-            color: var(--blanco);
+            color: var(--blanco); /* Ajustado a blanco para mayor contraste */
             padding: 0.8rem 1.8rem;
             border-radius: 6px;
             display: inline-block;
             font-weight: bold;
             font-size: 1.1rem;
             box-shadow: 0 4px 10px rgba(255, 92, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Sombra para mejor visibilidad */
         }
         .contador-regresivo span {
             font-size: 1.3rem;
-            color: var(--azul-oscuro);
+            color: var(--azul-oscuro); /* Mantenemos este color para los números */
         }
 
         /* Sección de contacto directo (unificada y mejorada) */
@@ -752,8 +885,7 @@
         .whatsapp-btn {
             position: fixed;
             bottom: 30px;
-            /* Ajustado de 'right' a 'left' y valor aumentado */
-            right: 100px; /* Aumentado de 30px a 100px para evitar el chatbot */
+            right: 100px; /* Separado del chatbot */
             background-color: #25D366;
             color: white;
             width: 65px;
@@ -764,7 +896,7 @@
             align-items: center;
             text-decoration: none;
             box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
-            z-index: 999; /* Asegurar que esté debajo del chatbot si es necesario, aunque el 'right' lo separará */
+            z-index: 999; /* Asegurar que esté visible */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             font-size: 2.2rem;
         }
@@ -818,10 +950,17 @@
             }
 
             .hero {
-                height: auto;
-                min-height: 80vh;
-                padding: 100px 5% 50px;
+                /* Ajustes responsive para el hero */
+                min-height: auto; /* Dejar que el contenido defina la altura */
+                padding: 100px 5% 50px; /* Ajustar padding */
             }
+
+            .hero::before {
+                width: 90%; /* Más ancho en móviles */
+                max-height: 40vh; /* Limitar altura en móviles */
+                opacity: 0.15; /* Menos opacidad en móviles si es muy intrusiva */
+            }
+
             .hero h1 {
                 font-size: 2rem;
             }
@@ -831,6 +970,11 @@
             .btn-hero {
                 padding: 1rem 2rem;
                 font-size: 1rem;
+                margin-bottom: 20px; /* Ajuste para móviles */
+            }
+            .hero-image-bottom {
+                max-width: 95%; /* Asegura que la imagen no se desborde */
+                margin-top: 20px; /* Ajuste para móviles */
             }
 
             .que-aprenderas, .modalidades, .beneficios, .testimonios, .faq, .cta-final, .contacto-form, .redes-sociales {
@@ -895,15 +1039,16 @@
                 height: 55px;
                 font-size: 1.8rem;
                 bottom: 20px;
-                /* Ajuste también para móviles */
-                right: 80px; /* Separado del borde derecho para no chocar con el chatbot */
+                right: 80px; /* Separado del chatbot */
             }
         }
     </style>
 </head>
 <body>
+    <div id="particles-js"></div>
+
     <header>
-        <img src="https://www.anupro360.com/imagotipoblanco.webp" alt="Logo Anupro360" class="logo">
+        <img src="https://www.anupro360.com/imagotipoblanco.webp" alt="Logo Anupro360" class="logo" loading="lazy">
         <nav>
             <ul>
                 <li><a href="#inicio">Inicio</a></li>
@@ -916,13 +1061,13 @@
             </ul>
         </nav>
         <a href="#contacto-form" class="btn-menu">Inscríbete ahora</a>
-        <div class="hamburger" id="hamburger-icon">
+        <div class="hamburger" id="hamburger-icon" aria-label="Abrir menú">
             <i class="fas fa-bars"></i>
         </div>
     </header>
 
     <div class="nav-mobile" id="mobile-menu">
-        <div class="hamburger" id="close-hamburger">
+        <div class="hamburger" id="close-hamburger" aria-label="Cerrar menú">
             <i class="fas fa-times"></i>
         </div>
         <ul>
@@ -940,6 +1085,7 @@
         <h1>Conviértete en Operador CAEX Certificado: Tu camino al éxito en la minería chilena comienza aquí.</h1>
         <p>Obtén la capacitación online más completa y la **certificación reconocida por la industria** en solo **2 meses** para acceder a oportunidades laborales con alta demanda y excelentes proyecciones.</p>
         <a href="#contacto-form" class="btn-hero">¡Inscríbete Ahora y Asegura Tu Futuro!</a>
+        <img src="https://www.anupro360.com/fondo2.webp" alt="Ilustración de Camión CAEX en la minería" class="hero-image-bottom" loading="lazy" width="1200" height="675">
     </section>
 
     <section class="que-aprenderas" id="curso">
@@ -962,13 +1108,17 @@
             </div>
             <div class="tema">
                 <i class="fas fa-wrench"></i>
-                <h3>Mantenimiento básico de equipos</h3>
-                <p>Aprende a realizar revisiones preventivas y corregir pequeños fallos, **prolongando la vida útil de la maquinaria** y evitando paradas innecesarias.</p>
+                <div>
+                    <h3>Mantenimiento básico de equipos</h3>
+                    <p>Aprende a realizar revisiones preventivas y corregir pequeños fallos, **prolongando la vida útil de la maquinaria** y evitando paradas innecesarias.</p>
+                </div>
             </div>
             <div class="tema">
                 <i class="fas fa-chart-line"></i>
-                <h3>Factores de productividad y eficiencia</h3>
-                <p>Maximiza el rendimiento y reduce costos en operaciones mineras, aplicando estrategias para una **producción más rentable y sostenible**.</p>
+                <div>
+                    <h3>Factores de productividad y eficiencia</h3>
+                    <p>Maximiza el rendimiento y reduce costos en operaciones mineras, aplicando estrategias para una **producción más rentable y sostenible**.</p>
+                </div>
             </div>
         </div>
     </section>
@@ -1049,15 +1199,21 @@
         <div class="testimonios-container">
             <div class="testimonio">
                 <p>Gracias al curso de Anupro360 pude conseguir trabajo en una minera importante. La formación fue excelente y muy práctica.</p>
-                <div class="autor"><img src="https://via.placeholder.com/50/FFB81C/FFFFFF?text=LA" alt="Foto de Luis A."> Luis A., Operador de Camión</div>
+                <div class="autor">
+                    <img src="https://www.anupro360.com/testimonio_luis_a.webp" alt="Foto de Luis A." loading="lazy"> Luis A., Operador de Camión
+                </div>
             </div>
             <div class="testimonio">
                 <p>El contenido del curso es muy completo y actualizado. Los instructores tienen mucha experiencia en el campo minero.</p>
-                <div class="autor"><img src="https://via.placeholder.com/50/FF5C00/FFFFFF?text=MP" alt="Foto de María P."> María P., Gerente de Operaciones</div>
+                <div class="autor">
+                    <img src="https://www.anupro360.com/testimonio_maria_p.webp" alt="Foto de María P." loading="lazy"> María P., Gerente de Operaciones
+                </div>
             </div>
             <div class="testimonio">
                 <p>La flexibilidad del curso me permitió estudiar mientras trabajaba. Ahora estoy listo para dar el siguiente paso en mi carrera.</p>
-                <div class="autor"><img src="https://via.placeholder.com/50/4B6F44/FFFFFF?text=CR" alt="Foto de Carlos R."> Carlos R., Técnico Minero</div>
+                <div class="autor">
+                    <img src="https://www.anupro360.com/testimonio_carlos_r.webp" alt="Foto de Carlos R." loading="lazy"> Carlos R., Técnico Minero
+                </div>
             </div>
         </div>
     </section>
@@ -1187,22 +1343,32 @@
         });
 
         // Animación de contador regresivo
-        let dias = 3;
+        // Establecer la fecha objetivo (ej: 3 días a partir de ahora, o una fecha específica)
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 3); // 3 días a partir de hoy
+
         const diasElement = document.getElementById('dias');
-        const countdown = setInterval(() => {
-            dias--;
-            if (dias < 0) {
-                dias = 0;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate.getTime() - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                diasElement.parentElement.textContent = '¡Oferta finalizada!';
+                diasElement.parentElement.style.backgroundColor = 'red';
+            } else {
+                diasElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
             }
-            diasElement.textContent = dias;
-            if (dias <= 0) {
-                clearInterval(countdown);
-                diasElement.textContent = '0';
-                diasElement.style.textDecoration = 'line-through';
-                diasElement.style.color = 'red';
-                diasElement.parentElement.title = '¡Oferta finalizada!';
-            }
-        }, 86400000); // Cada 24 horas
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000); // Actualizar cada segundo
+        updateCountdown(); // Llamada inicial para mostrar el contador inmediatamente
 
         // Accordeón FAQ
         const faqQuestions = document.querySelectorAll('.faq-question');
@@ -1246,6 +1412,118 @@
             link.addEventListener('click', () => {
                 mobileMenu.classList.remove('active');
             });
+        });
+
+        // Inicializar Particles.js
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#FFB81C" // Color de las partículas (amarillo corporativo)
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#FFB81C", // Color de las líneas
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 3,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab" // Las partículas se "agarran" al pasar el ratón
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push" // Empuja partículas al hacer clic
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
         });
 
     </script>
