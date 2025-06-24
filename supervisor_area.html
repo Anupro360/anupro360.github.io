@@ -6,6 +6,8 @@
     <title>Supervisor de Área Transporte Mina Course</title>
     <meta name="description" content="Conviértete en un líder en la industria minera con nuestro curso Supervisor de Área Transporte Mina. Matricúlate ahora y obtén un 50% de descuento.">
     <meta name="keywords" content="supervisor minero, curso transporte mina, capacitación minera, minería Chile, certificación minera">
+    <!-- Add Font Awesome for modern social media icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Global Styles */
         body {
@@ -70,9 +72,9 @@
                 top: 60px;
                 right: 0;
                 width: 100%;
-                z-index: 999; /* Ensure menu is above other content */
+                z-index: 999;
             }
-            .menu ul.active { /* Class to show the menu */
+            .menu ul.active {
                 display: flex;
             }
             .menu li {
@@ -84,7 +86,7 @@
                 display: block;
                 float: right;
                 padding: 10px;
-                color: white; /* Make hamburger icon visible */
+                color: white;
                 font-size: 24px;
             }
         }
@@ -160,7 +162,7 @@
         .section h2 {
             font-size: 36px;
             margin-bottom: 20px;
-            text-align: center; /* Centered section titles for better flow */
+            text-align: center;
         }
         .section h3 {
             font-size: 28px;
@@ -179,7 +181,6 @@
         .section li {
             margin-bottom: 10px;
         }
-
         /* Testimonials */
         .testimonials {
             display: flex;
@@ -200,7 +201,10 @@
             height: 100px;
             border-radius: 50%;
             margin-bottom: 10px;
-            object-fit: cover; /* Ensure image covers the area */
+            object-fit: cover;
+        }
+        .testimonial p {
+            text-align: left; /* Left-justify testimonial text */
         }
         /* Contact */
         .contact {
@@ -212,7 +216,7 @@
             margin: 10px;
             font-size: 24px;
             color: #00bcd4;
-            text-decoration: none; /* Remove underline from links */
+            text-decoration: none;
         }
         /* Enrollment */
         .enrollment {
@@ -251,7 +255,7 @@
             border-radius: 5px;
             text-align: center;
             font-weight: bold;
-            display: none; /* Hidden by default */
+            display: none;
         }
         .message-box.success {
             background-color: #d4edda;
@@ -263,24 +267,23 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
-
         /* Floating WhatsApp */
-        .whatsapp-float { /* Renamed to avoid conflict with contact section class */
+        .whatsapp-float {
             position: fixed;
             bottom: 20px;
             right: 20px;
             background: #25d366;
             color: white;
-            padding: 10px 15px; /* Adjust padding for better look */
+            padding: 10px 15px;
             border-radius: 50%;
             font-size: 24px;
             cursor: pointer;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            text-decoration: none; /* Remove underline */
-            display: flex; /* For centering the icon if it were an SVG/icon font */
+            text-decoration: none;
+            display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px; /* Fixed width/height for circular button */
+            width: 50px;
             height: 50px;
         }
         /* Footer */
@@ -296,7 +299,7 @@
             width: 100%;
             height: 400px;
             margin: 20px 0;
-            background-color: #e0e0e0; /* Placeholder for map */
+            background-color: #e0e0e0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -313,7 +316,7 @@
             width: 100%;
             max-width: 600px;
             border-radius: 5px;
-            height: auto; /* Maintain aspect ratio */
+            height: auto;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
     </style>
@@ -327,7 +330,7 @@
         </div>
         <div class="menu">
             <div class="hamburger">☰</div>
-            <ul class="menu-list"> <!-- Added a class to the ul -->
+            <ul class="menu-list">
                 <li><a href="#informacion">Información del curso</a></li>
                 <li><a href="#beneficios">Beneficios a estudiar el curso</a></li>
                 <li><a href="#valor">Valor y ofertas</a></li>
@@ -432,7 +435,7 @@
                 </div>
                 <div class="testimonial">
                     <img src="testimonial2.webp" alt="Carolina Soto Testimonial" onerror="this.onerror=null;this.src='https://placehold.co/100x100/cccccc/333333?text=User2';">
-                    <p>"Como ingeniera, siempre me preocupó la eficiencia. Pero este curso, especialmente el módulo de Gestión de Procesos y Optimización, me dio una visión práctica y metodologías concretas para identificar y resolver cuellos de botella en el transporte. Pude implementar mejoras que redujeron los tiempos de ciclo en un 15%, ¡un impacto real y medible! Muy recomendable."<br>— Carolina Soto, Jefa de Turno en Mina El Sol.</p>
+                    <p>"Como ingeniero, siempre me preocupó la eficiencia. Pero este curso, especialmente el módulo de Gestión de Procesos y Optimización, me dio una visión práctica y metodologías concretas para identificar y resolver cuellos de botella en el transporte. Pude implementar mejoras que redujeron los tiempos de ciclo en un 15%, ¡un impacto real y medible! Muy recomendable."<br>— Juan Soto, Jefe de Turno en Mina El Sol.</p>
                 </div>
                 <div class="testimonial">
                     <img src="testimonial3.webp" alt="Testimonial 3" onerror="this.onerror=null;this.src='https://placehold.co/100x100/cccccc/333333?text=User3';">
@@ -452,12 +455,12 @@
         <div id="contacto" class="section">
             <h2>Contacto</h2>
             <div class="contact">
-                <a href="whatsapp://send?phone=+56940523016" class="whatsapp" aria-label="WhatsApp">📱</a>
-                <a href="https://www.tiktok.com/@anupro360?_t=ZM-8vOTqpeWoNB&_r=1/" class="tiktok" aria-label="TikTok">🎵</a>
-                <a href="https://www.facebook.com/share/1ARsrDbDqw/" class="facebook" aria-label="Facebook">📘</a>
-                <a href="https://www.instagram.com/anupro360?utm_source=qr&igsh=MWljOW8xbGc3eW12dw==/" class="instagram" aria-label="Instagram">📸</a>
-                <a href="https://www.linkedin.com/in/anupro360/" class="linkedin" aria-label="LinkedIn">💼</a>
-                <a href="https://x.com/Anupro360?s=09/" class="twitter" aria-label="Twitter">🐦</a>
+                <a href="whatsapp://send?phone=+56940523016" class="whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.tiktok.com/@anupro360?_t=ZM-8vOTqpeWoNB&_r=1/" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.facebook.com/share/1ARsrDbDqw/" class="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/anupro360?utm_source=qr&igsh=MWljOW8xbGc3eW12dw==/" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/anupro360/" class="linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://x.com/Anupro360?s=09/" class="twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
             </div>
             <p>Website: <a href="https://www.anupro360.com/">https://www.anupro360.com/</a></p>
             <p>Email: <a href="mailto:contacto@anupro360.com">contacto@anupro360.com</a></p>
@@ -474,45 +477,40 @@
                     <textarea id="motivacion" name="Motivación" placeholder="Breve explicación de por qué desea tomar este curso"></textarea>
                     <button type="submit">Enviar Inscripción</button>
                 </form>
-                <div id="form-message" class="message-box"></div> <!-- Message box for feedback -->
+                <div id="form-message" class="message-box"></div>
                 <div class="contact">
-                    <a href="whatsapp://send?phone=+56912345678" class="whatsapp" aria-label="WhatsApp">📱</a>
-                    <a href="https://www.tiktok.com/@anupro360?_t=ZM-8vOTqpeWoNB&_r=1" class="tiktok" aria-label="TikTok">🎵</a>
-                    <a href="https://www.facebook.com/share/1ARsrDbDqw/" class="facebook" aria-label="Facebook">📘</a>
-                    <a href="https://www.instagram.com/anupro360?utm_source=qr&igsh=MWljOW8xbGc3eW12dw==" class="instagram" aria-label="Instagram">📸</a>
-                    <a href="https://www.linkedin.com/in/anupro360/" class="linkedin" aria-label="LinkedIn">💼</a>
-                    <a href="https://x.com/Anupro360?s=09" class="twitter" aria-label="Twitter">🐦</a>
+                    <a href="whatsapp://send?phone=+56912345678" class="whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.tiktok.com/@anupro360?_t=ZM-8vOTqpeWoNB&_r=1" class="tiktok" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.facebook.com/share/1ARsrDbDqw/" class="facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/anupro360?utm_source=qr&igsh=MWljOW8xbGc3eW12dw==" class="instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/in/anupro360/" class="linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://x.com/Anupro360?s=09" class="twitter" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
                 </div>
             </div>
             <div class="speaker" aria-label="Escuchar contenido">🔊</div>
         </div>
     </div>
-    <a href="whatsapp://send?phone=+56940523016" class="whatsapp-float" aria-label="WhatsApp Flotante">📱</a> <!-- Changed class name -->
+    <a href="whatsapp://send?phone=+56940523016" class="whatsapp-float" aria-label="WhatsApp Flotante"><i class="fab fa-whatsapp"></i></a>
     <div class="map" id="map">
-        <!-- Placeholder para el mapa -->
         Mapa de ubicación aquí (Google Maps u otro)
     </div>
     <div class="certificado">
         <img src="certificado.webp" alt="Certificado de Calidad Anupro360" onerror="this.onerror=null;this.src='https://placehold.co/600x400/cccccc/333333?text=Certificado';">
     </div>
     <footer>
-        <p>&copy; 2025 Anupro360. Todos los derechos reservados.</p>
+        <p>© 2025 Anupro360. Todos los derechos reservados.</p>
     </footer>
     <script>
         // Función para mostrar mensajes al usuario
         function showMessage(message, type) {
             const messageBox = document.getElementById('form-message');
             messageBox.textContent = message;
-            messageBox.className = 'message-box ' + type; // Set class for styling (success/error)
-            messageBox.style.display = 'block'; // Make it visible
-
-            // Hide the message after a few seconds
+            messageBox.className = 'message-box ' + type;
+            messageBox.style.display = 'block';
             setTimeout(() => {
                 messageBox.style.display = 'none';
             }, 5000);
         }
-
-        // Función para codificar los datos del formulario para enviar como 'application/x-www-form-urlencoded'
         function encodeFormData(data) {
             var formBody = [];
             for (var property in data) {
@@ -522,13 +520,9 @@
             }
             return formBody.join("&");
         }
-
-        // Hamburger Menu Toggle
         document.querySelector('.hamburger').addEventListener('click', function() {
             document.querySelector('.menu-list').classList.toggle('active');
         });
-
-        // Header Active on Scroll
         window.addEventListener('scroll', function() {
             if (window.scrollY > 50) {
                 document.querySelector('header').classList.add('active');
@@ -536,28 +530,18 @@
                 document.querySelector('header').classList.remove('active');
             }
         });
-
-        // Countdown Timer
-        // Establece la fecha de cuenta regresiva (ej. 3 días desde ahora)
         let countdownDate = new Date().getTime() + 3 * 24 * 60 * 60 * 1000;
         let x = setInterval(function() {
             let now = new Date().getTime();
             let distance = countdownDate - now;
-
-            // Calcula días, horas, minutos y segundos
             let days = Math.floor(distance / (1000 * 60 * 60 * 24));
             let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Muestra el resultado en el elemento con clase 'countdown'
             const countdownElement = document.querySelector('.countdown');
             if (countdownElement) {
-                 countdownElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                countdownElement.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
             }
-           
-
-            // Si la cuenta regresiva termina, muestra "EXPIRED"
             if (distance < 0) {
                 clearInterval(x);
                 if (countdownElement) {
@@ -565,27 +549,20 @@
                 }
             }
         }, 1000);
-
-        // Speaker Functionality (Text-to-speech)
         document.querySelectorAll('.speaker').forEach(function(speaker) {
             speaker.addEventListener('click', function() {
                 const textToSpeak = this.closest('.section') ? this.closest('.section').textContent : this.closest('.hero-content').textContent;
                 if ('speechSynthesis' in window) {
                     const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                    utterance.lang = 'es-ES'; // Set language to Spanish
+                    utterance.lang = 'es-ES';
                     window.speechSynthesis.speak(utterance);
                 } else {
                     showMessage('Tu navegador no soporta la funcionalidad de texto a voz.', 'error');
                 }
             });
         });
-
-        // Form Submission
         document.getElementById('inscripcion-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Previene el envío del formulario tradicional
-
-            // Recopila los datos del formulario.
-            // Es CRUCIAL que los 'name' de los inputs HTML coincidan con los encabezados en tu Google Sheet (e.g., "Nombre", "Email").
+            e.preventDefault();
             var formData = {
                 Nombre: document.getElementById('nombre').value,
                 Email: document.getElementById('email').value,
@@ -593,23 +570,17 @@
                 Empresa: document.getElementById('empresa').value,
                 Motivación: document.getElementById('motivacion').value
             };
-
-            // La URL de tu aplicación web de Google Apps Script.
-            // ASEGÚRATE de que esta URL sea la que obtuviste al desplegar tu script (termina en /exec).
             var appsScriptUrl = 'https://script.google.com/macros/s/AKfycbweojp0iga1U6G73B-t1kKOvj4R1iT1ea7jVVcwFyFXwLxJBOOpyhmWpFV1dpki4XDO/exec';
-            
             var xhr = new XMLHttpRequest();
             xhr.open('POST', appsScriptUrl, true);
-            // Configura el encabezado Content-Type para enviar datos como formulario URL-encoded
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     try {
                         const response = JSON.parse(xhr.responseText);
                         if (response.result === "success") {
                             showMessage('¡Inscripción enviada exitosamente!', 'success');
-                            document.getElementById('inscripcion-form').reset(); // Limpia el formulario
+                            document.getElementById('inscripcion-form').reset();
                         } else {
                             showMessage('Error al enviar la inscripción: ' + response.error, 'error');
                         }
@@ -622,13 +593,10 @@
                     console.error('Error de red o servidor:', xhr.status, xhr.responseText);
                 }
             };
-
             xhr.onerror = function() {
                 showMessage('No se pudo conectar con el servidor. Verifica tu conexión.', 'error');
                 console.error('Error de conexión XHR.');
             };
-
-            // Envía los datos codificados
             xhr.send(encodeFormData(formData));
         });
     </script>
