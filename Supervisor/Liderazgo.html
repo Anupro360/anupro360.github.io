@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · MicroMódulo Liderazgo</title>
+  <meta name="description" content="Microaprendizaje dinámico: Liderazgo en minería (Anupro360)">
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+      --bg:#0f1c24;       /* Fondo oscuro suave para contraste */
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(180deg, var(--azul) 0%, #072A3D 100%);
+      color: var(--blanco);
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter:saturate(140%) blur(8px);
+      background: rgba(0,59,92,.75);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .wrap{max-width:980px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{ display:none; }
+    h1{font-size:1.25rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{
+      background: radial-gradient(1000px 200px at 50% -50%, rgba(255,184,28,.2), transparent),
+                  radial-gradient(800px 250px at 100% 0%, rgba(255,92,0,.15), transparent);
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .hero h2{font-size:1.4rem; margin:.25rem 0 .5rem}
+    .hero p{opacity:.9; margin:.25rem 0}
+
+    /* Layout */
+    .grid{display:grid; gap:16px}
+    @media (min-width:920px){ .grid{grid-template-columns: 1.2fr .8fr} }
+
+    /* Card */
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    /* Buttons */
+    button{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{
+      background: linear-gradient(180deg, var(--amarillo), #EAA20F);
+      color:#0b1116;
+      box-shadow:0 6px 16px rgba(255,184,28,.35);
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); border-radius:12px; padding:10px 14px; display:inline-block; text-decoration:none}
+    .btn-sec{background:linear-gradient(180deg, var(--verde), #375636)}
+
+    /* Progress */
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress > i{display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--amarillo), var(--naranja)); transition:width .4s ease}
+
+    /* Pillars */
+    .pillars{display:grid; grid-template-columns:1fr; gap:12px}
+    @media(min-width:680px){.pillars{grid-template-columns:repeat(2,1fr)}}
+    .pillar{background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:14px}
+    .pillar h4{margin:0 0 4px; font-size:1rem}
+    .pillar p{margin:0; opacity:.9; font-size:.95rem}
+
+    /* Quiz */
+    .q{padding:12px; border-radius:14px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt input{margin-top:4px}
+    .feedback{font-weight:600; margin-top:8px}
+
+    /* Toggle list */
+    .toggle{display:grid; gap:8px}
+    .toggle .row{display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.04); padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.12)}
+
+    /* Footer */
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+
+    /* Accessibility helpers */
+    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" style="width:40px; height:40px; border-radius:12px; object-fit:contain">
+        <h1>Anupro360 · MicroMódulo: Liderazgo</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>¿Qué es el liderazgo en minería?</h2>
+      <p><strong>Idea clave:</strong> un líder no solo ordena; inspira, cuida la seguridad y guía con el ejemplo.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda: contenido -->
+    <section class="card" aria-labelledby="intro-title">
+      <h3 id="intro-title">1) Introducción rápida</h3>
+      <p style="margin-top:-6px; opacity:.9">Lee en menos de 60 segundos.</p>
+      <p><strong>Liderazgo vs. Jefatura:</strong> la jefatura se apoya en la autoridad formal; el liderazgo influye por ejemplo, comunicación y decisiones seguras. En faenas, un buen liderazgo reduce incidentes, mejora coordinación y eleva el estándar operativo.</p>
+      <button class="btn" data-complete="intro">Marcar como leído ✓</button>
+    </section>
+
+    <!-- Columna derecha: meta -->
+    <aside class="card" aria-labelledby="meta-title">
+      <h3 id="meta-title">Ficha del módulo</h3>
+      <ul style="margin:0; padding-left:18px; line-height:1.7">
+        <li>Duración total: ~10 minutos</li>
+        <li>Formato: lectura + mini-actividades + quiz</li>
+        <li>Objetivo: distinguir liderazgo de jefatura y aplicar 5 pilares</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Pilares -->
+    <section class="card" aria-labelledby="pillars-title">
+      <h3 id="pillars-title">2) Los 5 pilares del liderazgo minero</h3>
+      <div class="pillars">
+        <div class="pillar"><h4>1. Comunicación clara</h4><p>Mensajes directos y confirmación de entendimiento. Evita ambigüedades.</p></div>
+        <div class="pillar"><h4>2. Ejemplo personal</h4><p>Haz primero lo que pides. La coherencia construye confianza.</p></div>
+        <div class="pillar"><h4>3. Decisiones seguras</h4><p>Prioriza la seguridad sobre la prisa. Procedimientos primero.</p></div>
+        <div class="pillar"><h4>4. Empatía activa</h4><p>Conoce las condiciones reales del equipo y ajusta expectativas.</p></div>
+        <div class="pillar"><h4>5. Visión compartida</h4><p>Que todos sepan el objetivo del turno y su aporte específico.</p></div>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn" data-complete="pillars">He revisado los pilares ✓</button>
+        <a href="5pilares.webp" download class="btn-ghost">Descargar infografía</a>
+      </div>
+    </section>
+
+    <!-- Actividad Líder o Jefe -->
+    <section class="card" aria-labelledby="toggle-title">
+      <h3 id="toggle-title">3) Actividad: ¿Líder o Jefe?</h3>
+      <p>Marca si la frase describe a un <strong>LÍDER</strong> o un <strong>JEFE</strong>. Feedback inmediato.</p>
+      <div class="toggle" id="toggleList">
+        <!-- Filas generadas por JS -->
+      </div>
+      <div id="toggleScore" class="feedback" aria-live="polite"></div>
+      <button class="btn" data-complete="toggle">Actividad completada ✓</button>
+    </section>
+
+    <!-- Mini Quiz -->
+    <section class="card" aria-labelledby="quiz-title">
+      <h3 id="quiz-title">4) Mini‑quiz (3 preguntas)</h3>
+      <div id="quiz">
+        <!-- Preguntas generadas por JS -->
+      </div>
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <div id="quizFeedback" class="feedback" aria-live="polite"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Reflexión -->
+    <section class="card" aria-labelledby="ref-title">
+      <h3 id="ref-title">5) Reflexión (opcional · 2 líneas)</h3>
+      <label class="sr-only" for="reflexion">Escribe tu respuesta</label>
+      <textarea id="reflexion" rows="3" placeholder="Comparte una acción de liderazgo que aplicarás esta semana…" style="width:100%; border-radius:12px; padding:10px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.2); color:var(--blanco)"></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiar">Copiar para publicar en Classroom</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360. </div>
+  </footer>
+
+  <dialog id="win" style="border:none; border-radius:16px; padding:0; max-width:520px; width:92%">
+    <div style="background:linear-gradient(180deg, var(--verde), #2f4c2e); color:white; padding:18px 16px; border-radius:16px">
+      <h3 style="margin:0 0 6px">🏅 ¡Insignia obtenida: “Liderazgo Esencial”!</h3>
+      <p style="margin:0; opacity:.95">Completaste todas las secciones del micro‑módulo. Puedes compartir tu reflexión en el foro del curso.</p>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px"><button class="btn-ghost" onclick="document.getElementById('win').close()">Cerrar</button></div>
+    </div>
+  </dialog>
+
+  <script>
+    // Utilidades
+    const $ = (s, d=document)=>d.querySelector(s);
+    const $$ = (s, d=document)=>Array.from(d.querySelectorAll(s));
+    const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read  = (k,def=null)=>{ try{ return JSON.parse(localStorage.getItem(k)) ?? def }catch(e){ return def } };
+
+    const state = read('anupro360_liderazgo_v1', {
+      done: { intro:false, pillars:false, toggle:false, quiz:false },
+      reflexion:"",
+      scoreToggle:0,
+      quizAnswers:{}
+    });
+
+    // Progreso
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+      if(pct===100){ $('#win').showModal(); }
+    }
+
+    // Botones de completar
+    $$('button[data-complete]').forEach(b=>{
+      b.addEventListener('click', e=>{
+        const key = e.currentTarget.dataset.complete;
+        state.done[key] = true;
+        store('anupro360_liderazgo_v1', state);
+        calcProgress();
+        e.currentTarget.textContent = 'Completado ✓';
+        e.currentTarget.disabled = true;
+        e.currentTarget.classList.add('btn-ghost');
+      })
+    })
+
+    // Reset
+    $('#reset').addEventListener('click', ()=>{
+      localStorage.removeItem('anupro360_liderazgo_v1');
+      location.reload();
+    });
+
+    // Toggle actividad: Líder o Jefe
+    const enunciados = [
+      {t:'“Hazlo así porque lo digo yo”.', ans:'JEFE'},
+      {t:'“¿Qué opinas de esta solución?”.', ans:'LÍDER'},
+      {t:'“Yo también haré el turno de noche con ustedes”.', ans:'LÍDER'},
+      {t:'“Cumple el procedimiento, es por tu seguridad”.', ans:'LÍDER'}
+    ];
+
+    function renderToggle(){
+      const box = $('#toggleList');
+      box.innerHTML = '';
+      enunciados.forEach((item, i)=>{
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `
+          <div style="flex:1">${i+1}. ${item.t}</div>
+          <div style="display:flex; gap:8px">
+            <button class="btn-ghost" aria-label="Marcar como Líder" data-v="LÍDER">LÍDER</button>
+            <button class="btn-ghost" aria-label="Marcar como Jefe" data-v="JEFE">JEFE</button>
+          </div>
+        `;
+        const [b1,b2] = row.querySelectorAll('button');
+        [b1,b2].forEach(b=>{
+          b.addEventListener('click', (e)=>{
+            const v = e.currentTarget.dataset.v;
+            const correct = v===item.ans;
+            row.style.borderColor = correct ? 'rgba(255,184,28,.9)' : 'rgba(255,92,0,.9)';
+            row.style.background = correct ? 'rgba(255,184,28,.08)' : 'rgba(255,92,0,.08)';
+            row.querySelectorAll('button').forEach(x=>x.disabled=true);
+            if(correct){ state.scoreToggle=(state.scoreToggle||0)+1; store('anupro360_liderazgo_v1', state); updateToggleScore(); }
+          })
+        })
+        box.appendChild(row);
+      })
+      updateToggleScore();
+    }
+
+    function updateToggleScore(){
+      const total = enunciados.length;
+      const sc = Math.min(state.scoreToggle||0, total);
+      $('#toggleScore').textContent = `Aciertos: ${sc} / ${total}`;
+    }
+
+    // Quiz
+    const preguntas = [
+      { q:'Diferencia central entre líder y jefe:',
+        opts:['El líder inspira; el jefe ordena','El líder siempre tiene más años de experiencia','El jefe escucha más que el líder'],
+        ok:0 },
+      { q:'Pilar clave del liderazgo minero:',
+        opts:['Ser el más antiguo','Comunicación clara','Dar órdenes sin explicar'],
+        ok:1 },
+      { q:'El liderazgo es importante porque…',
+        opts:['Evita que el jefe trabaje','Reduce riesgos y mejora coordinación','Genera más papeleo'],
+        ok:1 }
+    ];
+
+    function renderQuiz(){
+      const wrap = $('#quiz');
+      wrap.innerHTML = '';
+      preguntas.forEach((p, i)=>{
+        const div = document.createElement('div');
+        div.className = 'q';
+        div.innerHTML = `<div style="font-weight:600">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt, j)=>{
+          const id = `q${i}_o${j}`;
+          const line = document.createElement('label');
+          line.className = 'opt';
+          line.innerHTML = `<input type="radio" name="q${i}" id="${id}" value="${j}"><span>${txt}</span>`;
+          div.appendChild(line);
+        })
+        wrap.appendChild(div);
+      })
+    }
+
+    $('#enviar').addEventListener('click', ()=>{
+      let correctas = 0;
+      preguntas.forEach((p, i)=>{
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(!sel) return;
+        const idx = Number(sel.value);
+        if(idx===p.ok) correctas++;
+      })
+      const total = preguntas.length;
+      const pct = Math.round(correctas/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${correctas}/${total} (${pct}%)`;
+    })
+
+    // Reflexión
+    const ref = $('#reflexion');
+    ref.value = state.reflexion || '';
+    $('#guardarRef').addEventListener('click', ()=>{
+      state.reflexion = ref.value.trim();
+      store('anupro360_liderazgo_v1', state);
+      alert('Reflexión guardada en este dispositivo.');
+    });
+    $('#copiar').addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(ref.value.trim()); alert('Texto copiado. Pégalo en el foro de Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Selecciona y copia manualmente.'); }
+    })
+
+    // Inicialización
+    renderToggle();
+    renderQuiz();
+    calcProgress();
+    $('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
