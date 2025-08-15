@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Sección 1 · Microclase 1 — Introducción al Rol</title>
+  <meta name="description" content="Microclase 1: ¿Qué es un Controlador de Terreno? Rol, ROC, ciclo de acarreo, DO/DM, bloqueo de rutas y desvío.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+         background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px);
+           background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+          border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-size:1.15rem}
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    /* Quiz + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    /* Drag & drop / tap-to-move */
+    .dd-wrap{display:grid; gap:12px}
+    @media(min-width:880px){.dd-wrap{grid-template-columns:1fr 1fr}}
+    .pool,.bucket{min-height:80px; background:rgba(255,255,255,.05); border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:10px}
+    .tag{display:inline-block; padding:8px 10px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2);
+         border-radius:999px; margin:6px; cursor:grab; user-select:none}
+    .bucket h4{margin:0 0 6px 0; font-size:0.95rem}
+    .bucket.good{outline:2px solid #4B6F44}
+    .bucket.bad{outline:2px solid #FF5C00}
+    .mini{font-size:.85rem; opacity:.85}
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+        <h1>Anupro360 · Sección 1 · Microclase 1</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>¿QUÉ ES UN CONTROLADOR DE TERRENO?</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Comprender el rol, su propósito y el entorno ROC. Diferenciar supervisión/gestión vs. conducción. Conocer el glosario base.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) Rol y propósito <span aria-hidden>🎯</span></h3>
+      <div class="pill"><i>🧭</i><div>El Controlador de Terreno <b>supervisa, coordina y optimiza</b> flotas de <b>CAEX autónomos</b> desde el <b>ROC</b>. No conduce: <b>gestiona seguridad, continuidad y productividad</b> con consolas como <em>FrontRunner</em> (Komatsu) y <em>MineStar Command</em> (Caterpillar).</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li>Resuelve cuellos de botella con <b>desvíos</b> y <b>priorización</b>.</li>
+        <li>Aplica <b>LOCK/UNLOCK</b> de rutas con <b>confirmación visual</b>.</li>
+        <li>Coordina con pala, botadero, mantenimiento y seguridad.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p1">Marcar leído ✓</button></div>
+    </section>
+
+    <!-- Columna derecha (Ficha) -->
+    <aside class="card">
+      <h3>Ficha de esta Microclase</h3>
+      <ul class="bullet">
+        <li>Duración: ~8 min</li>
+        <li>Formato: lectura + glosario + actividad + micro-quiz</li>
+        <li>Objetivo: entender el rol y su alcance</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Diagrama sugerido (SVG) -->
+    <section class="card">
+      <h3>2) Diagrama: Controlador al centro <span aria-hidden>🗺️</span></h3>
+      <p class="mini">Relación del Controlador con la flota, pala/botadero y áreas de apoyo.</p>
+      <div style="background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; overflow:hidden">
+        <svg viewBox="0 0 780 360" width="100%" height="auto" role="img" aria-label="Controlador al centro con conexiones">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#FFB81C"/><stop offset="1" stop-color="#FF5C00"/></linearGradient>
+          </defs>
+          <rect x="0" y="0" width="780" height="360" fill="rgba(0,0,0,.15)"/>
+          <!-- centro -->
+          <circle cx="390" cy="180" r="42" fill="url(#g1)" />
+          <text x="390" y="184" text-anchor="middle" font-size="14" fill="#0b1116" font-weight="700">CONTROLADOR</text>
+          <text x="390" y="202" text-anchor="middle" font-size="12" fill="#0b1116">ROC</text>
+          <!-- nodos -->
+          <g fill="#fff">
+            <rect x="60" y="60" rx="10" ry="10" width="160" height="50" fill="rgba(255,255,255,.18)"/>
+            <text x="140" y="90" text-anchor="middle" font-size="13">Flota CAEX</text>
+
+            <rect x="560" y="60" rx="10" ry="10" width="160" height="50" fill="rgba(255,255,255,.18)"/>
+            <text x="640" y="90" text-anchor="middle" font-size="13">Pala / Carguío</text>
+
+            <rect x="60" y="250" rx="10" ry="10" width="160" height="50" fill="rgba(255,255,255,.18)"/>
+            <text x="140" y="280" text-anchor="middle" font-size="13">Botadero / Planta</text>
+
+            <rect x="560" y="250" rx="10" ry="10" width="160" height="50" fill="rgba(255,255,255,.18)"/>
+            <text x="640" y="280" text-anchor="middle" font-size="13">Mantenimiento / Seguridad</text>
+          </g>
+          <!-- líneas -->
+          <g stroke="#FFB81C" stroke-width="2">
+            <line x1="390" y1="138" x2="220" y2="110" />
+            <line x1="390" y1="138" x2="560" y2="110" />
+            <line x1="390" y1="222" x2="220" y2="275" />
+            <line x1="390" y1="222" x2="560" y2="275" />
+          </g>
+        </svg>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn" data-complete="p2">He revisado el diagrama ✓</button>
+      </div>
+    </section>
+
+    <!-- Glosario esencial -->
+    <section class="card">
+      <h3>3) Glosario esencial <span aria-hidden>📚</span></h3>
+      <ul class="bullet">
+        <li><b>ROC</b> (Remote Operations Center): sala desde donde el Controlador coordina y toma decisiones.</li>
+        <li><b>Ciclo de acarreo:</b> <em>carga → transporte → descarga → retorno</em>; mantenerlo fluido es clave.</li>
+        <li><b>DO/DM</b> (Despacho Operativo / Dispatch Manager): rol/sistema que asigna destinos y ordena la flota según reglas.</li>
+        <li><b>Bloqueo de rutas (LOCK):</b> impedir tránsito por seguridad/obra; <b>UNLOCK</b> solo tras <b>confirmación visual</b>.</li>
+        <li><b>Desvío (DIVERT/REROUTE):</b> enviar camión por ruta/destino alterno para evitar riesgos o congestión.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p3">Glosario entendido ✓</button></div>
+    </section>
+
+    <!-- Actividad rápida: Arrastrar y soltar -->
+    <section class="card">
+      <h3>4) Actividad rápida (2 min) <span class="mini">Arrastra o toca para mover</span></h3>
+      <div class="pill"><i>💡</i><div>Ubica cada tarjeta en el contenedor correcto: <b>Pertenece al Controlador</b> / <b>No pertenece</b>.</div></div>
+
+      <div class="dd-wrap" style="margin-top:10px">
+        <div class="pool" id="pool" aria-label="Banco de tarjetas">
+          <span class="tag" draggable="true" data-key="control">Gestionar rutas</span>
+          <span class="tag" draggable="true" data-key="nocontrol">Conducir camión</span>
+          <span class="tag" draggable="true" data-key="control">Sala de control (ROC)</span>
+          <span class="tag" draggable="true" data-key="nocontrol">Terreno (cabina)</span>
+          <span class="tag" draggable="true" data-key="control">No conducir</span>
+          <span class="tag" draggable="true" data-key="nocontrol">Usar pedales/palancas</span>
+        </div>
+
+        <div class="bucket" id="b1">
+          <h4>⬅️ Pertenece al Controlador</h4>
+        </div>
+
+        <div class="bucket" id="b2">
+          <h4>➡️ No pertenece al Controlador</h4>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px">
+        <button class="btn-sec" id="checkDD">Verificar</button>
+        <button class="btn-ghost" id="resetDD">Reiniciar actividad</button>
+      </div>
+      <p id="ddMsg" class="note" style="margin-top:8px"></p>
+      <div style="margin-top:10px"><button class="btn" data-complete="p4">Actividad completada ✓</button></div>
+    </section>
+
+    <!-- Micro-quiz (3) -->
+    <section class="card">
+      <h3>5) Micro-quiz (3 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Reflexión breve -->
+    <section class="card">
+      <h3>6) Reflexión (1–2 líneas)</h3>
+      <textarea id="reflexion" rows="3" placeholder="¿Qué decisión concreta tomarías para mejorar seguridad o continuidad en tu próximo turno?"></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiarRef">Copiar</button>
+      </div>
+      <p class="note">Se guarda solo en este dispositivo.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Sección 1 · Microclase 1.</div>
+  </footer>
+
+  <script>
+    // Utils
+    const $=(s,d=document)=>d.querySelector(s);
+    const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    // Estado persistente de esta microclase
+    const state = read('anupro360_ct_s1_mc1_v1', {
+      done:{p1:false,p2:false,p3:false,p4:false,quiz:false},
+      reflexion:''
+    });
+
+    // Progreso
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    // Botones completar
+    $$('button[data-complete]').forEach(b=>{
+      const key = b.dataset.complete;
+      if (state.done[key]) { b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+      b.addEventListener('click', e=>{
+        state.done[key]=true; store('anupro360_ct_s1_mc1_v1', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+
+    // Reset general
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_ct_s1_mc1_v1'); location.reload(); });
+
+    // ---------- Drag & Drop / Tap-to-move ----------
+    const pool = $('#pool'), b1=$('#b1'), b2=$('#b2'), msg=$('#ddMsg');
+
+    function makeDraggable(tag){
+      tag.addEventListener('dragstart', e=>{
+        e.dataTransfer.setData('text/plain', 'drag');
+        tag.classList.add('dragging');
+      });
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      // Tap para mover (mobile)
+      tag.addEventListener('click', ()=>{
+        const parent = tag.parentElement.id;
+        if(parent==='pool') (Math.random()>.5?b1:b2).appendChild(tag);
+        else pool.appendChild(tag);
+      });
+    }
+    $$('#pool .tag').forEach(makeDraggable);
+
+    [pool,b1,b2].forEach(box=>{
+      box.addEventListener('dragover', e=>{ e.preventDefault(); });
+      box.addEventListener('drop', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging) box.appendChild(dragging);
+      });
+    });
+
+    $('#checkDD').addEventListener('click', ()=>{
+      let ok=0, total=0;
+      // Reglas: "control" debe estar en b1; "nocontrol" en b2
+      [b1,b2].forEach(b=> b.classList.remove('good','bad'));
+      [b1,b2].forEach(b=>{
+        b.querySelectorAll('.tag').forEach(tag=>{
+          total++;
+          const ideal = tag.dataset.key==='control' ? 'b1' : 'b2';
+          const isOk = (b.id===ideal);
+          if(isOk) ok++;
+        });
+      });
+      const pct = Math.round(ok/total*100);
+      msg.textContent = `Resultado: ${ok}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo.`;
+      b1.classList.add('good'); b2.classList.add('good');
+      // Marcar errores puntuales
+      b1.querySelectorAll('.tag').forEach(t=> (t.dataset.key!=='control') && t.classList.add('wrong'));
+      b2.querySelectorAll('.tag').forEach(t=> (t.dataset.key!=='nocontrol') && t.classList.add('wrong'));
+      setTimeout(()=>{ b1.classList.remove('good'); b2.classList.remove('good'); }, 1200);
+    });
+
+    $('#resetDD').addEventListener('click', ()=>{
+      $$('.bucket .tag').forEach(t=>{ t.classList.remove('wrong'); pool.appendChild(t); });
+      msg.textContent='';
+    });
+
+    // ---------- Micro-quiz (3 preguntas) ----------
+    const preguntas=[
+      {q:'El controlador…', opts:['Conduce','Supervisa rutas','Repara'], ok:1},
+      {q:'El puesto habitual del controlador es…', opts:['Cabina','Sala ROC','Taller'], ok:1},
+      {q:'Objetivo clave del rol', opts:['Velocidad máxima','Seguridad + continuidad + productividad','Reparación en terreno'], ok:1},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        wrap.appendChild(div);
+      });
+    }
+
+    function clearQuiz(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    function gradeQuiz(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, unanswered=0;
+      blocks.forEach(div=>{
+        const ok = Number(div.dataset.ok);
+        const picked = div.querySelector('input[type="radio"]:checked');
+        // Resaltar la correcta
+        const okLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        okLabel?.classList.add('correct');
+        // Bloquear
+        div.querySelectorAll('input').forEach(i=> i.disabled=true);
+        if(!picked){ div.classList.add('wrong'); unanswered++; return; }
+        const chosen = Number(picked.value);
+        if(chosen===ok){ div.classList.add('correct'); okCount++; }
+        else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); }
+      });
+      const total=preguntas.length; const pct=Math.round(okCount/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      try{ localStorage.setItem('anupro360_ct_s1_mc1_lastscore', String(okCount)); }catch{}
+    }
+
+    $('#enviar').addEventListener('click', gradeQuiz);
+    $('#resetQuiz').addEventListener('click', clearQuiz);
+
+    // Reflexión
+    const ref=$('#reflexion'); ref.value = state.reflexion||'';
+    $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_ct_s1_mc1_v1', state); alert('Reflexión guardada.'); });
+    $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+    // Init
+    renderQuiz(); calcProgress(); $('#year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>

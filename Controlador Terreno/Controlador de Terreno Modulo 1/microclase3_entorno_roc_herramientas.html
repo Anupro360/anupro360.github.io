@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Sección 1 · Microclase 3 — Entorno ROC y Herramientas</title>
+  <meta name="description" content="Microclase 3: Entorno de Trabajo (ROC), datos críticos, acciones HOLD/RESUME, DIVERT y LOCK/UNLOCK con práctica y quiz.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+         background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px);
+           background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+          border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-size:1.15rem}
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    /* Quiz + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .mini{font-size:.85rem; opacity:.85}
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    code{background:rgba(0,0,0,.25); padding:.1rem .35rem; border-radius:.35rem}
+
+    /* Demo ROC */
+    .demo{display:grid; gap:12px}
+    @media(min-width:880px){.demo{grid-template-columns:1fr 1fr}}
+    .monitor{background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.18); border-radius:12px; padding:8px}
+    .panel{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:12px}
+    .k{display:inline-block; font-size:.78rem; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.18); padding:2px 6px; border-radius:6px; margin-right:6px}
+    .ok{color:#8FE38A} .bad{color:#FF9A76}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+        <h1>Anupro360 · Sección 1 · Microclase 3</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>ENTORNO DE TRABAJO (ROC) Y HERRAMIENTAS</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Reconocer la interfaz típica del ROC (monitores, mapa, listas, alertas), interpretar datos críticos (GPS, estado, alarmas) y ejecutar acciones seguras (HOLD/RESUME, DIVERT, LOCK/UNLOCK).</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) Puesto ROC e interfaces <span aria-hidden>🖥️</span></h3>
+      <div class="pill"><i>🎯</i><div>Puesto con <b>múltiples monitores</b>: <b>Mapa</b> en tiempo real, <b>Lista de equipos</b> (estado), <b>Panel de alertas</b> y <b>Consola de acciones</b>. Se prioriza <b>seguridad</b> y <b>continuidad</b>.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li><b>Mapa:</b> posición GPS, rutas, geocercas, LOCK/UNLOCK.</li>
+        <li><b>Lista de equipos:</b> <em>cargando / en tránsito / descargando / detenido</em>.</li>
+        <li><b>Alertas:</b> seguridad, comunicaciones, ruta y mantenimiento (por severidad).</li>
+        <li><b>Consola:</b> <code>HOLD/RESUME</code>, <code>DIVERT</code>, <code>LOCK/UNLOCK</code> con registro 5W.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p1">Marcar leído ✓</button></div>
+    </section>
+
+    <!-- Columna derecha (Ficha) -->
+    <aside class="card">
+      <h3>Ficha de esta Microclase</h3>
+      <ul class="bullet">
+        <li>Duración: ~9–10 min</li>
+        <li>Formato: lectura + demo interactiva + práctica + quiz</li>
+        <li>Objetivo: reconocer UI y operar acciones frecuentes con seguridad</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Datos críticos -->
+    <section class="card">
+      <h3>2) Datos visibles críticos <span aria-hidden>📡</span></h3>
+      <div class="timeline">
+        <div class="step"><b>Posición GPS</b> + rumbo y velocidad.</div>
+        <div class="step"><b>Estado operacional</b>: cargando · en tránsito · descargando · detenido.</div>
+        <div class="step"><b>Alarmas</b> por severidad (crítica, alta, media, info) y tipo.</div>
+        <div class="step"><b>Contexto</b>: colas en pala/botadero, bloqueos, clima.</div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p2">Datos comprendidos ✓</button></div>
+    </section>
+
+    <!-- Acciones frecuentes -->
+    <section class="card">
+      <h3>3) Acciones frecuentes <span aria-hidden>🎛️</span></h3>
+      <ul class="bullet">
+        <li><code>HOLD</code>/<code>RESUME</code>: pausar/retomar un CAEX o grupo (motivo registrado).</li>
+        <li><code>REROUTE</code>/<code>DIVERT</code>: cambiar ruta/destino para balancear flota o evitar riesgo.</li>
+        <li><code>LOCK</code>/<code>UNLOCK</code>: bloquear/desbloquear un segmento. <b>UNLOCK sólo con confirmación visual</b>.</li>
+      </ul>
+      <div class="pill"><i>🛡️</i><div>Antes de cualquier <b>UNLOCK</b>: cámaras limpias, confirmación visual, radio con terreno y registro 5W.</div></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p3">Acciones dominadas ✓</button></div>
+    </section>
+
+    <!-- Mini-demo: tocar camión -> ficha -> HOLD -->
+    <section class="card">
+      <h3>4) Mini-demo interactiva: seleccionar camión y enviar HOLD <span aria-hidden>🧪</span></h3>
+      <p class="mini">Toca un camión en el mapa para abrir su ficha. Luego envía <b>HOLD</b> y observa el impacto.</p>
+      <div class="demo" id="demo">
+        <div class="monitor">
+          <svg id="mapa" viewBox="0 0 520 280" width="100%" height="auto" aria-label="Mapa simulado">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#FFB81C"/><stop offset="1" stop-color="#FF5C00"/></linearGradient>
+            </defs>
+            <rect x="0" y="0" width="520" height="280" fill="rgba(255,255,255,.06)"/>
+            <!-- Rutas -->
+            <g stroke="url(#g1)" stroke-width="3" opacity=".7">
+              <polyline points="20,240 120,200 220,180 320,120 480,60" fill="none"/>
+              <polyline points="60,40 180,80 260,120 340,160 500,220" fill="none"/>
+            </g>
+            <!-- Zonas -->
+            <circle cx="90" cy="210" r="18" fill="rgba(255,255,255,.12)"/><text x="90" y="214" font-size="10" fill="#fff" text-anchor="middle">Pala</text>
+            <circle cx="450" cy="70" r="18" fill="rgba(255,255,255,.12)"/><text x="450" y="74" font-size="10" fill="#fff" text-anchor="middle">Desc.</text>
+            <!-- Camiones -->
+            <g class="camion" data-id="CAEX-101" data-x="200" data-y="178" data-estado="en tránsito" data-vel="24" data-gps="-22.01,-68.18">
+              <rect x="195" y="170" width="20" height="16" rx="3" fill="#8FE38A" stroke="#0b1116"/>
+              <text x="205" y="166" font-size="9" text-anchor="middle" fill="#fff">101</text>
+            </g>
+            <g class="camion" data-id="CAEX-204" data-x="325" data-y="118" data-estado="en tránsito" data-vel="22" data-gps="-22.02,-68.19">
+              <rect x="320" y="110" width="20" height="16" rx="3" fill="#8FE38A" stroke="#0b1116"/>
+              <text x="330" y="106" font-size="9" text-anchor="middle" fill="#fff">204</text>
+            </g>
+            <g class="camion" data-id="CAEX-309" data-x="265" data-y="120" data-estado="descargando" data-vel="0" data-gps="-22.03,-68.20">
+              <rect x="260" y="112" width="20" height="16" rx="3" fill="#FFB81C" stroke="#0b1116"/>
+              <text x="270" y="108" font-size="9" text-anchor="middle" fill="#0b1116">309</text>
+            </g>
+          </svg>
+          <div class="mini" id="hintMapa" style="margin-top:6px">Consejo: en móvil, toca el rectángulo de color para seleccionar el CAEX.</div>
+        </div>
+        <div class="panel" id="panel">
+          <h4>Ficha del equipo</h4>
+          <div id="fichaVacia" class="note">Selecciona un camión en el mapa.</div>
+          <div id="ficha" style="display:none">
+            <div><span class="k">ID</span> <b id="fxId"></b></div>
+            <div><span class="k">Estado</span> <span id="fxEstado"></span></div>
+            <div><span class="k">Velocidad</span> <span id="fxVel"></span> km/h</div>
+            <div><span class="k">GPS</span> <span id="fxGPS"></span></div>
+            <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+              <button class="btn" id="holdBtn">Enviar HOLD</button>
+              <button class="btn-ghost" id="resumeBtn">RESUME</button>
+              <button class="btn-ghost" id="divertBtn">DIVERT</button>
+            </div>
+            <div class="mini" id="impacto" style="margin-top:6px"></div>
+          </div>
+          <div style="margin-top:10px"><button class="btn" id="demoOk" disabled>Mini-demo completada ✓</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actividad práctica: UNLOCK con verificación -->
+    <section class="card">
+      <h3>5) Actividad práctica: ¿Desbloquearías esta ruta? <span aria-hidden>🔒→🟢</span></h3>
+      <p class="mini">Contexto: el segmento R-27 está <b>LOCK</b> por presencia de personal. Llega notificación de “zona despejada”. Decide el orden correcto:</p>
+      <ol class="bullet" style="list-style:decimal">
+        <li>¿Verificaste <b>cámaras</b> y sensores de la zona?
+          <label class="opt"><input type="radio" name="p1" value="si"> Sí</label>
+          <label class="opt"><input type="radio" name="p1" value="no"> No</label></li>
+        <li>¿Confirmaste por <b>radio</b> con terreno (read-back)?
+          <label class="opt"><input type="radio" name="p2" value="si"> Sí</label>
+          <label class="opt"><input type="radio" name="p2" value="no"> No</label></li>
+        <li>¿Registraste <b>5W</b> y evidencias antes del <b>UNLOCK</b>?
+          <label class="opt"><input type="radio" name="p3" value="si"> Sí</label>
+          <label class="opt"><input type="radio" name="p3" value="no"> No</label></li>
+        <li>¿Ejecutas <b>UNLOCK</b> y monitoreas la primera pasada?
+          <label class="opt"><input type="radio" name="p4" value="si"> Sí</label>
+          <label class="opt"><input type="radio" name="p4" value="no"> No</label></li>
+      </ol>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="checkAct">Verificar decisión</button>
+        <button class="btn-ghost" id="resetAct">Reiniciar</button>
+      </div>
+      <div id="actMsg" class="note" style="margin-top:6px"></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p5" id="actOk" disabled>Actividad completada ✓</button></div>
+    </section>
+
+    <!-- Buenas prácticas -->
+    <section class="card">
+      <h3>6) Buenas prácticas en UI <span aria-hidden>🧭</span></h3>
+      <ul class="bullet">
+        <li>Usar filtros del panel de alertas y <b>ordenar por severidad</b>.</li>
+        <li>Confirmación visual siempre antes de <b>UNLOCK</b>.</li>
+        <li>Evitar “clics reflejo”: leer el <b>contexto</b> en la ficha.</li>
+        <li>Documentar cada acción con 5W y evidencias.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p6">Buenas prácticas entendidas ✓</button></div>
+    </section>
+
+    <!-- Atajos y seguridad -->
+    <section class="card">
+      <h3>7) Atajos y seguridad <span aria-hidden>⌨️</span></h3>
+      <div class="timeline">
+        <div class="step"><b>HOLD/RESUME</b> rápidos → confirmar equipo y motivo.</div>
+        <div class="step"><b>DIVERT</b> con plantilla de mensaje a pala/botadero.</div>
+        <div class="step"><b>LOCK/UNLOCK</b> con doble confirmación y registro 5W.</div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p7">Atajos dominados ✓</button></div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="card">
+      <h3>8) Quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Reflexión -->
+    <section class="card">
+      <h3>9) Reflexión (1–2 líneas)</h3>
+      <textarea id="reflexion" rows="3" placeholder="¿Qué dato miras primero en la ficha del CAEX y por qué?"></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiarRef">Copiar</button>
+      </div>
+      <p class="note">Se guarda solo en este dispositivo.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Sección 1 · Microclase 3.</div>
+  </footer>
+
+  <script>
+    // Helpers
+    const $=(s,d=document)=>d.querySelector(s);
+    const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    // Estado persistente
+    const state = read('anupro360_ct_s1_mc3_v1', {
+      done:{p1:false,p2:false,p3:false,p4:false,p5:false,p6:false,p7:false,quiz:false},
+      reflexion:''
+    });
+
+    // Progreso
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    // Botones completar
+    $$('button[data-complete]').forEach(b=>{
+      const key = b.dataset.complete;
+      if (state.done[key]) { b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+      b.addEventListener('click', e=>{
+        state.done[key]=true; store('anupro360_ct_s1_mc3_v1', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+
+    // Reset
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_ct_s1_mc3_v1'); location.reload(); });
+
+    // -------- Mini-demo --------
+    let selected = null;
+    function selectTruck(g){
+      selected = g;
+      $('#fichaVacia').style.display='none';
+      $('#ficha').style.display='block';
+      $('#fxId').textContent = g.dataset.id;
+      $('#fxEstado').textContent = g.dataset.estado;
+      $('#fxVel').textContent = g.dataset.vel;
+      $('#fxGPS').textContent = g.dataset.gps;
+      $('#impacto').textContent='';
+    }
+    $$('#mapa .camion').forEach(g=>{
+      g.style.cursor='pointer';
+      g.addEventListener('click', ()=> selectTruck(g));
+    });
+    $('#holdBtn').addEventListener('click', ()=>{
+      if(!selected) return;
+      selected.dataset.estado = 'HOLD';
+      $('#fxEstado').textContent='HOLD';
+      $('#impacto').innerHTML='🔴 Equipo en <b>HOLD</b>. Se detiene su avance y se notifica a la lista.';
+      $('#demoOk').disabled=false;
+    });
+    $('#resumeBtn').addEventListener('click', ()=>{
+      if(!selected) return;
+      selected.dataset.estado='en tránsito';
+      $('#fxEstado').textContent='en tránsito';
+      $('#impacto').innerHTML='🟢 Equipo en <b>RESUME</b>. Retoma su ciclo.';
+      $('#demoOk').disabled=false;
+    });
+    $('#divertBtn').addEventListener('click', ()=>{
+      if(!selected) return;
+      $('#impacto').innerHTML='➡️ <b>DIVERT</b> enviado. Equipo redirigido a ruta/destino alterno.';
+      $('#demoOk').disabled=false;
+    });
+    $('#demoOk').addEventListener('click', (e)=>{ e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; });
+
+    // -------- Actividad UNLOCK --------
+    function getVal(n){ const el=document.querySelector(`input[name="${n}"]:checked`); return el?el.value:null; }
+    $('#checkAct').addEventListener('click', ()=>{
+      const v1=getVal('p1')==='si';
+      const v2=getVal('p2')==='si';
+      const v3=getVal('p3')==='si';
+      const v4=getVal('p4')==='si';
+      const ok=v1&&v2&&v3&&v4;
+      $('#actMsg').textContent = ok
+        ? '✅ Secuencia correcta: verificación visual → radio/read-back → registro 5W/evidencias → UNLOCK y monitoreo.'
+        : '❌ Falta un paso crítico. Revisa cámaras, radio, registro 5W y monitoreo de la primera pasada.';
+      if(ok){ $('#actOk').disabled=false; }
+    });
+    $('#resetAct').addEventListener('click', ()=>{
+      ['p1','p2','p3','p4'].forEach(n=> $$(`input[name="${n}"]`).forEach(r=> r.checked=false));
+      $('#actMsg').textContent=''; $('#actOk').disabled=true;
+    });
+
+    // -------- QUIZ (10) --------
+    const preguntas = [
+      {q:'El puesto ROC típico incluye mapa, lista de equipos, panel de alertas y consola de acciones.', opts:['Verdadero','Falso'], ok:0, why:'Esos son los paneles base para priorizar y actuar.'},
+      {q:'En la lista de equipos, “en tránsito” y “descargando” son ejemplos de estados operacionales.', opts:['Verdadero','Falso'], ok:0, why:'También “cargando” y “detenido”.'},
+      {q:'HOLD detiene al CAEX y siempre debe registrar motivo.', opts:['Verdadero','Falso'], ok:0, why:'La trazabilidad es obligatoria.'},
+      {q:'DIVERT/REROUTE se usa para redirigir equipos a rutas/destinos alternos.', opts:['Verdadero','Falso'], ok:0, why:'Permite balanceo y evita riesgos.'},
+      {q:'Puedes hacer UNLOCK sin confirmación visual si la producción lo exige.', opts:['Verdadero','Falso'], ok:1, why:'Seguridad primero: confirmación visual + radio obligatorias.'},
+      {q:'Dato crítico en mapa: posición GPS, rumbo y velocidad.', opts:['Verdadero','Falso'], ok:0, why:'Son base para entender contexto y riesgo.'},
+      {q:'Un buen uso del panel de alertas es ordenar por severidad y filtrar por tipo.', opts:['Verdadero','Falso'], ok:0, why:'Mejora foco y tiempos de reacción.'},
+      {q:'Tras un DIVERT por congestión, es correcto monitorear TPH y tiempos de ciclo para evaluar impacto.', opts:['Verdadero','Falso'], ok:0, why:'Verifica si la acción recuperó el rendimiento.'},
+      {q:'En la mini-demo, tras seleccionar un camión puedes enviar HOLD/RESUME/DIVERT desde la ficha.', opts:['Verdadero','Falso'], ok:0, why:'Simula la consola del ROC.'},
+      {q:'En la actividad, el orden correcto incluye verificación de cámaras, radio read-back, registro 5W y monitoreo tras UNLOCK.', opts:['Verdadero','Falso'], ok:0, why:'Ese es el flujo seguro estándar.'},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        const exp=document.createElement('div'); exp.className='mini'; exp.style.marginTop='4px'; exp.dataset.role='exp'; exp.textContent='';
+        div.appendChild(exp);
+        wrap.appendChild(div);
+      });
+    }
+
+    function clearQuiz(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+        const exp=div.querySelector('[data-role="exp"]'); if(exp) exp.textContent='';
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    function gradeQuiz(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, unanswered=0;
+      blocks.forEach((div,idx)=>{
+        const ok = Number(div.dataset.ok);
+        const picked = div.querySelector('input[type="radio"]:checked');
+        const okLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        okLabel?.classList.add('correct');
+        div.querySelectorAll('input').forEach(i=> i.disabled=true);
+        const exp=div.querySelector('[data-role="exp"]');
+        if(!picked){ div.classList.add('wrong'); unanswered++; exp.textContent='❌ Sin respuesta.'; return; }
+        const chosen = Number(picked.value);
+        if(chosen===ok){ div.classList.add('correct'); okCount++; exp.textContent='✅ Correcto.'; }
+        else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); exp.textContent='❌ ' + (preguntas[idx].why || 'Revisa la sección correspondiente.'); }
+      });
+      const total=preguntas.length; const pct=Math.round(okCount/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      try{ localStorage.setItem('anupro360_ct_s1_mc3_lastscore', String(okCount)); }catch{}
+    }
+
+    $('#enviar').addEventListener('click', gradeQuiz);
+    $('#resetQuiz').addEventListener('click', clearQuiz);
+
+    // Reflexión
+    const ref=$('#reflexion'); ref.value = state.reflexion||'';
+    $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_ct_s1_mc3_v1', state); alert('Reflexión guardada.'); });
+    $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+    // Init
+    calcProgress(); renderQuiz(); $('#year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>

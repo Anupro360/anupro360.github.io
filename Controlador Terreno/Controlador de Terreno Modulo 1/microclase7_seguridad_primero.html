@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Sección 1 · Microclase 7 — Safety First</title>
+  <meta name="description" content="Microclase 7: Mentalidad de Seguridad 'Safety First' para Controladores de Terreno (CAEX autónomos). Incluye actividad semáforo y quiz de 10 preguntas." />
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --verde-strong:#22c55e; --azul:#003B5C; --blanco:#FFFFFF;
+      --amarillo-strong:#fbbf24; --rojo-strong:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+         background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px);
+           background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+          border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-size:1.15rem}
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    /* Quiz + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:3px solid var(--verde-strong); background:rgba(34,197,94,.15); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .mini{font-size:.85rem; opacity:.85}
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    code{background:rgba(0,0,0,.25); padding:.1rem .35rem; border-radius:.35rem}
+
+    /* Semáforo */
+    .traffic-wrap{display:grid; gap:14px}
+    .traffic-card{border:1px solid rgba(255,255,255,.18); border-radius:12px; padding:10px; background:rgba(255,255,255,.04)}
+    .traffic-opts{display:flex; gap:8px; flex-wrap:wrap; margin-top:6px}
+    .traffic-opts label{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; cursor:pointer; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.08)}
+    .g{background:rgba(34,197,94,.15)} .y{background:rgba(251,191,36,.18)} .r{background:rgba(239,68,68,.18)}
+    .traffic-opts input{display:none}
+    .traffic-opts label.selected{outline:3px solid rgba(255,255,255,.35)}
+    .traffic-opts label.correct{outline:3px solid var(--verde-strong); box-shadow:0 0 0 2px rgba(34,197,94,.25) inset}
+    .traffic-opts label.wrong{outline:3px solid var(--rojo-strong)}
+
+    table{width:100%; border-collapse:separate; border-spacing:0; margin-top:8px; font-size:.95rem}
+    th,td{padding:10px 12px; border:1px solid rgba(255,255,255,.12)}
+    th{background:rgba(255,255,255,.10); text-align:left}
+    tr:nth-child(even) td{background:rgba(255,255,255,.04)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+        <h1>Anupro360 · Sección 1 · Microclase 7</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>MENTALIDAD DE SEGURIDAD (SAFETY FIRST)</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Priorizar la seguridad sobre la producción, aplicar zonas de exclusión, usar parada de emergencia correctamente y <b>nunca</b> desbloquear sin confirmación visual. Practicar decisiones con la actividad tipo <em>semáforo</em>.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) Cultura “Safety First” y autoridad de detener <span aria-hidden>🛡️</span></h3>
+      <div class="pill"><i>ℹ️</i><div>Como Controlador de Terreno tienes <b>autoridad para detener</b> (Stop Work Authority). En conflicto <b>producción vs seguridad</b>, <u>gana seguridad</u>. Detener a tiempo evita incidentes y acelera la recuperación del flujo.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li><b>Principio 1:</b> personas por sobre equipos y KPI.</li>
+        <li><b>Principio 2:</b> decisiones <em>auditables</em> (5W) con lectura de confirmación (<em>read-back</em>).</li>
+        <li><b>Principio 3:</b> validación visual previa a <code>UNLOCK</code>.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p1">Marcar leído ✓</button></div>
+    </section>
+
+    <!-- Columna derecha -->
+    <aside class="card">
+      <h3>Ficha de esta Microclase</h3>
+      <ul class="bullet">
+        <li>Duración: 6–8 min</li>
+        <li>Formato: lectura + tablas + actividad semáforo + quiz (10)</li>
+        <li>Herramientas: cámaras, radar/LIDAR, mapas, comandos <code>HOLD/RESUME</code>, <code>LOCK/UNLOCK</code></li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Principios -->
+    <section class="card">
+      <h3>2) Principios y definiciones clave <span aria-hidden>📘</span></h3>
+      <table aria-label="Definiciones clave">
+        <thead><tr><th>Término</th><th>Qué es</th><th>Para qué sirve</th></tr></thead>
+        <tbody>
+          <tr><td>Zonas de exclusión</td><td>Áreas físicas/virtuales donde no puede ingresar personal ni equipos no autorizados.</td><td>Evitar atropellos y colisiones. Se monitorean por mapa y cámaras.</td></tr>
+          <tr><td>Parada de emergencia</td><td>Acción inmediata para <b>detener</b> equipos o rutas ante riesgo P1.</td><td>Proteger personas. Se combina con <code>HOLD</code>, <code>LOCK</code> y notificación.</td></tr>
+          <tr><td>Confirmación visual</td><td>Verificación por cámaras/sensores (<em>dos fuentes</em> si es posible).</td><td>Condición obligatoria antes de <code>UNLOCK</code> o reanudar.</td></tr>
+          <tr><td>Read-back</td><td>Repetición del mensaje por quien recibe.</td><td>Asegura que la instrucción se ejecutará de forma correcta y trazable.</td></tr>
+          <tr><td>Reporte de cuasi-incidente</td><td>Situación peligrosa sin daño.</td><td>Aprendizaje preventivo y mejora continua.</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px"><button class="btn" data-complete="p2">Principios claros ✓</button></div>
+    </section>
+
+    <!-- Zonas -->
+    <section class="card">
+      <h3>3) Zonas de exclusión: gestión práctica <span aria-hidden>🚧</span></h3>
+      <div class="timeline">
+        <div class="step"><b>Planificación</b>: Define límites, puntos ciegos, velocidad, personal autorizado.</div>
+        <div class="step"><b>Operación</b>: <code>LOCK</code> al detectar riesgo; <code>UNLOCK</code> solo tras confirmar visualmente.</div>
+        <div class="step"><b>Comunicación</b>: “<em>ROC a Seguridad (P1): persona en exclusión frente a Pala 307; HOLD y cierre de segmento. Confirmar.</em>”</div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p3">Zonas bajo control ✓</button></div>
+    </section>
+
+    <!-- E-stop -->
+    <section class="card">
+      <h3>4) Parada de emergencia (cuándo, cómo y a quién) <span aria-hidden>⛔</span></h3>
+      <ul class="bullet">
+        <li><b>Cuándo:</b> persona en pista, pérdida de visibilidad/sensores, derrumbe/obstáculo, incendio/fuga.</li>
+        <li><b>Cómo:</b> <code>HOLD</code> unidades afectadas → <code>LOCK</code> segmento → activar alarma local si aplica.</li>
+        <li><b>A quién avisas:</b> Seguridad, Supervisión, equipo/auxiliares del área, Mantenimiento si hay daños.</li>
+      </ul>
+      <div class="pill" style="margin-top:8px"><i>🧭</i><div><b>Regla de oro:</b> Si dudas, <b>detén</b>, verifica y recién ahí continúas.</div></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p4">E-stop entendido ✓</button></div>
+    </section>
+
+    <!-- Confirmación visual -->
+    <section class="card">
+      <h3>5) Confirmación visual antes de desbloquear <span aria-hidden>🎥</span></h3>
+      <div class="pill"><i>👀</i><div>No se realiza <code>UNLOCK</code> sin <b>confirmación visual</b> de cámaras/sensores. Ideal: <em>doble verificación</em> (cámara fija + móvil o térmica). Registra 5W del desbloqueo.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li>Si no hay visibilidad, mantén <code>LOCK</code> y coordina presencia en terreno.</li>
+        <li>Documenta: “quién/quién autoriza – qué – por qué – cuándo – dónde”.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p5">Regla de UNLOCK aceptada ✓</button></div>
+    </section>
+
+    <!-- Semáforo -->
+    <section class="card">
+      <h3>6) Actividad — Semáforo de seguridad <span class="mini">Elige Verde/Amarillo/Rojo</span></h3>
+      <div class="timeline">
+        <div class="step">Criterios: <b>Verde</b> = continuar normal; <b>Amarillo</b> = continuar con control/monitoreo/desvío; <b>Rojo</b> = detener, aislar y bloquear.</div>
+      </div>
+
+      <div class="traffic-wrap" id="semaforo">
+        <!-- S1 -->
+        <div class="traffic-card" data-correct="R">
+          <div><b>S1:</b> Niebla parcial en rampa y LIDAR intermitente en dos CAEX.</div>
+          <div class="traffic-opts">
+            <label class="g"><input type="radio" name="s1" value="V"> Verde</label>
+            <label class="y"><input type="radio" name="s1" value="A"> Amarillo</label>
+            <label class="r"><input type="radio" name="s1" value="R"> Rojo</label>
+          </div>
+          <div class="mini" data-exp=""></div>
+        </div>
+        <!-- S2 -->
+        <div class="traffic-card" data-correct="A">
+          <div><b>S2:</b> Bache leve en berma, fuera de huella; cámaras claras; sin personal en pista.</div>
+          <div class="traffic-opts">
+            <label class="g"><input type="radio" name="s2" value="V"> Verde</label>
+            <label class="y"><input type="radio" name="s2" value="A"> Amarillo</label>
+            <label class="r"><input type="radio" name="s2" value="R"> Rojo</label>
+          </div>
+          <div class="mini" data-exp=""></div>
+        </div>
+        <!-- S3 -->
+        <div class="traffic-card" data-correct="R">
+          <div><b>S3:</b> Alarma de “persona” por cámara térmica en zona de exclusión; segunda cámara con visibilidad parcial.</div>
+          <div class="traffic-opts">
+            <label class="g"><input type="radio" name="s3" value="V"> Verde</label>
+            <label class="y"><input type="radio" name="s3" value="A"> Amarillo</label>
+            <label class="r"><input type="radio" name="s3" value="R"> Rojo</label>
+          </div>
+          <div class="mini" data-exp=""></div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px">
+        <button class="btn-sec" id="verificarSemaforo">Verificar</button>
+        <button class="btn-ghost" id="resetSemaforo">Reiniciar</button>
+      </div>
+      <p class="note" id="msgSemaforo" aria-live="polite"></p>
+
+      <div style="margin-top:10px"><button class="btn" data-complete="p6" id="okSemaforo" disabled>Actividad completada ✓</button></div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="card">
+      <h3>7) Quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Cierre -->
+    <section class="card">
+      <h3>8) Compromiso personal de seguridad <span aria-hidden>✍️</span></h3>
+      <div class="pill"><i>✅</i><div>Escribe una acción concreta que aplicarás en tu próximo turno para elevar el estándar de seguridad (p. ej., “exigiré read-back antes de cualquier UNLOCK”).</div></div>
+      <textarea id="reflexion" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.2); color:var(--blanco)"></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiarRef">Copiar</button>
+      </div>
+      <p class="note">Se guarda solo en este dispositivo.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Sección 1 · Microclase 7.</div>
+  </footer>
+
+  <script>
+    // Helpers
+    const $=(s,d=document)=>d.querySelector(s);
+    const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    // Estado persistente
+    const state = read('anupro360_ct_s1_mc7_v1', {
+      done:{p1:false,p2:false,p3:false,p4:false,p5:false,p6:false,quiz:false},
+      reflexion:''
+    });
+
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    $$('button[data-complete]').forEach(b=>{
+      const key = b.dataset.complete;
+      if (state.done[key]) { b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+      b.addEventListener('click', e=>{
+        state.done[key]=true; store('anupro360_ct_s1_mc7_v1', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_ct_s1_mc7_v1'); location.reload(); });
+
+    // ========= Actividad Semáforo =========
+    // selección visual
+    $$('#semaforo .traffic-opts label').forEach(lab=>{
+      lab.addEventListener('click', (e)=>{
+        const group = e.currentTarget.closest('.traffic-card').querySelectorAll('label');
+        group.forEach(g=>g.classList.remove('selected'));
+        e.currentTarget.classList.add('selected');
+      });
+    });
+
+    function verificarSemaforo(){
+      let ok=0, total=0, unanswered=0;
+      $$('#semaforo .traffic-card').forEach(card=>{
+        total++;
+        const correct = card.dataset.correct; // 'V' | 'A' | 'R'
+        const labs = card.querySelectorAll('label');
+        const picked = Array.from(labs).find(l=> l.classList.contains('selected'));
+        // limpiar estilos previos
+        labs.forEach(l=> l.classList.remove('correct','wrong'));
+        if(!picked){
+          unanswered++; card.querySelector('[data-exp]').textContent='❌ Sin respuesta.';
+          return;
+        }
+        const val = picked.querySelector('input')?.value || '';
+        // marcar la correcta
+        const labOk = Array.from(labs).find(l=> l.querySelector('input')?.value===correct);
+        labOk?.classList.add('correct');
+        if(val===correct){ ok++; card.querySelector('[data-exp]').textContent='✅ Correcto.'; }
+        else{ picked.classList.add('wrong'); card.querySelector('[data-exp]').textContent='❌ Revisa criterios: Verde=normal · Amarillo=control/monitoreo · Rojo=detener/aislar.'; }
+      });
+      const pct = Math.round(ok/total*100);
+      $('#msgSemaforo').textContent = `Resultado: ${ok}/${total} (${pct}%). ✅ Correctos en verde · ❌ Incorrectos en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      if(ok===total){ $('#okSemaforo').disabled=false; }
+    }
+    $('#verificarSemaforo').addEventListener('click', verificarSemaforo);
+    $('#resetSemaforo').addEventListener('click', ()=>{
+      $$('#semaforo .traffic-card').forEach(card=>{
+        card.querySelectorAll('label').forEach(l=> l.classList.remove('selected','correct','wrong'));
+        card.querySelector('[data-exp]').textContent='';
+      });
+      $('#msgSemaforo').textContent=''; $('#okSemaforo').disabled=true;
+    });
+
+    // ========= Quiz (10) =========
+    const preguntas = [
+      {q:'Ante conflicto producción vs seguridad, la decisión correcta es…', opts:['Priorizar producción con cautela','Priorizar seguridad (Stop Work Authority)'], ok:1},
+      {q:'¿Cuándo aplicar <code>HOLD</code> inmediato?', opts:['Siempre que haya P1 o pérdida de visibilidad/sensores','Solo si lo pide producción'], ok:0},
+      {q:'Para <code>UNLOCK</code> se requiere…', opts:['Confirmación visual (ideal 2 fuentes) y registro 5W','Solo mapa actualizado'], ok:0},
+      {q:'Zonas de exclusión sirven para…', opts:['Optimizar combustible','Evitar ingreso no autorizado y atropellos'], ok:1},
+      {q:'El <em>read-back</em> es…', opts:['Repetición del mensaje por quien recibe para confirmar','Un saludo de radio'], ok:0},
+      {q:'El reporte de cuasi-incidente…', opts:['No es necesario si no hubo daño','Permite aprendizaje y prevención'], ok:1},
+      {q:'¿Qué prioridad corresponde a “persona en pista”?', opts:['P1','P2','P3'], ok:0},
+      {q:'Si la IA detecta persona pero no hay confirmación visual clara, el ROC debe…', opts:['UNLOCK','Mantener LOCK y coordinar verificación'], ok:1},
+      {q:'¿Qué actor SIEMPRE debe ser notificado en un P1?', opts:['Seguridad','Cafetería'], ok:0},
+      {q:'Buenas prácticas de e-stop:', opts:['HOLD/LOCK → Notificar → Registrar 5W','Esperar a que se despeje solo'], ok:0},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        const exp=document.createElement('div'); exp.className='mini'; exp.style.marginTop='4px'; exp.dataset.role='exp'; exp.textContent='';
+        div.appendChild(exp);
+        wrap.appendChild(div);
+      });
+    }
+
+    function clearQuiz(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+        const exp=div.querySelector('[data-role="exp"]'); if(exp) exp.textContent='';
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    function gradeQuiz(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, unanswered=0;
+      blocks.forEach((div,idx)=>{
+        const ok = Number(div.dataset.ok);
+        const picked = div.querySelector('input[type="radio"]:checked');
+        const okLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        okLabel?.classList.add('correct');
+        div.querySelectorAll('input').forEach(i=> i.disabled=true);
+        const exp=div.querySelector('[data-role="exp"]');
+        if(!picked){ div.classList.add('wrong'); unanswered++; exp.textContent='❌ Sin respuesta.'; return; }
+        const chosen = Number(picked.value);
+        if(chosen===ok){ div.classList.add('correct'); okCount++; exp.textContent='✅ Correcto.'; }
+        else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); exp.textContent='❌ Revisa el principio Safety First.'; }
+      });
+      const total=preguntas.length; const pct=Math.round(okCount/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      try{ localStorage.setItem('anupro360_ct_s1_mc7_lastscore', String(okCount)); }catch{}
+    }
+
+    document.getElementById('enviar').addEventListener('click', gradeQuiz);
+    document.getElementById('resetQuiz').addEventListener('click', clearQuiz);
+
+    // Reflexión
+    const ref=$('#reflexion'); ref.value=state.reflexion||'';
+    $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_ct_s1_mc7_v1', state); alert('Compromiso guardado.'); });
+    $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('Copia automática no permitida por el navegador.'); } });
+
+    // Init
+    calcProgress(); renderQuiz(); $('#year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>

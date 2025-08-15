@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Sección 1 · Microclase 6 — Un Día en el Turno</title>
+  <meta name="description" content="Microclase 6: Flujo real de un turno para Controladores de Terreno (CAEX autónomos). Handover, chequeos, monitoreo, ajustes y cierre. Escenario guiado + entrega corta + quiz.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --verde-strong:#22c55e; --azul:#003B5C; --blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+         background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px);
+           background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+          border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-size:1.15rem}
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    /* Quiz + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:3px solid var(--verde-strong); background:rgba(34,197,94,.15); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .mini{font-size:.85rem; opacity:.85}
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    code{background:rgba(0,0,0,.25); padding:.1rem .35rem; border-radius:.35rem}
+
+    /* Escenario guiado */
+    .scenario{display:grid; gap:10px}
+    .s-row{display:grid; gap:10px}
+    @media(min-width:860px){.s-row{grid-template-columns:1fr 1fr}}
+    .s-actions{display:flex; flex-wrap:wrap; gap:8px}
+    .s-actions .btn{min-width:180px}
+    .tag{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
+      background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.2); margin:4px 6px}
+    .ok{outline:3px solid var(--verde-strong); background:rgba(34,197,94,.15)}
+    .bad{outline:2px solid #FF5C00}
+
+    textarea, input[type="text"], input[type="time"]{
+      width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.2); color:var(--blanco)
+    }
+
+    table{width:100%; border-collapse:separate; border-spacing:0; margin-top:8px; font-size:.95rem}
+    th,td{padding:10px 12px; border:1px solid rgba(255,255,255,.12)}
+    th{background:rgba(255,255,255,.10); text-align:left}
+    tr:nth-child(even) td{background:rgba(255,255,255,.04)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+        <h1>Anupro360 · Sección 1 · Microclase 6</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>UN DÍA EN EL TURNO (FLUJO REAL)</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Integrar el ciclo completo del turno: handover, chequeos, monitoreo/alertas, ajustes operativos y cierre con reporte trazable. Practicar un escenario guiado de obstáculo en rampa y registrar el incidente.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) Visión general del turno <span aria-hidden>🎯</span></h3>
+      <div class="pill"><i>ℹ️</i><div>Un turno efectivo equilibra <b>seguridad + continuidad + productividad</b>. La disciplina en cada fase reduce variabilidad y evita incidentes.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li><b>Objetivo:</b> ejecutar el ciclo con baja latencia de respuesta a alertas y decisiones <em>auditables</em> (5W).</li>
+        <li><b>Duración:</b> 10–12 min (lectura + práctica + quiz).</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p1">Marcar leído ✓</button></div>
+    </section>
+
+    <!-- Columna derecha -->
+    <aside class="card">
+      <h3>Ficha de esta Microclase</h3>
+      <ul class="bullet">
+        <li>Formato: lectura + escenario guiado + entrega corta + quiz</li>
+        <li>Herramientas: mapa, lista de equipos, alertas, comandos (HOLD/RESUME, DIVERT, LOCK/UNLOCK)</li>
+        <li>Registros: 5W + plantilla de incidente</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Secuencia del turno -->
+    <section class="card">
+      <h3>2) Secuencia del turno <span aria-hidden>🗂️</span></h3>
+      <div class="timeline">
+        <div class="step">
+          <b>Handover (recepción)</b>
+          <ul class="bullet">
+            <li>Revisa reporte anterior: eventos abiertos, desvíos, rutas bloqueadas, estado de palas/botaderos.</li>
+            <li>Confirma <b>prioridades</b> del bloque: producción/seguridad/mantenciones.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <b>Chequeo de sistemas</b>
+          <ul class="bullet">
+            <li>Conectividad, mapas y capas activas (zonas, exclusiones, velocidad).</li>
+            <li>Prueba de comunicaciones y redundancia (radio/mensajería).</li>
+          </ul>
+        </div>
+        <div class="step">
+          <b>Monitoreo y reacción a alertas</b>
+          <ul class="bullet">
+            <li>P1 (seguridad) → reacción inmediata; P2 (flujo) → corrección; P3 (informativo) → seguimiento.</li>
+            <li>Latencia objetivo &lt; 5 min para P1/P2.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <b>Ajustes operativos</b>
+          <ul class="bullet">
+            <li>Comandos: <code>HOLD/RESUME</code>, <code>DIVERT</code>, <code>LOCK/UNLOCK</code>, reasignaciones por pala.</li>
+            <li>Siempre con <b>confirmación visual</b> y <em>read-back</em>.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <b>Cierre y reporte</b>
+          <ul class="bullet">
+            <li>KPI: TPH, tiempos de espera, desvíos ejecutados, incidentes.</li>
+            <li>Registro con 5W + aprendizajes para el siguiente turno.</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p2">Secuencia entendida ✓</button></div>
+    </section>
+
+    <!-- Chequeo de sistemas -->
+    <section class="card">
+      <h3>3) Chequeo de sistemas (lista rápida) <span aria-hidden>🧰</span></h3>
+      <table aria-label="Chequeo previo">
+        <thead><tr><th>Componente</th><th>Qué verificar</th><th>Resultado esperado</th></tr></thead>
+        <tbody>
+          <tr><td>Mapa</td><td>Capas activas, rutas y exclusiones vigentes.</td><td>Sin inconsistencias; zonas críticas resaltadas.</td></tr>
+          <tr><td>Equipos</td><td>Estados (cargando/tránsito/descargando/detenido).</td><td>Sin “fantasmas”; telemetría actualizándose.</td></tr>
+          <tr><td>Alertas</td><td>Filtros por severidad P1–P3; historial abierto.</td><td>Cola limpia; tiempos de reacción dentro de meta.</td></tr>
+          <tr><td>Comunicaciones</td><td>Radio, mensajería, back-up.</td><td>Prueba OK y <em>read-back</em> confirmado.</td></tr>
+          <tr><td>Credenciales</td><td>Acceso vigente; bloqueo de sesión inactiva.</td><td>Cumplimiento de ciberseguridad operativa.</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:10px"><button class="btn" data-complete="p3">Chequeo completado ✓</button></div>
+    </section>
+
+    <!-- Monitoreo y alertas -->
+    <section class="card">
+      <h3>4) Monitoreo y reacción a alertas <span aria-hidden>📡</span></h3>
+      <div class="pill"><i>⚠️</i><div><b>P1</b> (seguridad/personas), <b>P2</b> (flujo/producción), <b>P3</b> (informativo). Reacciona primero a P1: detener/aislar, luego corrige P2 con desvíos y balanceo.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li>Verifica con cámaras antes de UNLOCK.</li>
+        <li>Documenta decisión con 5W y prioridad aplicada.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p4">Monitoreo OK ✓</button></div>
+    </section>
+
+    <!-- Ajustes -->
+    <section class="card">
+      <h3>5) Ajustes operativos (rutas/prioridades) <span aria-hidden>🛠️</span></h3>
+      <div class="timeline">
+        <div class="step"><b>HOLD/RESUME</b>: pausa/retoma unidades o segmentos.</div>
+        <div class="step"><b>DIVERT/REROUTE</b>: reasigna destinos para descongestionar.</div>
+        <div class="step"><b>LOCK/UNLOCK</b>: bloquea o habilita tramos tras verificación visual.</div>
+      </div>
+      <div class="pill" style="margin-top:8px"><i>🧪</i><div>Evita “clic reflejo”: confirma mapa + radio + cámaras antes de ejecutar. Usa plantillas de mensaje con <em>read-back</em> y registra el ticket asociado.</div></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p5">Ajustes comprendidos ✓</button></div>
+    </section>
+
+    <!-- Cierre -->
+    <section class="card">
+      <h3>6) Cierre y traspaso <span aria-hidden>🧾</span></h3>
+      <ul class="bullet">
+        <li><b>KPIs</b>: TPH, espera por pala/botadero, % con read-back, tiempos de reacción.</li>
+        <li><b>Lecciones</b>: qué funcionó, qué mejorar, riesgos residuales.</li>
+        <li><b>Traspaso</b>: deja claro lo pendiente y las ventanas de mantención.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p6">Cierre preparado ✓</button></div>
+    </section>
+
+    <!-- Escenario guiado -->
+    <section class="card">
+      <h3>7) Escenario guiado — Obstáculo en rampa <span class="mini">Completa las acciones en orden</span></h3>
+      <div class="scenario">
+        <div class="pill"><i>📍</i><div><b>Situación:</b> Cámaras muestran obstáculo en rampa norte. Acción esperada: <b>detener 1 unidad</b> próxima, <b>desviar 3</b> por congestión, <b>abrir ruta alternativa</b> verificada, <b>notificar</b> a actores y <b>registrar</b> 5W.</div></div>
+        <div class="s-actions">
+          <button class="btn" id="s1">HOLD 1 unidad</button>
+          <button class="btn" id="s2">DIVERT 3 unidades</button>
+          <button class="btn" id="s3">UNLOCK / Abrir ruta alternativa</button>
+          <button class="btn" id="s4">Notificar (pala, seguridad, mantenimiento)</button>
+          <button class="btn" id="s5">Registrar 5W</button>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px">
+          <button class="btn-sec" id="verifyScenario" onclick="verifyScenario()">Verificar</button>
+          <button class="btn-ghost" id="resetScenario">Reiniciar</button>
+        </div>
+        <p id="sMsg" class="note" aria-live="polite"></p>
+        <div class="s-row">
+          <div class="pill"><i>📝</i><div><b>Consejo:</b> Antes de <b>UNLOCK</b> confirma cámaras limpias + read-back. Notifica con plantilla “Lugar–Problema–Acción–Confirmación”.</div></div>
+          <div class="pill"><i>🧭</i><div><b>Orden objetivo:</b> HOLD → DIVERT → UNLOCK → Notificar → Registrar.</div></div>
+        </div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p7" id="scenarioOk" disabled>Escenario completado ✓</button></div>
+    </section>
+
+    <!-- Entrega corta -->
+    <section class="card">
+      <h3>8) Entrega corta — Registro de incidente (3–5 min) <span aria-hidden>🖊️</span></h3>
+      <div class="timeline">
+        <div class="step">Completa la plantilla y <b>guárdala localmente</b>. Puedes <b>copiar</b> para Classroom o tu sistema.</div>
+      </div>
+      <div style="display:grid; gap:10px; margin-top:8px">
+        <label>Hora (24h) <input type="time" id="fHora"></label>
+        <label>Lugar <input type="text" id="fLugar" placeholder="Ej: Rampa norte, km 3.2"></label>
+        <label>Acción ejecutada <textarea id="fAccion" rows="2" placeholder="HOLD 1, DIVERT 3 a Ruta B, UNLOCK Ruta B tras verificación, notificación P2, registro 5W."></textarea></label>
+        <label>Resultado <textarea id="fResultado" rows="2" placeholder="Flujo restablecido en 8 min; sin incidentes."></textarea></label>
+        <label>Referencia/Adjunto (opcional) <input type="text" id="fRef" placeholder="ID ticket o captura"></label>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+        <button class="btn-sec" id="saveEntrega">Guardar en este dispositivo</button>
+        <button class="btn-ghost" id="copyEntrega">Copiar texto</button>
+      </div>
+      <p class="note" id="entregaMsg"></p>
+    </section>
+
+    <!-- Quiz -->
+    <section class="card">
+      <h3>9) Quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Sección 1 · Microclase 6.</div>
+  </footer>
+
+  <script>
+    // Helpers
+    const $=(s,d=document)=>d.querySelector(s);
+    const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    // Estado persistente
+    const state = read('anupro360_ct_s1_mc6_v1', {
+      done:{p1:false,p2:false,p3:false,p4:false,p5:false,p6:false,p7:false,quiz:false},
+      entrega:{hora:'',lugar:'',accion:'',resultado:'',ref:''}
+    });
+
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    $$('button[data-complete]').forEach(b=>{
+      const key = b.dataset.complete;
+      if (state.done[key]) { b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+      b.addEventListener('click', e=>{
+        state.done[key]=true; store('anupro360_ct_s1_mc6_v1', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_ct_s1_mc6_v1'); location.reload(); });
+
+    // ===== Escenario guiado =====
+    const scenarioOrder = ['s1','s2','s3','s4','s5']; // HOLD -> DIVERT -> UNLOCK -> Notificar -> Registrar
+    let steps=[];
+    ['s1','s2','s3','s4','s5'].forEach(id=>{
+      const btn = document.getElementById(id);
+      btn.addEventListener('click', ()=>{
+        if(btn.classList.contains('ok')) return;
+        steps.push(id);
+        btn.classList.add('ok');
+        btn.textContent += ' ✓';
+      });
+    });
+
+    function verifyScenario(){
+      let ok=0;
+      const minLen = Math.min(steps.length, scenarioOrder.length);
+      // limpiar marcas previas de estado
+      ['s1','s2','s3','s4','s5'].forEach(id=>{
+        const b=document.getElementById(id);
+        b.classList.remove('bad');
+      });
+      for(let i=0;i<scenarioOrder.length;i++){
+        const id=scenarioOrder[i];
+        const b=document.getElementById(id);
+        if(steps[i]===id){ ok++; /* correcto en posición */}
+        else{ b.classList.add('bad'); }
+      }
+      const pct=Math.round(ok/scenarioOrder.length*100);
+      $('#sMsg').textContent = `Orden: ${ok}/${scenarioOrder.length} (${pct}%). ✅ Correctos en verde · ❌ Los pasos marcados en rojo están fuera de orden.`;
+      if(ok===scenarioOrder.length){ $('#scenarioOk').disabled=false; }
+    }
+    window.verifyScenario = verifyScenario;
+
+    $('#resetScenario').addEventListener('click', ()=>{
+      steps=[];
+      ['s1','s2','s3','s4','s5'].forEach(id=>{
+        const b=document.getElementById(id);
+        b.classList.remove('ok','bad');
+        b.textContent = b.textContent.replace(' ✓','');
+      });
+      $('#sMsg').textContent='';
+      $('#scenarioOk').disabled=true;
+    });
+
+    // ===== Entrega corta =====
+    const fHora=$('#fHora'), fLugar=$('#fLugar'), fAccion=$('#fAccion'), fResultado=$('#fResultado'), fRef=$('#fRef');
+    // cargar si existía
+    if(state.entrega){
+      fHora.value=state.entrega.hora||''; fLugar.value=state.entrega.lugar||'';
+      fAccion.value=state.entrega.accion||''; fResultado.value=state.entrega.resultado||'';
+      fRef.value=state.entrega.ref||'';
+    }
+    function entregaTexto(){
+      const hora=fHora.value||'(hora)';
+      const lugar=fLugar.value||'(lugar)';
+      const accion=(fAccion.value||'').trim();
+      const resultado=(fResultado.value||'').trim();
+      const ref=(fRef.value||'').trim();
+      return `Registro de incidente — Turno\nHora: ${hora}\nLugar: ${lugar}\nAcción ejecutada: ${accion}\nResultado: ${resultado}\nReferencia: ${ref}\n5W: What=${accion?accion:'—'} | Why=obstáculo en rampa | When=${hora} | Where=${lugar} | Who=ROC`;
+    }
+    $('#saveEntrega').addEventListener('click', ()=>{
+      state.entrega={hora:fHora.value,lugar:fLugar.value,accion:fAccion.value,resultado:fResultado.value,ref:fRef.value};
+      store('anupro360_ct_s1_mc6_v1', state);
+      $('#entregaMsg').textContent='Guardado en este dispositivo. Puedes copiar el texto para tu reporte.';
+    });
+    $('#copyEntrega').addEventListener('click', async()=>{
+      try{ await navigator.clipboard.writeText(entregaTexto()); $('#entregaMsg').textContent='Texto copiado al portapapeles.'; }
+      catch(e){ $('#entregaMsg').textContent='No se pudo copiar automáticamente. Selecciona y copia manualmente.'; }
+    });
+
+    // ===== Quiz (10) =====
+    const preguntas = [
+      {q:'Orden correcto del turno:', opts:['Chequeo → Monitoreo → Handover → Cierre','Handover → Chequeo → Monitoreo/Ajustes → Cierre'], ok:1, why:'El handover abre el turno; el cierre lo documenta.'},
+      {q:'Al recibir P1 en rampa, la primera acción es…', opts:['DIVERT 3 unidades','HOLD 1 unidad próxima y aislar'], ok:1, why:'Primero protege la seguridad.'},
+      {q:'Antes de UNLOCK en ruta alternativa, debes…', opts:['Confirmar cámaras y read-back','Mirar el mapa solamente'], ok:0, why:'Verificación visual + confirmación.'},
+      {q:'Qué incluye el chequeo de sistemas:', opts:['Estado de equipos, alertas y comunicaciones','Sólo credenciales'], ok:0},
+      {q:'Latencia objetivo para P1/P2:', opts:['< 5 min','< 30 min'], ok:0},
+      {q:'DIVERT/REROUTE sirve para…', opts:['Balancear flota y desviar por congestión','Acelerar un CAEX manualmente'], ok:0},
+      {q:'En el cierre, ¿qué KPI NO es típico?', opts:['% con read-back','Cantidad de memes enviados'], ok:0},
+      {q:'En el escenario, el tercer paso correcto es:', opts:['Notificar','UNLOCK / Abrir ruta alternativa'], ok:1},
+      {q:'El registro 5W permite…', opts:['Cumplir trazabilidad y aprendizaje','Saltar validaciones de seguridad'], ok:0},
+      {q:'Si una alerta P2 compite con una P1, se prioriza…', opts:['P2','P1'], ok:1},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        const exp=document.createElement('div'); exp.className='mini'; exp.style.marginTop='4px'; exp.dataset.role='exp'; exp.textContent='';
+        div.appendChild(exp);
+        wrap.appendChild(div);
+      });
+    }
+
+    function clearQuiz(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+        const exp=div.querySelector('[data-role="exp"]'); if(exp) exp.textContent='';
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    function gradeQuiz(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, unanswered=0;
+      blocks.forEach((div,idx)=>{
+        const ok = Number(div.dataset.ok);
+        const picked = div.querySelector('input[type="radio"]:checked');
+        const okLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        okLabel?.classList.add('correct');
+        div.querySelectorAll('input').forEach(i=> i.disabled=true);
+        const exp=div.querySelector('[data-role="exp"]');
+        if(!picked){ div.classList.add('wrong'); unanswered++; exp.textContent='❌ Sin respuesta.'; return; }
+        const chosen = Number(picked.value);
+        if(chosen===ok){ div.classList.add('correct'); okCount++; exp.textContent='✅ Correcto.'; }
+        else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); exp.textContent='❌ ' + (preguntas[idx].why || 'Revisa la sección correspondiente.'); }
+      });
+      const total=preguntas.length; const pct=Math.round(okCount/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      try{ localStorage.setItem('anupro360_ct_s1_mc6_lastscore', String(okCount)); }catch{}
+    }
+
+    document.getElementById('enviar').addEventListener('click', gradeQuiz);
+    document.getElementById('resetQuiz').addEventListener('click', clearQuiz);
+
+    // Init
+    calcProgress(); renderQuiz(); $('#year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Sección 1 · Microclase 5 — Equipo y Comunicación</title>
+  <meta name="description" content="Microclase 5: Equipo multidisciplinario y comunicación efectiva para Controladores de Terreno (CAEX autónomos). Incluye actividad de orden y quiz de 10 preguntas.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --verde-strong:#22c55e; --azul:#003B5C; --blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+         background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px);
+           background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+          border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-size:1.15rem}
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    /* Quiz + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:3px solid var(--verde-strong); background:rgba(34,197,94,.15); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .mini{font-size:.85rem; opacity:.85}
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    code{background:rgba(0,0,0,.25); padding:.1rem .35rem; border-radius:.35rem}
+
+    /* Ordenar (drag list) */
+    .order-wrap{display:grid; gap:10px}
+    .order-list{list-style:none; padding:0; margin:0}
+    .order-list li{background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.25);
+      border-radius:10px; padding:10px; margin-bottom:8px; cursor:grab}
+    .order-list li.dragging{opacity:.6}
+    .order-list li.ok{outline:3px solid var(--verde-strong); background:rgba(34,197,94,.15)}
+    .order-list li.bad{outline:2px solid #FF5C00}
+
+    /* Chips y tablas breves */
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip2{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
+      background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.2)}
+    .kbd{font-variant-numeric:tabular-nums; background:rgba(0,0,0,.35); padding:.1rem .35rem; border-radius:.35rem}
+
+    table{width:100%; border-collapse:separate; border-spacing:0; margin-top:8px; font-size:.95rem}
+    th,td{padding:10px 12px; border:1px solid rgba(255,255,255,.12)}
+    th{background:rgba(255,255,255,.10); text-align:left}
+    tr:nth-child(even) td{background:rgba(255,255,255,.04)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+        <h1>Anupro360 · Sección 1 · Microclase 5</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>EQUIPO MULTIDISCIPLINARIO Y COMUNICACIÓN</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Coordinar eficazmente con supervisión, planificación/producción, mantenimiento autónomo, auxiliares y seguridad. Aplicar mensajes breves con prioridad, <em>read-back</em> y registro 5W.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) ¿Por qué importa la coordinación? <span aria-hidden>🎯</span></h3>
+      <div class="pill"><i>ℹ️</i><div>El Controlador de Terreno mantiene <b>flujo continuo</b> y <b>seguridad operacional</b>. Para lograrlo necesita decisiones sincronizadas con todas las áreas. Una comunicación deficiente produce colas, desvíos tardíos y eventos de riesgo.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li><b>Resultados esperados:</b> menos tiempos muertos, rutas seguras, TPH estable.</li>
+        <li><b>Llaves:</b> prioridad del mensaje, <em>read-back</em>, registro (5W) y notificación oportuna.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p1">Marcar leído ✓</button></div>
+    </section>
+
+    <!-- Columna derecha (Ficha) -->
+    <aside class="card">
+      <h3>Ficha de esta Microclase</h3>
+      <ul class="bullet">
+        <li>Duración: ~8–10 min</li>
+        <li>Formato: lectura + tablas + actividad de orden + quiz (10)</li>
+        <li>Objetivo: coordinar con áreas y aplicar un protocolo de comunicación robusto</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Actores clave -->
+    <section class="card">
+      <h3>2) Actores y focos de coordinación <span aria-hidden>🤝</span></h3>
+      <table aria-label="Actores y focos">
+        <thead><tr><th>Actor</th><th>Necesidad del ROC</th><th>Qué espera el actor del ROC</th></tr></thead>
+        <tbody>
+          <tr><td>Supervisión mina</td><td>Estado de flota, desvíos activos, eventos críticos.</td><td>Decisiones rápidas y trazables (5W).</td></tr>
+          <tr><td>Planificación/producción</td><td>Balance por pala/botadero, TPH y colas.</td><td>Cumplimiento de asignaciones y retroalimentación.</td></tr>
+          <tr><td>Mantenimiento autónomo</td><td>Alertas de condición, ventanas de intervención.</td><td>Programación sin afectar flujo y seguridad.</td></tr>
+          <tr><td>Auxiliares (palas/motoniveladoras)</td><td>Prioridad de limpieza, accesos, slots.</td><td>Rutas desbloqueadas a tiempo, <em>diverts</em> claros.</td></tr>
+          <tr><td>Seguridad</td><td>Zonas de exclusión, personal en pista.</td><td>Bloqueos/UNLOCK con verificación visual.</td></tr>
+        </tbody>
+      </table>
+      <div class="chips" style="margin-top:8px">
+        <span class="chip2">📡 Prioridades: <span class="kbd">P1</span> crítico · <span class="kbd">P2</span> alto · <span class="kbd">P3</span> informativo</span>
+        <span class="chip2">📝 Registro: 5W (What/Why/When/Where/Who)</span>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p2">Actores comprendidos ✓</button></div>
+    </section>
+
+    <!-- Protocolos -->
+    <section class="card">
+      <h3>3) Protocolos de comunicación (radio/mensajería) <span aria-hidden>📻</span></h3>
+      <div class="timeline">
+        <div class="step">
+          <b>Mensaje breve</b>
+          <ul class="bullet"><li>Estructura: <b>Lugar – Problema – Acción solicitada – Confirmación</b>.</li><li>Evita tecnicismos; usa claves acordadas.</li></ul>
+        </div>
+        <div class="step">
+          <b>Prioridad</b>
+          <ul class="bullet"><li><span class="kbd">P1</span> riesgo/seguridad, <span class="kbd">P2</span> afecta producción, <span class="kbd">P3</span> informativo.</li></ul>
+        </div>
+        <div class="step">
+          <b><em>Read-back</em></b>
+          <ul class="bullet"><li>Repetición por quien recibe: “<em>ROC copia: desviar CAEX 312 a Botadero 2</em>”.</li><li>Si no se confirma, el cambio <b>no está aprobado</b>.</li></ul>
+        </div>
+        <div class="step">
+          <b>Registro</b>
+          <ul class="bullet"><li>Asiento en sistema con 5W + referencia (captura o ticket).</li><li>Permite auditoría y <b>mejora de KPIs</b>.</li></ul>
+        </div>
+      </div>
+      <div class="pill" style="margin-top:8px"><i>🧩</i><div><b>Plantilla de radio:</b> “<em>ROC para Pala 304 (P2). Congestión rampa norte. Solicito DIVERT 3 CAEX a Botadero B. Confirmar.</em>” → <b>Read-back</b> → Registrar.</div></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p3">Protocolos OK ✓</button></div>
+    </section>
+
+    <!-- Role play -->
+    <section class="card">
+      <h3>4) Role-play guiado: cambio de punto de descarga <span aria-hidden>🎬</span></h3>
+      <ol class="bullet" style="list-style:decimal">
+        <li><b>Recibir aviso</b> de Pala: “Cambiar a Botadero 2 por mantención.”</li>
+        <li><b>Confirmar (read-back)</b>: “ROC copia: cambio a Botadero 2. ¿vigencia 40 min?”</li>
+        <li><b>Aplicar en sistema</b>: <code>DIVERT</code> flota asignada + <code>LOCK</code> segmento en mantención.</li>
+        <li><b>Notificar a flota</b>: mensaje + verificación en mapa; registrar 5W.</li>
+      </ol>
+      <div class="pill"><i>🛡️</i><div>Si hay personal en pista o cámaras sin visibilidad: <b>pausa</b> la ejecución y coordina con Seguridad antes del UNLOCK.</div></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p4">Role-play completado ✓</button></div>
+    </section>
+
+    <!-- Actividad: Orden de los 4 pasos -->
+    <section class="card">
+      <h3>5) Actividad — Ordena los 4 pasos correctos <span class="mini">Arrastra para ordenar</span></h3>
+      <div class="order-wrap">
+        <ul class="order-list" id="orderList">
+          <li draggable="true">Notificar a flota</li>
+          <li draggable="true">Aplicar en sistema</li>
+          <li draggable="true">Recibir aviso</li>
+          <li draggable="true">Confirmar (read-back)</li>
+        </ul>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn-sec" id="verifyOrder" onclick="verifyOrder()">Verificar</button>
+          <button class="btn-ghost" id="resetOrder">Reiniciar</button>
+        </div>
+        <p id="orderMsg" class="note" aria-live="polite"></p>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p5" id="orderOk" disabled>Actividad completada ✓</button></div>
+    </section>
+
+    <!-- Buenas prácticas -->
+    <section class="card">
+      <h3>6) Buenas prácticas y errores típicos <span aria-hidden>✅/⚠️</span></h3>
+      <div class="timeline">
+        <div class="step"><b>Hacer</b>: prioriza P1 y exige <em>read-back</em> antes de ejecutar cambios; usa plantillas de mensaje.</div>
+        <div class="step"><b>No hacer</b>: cambiar rutas “por presión” sin verificación visual; mensajes largos sin prioridad.</div>
+        <div class="step"><b>Métricas útiles</b>: tiempo de confirmación, % con read-back, desvíos ejecutados sin incidentes.</div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p6">Buenas prácticas entendidas ✓</button></div>
+    </section>
+
+    <!-- Quiz 10 -->
+    <section class="card">
+      <h3>7) Quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Reflexión -->
+    <section class="card">
+      <h3>8) Reflexión (1–2 líneas)</h3>
+      <textarea id="reflexion" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.2); color:var(--blanco)"
+        placeholder="Escribe la plantilla de mensaje que usarás para un DIVERT por congestión."></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiarRef">Copiar</button>
+      </div>
+      <p class="note">Se guarda solo en este dispositivo.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Sección 1 · Microclase 5.</div>
+  </footer>
+
+  <script>
+    // Helpers
+    const $=(s,d=document)=>d.querySelector(s);
+    const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    // Estado persistente
+    const state = read('anupro360_ct_s1_mc5_v1', {
+      done:{p1:false,p2:false,p3:false,p4:false,p5:false,p6:false,quiz:false},
+      reflexion:''
+    });
+
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    $$('button[data-complete]').forEach(b=>{
+      const key = b.dataset.complete;
+      if (state.done[key]) { b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+      b.addEventListener('click', e=>{
+        state.done[key]=true; store('anupro360_ct_s1_mc5_v1', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_ct_s1_mc5_v1'); location.reload(); });
+
+    // ===== Ordenar 4 pasos =====
+    const orderList = $('#orderList');
+    let dragItem=null;
+    orderList.querySelectorAll('li').forEach(li=>{
+      li.addEventListener('dragstart',()=>{ dragItem=li; li.classList.add('dragging'); });
+      li.addEventListener('dragend',()=>{ dragItem=null; li.classList.remove('dragging'); });
+    });
+    orderList.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const after = [...orderList.querySelectorAll('li:not(.dragging)')].find(el=>{
+        const box = el.getBoundingClientRect();
+        return e.clientY <= box.top + box.height/2;
+      });
+      if(!dragItem) return;
+      if(after) orderList.insertBefore(dragItem, after);
+      else orderList.appendChild(dragItem);
+    });
+
+    function verifyOrder(){
+      const target = ["Recibir aviso","Confirmar (read-back)","Aplicar en sistema","Notificar a flota"];
+      let ok=0, total=0;
+      orderList.querySelectorAll('li').forEach((li,i)=>{
+        total++;
+        li.classList.remove('ok','bad');
+        if(li.textContent.trim()===target[i]){ li.classList.add('ok'); ok++; }
+        else{ li.classList.add('bad'); }
+      });
+      const pct=Math.round(ok/total*100);
+      $('#orderMsg').textContent = `Resultado: ${ok}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo.`;
+      if(ok===total){ $('#orderOk').disabled=false; }
+    }
+    window.verifyOrder = verifyOrder; // respaldo si falla addEventListener
+
+    $('#resetOrder').addEventListener('click', ()=>{
+      // Reiniciar a un orden aleatorio
+      const items=[...orderList.querySelectorAll('li')];
+      items.forEach(li=> li.classList.remove('ok','bad'));
+      items.sort(()=>Math.random()-0.5).forEach(li=> orderList.appendChild(li));
+      $('#orderMsg').textContent='';
+      $('#orderOk').disabled=true;
+    });
+
+    // ===== Quiz (10) =====
+    const preguntas = [
+      {q:'¿Cuál es la prioridad de un mensaje que implica riesgo de personas en pista?', opts:['P1','P2','P3'], ok:0, why:'P1 = crítico/seguridad.'},
+      {q:'El <em>read-back</em> es opcional si el mensaje fue claro.', opts:['Verdadero','Falso'], ok:1, why:'Sin read-back, el cambio no está confirmado.'},
+      {q:'¿Qué espera Mantenimiento del ROC?', opts:['Decisiones sin registro','Programación que no afecte flujo y seguridad'], ok:1, why:'Coordinar ventanas y mantener continuidad.'},
+      {q:'En radio, ¿cuál es el orden recomendado?', opts:['Problema → Lugar → Acción → Confirmación','Lugar → Problema → Acción → Confirmación'], ok:1, why:'Partir por lugar reduce confusión.'},
+      {q:'¿Cuál es un KPI de comunicación útil?', opts:['% de mensajes con read-back','# de radios disponibles'], ok:0, why:'Mide disciplina comunicacional.'},
+      {q:'Ante congestión severa, el ROC debe…', opts:['Esperar reporte de fin de turno','Ejecutar DIVERT y coordinar limpieza'], ok:1, why:'Acción para proteger flujo y seguridad.'},
+      {q:'¿Qué actor define prioridades de limpieza de rampa?', opts:['Auxiliar/motoniveladora con coordinación del ROC','Operador de taxi'], ok:0, why:'Se coordina con auxiliares y supervisión.'},
+      {q:'Selecciona el enunciado correcto:', opts:['El registro 5W solo es para auditorías','El registro 5W habilita trazabilidad y mejora de KPIs'], ok:1},
+      {q:'Si no hay visibilidad de cámaras para UNLOCK, el ROC debe…', opts:['UNLOCK por presión de producción','Detener, coordinar con Seguridad y validar visual'], ok:1},
+      {q:'¿Qué incluye el “mensaje breve”?', opts:['Lugar – Problema – Acción – Confirmación','Saludo – Detalle largo – Cierre'], ok:0},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        const exp=document.createElement('div'); exp.className='mini'; exp.style.marginTop='4px'; exp.dataset.role='exp'; exp.textContent='';
+        div.appendChild(exp);
+        wrap.appendChild(div);
+      });
+    }
+
+    function clearQuiz(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+        const exp=div.querySelector('[data-role="exp"]'); if(exp) exp.textContent='';
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    function gradeQuiz(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, unanswered=0;
+      blocks.forEach((div,idx)=>{
+        const ok = Number(div.dataset.ok);
+        const picked = div.querySelector('input[type="radio"]:checked');
+        const okLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        okLabel?.classList.add('correct');
+        div.querySelectorAll('input').forEach(i=> i.disabled=true);
+        const exp=div.querySelector('[data-role="exp"]');
+        if(!picked){ div.classList.add('wrong'); unanswered++; exp.textContent='❌ Sin respuesta.'; return; }
+        const chosen = Number(picked.value);
+        if(chosen===ok){ div.classList.add('correct'); okCount++; exp.textContent='✅ Correcto.'; }
+        else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); exp.textContent='❌ ' + (preguntas[idx].why || 'Revisa la sección correspondiente.'); }
+      });
+      const total=preguntas.length; const pct=Math.round(okCount/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      try{ localStorage.setItem('anupro360_ct_s1_mc5_lastscore', String(okCount)); }catch{}
+    }
+
+    document.getElementById('enviar').addEventListener('click', gradeQuiz);
+    document.getElementById('resetQuiz').addEventListener('click', clearQuiz);
+
+    // Reflexión
+    const ref=$('#reflexion'); ref.value = state.reflexion||'';
+    $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_ct_s1_mc5_v1', state); alert('Reflexión guardada.'); });
+    $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+    // Init
+    calcProgress(); renderQuiz(); $('#year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>

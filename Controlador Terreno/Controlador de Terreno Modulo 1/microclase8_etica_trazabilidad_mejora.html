@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Sección 1 · Microclase 8 — Ética, Trazabilidad y Mejora Continua</title>
+  <meta name="description" content="Microclase 8: Ética, trazabilidad y mejora continua para Controladores de Terreno (CAEX autónomos). Incluye actividad 5W y quiz de 10 preguntas.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --verde-strong:#22c55e; --azul:#003B5C; --blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+         background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px);
+           background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+          border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-size:1.15rem}
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    /* Inputs */
+    textarea, input[type="text"], input[type="datetime-local"]{
+      width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.2); color:var(--blanco)
+    }
+
+    /* Tablas */
+    table{width:100%; border-collapse:separate; border-spacing:0; margin-top:8px; font-size:.95rem}
+    th,td{padding:10px 12px; border:1px solid rgba(255,255,255,.12)}
+    th{background:rgba(255,255,255,.10); text-align:left}
+    tr:nth-child(even) td{background:rgba(255,255,255,.04)}
+
+    /* Quiz + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:3px solid var(--verde-strong); background:rgba(34,197,94,.15); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .mini{font-size:.85rem; opacity:.85}
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    code{background:rgba(0,0,0,.25); padding:.1rem .35rem; border-radius:.35rem}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+        <h1>Anupro360 · Sección 1 · Microclase 8</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>ÉTICA, TRAZABILIDAD Y MEJORA CONTINUA</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Comprender la responsabilidad del controlador, tomar decisiones <b>auditables</b> con 5W, proteger la <b>confidencialidad</b> y aplicar registros que impulsen la <b>mejora de KPIs</b>. Practicar con una actividad 5W y validar con un quiz de 10 preguntas.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) Ética y responsabilidad profesional <span aria-hidden>🛡️</span></h3>
+      <div class="pill"><i>ℹ️</i><div>Tu rol impacta en <b>personas, equipos y continuidad</b>. La ética operacional exige <b>veracidad</b> en los reportes, <b>imparcialidad</b> en la toma de decisiones y <b>respeto</b> por la confidencialidad.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li><b>Integridad:</b> sin “ajustes” de datos para cumplir metas.</li>
+        <li><b>Templanza:</b> seguridad sobre presión por producción.</li>
+        <li><b>Responsabilidad:</b> registrar y comunicar oportunamente.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p1">Marcar leído ✓</button></div>
+    </section>
+
+    <!-- Columna derecha -->
+    <aside class="card">
+      <h3>Ficha de esta Microclase</h3>
+      <ul class="bullet">
+        <li>Duración: 5–7 min</li>
+        <li>Formato: lectura + tablas + actividad 5W + quiz (10)</li>
+        <li>Registros: decisiones auditables, evidencias y KPIs asociados</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- 5W y evidencia -->
+    <section class="card">
+      <h3>2) Trazabilidad con 5W + evidencia <span aria-hidden>🧾</span></h3>
+      <table aria-label="5W y evidencia">
+        <thead><tr><th>5W</th><th>Descripción</th><th>Ejemplo (rampa norte)</th><th>Evidencia</th></tr></thead>
+        <tbody>
+          <tr><td><b>What</b></td><td>Acción ejecutada</td><td>HOLD 1, DIVERT 3, LOCK segmento B</td><td>Captura de consola + ID comando</td></tr>
+          <tr><td><b>Why</b></td><td>Motivo</td><td>Obstáculo detectado por cámara térmica</td><td>Clip 20s + ticket #A-3421</td></tr>
+          <tr><td><b>When</b></td><td>Fecha/hora</td><td>2025-08-14 07:42</td><td>Marca de tiempo del sistema</td></tr>
+          <tr><td><b>Where</b></td><td>Ubicación</td><td>Rampa norte km 3.2</td><td>Coordenadas/Mosaico de cámaras</td></tr>
+          <tr><td><b>Who</b></td><td>Responsable/autoriza</td><td>ROC-Turno B / Supervisor Mina</td><td>Usuario en log + read-back</td></tr>
+        </tbody>
+      </table>
+      <div class="pill" style="margin-top:8px"><i>✅</i><div><b>Decisión auditable</b> = 5W completo + evidencia adjunta + registro en sistema. Evita comunicaciones fuera de canal.</div></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p2">5W comprendido ✓</button></div>
+    </section>
+
+    <!-- KPIs y mejora -->
+    <section class="card">
+      <h3>3) Reportes → Mejora de KPIs <span aria-hidden>📈</span></h3>
+      <table aria-label="KPIs vinculados a registros">
+        <thead><tr><th>KPI</th><th>Cómo lo afectan los registros</th><th>Métrica de calidad</th></tr></thead>
+        <tbody>
+          <tr><td>Tiempo de reacción P1/P2</td><td>Permite medir latencia real por tipo de alerta</td><td>Mediana &lt; 5 min</td></tr>
+          <tr><td>TPH (ton/h)</td><td>Relaciona desvíos/lock con caída y recuperación</td><td>% recuperación &lt; 15 min</td></tr>
+          <tr><td>Incidentes/cuasi-incidentes</td><td>Identifica patrones y zonas críticas</td><td>↑ tasa de reporte, ↓ recurrencia</td></tr>
+          <tr><td>Read-back</td><td>Valida ejecución correcta</td><td>&gt;= 95% de mensajes críticos</td></tr>
+        </tbody>
+      </table>
+      <div class="pill" style="margin-top:8px"><i>🧠</i><div>Sin registro no hay aprendizaje: <b>lo que no se mide, no mejora</b>.</div></div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p3">KPIs vinculados ✓</button></div>
+    </section>
+
+    <!-- Confidencialidad y ciberseguridad -->
+    <section class="card">
+      <h3>4) Confidencialidad y ciberseguridad operativa <span aria-hidden>🔒</span></h3>
+      <div class="timeline">
+        <div class="step"><b>Principio de mínimo privilegio:</b> acceso solo a lo necesario para la función.</div>
+        <div class="step"><b>Canales autorizados:</b> nada de rutas/telemetría por apps personales.</div>
+        <div class="step"><b>Gestión de credenciales:</b> no compartir, 2FA cuando esté disponible.</div>
+        <div class="step"><b>Phishing/ingeniería social:</b> sospecha de URLs raras, adjuntos inesperados, urgencias atípicas.</div>
+        <div class="step"><b>Logs inviolables:</b> nunca borrar/alterar; solicitar corrección con ticket.</div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p4">Seguridad aplicada ✓</button></div>
+    </section>
+
+    <!-- Antipatrones -->
+    <section class="card">
+      <h3>5) Errores frecuentes (y cómo evitarlos) <span aria-hidden>🧯</span></h3>
+      <ul class="bullet">
+        <li><b>Registrar al final del turno:</b> genera olvidos → <u>registra inmediato</u>.</li>
+        <li><b>Reportes ambiguos:</b> faltan 5W → usa plantilla.</li>
+        <li><b>Compartir por chats no oficiales:</b> riesgo de fuga → usa canal corporativo.</li>
+        <li><b>Editar logs:</b> destruye trazabilidad → solicita enmienda documentada.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p5">Errores controlados ✓</button></div>
+    </section>
+
+    <!-- Actividad 5W -->
+    <section class="card">
+      <h3>6) Actividad — Completa un registro 5W (3–5 min) <span aria-hidden>✍️</span></h3>
+      <div class="timeline">
+        <div class="step">Completa los campos. Luego <b>Guarda</b> en el dispositivo o <b>Copia</b> para tu reporte.</div>
+      </div>
+      <div style="display:grid; gap:10px; margin-top:8px">
+        <label>What — ¿Qué hiciste? <textarea id="w_what" rows="2" placeholder="Ej.: HOLD 1, DIVERT 3 a Ruta B, LOCK en Km 3.2; verificación visual."></textarea></label>
+        <label>Why — ¿Por qué? <textarea id="w_why" rows="2" placeholder="Ej.: Obstáculo detectado por cámara térmica; mitigación de riesgo P1."></textarea></label>
+        <label>When — ¿Cuándo? <input type="datetime-local" id="w_when"></label>
+        <label>Where — ¿Dónde? <input type="text" id="w_where" placeholder="Ej.: Rampa norte Km 3.2"></label>
+        <label>Who — ¿Quién ejecutó/autorizó? <input type="text" id="w_who" placeholder="Ej.: ROC-Turno B / Supervisor Mina"></label>
+        <label>Evidencia (ID/nota) <input type="text" id="w_evid" placeholder="ID comando o ticket, enlace a captura"></label>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+        <button class="btn-sec" id="btnSave5w">Guardar en este dispositivo</button>
+        <button class="btn-ghost" id="btnCopy5w">Copiar texto</button>
+        <button class="btn-ghost" id="btnNow">Usar fecha/hora actual</button>
+      </div>
+      <p class="note" id="msg5w"></p>
+      <div style="margin-top:10px"><button class="btn" data-complete="p6">Actividad 5W completada ✓</button></div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="card">
+      <h3>7) Quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Sección 1 · Microclase 8.</div>
+  </footer>
+
+  <script>
+    // Helpers
+    const $=(s,d=document)=>d.querySelector(s);
+    const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    // Estado
+    const state = read('anupro360_ct_s1_mc8_v1', {
+      done:{p1:false,p2:false,p3:false,p4:false,p5:false,p6:false,quiz:false},
+      w:{what:'',why:'',when:'',where:'',who:'',evid:''}
+    });
+
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    $$('button[data-complete]').forEach(b=>{
+      const key = b.dataset.complete;
+      if (state.done[key]) { b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+      b.addEventListener('click', e=>{
+        state.done[key]=true; store('anupro360_ct_s1_mc8_v1', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_ct_s1_mc8_v1'); location.reload(); });
+
+    // === Actividad 5W ===
+    const fields = {
+      what: $('#w_what'), why: $('#w_why'), when: $('#w_when'),
+      where: $('#w_where'), who: $('#w_who'), evid: $('#w_evid')
+    };
+    // cargar
+    if(state.w){
+      fields.what.value=state.w.what||''; fields.why.value=state.w.why||'';
+      fields.when.value=state.w.when||''; fields.where.value=state.w.where||'';
+      fields.who.value=state.w.who||''; fields.evid.value=state.w.evid||'';
+    }
+    function wText(){
+      const t = {
+        what:(fields.what.value||'').trim(),
+        why:(fields.why.value||'').trim(),
+        when:(fields.when.value||'').trim(),
+        where:(fields.where.value||'').trim(),
+        who:(fields.who.value||'').trim(),
+        evid:(fields.evid.value||'').trim(),
+      };
+      return `Registro 5W\nWhat: ${t.what||'—'}\nWhy: ${t.why||'—'}\nWhen: ${t.when||'—'}\nWhere: ${t.where||'—'}\nWho: ${t.who||'—'}\nEvidencia: ${t.evid||'—'}`;
+    }
+    $('#btnSave5w').addEventListener('click', ()=>{
+      state.w={what:fields.what.value,why:fields.why.value,when:fields.when.value,where:fields.where.value,who:fields.who.value,evid:fields.evid.value};
+      store('anupro360_ct_s1_mc8_v1', state);
+      $('#msg5w').textContent='Registro 5W guardado en este dispositivo.';
+    });
+    $('#btnCopy5w').addEventListener('click', async()=>{
+      try{ await navigator.clipboard.writeText(wText()); $('#msg5w').textContent='Texto copiado. Pégalo en tu reporte.'; }
+      catch(e){ $('#msg5w').textContent='No se pudo copiar automáticamente. Copia manualmente.'; }
+    });
+    $('#btnNow').addEventListener('click', ()=>{
+      const now=new Date(); const tzOff=now.getTimezoneOffset()*60000; // para local
+      const localISO=new Date(now - tzOff).toISOString().slice(0,16);
+      fields.when.value=localISO;
+    });
+
+    // === Quiz (10) ===
+    const preguntas = [
+      {q:'Una decisión es “auditable” cuando…', opts:['Se comenta por radio sin registro','Tiene 5W completo + evidencia en el sistema'], ok:1, why:'Debe rastrearse con datos y adjuntos.'},
+      {q:'El momento correcto para registrar un evento es…', opts:['Al final del turno','Inmediatamente después de la acción'], ok:1},
+      {q:'¿Qué principio protege datos sensibles?', opts:['Mínimo privilegio','Acceso abierto'], ok:0},
+      {q:'¿Qué hacer ante solicitud de editar un log?', opts:['Borrar líneas antiguas','Solicitar enmienda documentada (ticket)'], ok:1},
+      {q:'Compartir rutas por apps personales es…', opts:['Permitido si es rápido','Prohibido: solo canales corporativos'], ok:1},
+      {q:'¿Qué KPI se beneficia directo de registros claros?', opts:['Tiempo de reacción P1/P2','Temperatura ambiente'], ok:0},
+      {q:'El read-back aporta a…', opts:['Velocidad del CAEX','Ejecución correcta y trazabilidad'], ok:1},
+      {q:'Señal típica de phishing:', opts:['Dominio extraño y urgencia inusual','Correo de IT con dominio oficial'], ok:0},
+      {q:'Antes de compartir un reporte externo debes…', opts:['Anonimizar y revisar permisos','Enviar tal como salió del sistema'], ok:0},
+      {q:'Qué NO debe hacerse con los logs:', opts:['Bloquear su borrado','Alterarlos para mejorar cifras'], ok:1}
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        const exp=document.createElement('div'); exp.className='mini'; exp.style.marginTop='4px'; exp.dataset.role='exp'; exp.textContent='';
+        div.appendChild(exp);
+        wrap.appendChild(div);
+      });
+    }
+
+    function clearQuiz(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+        const exp=div.querySelector('[data-role="exp"]'); if(exp) exp.textContent='';
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    function gradeQuiz(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, unanswered=0;
+      blocks.forEach((div,idx)=>{
+        const ok = Number(div.dataset.ok);
+        const picked = div.querySelector('input[type="radio"]:checked');
+        const okLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        okLabel?.classList.add('correct'); // siempre resalta la correcta
+        div.querySelectorAll('input').forEach(i=> i.disabled=true);
+        const exp=div.querySelector('[data-role="exp"]');
+        if(!picked){ div.classList.add('wrong'); unanswered++; exp.textContent='❌ Sin respuesta.'; return; }
+        const chosen = Number(picked.value);
+        if(chosen===ok){ div.classList.add('correct'); okCount++; exp.textContent='✅ Correcto.'; }
+        else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); exp.textContent='❌ ' + (preguntas[idx].why || 'Revisa la sección correspondiente.'); }
+      });
+      const total=preguntas.length; const pct=Math.round(okCount/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      try{ localStorage.setItem('anupro360_ct_s1_mc8_lastscore', String(okCount)); }catch{}
+    }
+
+    document.getElementById('enviar').addEventListener('click', gradeQuiz);
+    document.getElementById('resetQuiz').addEventListener('click', clearQuiz);
+
+    // Init
+    calcProgress(); renderQuiz(); $('#year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>

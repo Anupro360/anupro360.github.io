@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Anupro360 · Sección 1 · Recursos “micro” por clase</title>
+<meta name="description" content="Sección 1 completa con lecturas, actividades, mini-evaluaciones y fichas descargables para Controladores de Terreno (CAEX autónomos).">
+<style>
+  :root{
+    --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+    --verde:#4B6F44; --verde-strong:#22c55e; --azul:#003B5C; --blanco:#FFFFFF;
+    --bg:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%);
+  }
+  *{box-sizing:border-box}
+  body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; color:var(--blanco); background:var(--bg); -webkit-font-smoothing:antialiased}
+  header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+  .wrap{max-width:1080px; margin:0 auto; padding:16px}
+  .brand{display:flex; align-items:center; gap:10px}
+  .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+  h1{font-size:1.2rem; margin:0}
+  .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+  .hero{border-bottom:1px solid rgba(255,255,255,.08);
+    background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+  .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+  .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+  .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+  .grid{display:grid; gap:16px}
+  @media(min-width:980px){.grid{grid-template-columns:1.05fr .95fr}}
+
+  .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+        border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .card h3{margin-top:0}
+
+  .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+  .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+  .btn:active{transform:translateY(1px)}
+  .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+  .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+  .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+        border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+  .pill i{font-style:normal; font-size:1.1rem}
+
+  .timeline{display:grid; gap:12px}
+  .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+  .bullet{margin:4px 0 4px 16px}
+  .mini{font-size:.85rem; opacity:.9}
+
+  /* Navegación microclases */
+  .toc{display:grid; grid-template-columns:1fr; gap:10px}
+  @media(min-width:720px){.toc{grid-template-columns:1fr 1fr}}
+  .toc .item{display:flex; gap:10px; align-items:center; padding:12px; border-radius:12px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); cursor:pointer}
+  .toc .item:hover{background:rgba(255,255,255,.08)}
+  .toc .item i{font-style:normal; background:rgba(255,255,255,.12); width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center}
+
+  /* Diagramas (SVG responsive) */
+  .svg-wrap{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:8px}
+  svg{width:100%; height:auto}
+
+  /* Actividades y quiz */
+  .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+  .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+  .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+  .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+  .opt.correct{outline:3px solid var(--verde-strong); background:rgba(34,197,94,.15); border-radius:8px; padding:4px}
+  .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+  .drag-wrap,.order-wrap{display:grid; gap:8px}
+  .draggable,.dropzone,.order-item{padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.08)}
+  .dropzone{min-height:40px}
+  .dragging{opacity:.65}
+  .order-item{cursor:grab}
+  .order-item:active{cursor:grabbing}
+  .mc-activity-buttons{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+
+  textarea,input[type="text"],input[type="time"],input[type="datetime-local"]{
+    width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.2); color:var(--blanco)
+  }
+
+  footer{opacity:.75; font-size:.85rem; padding:24px 0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+      <h1>Anupro360 · Sección 1 · Recursos “micro” por clase</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>RECURSOS “MICRO” · SECCIÓN 1</h2>
+    <p class="mini"><b>Incluye:</b> lecturas móviles (400–600 palabras) + 3 ideas clave ·
+      actividad rápida (arrastrar/soltar, ordenar, opción múltiple) · mini-evaluación (3–4 preguntas) ·
+      <b>fichas descargables (PDF)</b> con checklists y atajos.</p>
+    <div class="progress" aria-label="Progreso general"><i id="bar"></i></div>
+    <div style="margin-top:8px">
+      <a class="btn-ghost" href="sandbox:/mnt/data/Seccion1_Fichas_Checklists_Atajos.pdf" target="_blank" rel="noopener">Descargar fichas (PDF)</a>
+    </div>
+  </div>
+</section>
+
+<main class="wrap" id="app" role="main">
+  <!-- Índice de microclases -->
+  <section class="card">
+    <h3>Microclases (Sección 1)</h3>
+    <div class="toc">
+      <div class="item" data-open="mc1"><i>1</i> ¿Qué es un Controlador de Terreno?</div>
+      <div class="item" data-open="mc2"><i>2</i> Objetivos y Resultados del Rol</div>
+      <div class="item" data-open="mc3"><i>3</i> Entorno ROC y Herramientas</div>
+      <div class="item" data-open="mc4"><i>4</i> Diferencias con Operador Convencional</div>
+      <div class="item" data-open="mc5"><i>5</i> Equipo Multidisciplinario y Comunicación</div>
+      <div class="item" data-open="mc6"><i>6</i> Un Día en el Turno (Flujo Real)</div>
+      <div class="item" data-open="mc7"><i>7</i> Mentalidad de Seguridad (Safety First)</div>
+      <div class="item" data-open="mc8"><i>8</i> Ética, Trazabilidad y Mejora Continua</div>
+    </div>
+  </section>
+
+  <!-- CONTENIDO DE MICROCLASES -->
+  <div id="content"></div>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Sección 1.</div>
+</footer>
+
+<script>
+/* ========== Datos: lecturas (resumidas a ~450–550 palabras), ideas clave, actividades y mini-eval ========== */
+const MC = [
+  {
+    id:"mc1",
+    title:"¿Qué es un Controlador de Terreno?",
+    reading: `
+El Controlador de Terreno gestiona la operación de camiones de extracción autónomos (CAEX) desde un Centro de Operaciones Remotas (ROC). A diferencia del operador convencional, no conduce: coordina y optimiza un sistema completo con foco en seguridad, continuidad y productividad. Su consola integra un mapa en tiempo real, una lista de equipos con estados (cargando/en tránsito/descargando/detenido) y un panel de alertas, además de comandos como HOLD/RESUME, DIVERT/REROUTE y LOCK/UNLOCK. La esencia del trabajo es priorizar acciones según impacto: si surge un riesgo a personas (P1), se detiene y aísla; si hay congestión (P2), se desvían flotas o se balancea la asignación; lo informativo (P3) se monitorea sin interrumpir el flujo.
+
+En la práctica, el controlador mantiene el ciclo carga→transporte→descarga→retorno con baja variabilidad. Supervisa múltiples CAEX, coordina con palas, botaderos, chancadores y mantenimiento, y documenta decisiones de forma auditable (5W). La comunicación efectiva es crítica: mensajes breves, con read-back y registro; por ejemplo: “ROC a Pala 307: desvío a Ruta B por bloqueo en Rampa Norte; confirmar”. La confirmación visual (cámaras/sensores) es imprescindible antes de desbloquear un segmento.
+
+Un diagrama simple ayuda a entender su rol: el controlador al centro, conectado a la flota CAEX, a equipos auxiliares (motoniveladora, riego), a la planta/descarga y a seguridad industrial. Cada decisión favorece el sistema completo. La clave cultural es la autoridad para detener: ante la duda, detener, verificar y recién continuar. La ética y la trazabilidad garantizan confianza: datos reales, evidencias adjuntas y cero alteraciones de log. Con disciplina, el controlador reduce tiempos muertos, evita eventos de riesgo y sostiene el rendimiento del turno.
+`,
+    ideas:["Supervisa sistema completo (no conduce)","Prioriza P1/P2 y registra con 5W","Confirmación visual + read-back"],
+    diagram:"controller",
+    activity:{
+      type:"dragpair", title:"Empareja: ¿Conduce o Gestiona?",
+      left:["Conducir camión","Trabajar en cabina","Gestionar rutas","Coordinar desvíos","Atender alertas","Trabajo en sala ROC"],
+      right:["Operador Convencional","Operador Convencional","Controlador de Terreno","Controlador de Terreno","Controlador de Terreno","Controlador de Terreno"],
+      pairs:{0:0,1:0,2:1,3:1,4:1,5:1} // índice izquierda -> 0=Operador,1=Controlador
+    },
+    quiz:[
+      {q:"El controlador trabaja principalmente…", opts:["En cabina de CAEX","En el ROC"], ok:1},
+      {q:"Antes de UNLOCK debes…", opts:["Ver mapa solamente","Confirmación visual y registro"], ok:1},
+      {q:"Meta del rol:", opts:["Conducir rápido","Seguridad + continuidad + productividad"], ok:1},
+      {q:"Comunicación efectiva:", opts:["Mensajes largos","Brevedad + read-back + registro"], ok:1},
+    ]
+  },
+  {
+    id:"mc2",
+    title:"Objetivos y Resultados del Rol",
+    reading: `
+El propósito operativo del controlador es sostener un flujo continuo del ciclo carga→transporte→descarga→retorno con la menor variabilidad posible. Para lograrlo, anticipa cuellos de botella y actúa con decisiones rápidas: ante congestión en rampa, aplica DIVERT para redirigir 2–3 unidades a una ruta alternativa y coordina motoniveladora si la causa es deterioro de superficie. Los objetivos se ordenan por riesgo e impacto: 1) Seguridad (P1); 2) Flujo/Producción (P2); 3) Información/Seguimiento (P3). En paralelo, el controlador protege KPIs como TPH y tiempos de espera por pala/botadero, con umbrales de reacción (< 5 min para P1/P2).
+
+Un checklist previo al inicio del turno minimiza fricciones: comunicaciones OK, mapas y capas actualizados, zonas de exclusión activas, rutas alternativas definidas y puntos de control de velocidad válidos. Durante el turno, el controlador equilibra la asignación por pala y ajusta prioridades según condiciones climáticas, tareas de mantenimiento o trabajos de seguridad. El cierre de turno documenta KPIs y decisiones clave, dejando aprendizajes para quien recibe el siguiente bloque.
+
+El resultado esperado es “flujo sin sorpresas”: menos tiempos muertos, menos desvíos imprevistos y mayor previsibilidad. El controlador, al leer tendencias en la consola (colas formándose, alertas repetitivas, pérdida de visibilidad), se adelanta con acciones preventivas. Esta mentalidad de mejora continua mantiene una operación estable incluso cuando cambian las condiciones del terreno.
+`,
+    ideas:["Flujo continuo con baja variabilidad","Priorizar P1>P2>P3","Checklist pre-turno sólido"],
+    diagram:"cycle",
+    activity:{
+      type:"order", title:"Ordena este checklist de pre-inicio (lógico)",
+      items:["Comunicaciones OK","Mapas/capas vigentes","Zonas de exclusión activas","Rutas alternativas definidas"]
+    },
+    quiz:[
+      {q:"Prioridad ante conflicto:", opts:["Producción","Seguridad"], ok:1},
+      {q:"Acción correcta ante congestión:", opts:["Esperar","DIVERT + coordinar motoniveladora"], ok:1},
+      {q:"Meta de reacción a P1/P2:", opts:["< 5 min","< 30 min"], ok:0}
+    ]
+  },
+  {
+    id:"mc3",
+    title:"Entorno de Trabajo (ROC) y Herramientas",
+    reading: `
+El puesto del ROC integra varios monitores. A la izquierda, el mapa en tiempo real muestra rutas, zonas de exclusión y posiciones GPS de cada CAEX. Arriba, indicadores de clima y visibilidad; a la derecha, la lista de equipos con estado (cargando/en tránsito/descargando/detenido) y salud de sensores. Abajo, el panel de alertas clasifica por severidad: P1 (seguridad), P2 (flujo) y P3 (informativo). La consola permite comandos rápidos: STOP/RESUME, HOLD, DIVERT/REROUTE y LOCK/UNLOCK. Cada comando exige confirmación visual y registro con 5W.
+
+La “captura simulada” de consola (abajo) ilustra el layout típico: zonas en color, segmentos bloqueados y colas por pala. En una mini-demo, tocar el ícono de un camión abre su ficha (destino, velocidad, último comando) y permite aplicar HOLD para aislarlo ante un evento. El controlador evalúa el impacto: si detener una unidad despeja un riesgo sin arriesgar la producción, es la decisión correcta. La agilidad proviene de plantillas de mensajes con read-back y de atajos en la consola (por ejemplo, seleccionar varios equipos y aplicar DIVERT).
+`,
+    ideas:["Mapa + equipos + alertas","Comandos rápidos con verificación","Ficha de equipo y impacto"],
+    diagram:"roc",
+    activity:{
+      type:"mcq", title:"Mini-demo mental",
+      question:"Tocas un CAEX con alerta de proximidad en rampa con niebla. ¿Qué haces primero?",
+      options:["UNLOCK inmediata","HOLD y verificar cámaras/sensores"], ok:1
+    },
+    quiz:[
+      {q:"Panel que muestra estados:", opts:["Alertas","Lista de equipos"], ok:1},
+      {q:"Antes de UNLOCK:", opts:["Solo mapa","Confirmación visual + registro"], ok:1},
+      {q:"Comando para desviar:", opts:["DIVERT/REROUTE","HOLD"], ok:0},
+      {q:"Severidad de persona en pista:", opts:["P2","P1"], ok:1}
+    ]
+  },
+  {
+    id:"mc4",
+    title:"Diferencias con un Operador Convencional",
+    reading: `
+El operador convencional conduce desde cabina: su foco es el control de la máquina (palancas/pedales), percepción directa y cumplimiento de procedimientos a bordo. El Controlador de Terreno, en cambio, gestiona el sistema desde el ROC: usa software, datos y protocolos para guiar múltiples unidades. La seguridad individual del operador da paso a la seguridad operacional: proteger el conjunto (personas, equipos, rutas). Los límites del rol evitan ambigüedades: el controlador no “toma” una cabina, ni el operador decide desvíos de flota.
+
+Una tabla comparativa resume los contrastes: Ubicación (Cabina vs ROC), Tarea (Conducir vs Gestionar flota), Seguridad (Personal vs Operacional), Herramientas (Palancas vs Software). En la práctica, si la pala cambia punto de descarga, el controlador aplica el cambio en el sistema y comunica a la flota con read-back; el operador obedece la instrucción, sin alterar rutas por su cuenta. Esta claridad reduce riesgos y agiliza decisiones.
+`,
+    ideas:["Cabina vs ROC","Conducir vs Gestionar","Seguridad personal vs operacional"],
+    diagram:"compare",
+    activity:{
+      type:"dragpair", title:"Emparejar tarea–rol (60s)",
+      left:["Conducir con palancas","Aplicar DIVERT a 3 CAEX","Read-back de instrucciones","Reportar estado de sensores"],
+      right:["Operador","Controlador","Controlador","Operador"],
+      pairs:{0:0,1:1,2:1,3:0}
+    },
+    quiz:[
+      {q:"¿Quién gestiona flota desde ROC?", opts:["Operador","Controlador"], ok:1},
+      {q:"La seguridad priorizada por el controlador es…", opts:["Personal","Operacional"], ok:1},
+      {q:"Herramientas del operador:", opts:["Palancas","Software ROC"], ok:0}
+    ]
+  },
+  {
+    id:"mc5",
+    title:"Equipo Multidisciplinario y Comunicación",
+    reading: `
+La coordinación con áreas clave sostiene la continuidad: supervisión mina, planificación/producción, mantenimiento autónomo, auxiliares (palas, motoniveladoras, camión de riego) y seguridad industrial. La comunicación efectiva usa mensajes breves, priorizados y con confirmación. Formato recomendado: Lugar – Problema – Acción – Confirmación (read-back). Ejemplo: “ROC a Pala 412: cambio a descarga en Botadero 3 por mantenimiento en Chancador 2; confirmar”. Tras la confirmación, el controlador aplica el cambio en el sistema (DIVERT/REROUTE) y notifica a la flota.
+
+Un role-play típico: la pala anuncia cambio de descarga; el controlador confirma, ejecuta en la consola, verifica que la flota reciba el nuevo destino y registra el evento (5W). La trazabilidad demuestra que la decisión fue correcta y que todos actuaron coordinados.
+`,
+    ideas:["Mensajes breves + read-back","Coordinar pala/botadero/mantención","Registro 5W tras cambios"],
+    diagram:"comms",
+    activity:{
+      type:"order", title:"Ordena los 4 pasos de comunicación",
+      items:["Recibir aviso","Confirmar (read-back)","Aplicar cambio en sistema","Notificar a flota"]
+    },
+    quiz:[
+      {q:"Formato de mensaje recomendado:", opts:["Largo y técnico","Lugar – Problema – Acción – Confirmación"], ok:1},
+      {q:"Tras confirmar cambio de descarga:", opts:["Esperar","Aplicar en sistema y notificar"], ok:1},
+      {q:"¿Registrar el evento?", opts:["No hace falta","Sí, con 5W"], ok:1}
+    ]
+  },
+  {
+    id:"mc6",
+    title:"Un Día en el Turno (Flujo Real)",
+    reading: `
+La secuencia práctica: Handover (recibir turno), Chequeo de sistemas, Monitoreo y reacción a alertas, Ajustes operativos (rutas/prioridades), Cierre y reporte. El handover precisa eventos abiertos, rutas bloqueadas y prioridades. El chequeo valida comunicaciones, mapas/capas y zonas de exclusión. En operación, reacciona a P1/P2 con latencia objetivo < 5 min: HOLD/LOCK ante riesgo, DIVERT para balancear, y UNLOCK solo con confirmación visual. El cierre consolida KPIs (TPH, esperas por pala/botadero, tiempos de reacción), lecciones y pendientes para el siguiente turno.
+
+Escenario estándar: obstáculo en rampa. Acciones en orden: HOLD a 1 unidad próxima, DIVERT a 3 unidades, UNLOCK de ruta alternativa tras verificación, notificar a actores (pala, seguridad, mantenimiento) y registrar 5W. La práctica repetida de este patrón disminuye tiempos de recuperación y evita incidentes.
+`,
+    ideas:["Handover→Chequeo→Monitoreo→Cierre","Reacción < 5 min","Registro 5W siempre"],
+    diagram:"flow",
+    activity:{
+      type:"mcq", title:"¿Cuál es el orden correcto ante obstáculo en rampa?",
+      question:"Elige la mejor secuencia.",
+      options:["DIVERT→UNLOCK→HOLD→Notificar→Registrar","HOLD→DIVERT→UNLOCK→Notificar→Registrar"], ok:1
+    },
+    quiz:[
+      {q:"Latencia objetivo P1/P2:", opts:["< 5 min","< 30 min"], ok:0},
+      {q:"UNLOCK requiere…", opts:["Solo mapa","Confirmación visual"], ok:1},
+      {q:"KPI típico del cierre:", opts:["Cantidad de memes","TPH y tiempos de espera"], ok:1}
+    ]
+  },
+  {
+    id:"mc7",
+    title:"Mentalidad de Seguridad (Safety First)",
+    reading: `
+La cultura Safety First coloca a las personas por sobre cualquier KPI. Zonas de exclusión (físicas/virtuales) se respetan siempre; la parada de emergencia (HOLD/LOCK) se usa al detectar P1; y el desbloqueo exige confirmación visual (idealmente doble fuente). El read-back asegura que la instrucción se entendió. Un “semáforo mental” agiliza decisiones: Verde = continuar normal; Amarillo = continuar con control/monitoreo/desvío; Rojo = detener, aislar y bloquear. Si dudas, detén y verifica.
+
+Tres casos ambiguos: niebla con LIDAR intermitente (Rojo), bache leve fuera de huella (Amarillo), detección de persona por cámara térmica con visibilidad parcial (Rojo). Practicar estos juicios fortalece la respuesta del ROC.
+`,
+    ideas:["Personas>KPIs","Semáforo de decisión","Read-back + confirmación visual"],
+    diagram:"traffic",
+    activity:{
+      type:"semaforo",
+      cases:[
+        {t:"Niebla parcial en rampa y LIDAR intermitente en dos CAEX", ok:"R"},
+        {t:"Bache leve en berma, fuera de huella; cámaras claras; sin personal", ok:"A"},
+        {t:"Alarma de 'persona' por cámara térmica en zona de exclusión", ok:"R"}
+      ]
+    },
+    quiz:[
+      {q:"Ante duda, ¿qué haces?", opts:["Sigues por producción","Detienes y verificas"], ok:1},
+      {q:"Semáforo: 'Rojo' significa…", opts:["Continuar","Detener/aislar/bloquear"], ok:1},
+      {q:"UNLOCK sin cámaras es…", opts:["Aceptable","No permitido"], ok:1}
+    ]
+  },
+  {
+    id:"mc8",
+    title:"Ética, Trazabilidad y Mejora Continua",
+    reading: `
+La ética operacional exige veracidad en los reportes, imparcialidad en la toma de decisiones y respeto por la confidencialidad. La trazabilidad convierte acciones en evidencia: 5W completo (What/Why/When/Where/Who) + adjuntos (capturas, ID de comandos y tickets). “Lo que no se mide no mejora”: los registros alimentan KPIs críticos (tiempos de reacción, TPH, cuasi-incidentes, % de read-back). En ciberseguridad operativa, rige el mínimo privilegio, el uso de canales corporativos y la protección de credenciales (ideal 2FA). Los logs no se alteran; si hay un error, se solicita enmienda documentada.
+
+Un antipatron frecuente es posponer registros al final del turno: se pierden detalles y se debilita la evidencia. El estándar profesional es registrar inmediatamente, con lenguaje claro y datos verificables. Este hábito eleva la confiabilidad del sistema y facilita auditorías y aprendizaje continuo.
+`,
+    ideas:["5W + evidencia","KPI desde registros","Mínimo privilegio y canales oficiales"],
+    diagram:"fivew",
+    activity:{
+      type:"fivew",
+      fields:["What","Why","When","Where","Who","Evidencia"]
+    },
+    quiz:[
+      {q:"Una decisión auditable incluye…", opts:["Comentario sin registro","5W + evidencia"], ok:1},
+      {q:"Canal para información sensible:", opts:["Mensajería personal","Canales corporativos"], ok:1},
+      {q:"Cuándo registrar:", opts:["Al final del turno","Inmediatamente"], ok:1},
+      {q:"Editar logs para mejorar cifras es…", opts:["Aceptable","Prohibido"], ok:1}
+    ]
+  },
+];
+
+/* ========== Render dinámico por microclase ========== */
+const $ = (s,d=document)=>d.querySelector(s);
+const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+const state = { done: {}, score:{} };
+
+function setProgress(){
+  const total = MC.length;
+  const ok = Object.values(state.done).filter(Boolean).length;
+  const pct = Math.round(ok/total*100);
+  $('#bar').style.width = pct+'%';
+  $('#badge').textContent = `Progreso ${pct}%`;
+}
+function markDone(id){
+  state.done[id]=true; setProgress();
+}
+
+/* Diagramas SVG inline (ligeros, sin imágenes externas) */
+function svgDiagram(kind){
+  if(kind==="controller"){
+    return `
+    <div class="svg-wrap" aria-label="Diagrama: Controlador al centro">
+      <svg viewBox="0 0 600 220" role="img">
+        <defs><style>
+          .n{fill:#0b1116;stroke:#FFB81C;stroke-width:2}
+          .t{fill:#fff;font:600 12px system-ui}
+          .a{stroke:#FF5C00;stroke-width:2;marker-end:url(#m)}
+        </style>
+        <marker id="m" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#FF5C00"/></marker></defs>
+        <rect x="250" y="80" width="100" height="60" rx="10" class="n"></rect>
+        <text x="300" y="115" class="t" text-anchor="middle">Controlador (ROC)</text>
+        <circle cx="90" cy="60" r="35" class="n"/><text x="90" y="65" class="t" text-anchor="middle">Flota CAEX</text>
+        <circle cx="520" cy="60" r="35" class="n"/><text x="520" y="65" class="t" text-anchor="middle">Seguridad</text>
+        <circle cx="90" cy="170" r="35" class="n"/><text x="90" y="175" class="t" text-anchor="middle">Pala</text>
+        <circle cx="520" cy="170" r="35" class="n"/><text x="520" y="175" class="t" text-anchor="middle">Botadero</text>
+        <line x1="250" y1="110" x2="125" y2="60" class="a"/><line x1="350" y1="110" x2="485" y2="60" class="a"/>
+        <line x1="250" y1="110" x2="125" y2="170" class="a"/><line x1="350" y1="110" x2="485" y2="170" class="a"/>
+      </svg>
+    </div>`;
+  }
+  if(kind==="cycle"){
+    return `
+    <div class="svg-wrap"><svg viewBox="0 0 600 160">
+      <defs><style>.t{fill:#fff;font:600 12px system-ui}.b{fill:#0b1116;stroke:#FFB81C;stroke-width:2}.a{stroke:#FF5C00;stroke-width:2;marker-end:url(#m)}</style>
+      <marker id="m" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#FF5C00"/></marker></defs>
+      <rect x="30" y="60" width="110" height="40" rx="10" class="b"/><text x="85" y="85" class="t" text-anchor="middle">Carga</text>
+      <rect x="170" y="60" width="110" height="40" rx="10" class="b"/><text x="225" y="85" class="t" text-anchor="middle">Transporte</text>
+      <rect x="310" y="60" width="110" height="40" rx="10" class="b"/><text x="365" y="85" class="t" text-anchor="middle">Descarga</text>
+      <rect x="450" y="60" width="110" height="40" rx="10" class="b"/><text x="505" y="85" class="t" text-anchor="middle">Retorno</text>
+      <line x1="140" y1="80" x2="170" y2="80" class="a"/><line x1="280" y1="80" x2="310" y2="80" class="a"/><line x1="420" y1="80" x2="450" y2="80" class="a"/>
+    </svg></div>`;
+  }
+  if(kind==="roc"){
+    return `
+    <div class="svg-wrap"><svg viewBox="0 0 600 230">
+      <defs><style>.p{fill:#0b1116;stroke:#FFB81C;stroke-width:2}.t{fill:#fff;font:600 11px system-ui}.s{fill:#113a52;stroke:#FF5C00;stroke-width:1.5}</style></defs>
+      <rect x="20" y="20" width="560" height="190" rx="12" class="p"/>
+      <rect x="30" y="30" width="320" height="120" rx="8" class="s"/><text x="190" y="48" class="t" text-anchor="middle">Mapa</text>
+      <rect x="360" y="30" width="210" height="80" rx="8" class="s"/><text x="465" y="48" class="t" text-anchor="middle">Lista de equipos</text>
+      <rect x="30" y="155" width="540" height="45" rx="8" class="s"/><text x="300" y="175" class="t" text-anchor="middle">Alertas P1/P2/P3</text>
+    </svg></div>`;
+  }
+  if(kind==="compare"){
+    return `
+    <div class="svg-wrap"><svg viewBox="0 0 600 160">
+      <defs><style>.t{fill:#fff;font:600 12px system-ui}.b{fill:#0b1116;stroke:#FFB81C;stroke-width:2}</style></defs>
+      <rect x="40" y="40" width="220" height="80" rx="10" class="b"/><text x="150" y="65" class="t" text-anchor="middle">Operador</text>
+      <text x="150" y="95" class="t" text-anchor="middle">Cabina · Palancas · Seguridad personal</text>
+      <rect x="340" y="40" width="220" height="80" rx="10" class="b"/><text x="450" y="65" class="t" text-anchor="middle">Controlador</text>
+      <text x="450" y="95" class="t" text-anchor="middle">ROC · Software · Seguridad operacional</text>
+    </svg></div>`;
+  }
+  if(kind==="comms"){
+    return `
+    <div class="svg-wrap"><svg viewBox="0 0 600 160">
+      <defs><style>.t{fill:#fff;font:600 12px system-ui}.b{fill:#0b1116;stroke:#FFB81C;stroke-width:2}.a{stroke:#FF5C00;stroke-width:2;marker-end:url(#m)}</style>
+      <marker id="m" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#FF5C00"/></marker></defs>
+      <rect x="40" y="60" width="120" height="40" rx="10" class="b"/><text x="100" y="85" class="t" text-anchor="middle">Pala</text>
+      <rect x="240" y="60" width="120" height="40" rx="10" class="b"/><text x="300" y="85" class="t" text-anchor="middle">ROC</text>
+      <rect x="440" y="60" width="120" height="40" rx="10" class="b"/><text x="500" y="85" class="t" text-anchor="middle">Flota</text>
+      <line x1="160" y1="80" x2="240" y2="80" class="a"/><line x1="360" y1="80" x2="440" y2="80" class="a"/>
+    </svg></div>`;
+  }
+  if(kind==="flow"){
+    return `
+    <div class="svg-wrap"><svg viewBox="0 0 600 160">
+      <defs><style>.t{fill:#fff;font:600 12px system-ui}.b{fill:#0b1116;stroke:#FFB81C;stroke-width:2}.a{stroke:#FF5C00;stroke-width:2;marker-end:url(#m)}</style>
+      <marker id="m" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#FF5C00"/></marker></defs>
+      <rect x="30" y="60" width="100" height="40" rx="10" class="b"/><text x="80" y="85" class="t" text-anchor="middle">Handover</text>
+      <rect x="160" y="60" width="100" height="40" rx="10" class="b"/><text x="210" y="85" class="t" text-anchor="middle">Chequeo</text>
+      <rect x="290" y="60" width="110" height="40" rx="10" class="b"/><text x="345" y="85" class="t" text-anchor="middle">Monitoreo</text>
+      <rect x="430" y="60" width="120" height="40" rx="10" class="b"/><text x="490" y="85" class="t" text-anchor="middle">Cierre</text>
+      <line x1="130" y1="80" x2="160" y2="80" class="a"/><line x1="260" y1="80" x2="290" y2="80" class="a"/><line x1="400" y1="80" x2="430" y2="80" class="a"/>
+    </svg></div>`;
+  }
+  if(kind==="traffic"){
+    return `
+    <div class="svg-wrap"><svg viewBox="0 0 160 180">
+      <defs><style>.l{fill:#0b1116;stroke:#FFB81C;stroke-width:2}.g{fill:#22c55e}.y{fill:#fbbf24}.r{fill:#ef4444}</style></defs>
+      <rect x="30" y="20" width="100" height="140" rx="16" class="l"/>
+      <circle cx="80" cy="55" r="18" class="r"/><circle cx="80" cy="90" r="18" class="y"/><circle cx="80" cy="125" r="18" class="g"/>
+    </svg></div>`;
+  }
+  if(kind==="fivew"){
+    return `
+    <div class="svg-wrap"><svg viewBox="0 0 600 160">
+      <defs><style>.t{fill:#fff;font:600 12px system-ui}.b{fill:#0b1116;stroke:#FFB81C;stroke-width:2}</style></defs>
+      <rect x="30" y="40" width="100" height="30" rx="8" class="b"/><text x="80" y="60" class="t" text-anchor="middle">What</text>
+      <rect x="140" y="40" width="100" height="30" rx="8" class="b"/><text x="190" y="60" class="t" text-anchor="middle">Why</text>
+      <rect x="250" y="40" width="100" height="30" rx="8" class="b"/><text x="300" y="60" class="t" text-anchor="middle">When</text>
+      <rect x="360" y="40" width="100" height="30" rx="8" class="b"/><text x="410" y="60" class="t" text-anchor="middle">Where</text>
+      <rect x="470" y="40" width="100" height="30" rx="8" class="b"/><text x="520" y="60" class="t" text-anchor="middle">Who</text>
+    </svg></div>`;
+  }
+  return "";
+}
+
+/* Render de una microclase */
+function renderMC(mc){
+  const ideasHtml = mc.ideas.map(i=>`<li>${i}</li>`).join("");
+  let actHtml = "";
+  if(mc.activity?.type==="dragpair"){
+    const L = mc.activity.left.map((t,i)=>`<div class="draggable" draggable="true" data-i="${i}">${t}</div>`).join("");
+    const R = ["Operador Convencional","Controlador de Terreno"].map((lab,idx)=>`
+      <div>
+        <div class="pill"><i>🎯</i><div><b>${lab}</b></div></div>
+        <div class="dropzone" data-group="${idx}"></div>
+      </div>`).join("");
+    actHtml = `
+      <div class="pill"><i>🧪</i><div>${mc.activity.title}</div></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px; margin-top:8px">
+        <div class="drag-wrap">${L}</div>
+        <div class="drag-wrap">${R}</div>
+      </div>
+      <div class="mc-activity-buttons">
+        <button class="btn-sec" data-act="check">Verificar</button>
+        <button class="btn-ghost" data-act="reset">Reiniciar</button>
+      </div>
+      <p class="mini" data-act="msg"></p>
+    `;
+  } else if(mc.activity?.type==="order"){
+    const items = mc.activity.items.map((t,i)=>`<div class="order-item" draggable="true" data-i="${i}">${t}</div>`).join("");
+    actHtml = `
+      <div class="pill"><i>🔀</i><div>${mc.activity.title}</div></div>
+      <div class="order-wrap">${items}</div>
+      <div class="mc-activity-buttons">
+        <button class="btn-sec" data-act="check-order">Verificar</button>
+        <button class="btn-ghost" data-act="reset-order">Reiniciar</button>
+      </div>
+      <p class="mini" data-act="msg"></p>
+    `;
+  } else if(mc.activity?.type==="mcq"){
+    actHtml = `
+      <div class="pill"><i>📝</i><div>${mc.activity.title}</div></div>
+      <div class="q" data-mc="mcqa">
+        <div style="font-weight:700">${mc.activity.question}</div>
+        ${mc.activity.options.map((o,i)=>`<label class="opt"><input type="radio" name="mcqa_${mc.id}" value="${i}"> <span>${o}</span></label>`).join("")}
+      </div>
+      <div class="mc-activity-buttons">
+        <button class="btn-sec" data-act="check-mcq" data-ok="${mc.activity.ok}">Verificar</button>
+        <button class="btn-ghost" data-act="reset-mcq">Reiniciar</button>
+      </div>
+      <p class="mini" data-act="msg"></p>
+    `;
+  } else if(mc.activity?.type==="semaforo"){
+    actHtml = `
+      <div class="pill"><i>🚦</i><div>Actividad semáforo: Verde (V) / Amarillo (A) / Rojo (R)</div></div>
+      <div class="timeline">
+        ${mc.activity.cases.map((c,idx)=>`
+          <div class="step" data-case="${idx}" data-ok="${c.ok}">
+            <b>S${idx+1}:</b> ${c.t}
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px">
+              <label class="opt"><input type="radio" name="sv${idx}" value="V"> Verde</label>
+              <label class="opt"><input type="radio" name="sv${idx}" value="A"> Amarillo</label>
+              <label class="opt"><input type="radio" name="sv${idx}" value="R"> Rojo</label>
+            </div>
+          </div>`).join("")}
+      </div>
+      <div class="mc-activity-buttons">
+        <button class="btn-sec" data-act="check-semaforo">Verificar</button>
+        <button class="btn-ghost" data-act="reset-semaforo">Reiniciar</button>
+      </div>
+      <p class="mini" data-act="msg"></p>
+    `;
+  } else if(mc.activity?.type==="fivew"){
+    actHtml = `
+      <div class="pill"><i>✍️</i><div>Actividad 5W: completa y copia tu registro.</div></div>
+      <div style="display:grid; gap:8px; margin-top:6px">
+        <input type="text" placeholder="What — ¿Qué hiciste?" data-fivew="What">
+        <input type="text" placeholder="Why — ¿Por qué?" data-fivew="Why">
+        <input type="datetime-local" data-fivew="When">
+        <input type="text" placeholder="Where — ¿Dónde?" data-fivew="Where">
+        <input type="text" placeholder="Who — ¿Quién?" data-fivew="Who">
+        <input type="text" placeholder="Evidencia — ID/captura" data-fivew="Evidencia">
+      </div>
+      <div class="mc-activity-buttons">
+        <button class="btn-sec" data-act="fivew-copy">Copiar texto</button>
+        <button class="btn-ghost" data-act="fivew-clear">Limpiar</button>
+      </div>
+      <p class="mini" data-act="msg"></p>
+    `;
+  }
+
+  const quizHtml = mc.quiz.map((p,idx)=>`
+    <div class="q" data-idx="${idx}" data-ok="${p.ok}">
+      <div style="font-weight:700">${idx+1}. ${p.q}</div>
+      ${p.opts.map((o,j)=>`<label class="opt"><input type="radio" name="q_${mc.id}_${idx}" value="${j}"> <span>${o}</span></label>`).join("")}
+      <div class="mini" data-role="exp"></div>
+    </div>
+  `).join("");
+
+  return `
+    <section class="card" id="${mc.id}">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+        <h3>${mc.title}</h3>
+        <button class="btn-ghost" onclick="document.getElementById('content').innerHTML='';">Cerrar</button>
+      </div>
+      <div class="grid">
+        <div>
+          <div class="pill"><i>📖</i><div>${mc.reading.replace(/\n/g,'<br>')}</div></div>
+          <div style="margin-top:10px">
+            <div class="pill"><i>💡</i><div><b>3 ideas clave:</b>
+              <ul class="bullet">${ideasHtml}</ul>
+            </div></div>
+          </div>
+        </div>
+        <div>
+          ${svgDiagram(mc.diagram)}
+        </div>
+      </div>
+
+      <div style="margin-top:12px">${actHtml}</div>
+
+      <div class="card" style="margin-top:12px">
+        <h4 style="margin:0 0 8px 0">Mini-evaluación</h4>
+        ${quizHtml}
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="btn-sec" data-quiz="check">Enviar respuestas</button>
+          <button class="btn-ghost" data-quiz="reset">Reiniciar</button>
+          <button class="btn" onclick="markDone('${mc.id}')">Marcar microclase completada ✓</button>
+        </div>
+        <p class="mini" data-quiz="feedback"></p>
+      </div>
+    </section>
+  `;
+}
+
+/* Navegación */
+$$('.toc .item').forEach(i=>{
+  i.addEventListener('click', ()=>{
+    const id = i.dataset.open;
+    const mc = MC.find(m=>m.id===id);
+    $('#content').innerHTML = renderMC(mc);
+    wireUpActivities(mc);
+  });
+});
+
+/* === Interacciones de actividades y mini-eval === */
+function wireUpActivities(mc){
+  const root = document.getElementById(mc.id);
+
+  // Dragpair
+  if(mc.activity?.type==="dragpair"){
+    let dragged=null;
+    root.querySelectorAll('.draggable').forEach(el=>{
+      el.addEventListener('dragstart', ()=>{ dragged=el; el.classList.add('dragging'); });
+      el.addEventListener('dragend', ()=>{ dragged=null; el.classList.remove('dragging'); });
+    });
+    root.querySelectorAll('.dropzone').forEach(zone=>{
+      zone.addEventListener('dragover', e=>e.preventDefault());
+      zone.addEventListener('drop', e=>{ e.preventDefault(); if(dragged){ zone.appendChild(dragged); }});
+    });
+    root.querySelector('[data-act="check"]').addEventListener('click', ()=>{
+      const msg = root.querySelector('[data-act="msg"]');
+      let ok=0,total=0;
+      const mapping = mc.activity.pairs;
+      // group 0 = Operador, group 1 = Controlador
+      root.querySelectorAll('.dropzone').forEach((zone,idx)=>{
+        zone.querySelectorAll('.draggable').forEach(d=>{
+          total++;
+          const leftIdx = Number(d.dataset.i);
+          const should = mapping[leftIdx];
+          if(should===idx){ d.classList.add('opt','correct'); ok++; }
+          else{ d.classList.add('opt','wrong'); }
+        });
+      });
+      msg.textContent = `Resultado: ${ok}/${total}. Correctos en verde, incorrectos en rojo.`;
+    });
+    root.querySelector('[data-act="reset"]').addEventListener('click', ()=>{
+      const left = root.querySelectorAll('.drag-wrap')[0];
+      root.querySelectorAll('.draggable').forEach(d=>{ d.classList.remove('opt','correct','wrong'); left.appendChild(d); });
+      root.querySelector('[data-act="msg"]').textContent='';
+    });
+  }
+
+  // Order
+  if(mc.activity?.type==="order"){
+    const wrap = root.querySelector('.order-wrap');
+    let dragEl=null;
+    wrap.querySelectorAll('.order-item').forEach(it=>{
+      it.addEventListener('dragstart', ()=>{ dragEl=it; it.classList.add('dragging'); });
+      it.addEventListener('dragend', ()=>{ dragEl=null; it.classList.remove('dragging'); });
+      it.addEventListener('dragover', e=>e.preventDefault());
+      it.addEventListener('drop', e=>{
+        e.preventDefault();
+        const target = e.currentTarget;
+        if(dragEl && target!==dragEl){
+          const ref = (dragEl.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING)? target.nextSibling : target;
+          wrap.insertBefore(dragEl, ref);
+        }
+      });
+    });
+    root.querySelector('[data-act="check-order"]').addEventListener('click', ()=>{
+      const msg = root.querySelector('[data-act="msg"]');
+      const items = Array.from(wrap.children).map(el=>el.textContent.trim());
+      const correct = mc.activity.items.join('|');
+      const result = items.join('|');
+      let ok=0; items.forEach((t,idx)=>{ if(t===mc.activity.items[idx]) ok++; });
+      msg.textContent = `Orden correcto en ${ok}/${items.length} posiciones.${result===correct?' ✅ Perfecto.':' ❌ Revisa el orden lógico.'}`;
+    });
+    root.querySelector('[data-act="reset-order"]').addEventListener('click', ()=>{
+      wrap.innerHTML = mc.activity.items.map((t,i)=>`<div class="order-item" draggable="true" data-i="${i}">${t}</div>`).join("");
+      wireUpActivities(mc); // re-wire
+      root.querySelector('[data-act="msg"]').textContent='';
+    });
+  }
+
+  // MCQ
+  if(mc.activity?.type==="mcq"){
+    root.querySelector('[data-act="check-mcq"]').addEventListener('click', (e)=>{
+      const ok = Number(e.currentTarget.dataset.ok);
+      const q = root.querySelector('.q[data-mc="mcqa"]');
+      const picked = q.querySelector('input[type="radio"]:checked');
+      const labs = q.querySelectorAll('label');
+      labs.forEach(l=>l.classList.remove('correct','wrong'));
+      const okLab = q.querySelector(`input[value="${ok}"]`)?.closest('label');
+      okLab?.classList.add('correct');
+      const msg = root.querySelector('[data-act="msg"]');
+      if(!picked){ q.classList.add('wrong'); msg.textContent='❌ Sin respuesta.'; return; }
+      if(Number(picked.value)===ok){ q.classList.add('correct'); msg.textContent='✅ Correcto.'; }
+      else{ q.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); msg.textContent='❌ Revisa la sección.'; }
+      q.querySelectorAll('input').forEach(i=> i.disabled=true);
+    });
+    root.querySelector('[data-act="reset-mcq"]').addEventListener('click', ()=>{
+      const q = root.querySelector('.q[data-mc="mcqa"]');
+      q.classList.remove('correct','wrong');
+      q.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      q.querySelectorAll('input').forEach(i=>{ i.disabled=false; i.checked=false; });
+      root.querySelector('[data-act="msg"]').textContent='';
+    });
+  }
+
+  // Semáforo
+  if(mc.activity?.type==="semaforo"){
+    root.querySelector('[data-act="check-semaforo"]').addEventListener('click', ()=>{
+      let ok=0,total=0,unanswered=0;
+      root.querySelectorAll('.step[data-case]').forEach(st=>{
+        total++;
+        const correct = st.dataset.ok;
+        const labs = st.querySelectorAll('label');
+        labs.forEach(l=>l.classList.remove('correct','wrong'));
+        const picked = Array.from(labs).find(l=>l.querySelector('input:checked'));
+        const okLab = Array.from(labs).find(l=>l.querySelector('input')?.value===correct);
+        okLab?.classList.add('correct');
+        if(!picked){ unanswered++; st.classList.add('wrong'); return; }
+        if(picked.querySelector('input').value===correct){ ok++; st.classList.add('correct'); }
+        else{ st.classList.add('wrong'); picked.classList.add('wrong'); }
+      });
+      const msg = root.querySelector('[data-act="msg"]');
+      msg.textContent = `Resultado: ${ok}/${total}. ${unanswered?unanswered+' sin responder.':''}`;
+    });
+    root.querySelector('[data-act="reset-semaforo"]').addEventListener('click', ()=>{
+      root.querySelectorAll('.step[data-case]').forEach(st=>{
+        st.classList.remove('correct','wrong');
+        st.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        st.querySelectorAll('input').forEach(i=> i.checked=false);
+      });
+      root.querySelector('[data-act="msg"]').textContent='';
+    });
+  }
+
+  // FiveW
+  if(mc.activity?.type==="fivew"){
+    root.querySelector('[data-act="fivew-copy"]').addEventListener('click', async()=>{
+      const vals = {};
+      root.querySelectorAll('[data-fivew]').forEach(i=> vals[i.dataset.fivew]=i.value.trim());
+      const txt = `Registro 5W\nWhat: ${vals.What||'—'}\nWhy: ${vals.Why||'—'}\nWhen: ${vals.When||'—'}\nWhere: ${vals.Where||'—'}\nWho: ${vals.Who||'—'}\nEvidencia: ${vals.Evidencia||'—'}`;
+      try{ await navigator.clipboard.writeText(txt); root.querySelector('[data-act="msg"]').textContent='Texto copiado.'; }catch(e){ root.querySelector('[data-act="msg"]').textContent='No se pudo copiar automáticamente.'; }
+    });
+    root.querySelector('[data-act="fivew-clear"]').addEventListener('click', ()=>{
+      root.querySelectorAll('[data-fivew]').forEach(i=> i.value='');
+      root.querySelector('[data-act="msg"]').textContent='';
+    });
+  }
+
+  // Mini-eval
+  root.querySelector('[data-quiz="check"]').addEventListener('click', ()=>{
+    let ok=0,unanswered=0; const blocks = root.querySelectorAll('.q[data-idx]');
+    blocks.forEach((div)=>{
+      const ans = Number(div.dataset.ok);
+      const picked = div.querySelector('input[type="radio"]:checked');
+      const okLab = div.querySelector(`input[value="${ans}"]`)?.closest('label');
+      okLab?.classList.add('correct');
+      div.querySelectorAll('input').forEach(i=> i.disabled=true);
+      if(!picked){ div.classList.add('wrong'); unanswered++; return; }
+      if(Number(picked.value)===ans){ div.classList.add('correct'); ok++; }
+      else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); }
+    });
+    root.querySelector('[data-quiz="feedback"]').textContent = `Resultado: ${ok}/${blocks.length}${unanswered?` · ${unanswered} sin responder`:''}.`;
+  });
+  root.querySelector('[data-quiz="reset"]').addEventListener('click', ()=>{
+    root.querySelectorAll('.q[data-idx]').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(i=>{ i.disabled=false; i.checked=false; });
+      const exp=div.querySelector('[data-role="exp"]'); if(exp) exp.textContent='';
+    });
+    root.querySelector('[data-quiz="feedback"]').textContent='';
+  });
+}
+
+/* Init */
+document.getElementById('year').textContent = new Date().getFullYear();
+setProgress();
+</script>
+</body>
+</html>

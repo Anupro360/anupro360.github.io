@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Sección 1 · Microclase 2 — Objetivos y Resultados del Rol</title>
+  <meta name="description" content="Microclase 2: Objetivos y Resultados del Rol del Controlador de Terreno (CAEX autónomos). Flujo, tiempos muertos, coordinación, TPH y checklist pre-inicio.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+         background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px);
+           background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+          border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-size:1.15rem}
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    /* Quiz + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .mini{font-size:.85rem; opacity:.85}
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    code{background:rgba(0,0,0,.25); padding:.1rem .35rem; border-radius:.35rem}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+        <h1>Anupro360 · Sección 1 · Microclase 2</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>OBJETIVOS Y RESULTADOS DEL ROL</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Alinear el trabajo diario con metas operacionales: flujo continuo del ciclo, mínimos tiempos muertos, coordinación efectiva y checklist pre-inicio.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) Introducción: ¿por qué estos objetivos importan? <span aria-hidden>🎯</span></h3>
+      <div class="pill"><i>ℹ️</i><div>Tu impacto como Controlador se mide en <b>seguridad</b>, <b>continuidad</b> y <b>productividad</b>. Todo lo que haces debe aportar a mantener el <b>flujo continuo</b>, evitar <b>tiempos muertos</b> y coordinar a los actores del ciclo.</div></div>
+      <ul class="bullet" style="margin-top:8px">
+        <li><b>Flujo continuo</b>: mantener el ciclo <em>carga → transporte → descarga → retorno</em> sin interrupciones.</li>
+        <li><b>Tiempos muertos mínimos</b>: detectar y resolver causas (congestión, rutas cerradas, clima, fallas).</li>
+        <li><b>Coordinación</b>: pala, botadero, chancador, mantenimiento y seguridad.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p1">Marcar leído ✓</button></div>
+    </section>
+
+    <!-- Columna derecha (Ficha) -->
+    <aside class="card">
+      <h3>Ficha de esta Microclase</h3>
+      <ul class="bullet">
+        <li>Duración: ~6–8 min</li>
+        <li>Formato: lectura + diagrama + checklist + quiz</li>
+        <li>Objetivo: alinear acciones con metas operacionales</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Diagrama del flujo -->
+    <section class="card">
+      <h3>2) Flujo del ciclo operativo <span aria-hidden>🔁</span></h3>
+      <p class="mini">La continuidad del ciclo es el corazón de la productividad. Si el ciclo se detiene, el TPH cae.</p>
+      <div style="background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; overflow:hidden">
+        <svg viewBox="0 0 820 180" width="100%" height="auto" role="img" aria-label="Ciclo carga-transporte-descarga-retorno">
+          <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#FFB81C"/><stop offset="1" stop-color="#FF5C00"/></linearGradient></defs>
+          <rect x="0" y="0" width="820" height="180" fill="rgba(0,0,0,.15)"/>
+          <g font-size="13" fill="#fff" text-anchor="middle" font-weight="600">
+            <rect x="40" y="60" width="160" height="50" rx="10" fill="rgba(255,255,255,.18)"/><text x="120" y="90">CARGA (pala)</text>
+            <rect x="240" y="60" width="160" height="50" rx="10" fill="rgba(255,255,255,.18)"/><text x="320" y="90">TRANSPORTE</text>
+            <rect x="440" y="60" width="160" height="50" rx="10" fill="rgba(255,255,255,.18)"/><text x="520" y="90">DESCARGA</text>
+            <rect x="640" y="60" width="160" height="50" rx="10" fill="rgba(255,255,255,.18)"/><text x="720" y="90">RETONO</text>
+          </g>
+          <g stroke="url(#g1)" stroke-width="3">
+            <line x1="200" y1="85" x2="240" y2="85"/><line x1="400" y1="85" x2="440" y2="85"/><line x1="600" y1="85" x2="640" y2="85"/>
+          </g>
+        </svg>
+      </div>
+      <ul class="bullet" style="margin-top:8px">
+        <li><b>Indicadores</b>: TPH, tiempo de ciclo, colas en pala/botadero, ocupación de rutas.</li>
+        <li><b>Acciones</b>: balance de flota, <code>DIVERT</code> temporal, priorizar destino, señalizar obras.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p2">Flujo comprendido ✓</button></div>
+    </section>
+
+    <!-- Minimizar tiempos muertos -->
+    <section class="card">
+      <h3>3) Minimizar tiempos muertos <span aria-hidden>⏳</span></h3>
+      <div class="timeline">
+        <div class="step"><b>Congestión en rampa</b> → aplicar <code>DIVERT</code> carril alterno y avisar motoniveladora (mejora de huella).</div>
+        <div class="step"><b>Clima/visibilidad</b> → reducir velocidad, ampliar headway, <code>HOLD</code> si es crítico.</div>
+        <div class="step"><b>Ruta bloqueada</b> → <code>LOCK</code> + señalización + replanificación de destinos.</div>
+        <div class="step"><b>Falla equipo</b> → retirar de circuito, coordinar mantenimiento y redistribuir camiones.</div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="p3">Estrategias claras ✓</button></div>
+    </section>
+
+    <!-- Coordinación -->
+    <section class="card">
+      <h3>4) Coordinación efectiva <span aria-hidden>🤝</span></h3>
+      <ul class="bullet">
+        <li><b>Pala</b>: evitar colas; balancear asignaciones para mantener ritmo de carga.</li>
+        <li><b>Botadero/Chancador</b>: gestionar ventanas; evitar saturación en descarga.</li>
+        <li><b>Mantenimiento</b>: priorizar equipos con mayor impacto en el ciclo; coordinar ventanas de intervención.</li>
+        <li><b>Seguridad</b>: validar zonas de exclusión y accesos durante trabajos especiales.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p4">Coordinación practicada ✓</button></div>
+    </section>
+
+    <!-- Caso express -->
+    <section class="card">
+      <h3>5) Caso express: caída de TPH por congestión <span aria-hidden>📉</span></h3>
+      <ol class="bullet" style="list-style:decimal">
+        <li><b>Detecta</b> la congestión (colas prolongadas, baja velocidad promedio).</li>
+        <li><b>Actúa</b>: <code>DIVERT</code> parte de la flota a rutas alternas o a otro destino compatible.</li>
+        <li><b>Coordina</b> motoniveladora para corregir huellas/bermas si son causa de la lentitud.</li>
+        <li><b>Monitorea</b> recuperación de TPH y tiempos de ciclo; ajusta si es necesario.</li>
+        <li><b>Registra</b> 5W + evidencia para aprendizaje y mejora continua.</li>
+      </ol>
+      <div style="margin-top:10px"><button class="btn" data-complete="p5">Caso entendido ✓</button></div>
+    </section>
+
+    <!-- Checklist pre-inicio -->
+    <section class="card">
+      <h3>6) Checklist de turno (pre-inicio) <span aria-hidden>🗂️</span></h3>
+      <ul class="bullet">
+        <li><b>Comunicaciones</b> OK (ROC⇄flota, radio, latencia dentro de tolerancia).</li>
+        <li><b>Mapas/Geocercas</b> actualizados y zonas de exclusión activas.</li>
+        <li><b>Rutas alternativas</b> definidas y probadas para contingencias.</li>
+        <li><b>KPIs de control</b>: tablero con TPH, tiempos de ciclo, ocupación de rutas.</li>
+      </ul>
+      <div style="margin-top:10px"><button class="btn" data-complete="p6">Checklist aplicado ✓</button></div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="card">
+      <h3>7) Quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Reflexión -->
+    <section class="card">
+      <h3>8) Reflexión (1–2 líneas)</h3>
+      <textarea id="reflexion" rows="3" placeholder="Menciona dos acciones para estabilizar el flujo y cómo las evidenciarías."></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiarRef">Copiar</button>
+      </div>
+      <p class="note">Se guarda solo en este dispositivo.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Sección 1 · Microclase 2.</div>
+  </footer>
+
+  <script>
+    // Helpers
+    const $=(s,d=document)=>d.querySelector(s);
+    const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    // Estado persistente de esta microclase
+    const state = read('anupro360_ct_s1_mc2_v1', {
+      done:{p1:false,p2:false,p3:false,p4:false,p5:false,p6:false,quiz:false},
+      reflexion:''
+    });
+
+    // Progreso
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    // Botones completar
+    $$('button[data-complete]').forEach(b=>{
+      const key = b.dataset.complete;
+      if (state.done[key]) { b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+      b.addEventListener('click', e=>{
+        state.done[key]=true; store('anupro360_ct_s1_mc2_v1', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+
+    // Reset
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_ct_s1_mc2_v1'); location.reload(); });
+
+    // --------- QUIZ (10) ----------
+    // Mezcla de V/F y selección múltiple. Para V/F, opts = ['Verdadero','Falso'] y ok = índice correcto.
+    const preguntas = [
+      // 1 V/F: flujo continuo
+      {q:'Mantener el flujo continuo del ciclo es clave para sostener el TPH.', opts:['Verdadero','Falso'], ok:0, why:'Si el flujo se interrumpe, el TPH cae.'},
+      // 2 selección: causa de tiempo muerto
+      {q:'Una causa típica de tiempos muertos es:', opts:['Balance perfecto de flota','Congestión en rampa','KPIs altos'], ok:1, why:'Las colas y la baja velocidad elevan el tiempo de ciclo.'},
+      // 3 selección: acción ante congestión
+      {q:'Caída de TPH por congestión. Acción prioritaria:', opts:['Esperar a que mejore','DIVERT y coordinar motoniveladora','Aumentar velocidad sin evaluar'], ok:1, why:'Desvías flujo y mejoras huella para recuperar TPH.'},
+      // 4 V/F: checklist pre-inicio
+      {q:'El checklist pre-inicio debe incluir comunicaciones OK y geocercas activas.', opts:['Verdadero','Falso'], ok:0, why:'También mapas y rutas alternativas definidas.'},
+      // 5 selección: coordinación
+      {q:'¿Con quién NO es clave coordinar para mantener flujo?', opts:['Pala','Botadero/Chancador','Recursos Humanos'], ok:2, why:'El core operativo depende de pala, botadero/chancador y mantención.'},
+      // 6 V/F: LOCK/UNLOCK
+      {q:'Puedes hacer UNLOCK de ruta sin confirmación visual si hay prisa.', opts:['Verdadero','Falso'], ok:1, why:'La seguridad prima: siempre confirmar visualmente.'},
+      // 7 selección: KPIs de control
+      {q:'KPI que refleja continuidad del ciclo:', opts:['TPH y tiempo de ciclo','N° de correos enviados','Diseño del logo'], ok:0, why:'TPH y tiempo de ciclo miden el valor del flujo.'},
+      // 8 V/F: rutas alternativas
+      {q:'Definir rutas alternativas ayuda a minimizar tiempos muertos ante contingencias.', opts:['Verdadero','Falso'], ok:0, why:'Permite redirigir la flota rápidamente.'},
+      // 9 selección: clima/visibilidad
+      {q:'Con visibilidad reducida, el Controlador debe:', opts:['Acelerar para recuperar TPH','Reducir velocidad, ampliar headway o HOLD','Ignorar si hay presión'], ok:1, why:'Primero la seguridad; luego productividad.'},
+      // 10 V/F: caso express
+      {q:'En el caso express, solo DIVERT es suficiente; no es necesario coordinar motoniveladora.', opts:['Verdadero','Falso'], ok:1, why:'La corrección de huella/bermas es clave para eliminar la causa.'},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        // espacio para explicación
+        const exp=document.createElement('div'); exp.className='mini'; exp.style.marginTop='4px'; exp.dataset.role='exp'; exp.textContent='';
+        div.appendChild(exp);
+        wrap.appendChild(div);
+      });
+    }
+
+    function clearQuiz(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+        const exp=div.querySelector('[data-role="exp"]'); if(exp) exp.textContent='';
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    function gradeQuiz(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, unanswered=0;
+      blocks.forEach((div,idx)=>{
+        const ok = Number(div.dataset.ok);
+        const picked = div.querySelector('input[type="radio"]:checked');
+        // resaltar correcta
+        const okLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        okLabel?.classList.add('correct');
+        // bloquear
+        div.querySelectorAll('input').forEach(i=> i.disabled=true);
+        // explicación
+        const exp=div.querySelector('[data-role="exp"]');
+        if(!picked){ div.classList.add('wrong'); unanswered++; exp.textContent='❌ Sin respuesta. Revisa el contenido.'; return; }
+        const chosen = Number(picked.value);
+        if(chosen===ok){ div.classList.add('correct'); okCount++; exp.textContent='✅ Correcto.'; }
+        else{ div.classList.add('wrong'); picked.closest('label')?.classList.add('wrong'); exp.textContent='❌ Incorrecto. ' + (preguntas[idx].why || 'Revisa la sección correspondiente.'); }
+      });
+      const total=preguntas.length; const pct=Math.round(okCount/total*100);
+      $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      try{ localStorage.setItem('anupro360_ct_s1_mc2_lastscore', String(okCount)); }catch{}
+    }
+
+    $('#enviar').addEventListener('click', gradeQuiz);
+    $('#resetQuiz').addEventListener('click', clearQuiz);
+
+    // Reflexión
+    const ref=$('#reflexion'); ref.value = state.reflexion||'';
+    $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_ct_s1_mc2_v1', state); alert('Reflexión guardada.'); });
+    $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+    // Init
+    renderQuiz(); calcProgress(); $('#year').textContent=new Date().getFullYear();
+  </script>
+</body>
+</html>
