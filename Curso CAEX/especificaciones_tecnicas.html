@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submódulo 1.2: Especificaciones Técnicas</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6d9eeb;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-color: #e9ecef;
+            --dark-color: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .navigation {
+            background: var(--dark-color);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pildora {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .pildora h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .pildora h3::before {
+            content: "📝";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .spec-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .spec-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--secondary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .spec-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .spec-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .spec-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .spec-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--light-color);
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .spec-list li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .question {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            background: var(--light-color);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: #cce5ff;
+            border-color: var(--primary-color);
+        }
+
+        .submit-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .result.excellent {
+            background: #d4edda;
+            color: var(--dark-color);
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.good {
+            background: #fff3cd;
+            color: var(--dark-color);
+            border: 1px solid #ffe066;
+        }
+
+        .result.needs-improvement {
+            background: #f8d7da;
+            color: var(--dark-color);
+            border: 1px solid #f5c6cb;
+        }
+
+        .back-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ Submódulo 1.2: Especificaciones Técnicas</h1>
+            <p>Conoce las especificaciones técnicas clave de los camiones mineros</p>
+        </div>
+
+        <div class="module-container">
+            <div class="navigation">
+                <button class="nav-btn active" onclick="showSection('introduccion')">📚 Introducción</button>
+                <button class="nav-btn" onclick="showSection('pildora1')">📝 Especificaciones Básicas</button>
+                <button class="nav-btn" onclick="showSection('pildora2')">📝 Sistemas de Potencia</button>
+                <button class="nav-btn" onclick="showSection('pildora3')">📝 Sistemas de Seguridad</button>
+                <button class="nav-btn" onclick="showSection('quiz')">🎯 Quiz</button>
+            </div>
+
+            <div class="content">
+                <!-- Introducción -->
+                <div id="introduccion" class="section active">
+                    <h2>Introducción a las Especificaciones Técnicas</h2>
+                    <p>Las especificaciones técnicas de un camión minero son fundamentales para comprender su capacidad, rendimiento y aplicabilidad en diferentes condiciones de trabajo. En este submódulo aprenderás sobre las principales especificaciones que definen el rendimiento de estos equipos.</p>
+                    
+                    <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h3>⚙️ ¿Qué incluyen las especificaciones técnicas?</h3>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Capacidades de carga y capacidad de transporte</li>
+                            <li>Dimensiones físicas y peso</li>
+                            <li>Sistemas de propulsión y potencia</li>
+                            <li>Sistemas de seguridad y control</li>
+                            <li>Requisitos de mantenimiento</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Píldora 1 -->
+                <div id="pildora1" class="section">
+                    <div class="pildora">
+                        <h3>Especificaciones Básicas</h3>
+                        <p>Las especificaciones básicas definen las características físicas y de carga de los camiones mineros.</p>
+                    </div>
+
+                    <div class="spec-container">
+                        <div class="spec-card">
+                            <h4>Capacidad de Carga</h4>
+                            <ul class="spec-list">
+                                <li>Capacidad nominal: 240 a 400 toneladas</li>
+                                <li>Capacidad máxima: Varía según el modelo y la configuración</li>
+                                <li>Capacidad de sobrecarga: Algunos modelos admiten cargas temporales excedentes</li>
+                            </ul>
+                        </div>
+
+                        <div class="spec-card">
+                            <h4>Dimensiones Físicas</h4>
+                            <ul class="spec-list">
+                                <li>Longitud: 10-15 metros</li>
+                                <li>Anchura: 5-7 metros</li>
+                                <li>Altura: 6-8 metros (con tolva levantada)</li>
+                                <li>Peso en vacío: 100-150 toneladas</li>
+                            </ul>
+                        </div>
+
+                        <div class="spec-card">
+                            <h4>Velocidad y Rendimiento</h4>
+                            <ul class="spec-list">
+                                <li>Velocidad máxima: 40-70 km/h</li>
+                                <li>Velocidad en operación: 25-40 km/h</li>
+                                <li>Consumo de combustible: 200-400 litros por hora</li>
+                                <li>Autonomía: 8-12 horas con tanque lleno</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Píldora 2 -->
+                <div id="pildora2" class="section">
+                    <div class="pildora">
+                        <h3>Sistemas de Potencia</h3>
+                        <p>Los sistemas de potencia determinan el rendimiento y eficiencia de los camiones mineros.</p>
+                    </div>
+
+                    <div class="spec-container">
+                        <div class="spec-card">
+                            <h4>Motor</h4>
+                            <ul class="spec-list">
+                                <li>Tipo: Diésel V12 o V16</li>
+                                <li>Potencia: 1800 a 3600 caballos de fuerza</li>
+                                <li>Torque máximo: 4000 a 8000 Nm</li>
+                                <li>Sistema de turboalimentación: Sí</li>
+                            </ul>
+                        </div>
+
+                        <div class="spec-card">
+                            <h4>Transmisión</h4>
+                            <ul class="spec-list">
+                                <li>Tipo: Automática o semiautomática</li>
+                                <li>Número de velocidades: 4-8</li>
+                                <li>Sistema de control: Electrónico</li>
+                                <li>Transmisión integral: 4x4 en modelos articulados</li>
+                            </ul>
+                        </div>
+
+                        <div class="spec-card">
+                            <h4>Sistema Eléctrico</h4>
+                            <ul class="spec-list">
+                                <li>Voltaje: 24-48 V</li>
+                                <li>Baterías: 4-8 unidades en paralelo</li>
+                                <li>Sistema de arranque: Eléctrico con motor de arranque de alta potencia</li>
+                                <li>Iluminación: LED de alta intensidad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Píldora 3 -->
+                <div id="pildora3" class="section">
+                    <div class="pildora">
+                        <h3>Sistemas de Seguridad</h3>
+                        <p>La seguridad es primordial en operaciones mineras. Los camiones están equipados con sistemas avanzados para proteger al operador y prevenir accidentes.</p>
+                    </div>
+
+                    <div class="spec-container">
+                        <div class="spec-card">
+                            <h4>Sistema de Frenos</h4>
+                            <ul class="spec-list">
+                                <li>Tipo: Hidráulico con sistema anti-bloqueo (ABS)</li>
+                                <li>Sistema de frenado de emergencia</li>
+                                <li>Frenos de estacionamiento automáticos</li>
+                                <li>Sistema de recuperación de energía en frenado en modelos eléctricos</li>
+                            </ul>
+                        </div>
+
+                        <div class="spec-card">
+                            <h4>Sistema de Seguridad en Cabina</h4>
+                            <ul class="spec-list">
+                                <li>Estructura ROPS (Protección contra volteo)</li>
+                                <li>Sistema de cinturón de seguridad de 3 puntos</li>
+                                <li>Aire acondicionado y filtración de partículas</li>
+                                <li>Sistema de comunicación de emergencia</li>
+                            </ul>
+                        </div>
+
+                        <div class="spec-card">
+                            <h4>Sensores y Alertas</h4>
+                            <ul class="spec-list">
+                                <li>Sensores de proximidad y cámaras de respaldo</li>
+                                <li>Alertas de fatiga del operador</li>
+                                <li>Monitoreo de presión de neumáticos en tiempo real</li>
+                                <li>Sistema de detección de fallas mecánicas</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div id="quiz" class="section">
+                    <div class="quiz-container">
+                        <h2>🎯 Quiz: Especificaciones Técnicas</h2>
+                        <p>Evalúa tus conocimientos sobre las especificaciones técnicas de los camiones mineros.</p>
+
+                        <form id="quizForm">
+                            <div class="question">
+                                <h4>1. ¿Cuál es la capacidad de carga típica de un camión minero grande?</h4>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="a">
+                                    a) 50-100 toneladas
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="b">
+                                    b) 240-400 toneladas
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="c">
+                                    c) 10-50 toneladas
+                                </label>
+                            </div>
+
+                            <div class="question">
+                                <h4>2. ¿Qué tipo de motor utilizan la mayoría de los camiones mineros?</h4>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="a">
+                                    a) Gasolina
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="b">
+                                    b) Diésel
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="c">
+                                    c) Eléctrico puro
+                                </label>
+                            </div>
+
+                            <div class="question">
+                                <h4>3. ¿Qué sistema de frenos incluyen la mayoría de los camiones mineros modernos?</h4>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="a">
+                                    a) Frenos de tambor
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="b">
+                                    b) Frenos de disco con ABS
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="c">
+                                    c) Frenos de aire comprimido
+                                </label>
+                            </div>
+
+                            <button type="button" class="submit-btn" onclick="evaluateQuiz()">📊 Evaluar Quiz</button>
+                        </form>
+
+                        <div id="quizResult" class="result" style="display: none;"></div>
+
+                        <button id="backToIntroduction" class="back-btn" onclick="showSection('introduccion')">⬅️ Volver a la Introducción</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'introduccion';
+
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function evaluateQuiz() {
+            const answers = {
+                q1: 'b', // 240-400 toneladas
+                q2: 'b', // Diésel
+                q3: 'b'  // Frenos de disco con ABS
+            };
+            
+            let score = 0;
+            let totalQuestions = Object.keys(answers).length;
+            
+            // Mostrar retroalimentación en cada opción
+            document.querySelectorAll('.option').forEach(option => {
+                const questionName = option.querySelector('input').name;
+                const selectedValue = option.querySelector('input').value;
+                
+                if (answers[questionName] === selectedValue) {
+                    option.style.backgroundColor = '#d4edda'; // Verde para correctas
+                } else if (option.querySelector('input').checked) {
+                    option.style.backgroundColor = '#f8d7da'; // Rojo para incorrectas marcadas
+                } else {
+                    option.style.backgroundColor = ''; // Reiniciar estilo para no marcadas
+                }
+            });
+            
+            // Calcular el puntaje
+            for (let question in answers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === answers[question]) {
+                    score++;
+                }
+            }
+            
+            const percentage = (score / totalQuestions) * 100;
+            const resultDiv = document.getElementById('quizResult');
+            
+            let resultClass = '';
+            let resultMessage = '';
+            
+            if (percentage >= 80) {
+                resultClass = 'excellent';
+                resultMessage = `¡Excelente! 🎉 Has obtenido ${score}/${totalQuestions} respuestas correctas (${percentage}%). ¡Dominas las especificaciones técnicas de los camiones mineros!`;
+            } else if (percentage >= 60) {
+                resultClass = 'good';
+                resultMessage = `¡Bien! 👍 Has obtenido ${score}/${totalQuestions} respuestas correctas (${percentage}%). Tienes un buen conocimiento de las especificaciones técnicas.`;
+            } else {
+                resultClass = 'needs-improvement';
+                resultMessage = `Necesitas repasar 📚. Has obtenido ${score}/${totalQuestions} respuestas correctas (${percentage}%). Te recomendamos revisar las píldoras antes de intentar nuevamente.`;
+            }
+            
+            resultDiv.className = `result ${resultClass}`;
+            resultDiv.innerHTML = resultMessage;
+            resultDiv.style.display = 'block';
+            
+            // Mostrar el botón "Volver a la Introducción"
+            document.getElementById('backToIntroduction').style.display = 'block';
+            
+            // Scroll al resultado
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

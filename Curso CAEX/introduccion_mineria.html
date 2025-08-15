@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1: Introducción a la Minería a Cielo Abierto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c5530;
+            --secondary-color: #4a7c59;
+            --accent-color: #8b4513;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --light-bg: #f8f9fa;
+            --dark-text: #333;
+            --light-text: #666;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            opacity: 0.9;
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 15px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .audio-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .audio-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .audio-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            background: white;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .nav-tab:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-section h2 {
+            color: var(--primary-color);
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-section h3 {
+            color: var(--secondary-color);
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            margin: 1.5rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .content-section h4 {
+            color: var(--accent-color);
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .content-section p {
+            margin-bottom: 1rem;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            text-align: justify;
+        }
+
+        .content-section ul, .content-section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            table-layout: auto;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: clamp(0.8rem, 1.2vw, 1rem);
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Images */
+        figure {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        figure img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        figcaption {
+            font-style: italic;
+            color: var(--light-text);
+            margin-top: 0.5rem;
+            font-size: clamp(0.8rem, 1vw, 0.9rem);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--info-color);
+        }
+
+        .question-number {
+            background: var(--info-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark-text);
+        }
+
+        .answer-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .answer-option:hover {
+            background: #e9ecef;
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .answer-option.correct {
+            background: #d4edda;
+            border-color: var(--success-color);
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        .answer-option.incorrect {
+            background: #f8d7da;
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+            font-weight: 600;
+        }
+
+        .answer-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        .quiz-results {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .score-display.excellent { color: var(--success-color); }
+        .score-display.good { color: var(--info-color); }
+        .score-display.needs-improvement { color: var(--warning-color); }
+        .score-display.poor { color: var(--danger-color); }
+
+        /* Buttons */
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-large {
+            padding: 16px 32px;
+            font-size: 18px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .audio-controls {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin-bottom: 1rem;
+                justify-content: center;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            table {
+                min-width: 600px;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        button:focus, .nav-tab:focus, .answer-option:focus {
+            outline: 3px solid var(--warning-color);
+            outline-offset: 2px;
+        }
+
+        @media (prefers-contrast: high) {
+            :root {
+                --primary-color: #000;
+                --secondary-color: #333;
+                --light-bg: #fff;
+                --dark-text: #000;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🧱 Módulo 1: Introducción a la Minería a Cielo Abierto</h1>
+            <p>Aprende sobre los fundamentos de la minería a cielo abierto en Chile</p>
+        </div>
+    </div>
+
+    <div class="audio-controls">
+        <button class="audio-btn" id="playBtn" aria-label="Reproducir contenido">
+            <span id="playIcon">🔊</span>
+            <span id="playText">Reproducir</span>
+        </button>
+        <button class="audio-btn" id="stopBtn" aria-label="Detener reproducción">
+            <span>⏹️</span>
+            <span>Detener</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <nav class="nav-tabs" role="tablist">
+            <button class="nav-tab active" onclick="showSection('intro')" role="tab" aria-selected="true" aria-controls="intro">Introducción</button>
+            <button class="nav-tab" onclick="showSection('historia')" role="tab" aria-selected="false" aria-controls="historia">Historia</button>
+            <button class="nav-tab" onclick="showSection('minerales')" role="tab" aria-selected="false" aria-controls="minerales">Minerales</button>
+            <button class="nav-tab" onclick="showSection('normativo')" role="tab" aria-selected="false" aria-controls="normativo">Marco Legal</button>
+            <button class="nav-tab" onclick="showSection('glosario')" role="tab" aria-selected="false" aria-controls="glosario">Glosario</button>
+            <button class="nav-tab" onclick="showSection('quiz')" role="tab" aria-selected="false" aria-controls="quiz">Evaluación</button>
+        </nav>
+
+        <section id="intro" class="content-section active" role="tabpanel" aria-labelledby="intro-tab">
+            <h2>🏗️ ¿Qué es la Minería a Cielo Abierto?</h2>
+            
+            <h3>✅ Definición:</h3>
+            <p>La minería a cielo abierto, también conocida como minería a tajo abierto o a rajo abierto, es un método de extracción de minerales y rocas que se encuentran cerca de la superficie terrestre. A diferencia de la minería subterránea, no implica la construcción de túneles o galerías bajo tierra. En su lugar, se remueve progresivamente el material estéril (sin valor comercial, conocido como "estéril", "ganga" o "sobrecarga") que cubre el yacimiento para poder acceder y extraer el mineral de interés.</p>
+            <figure>
+                <img src="diagramamina.webp" alt="Diagrama de una mina a cielo abierto mostrando bancos, rampas, botadero, zona de carguío y equipos principales como palas y camiones.">
+                <figcaption>Diagrama ilustrativo de una mina a cielo abierto.</figcaption>
+            </figure>
+
+            <h3>✅ Características Clave:</h3>
+            <ul>
+                <li><strong>Excavación en bancos:</strong> El diseño de la mina se realiza en escalones o "bancos" para asegurar la estabilidad de las paredes del tajo y permitir el acceso de la maquinaria.</li>
+                <li><strong>Uso intensivo de maquinaria pesada:</strong> Requiere equipos de gran envergadura como palas eléctricas/hidráulicas, camiones de alto tonelaje, perforadoras, y cargadores frontales.</li>
+                <li><strong>Continuidad operativa a gran escala:</strong> Las operaciones suelen ser 24/7, permitiendo una producción constante y masiva.</li>
+                <li><strong>Remoción de sobrecarga:</strong> Implica el movimiento de grandes volúmenes de material no mineralizado antes de acceder al cuerpo de mineral.</li>
+            </ul>
+
+            <h3>✅ Tipos Comunes de Minería a Cielo Abierto:</h3>
+            <ul>
+                <li><strong>Canteras:</strong> Se utilizan principalmente para extraer rocas ornamentales, agregados para la construcción (grava, arena), o materiales industriales como caliza y arcilla. Generalmente son operaciones de menor escala.</li>
+                <li><strong>Tajaderas o Descubrimientos (Open Pit Mining):</strong> Es la forma más común para depósitos metálicos (cobre, oro, hierro, etc.) y de carbón. Se excava un gran hoyo cónico o aterrazado.</li>
+                <li><strong>Minería por Arrancamiento o Franjas (Strip Mining):</strong> Típicamente usada para yacimientos horizontales o ligeramente inclinados de carbón o fosfatos.</li>
+            </ul>
+
+            <h3>✅ Proceso de Extracción (Open Pit):</h3>
+            <ol>
+                <li><strong>Prospección y Exploración:</strong> Identificación y evaluación del yacimiento mediante estudios geológicos, perforaciones y análisis.</li>
+                <li><strong>Diseño y Planificación:</strong> Diseño del plan de extracción, incluyendo la geometría del tajo, rampas de acceso y secuencia de extracción.</li>
+                <li><strong>Remoción del Material Estéril (Desbroce):</strong>
+                    <ul>
+                        <li><strong>Perforación:</strong> Perforación de agujeros para explosivos.</li>
+                        <li><strong>Tronadura:</strong> Uso de explosivos para fracturar la roca.</li>
+                        <li><strong>Cargue:</strong> Palas o cargadores frontales cargan el material.</li>
+                        <li><strong>Transporte:</strong> Camiones o cintas transportadoras llevan el material a botaderos.</li>
+                    </ul>
+                </li>
+                <li><strong>Extracción del Mineral:</strong> Proceso similar de perforación, tronadura, cargue y transporte hacia la planta de procesamiento.</li>
+                <li><strong>Procesamiento:</strong> Trituración, molienda y procesos fisicoquímicos (flotación, lixiviación) para obtener el mineral valioso.</li>
+                <li><strong>Cierre y Post-cierre:</strong> Remediación ambiental, revegetación y monitoreo a largo plazo.</li>
+            </ol>
+
+            <h3>✅ Comparación con Minería Subterránea:</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Minería a Cielo Abierto</th>
+                            <th>Minería Subterránea</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Costo operativo</td>
+                            <td>Más bajo por tonelada</td>
+                            <td>Más alto por tonelada</td>
+                        </tr>
+                        <tr>
+                            <td>Producción</td>
+                            <td>Alta y a gran escala</td>
+                            <td>Menor volumen, más selectiva</td>
+                        </tr>
+                        <tr>
+                            <td>Seguridad</td>
+                            <td>Menor riesgo estructural</td>
+                            <td>Mayor riesgo (colapsos/gases)</td>
+                        </tr>
+                        <tr>
+                            <td>Recuperación</td>
+                            <td>Mayor porcentaje de yacimiento</td>
+                            <td>Menor porcentaje de yacimiento</td>
+                        </tr>
+                        <tr>
+                            <td>Profundidad</td>
+                            <td>Yacimientos superficiales</td>
+                            <td>Yacimientos profundos</td>
+                        </tr>
+                        <tr>
+                            <td>Impacto ambiental</td>
+                            <td>Alto impacto superficial</td>
+                            <td>Moderado impacto superficial, pero riesgo en acuíferos</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn" onclick="exportTableToCSV('comparacion-mineria')">📊 Exportar a CSV</button>
+            </div>
+            <figure>
+                <img src="comparacionminas.webp" alt="Corte transversal de la tierra comparando una mina a cielo abierto y una mina subterránea.">
+                <figcaption>Comparación esquemática de técnicas mineras.</figcaption>
+            </figure>
+
+            <h3>✅ Ventajas y Desventajas:</h3>
+            <h4>Ventajas:</h4>
+            <ul>
+                <li><strong>Productividad elevada:</strong> Permite extraer grandes volúmenes de mineral eficientemente.</li>
+                <li><strong>Menor costo por tonelada:</strong> Más económico para depósitos de baja ley.</li>
+                <li><strong>Mayor seguridad:</strong> Menor riesgo de derrumbes o acumulación de gases.</li>
+                <li><strong>Mayor recuperación:</strong> Acceso a todo el cuerpo mineralizado superficial.</li>
+            </ul>
+            <h4>Desventajas:</h4>
+            <ul>
+                <li><strong>Alto impacto ambiental:</strong> Alteración del paisaje y generación de residuos.</li>
+                <li><strong>Gran consumo de recursos:</strong> Elevado uso de agua y energía.</li>
+                <li><strong>Generación de residuos:</strong> Roca estéril, relaves y drenaje ácido de mina.</li>
+                <li><strong>Pérdida de biodiversidad:</strong> Destrucción de hábitats naturales.</li>
+                <li><strong>Posible desplazamiento:</strong> Reubicación de comunidades cercanas.</li>
+                <li><strong>Emisiones:</strong> Polvo y gases de efecto invernadero por maquinaria.</li>
+            </ul>
+            <figure>
+                <img src="impactoambiental.webp" alt="Infografía mostrando el antes y después de una mina a cielo abierto, destacando polvo, uso de agua y relaves.">
+                <figcaption>Impacto ambiental de la minería a cielo abierto.</figcaption>
+            </figure>
+        </section>
+
+        <section id="historia" class="content-section" role="tabpanel" aria-labelledby="historia-tab">
+            <h2>📈 Historia y Relevancia de la Minería en Chile</h2>
+            
+            <h3>📊 Importancia Económica:</h3>
+            <ul>
+                <li><strong>Aporta el 13% del PIB nacional:</strong> Uno de los sectores productivos más relevantes.</li>
+                <li><strong>60% de las exportaciones:</strong> Genera divisas vitales para la balanza comercial.</li>
+                <li><strong>Motor de desarrollo:</strong> Fomenta empleo, infraestructura y servicios en regiones mineras.</li>
+                <li><strong>Inversión extranjera:</strong> Atrae capital internacional al país.</li>
+            </ul>
+            <figure>
+                <img src="grafico-pib-mineria.webp" alt="Gráfico de barras mostrando la participación de la minería en el PIB y exportaciones de Chile a lo largo del tiempo.">
+                <figcaption>Contribución económica de la minería en Chile.</figcaption>
+            </figure>
+
+            <h3>🛠️ Principales Yacimientos y Empresas:</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Yacimiento</th>
+                            <th>Tipo de Mina</th>
+                            <th>Región</th>
+                            <th>Empresa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Chuquicamata</td>
+                            <td>Cielo abierto (transición a subterráneo)</td>
+                            <td>Antofagasta</td>
+                            <td>Codelco</td>
+                        </tr>
+                        <tr>
+                            <td>Escondida</td>
+                            <td>Cielo abierto</td>
+                            <td>Antofagasta</td>
+                            <td>BHP Billiton</td>
+                        </tr>
+                        <tr>
+                            <td>El Teniente</td>
+                            <td>Subterráneo</td>
+                            <td>O’Higgins</td>
+                            <td>Codelco</td>
+                        </tr>
+                        <tr>
+                            <td>Collahuasi</td>
+                            <td>Cielo abierto</td>
+                            <td>Tarapacá</td>
+                            <td>Anglo American / Glencore</td>
+                        </tr>
+                        <tr>
+                            <td>Los Pelambres</td>
+                            <td>Cielo abierto</td>
+                            <td>Coquimbo</td>
+                            <td>Antofagasta Minerals</td>
+                        </tr>
+                        <tr>
+                            <td>Radomiro Tomic</td>
+                            <td>Cielo abierto</td>
+                            <td>Antofagasta</td>
+                            <td>Codelco</td>
+                        </tr>
+                        <tr>
+                            <td>Gabriela Mistral</td>
+                            <td>Cielo abierto</td>
+                            <td>Antofagasta</td>
+                            <td>Codelco</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn" onclick="exportTableToCSV('yacimientos')">📊 Exportar a CSV</button>
+            </div>
+            <figure>
+                <img src="mapa-yacimientos.webp" alt="Mapa de Chile con íconos diferenciando minas a cielo abierto y subterráneas.">
+                <figcaption>Principales yacimientos mineros en Chile.</figcaption>
+            </figure>
+
+            <h3>🧰 Evolución Tecnológica:</h3>
+            <ul>
+                <li><strong>De artesanal a digital:</strong> Transición desde métodos coloniales a automatización e IA.</li>
+                <li><strong>Maquinaria avanzada:</strong> Palas y camiones autónomos, trenes automatizados.</li>
+                <li><strong>Seguridad:</strong> Monitoreo remoto, teleoperación, detección de fatiga.</li>
+                <li><strong>Gestión de datos:</strong> Big Data, Machine Learning e IoT para optimización.</li>
+                <li><strong>Innovación metalúrgica:</strong> Nuevas tecnologías para recuperación y sostenibilidad.</li>
+            </ul>
+            <figure>
+                <img src="evolucion-tecnologica.webp" alt="Línea de tiempo desde carretilla hasta camión autónomo en la minería chilena.">
+                <figcaption>Evolución tecnológica en la minería chilena.</figcaption>
+            </figure>
+        </section>
+
+        <section id="minerales" class="content-section" role="tabpanel" aria-labelledby="minerales-tab">
+            <h2>🔧 Tipos de Minerales Extraídos en Chile</h2>
+            
+            <h3>⚙️ Cobre:</h3>
+            <ul>
+                <li><strong>Principal recurso:</strong> Chile es el mayor productor mundial de cobre.</li>
+                <li><strong>Usos:</strong> Industria eléctrica, construcción, transporte, tecnología, energías renovables.</li>
+                <li><strong>Transición energética:</strong> Clave para la descarbonización global.</li>
+            </ul>
+
+            <h3>✨ Oro y Plata:</h3>
+            <ul>
+                <li><strong>Ubicación:</strong> Subproductos en minas de cobre y yacimientos primarios.</li>
+                <li><strong>Usos:</strong> Joyería, electrónica, medicina, reservas de valor.</li>
+            </ul>
+
+            <h3>🔋 Litio:</h3>
+            <ul>
+                <li><strong>Importancia creciente:</strong> Grandes reservas en el Salar de Atacama.</li>
+                <li><strong>Electromovilidad:</strong> Esencial para baterías de iones de litio.</li>
+                <li><strong>Aplicaciones:</strong> Autos eléctricos, dispositivos móviles, almacenamiento de energía.</li>
+            </ul>
+
+            <h3>🏗️ Otros Minerales Relevantes:</h3>
+            <ul>
+                <li><strong>Molibdeno:</strong> Subproducto del cobre, usado en aleaciones de acero.</li>
+                <li><strong>Hierro:</strong> Extraído para producción de acero.</li>
+                <li><strong>Salitre:</strong> Históricamente importante, menor relevancia actual.</li>
+                <li><strong>Yodo:</strong> Usado en medicina, agricultura y alimentación.</li>
+                <li><strong>Carbón:</strong> Fuente energética, en disminución por descarbonización.</li>
+                <li><strong>Yeso:</strong> Construcción y agricultura.</li>
+            </ul>
+            <figure>
+                <img src="tabla-minerales.webp" alt="Tabla con imágenes y usos de minerales clave como cobre, oro y litio.">
+                <figcaption>Minerales extraídos en Chile y sus aplicaciones.</figcaption>
+            </figure>
+        </section>
+
+        <section id="normativo" class="content-section" role="tabpanel" aria-labelledby="normativo-tab">
+            <h2>⚖️ Marco Normativo Chileno</h2>
+            
+            <h3>🧾 Leyes y Reglamentos Relevantes:</h3>
+            
+            <h4>Código de Minería de Chile (DL N° 1 de 1986):</h4>
+            <p>Regula el dominio, exploración y explotación de recursos mineros. Establece el sistema de concesiones mineras y la relación con la propiedad superficial.</p>
+
+            <h4>Decreto Supremo N°132 de 2004:</h4>
+            <p>Reglamento de Seguridad Minera que establece normas técnicas de operación, prevención de riesgos y condiciones de seguridad laboral.</p>
+
+            <h4>Ley N° 20.551 de 2011:</h4>
+            <p>Regula el Cierre de Faenas e Instalaciones Mineras, obligando a presentar un plan de cierre para proteger el medio ambiente.</p>
+
+            <h4>Decreto Supremo N° 248 de 2007:</h4>
+            <p>Aprueba el Reglamento para Depósitos de Relaves, estableciendo normas técnicas para su diseño, operación y cierre.</p>
+
+            <h4>Ley N° 21.420 de 2022:</h4>
+            <p>Modifica el Código de Minería e introduce un royalty minero sobre las ventas de cobre y litio.</p>
+
+            <h4>Ley N° 19.300 de 1994:</h4>
+            <p>Establece el Sistema de Evaluación de Impacto Ambiental (SEIA) que deben cumplir todos los proyectos mineros.</p>
+            <figure>
+                <img src="marco-legal.webp" alt="Infografía con resumen legal y logos de entidades reguladoras como el Ministerio de Minería y Sernageomin.">
+                <figcaption>Resumen del marco normativo minero en Chile.</figcaption>
+            </figure>
+        </section>
+
+        <section id="glosario" class="content-section" role="tabpanel" aria-labelledby="glosario-tab">
+            <h2>📚 Glosario Minero Básico</h2>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Término</th>
+                            <th>Definición</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Aculatar</strong></td>
+                            <td>Maniobra de retroceso de un camión o equipo pesado para carguío o descarga.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Banco</strong></td>
+                            <td>Superficie horizontal escalonada en una mina a rajo abierto, fundamental para la estabilidad.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Berma</strong></td>
+                            <td>Montículo de seguridad en caminos o bordes de bancos para evitar caídas de vehículos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Botadero</strong></td>
+                            <td>Lugar donde se deposita el material estéril o sin valor económico.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cátodos de Cobre</strong></td>
+                            <td>Placas de cobre de alta pureza obtenidas por electrorefinación o electroobtención.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chancado</strong></td>
+                            <td>Reducción de tamaño de rocas mediante trituración mecánica.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Desbroce</strong></td>
+                            <td>Remoción y transporte del material estéril que cubre el yacimiento.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Drenaje Ácido de Mina</strong></td>
+                            <td>Aguas ácidas ricas en metales por oxidación de minerales sulfurosos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ganga</strong></td>
+                            <td>Material rocoso sin valor comercial que acompaña al mineral.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lixiviación</strong></td>
+                            <td>Proceso químico para disolver el mineral valioso usando una solución.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mineral de Baja Ley</strong></td>
+                            <td>Mineral con baja concentración del elemento de interés, pero explotable.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Overburden</strong></td>
+                            <td>Término en inglés para la sobrecarga o material estéril.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Planta Concentradora</strong></td>
+                            <td>Instalación para separar el metal valioso de la ganga mediante flotación.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rampa</strong></td>
+                            <td>Camino inclinado que conecta los bancos de la mina.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Relave</strong></td>
+                            <td>Residuo molido con agua resultante del procesamiento del mineral.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Talud</strong></td>
+                            <td>Inclinación de la pared de un banco, crítica para la estabilidad.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tronadura</strong></td>
+                            <td>Uso de explosivos para fragmentar roca.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tranques de Relaves</strong></td>
+                            <td>Estructuras para almacenar relaves, con diseño riguroso.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Yacimiento</strong></td>
+                            <td>Masa rocosa con minerales explotables económicamente.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Zona de Carguío</strong></td>
+                            <td>Área donde se carga el material extraído en camiones.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn" onclick="exportTableToCSV('glosario')">📊 Exportar a CSV</button>
+            </div>
+            <figure>
+                <img src="/images/diagrama-glosario.jpg" alt="Diagrama de una mina a cielo abierto señalando términos como banco, rampa, botadero y talud.">
+                <figcaption>Términos clave en una mina a cielo abierto.</figcaption>
+            </figure>
+        </section>
+
+        <section id="quiz" class="content-section" role="tabpanel" aria-labelledby="quiz-tab">
+            <h2>📝 Evaluación de Autoaprendizaje</h2>
+            <p>Responde las siguientes preguntas para evaluar tu comprensión del módulo:</p>
+            
+            <div class="quiz-container" id="quizContainer"></div>
+
+            <div class="quiz-results" id="quizResults">
+                <h3>¡Evaluación Completada!</h3>
+                <div class="score-display" id="scoreDisplay">0/10</div>
+                <p id="scoreMessage"></p>
+                <button class="btn btn-large" onclick="restartQuiz()">🔄 Reiniciar Evaluación</button>
+                <button class="btn btn-large" onclick="goToBeginning()">🏠 Volver al Inicio</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentSection = 'intro';
+        let speechSynthesis = window.speechSynthesis;
+        let currentUtterance = null;
+        let isPlaying = false;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        // Datos del quiz
+        const quizData = [
+            {
+                question: "¿Cuál es la principal diferencia entre la minería a cielo abierto y la minería subterránea?",
+                options: [
+                    "La minería a cielo abierto utiliza túneles, mientras que la subterránea no.",
+                    "La minería a cielo abierto extrae minerales cercanos a la superficie, la subterránea lo hace bajo tierra.",
+                    "La minería a cielo abierto es exclusiva para el cobre, la subterránea para otros metales.",
+                    "La minería subterránea es más segura que la minería a cielo abierto."
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "¿Qué tipo de material se conoce como 'estéril' o 'ganga' en la minería a cielo abierto?",
+                options: [
+                    "El mineral valioso que se extrae.",
+                    "La roca que no contiene minerales de interés comercial y debe ser removida.",
+                    "El concentrado final obtenido del procesamiento.",
+                    "El agua utilizada en el proceso de lixiviación."
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "¿Cuál de las siguientes afirmaciones es una ventaja de la minería a cielo abierto?",
+                options: [
+                    "Menor impacto visual en el paisaje.",
+                    "Mayor riesgo de derrumbes subterráneos.",
+                    "Permite una mayor escala de producción.",
+                    "Consume menos agua que la minería subterránea."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "¿Qué rol cumple el Decreto Supremo N°132 en la minería chilena?",
+                options: [
+                    "Regula el cierre de faenas mineras.",
+                    "Establece el royalty a la explotación de cobre.",
+                    "Regula la seguridad y salud laboral en las faenas mineras.",
+                    "Define los tipos de minerales que se pueden extraer."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "¿Qué se entiende por 'relave' en el contexto minero?",
+                options: [
+                    "El mineral extraído directamente del tajo.",
+                    "El material estéril depositado en los botaderos.",
+                    "El residuo finamente molido con agua, resultante del procesamiento del mineral.",
+                    "Las placas de cobre de alta pureza."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "¿Cuál de los siguientes es el principal mineral extraído en Chile y es fundamental para la transición energética global?",
+                options: [
+                    "Oro",
+                    "Litio",
+                    "Plata",
+                    "Cobre"
+                ],
+                correctAnswer: 3
+            },
+            {
+                question: "El proceso de 'tronadura' en minería a cielo abierto tiene como objetivo principal:",
+                options: [
+                    "Cargar el mineral en los camiones.",
+                    "Reducir el tamaño de la roca mediante explosivos.",
+                    "Separar el mineral de la ganga químicamente.",
+                    "Transportar el material estéril a los botaderos."
+                ],
+                correctAnswer: 1
+            },
+            {
+                question: "¿Cuál de estas empresas es una de las principales operadoras de minas a cielo abierto en la Región de Tarapacá, Chile?",
+                options: [
+                    "Codelco (Chuquicamata)",
+                    "BHP Billiton (Escondida)",
+                    "Anglo American / Glencore (Collahuasi)",
+                    "Antofagasta Minerals (Los Pelambres)"
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "La Ley N° 20.551 de 2011 es fundamental para la minería chilena porque:",
+                options: [
+                    "Establece los impuestos a la minería.",
+                    "Regula la seguridad de los trabajadores.",
+                    "Obliga a presentar un plan de cierre de faenas mineras.",
+                    "Promueve la exploración de nuevos yacimientos."
+                ],
+                correctAnswer: 2
+            },
+            {
+                question: "¿Qué significa el término 'Aculatar' en el glosario minero?",
+                options: [
+                    "Realizar una perforación para tronadura.",
+                    "La maniobra de retroceso de un camión para carguío o descarga.",
+                    "La construcción de un banco en el tajo.",
+                    "El proceso de lixiviación de minerales."
+                ],
+                correctAnswer: 1
+            }
+        ];
+
+        // Mostrar sección
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+                section.setAttribute('aria-hidden', 'true');
+            });
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.setAttribute('aria-selected', 'false');
+            });
+
+            const section = document.getElementById(sectionId);
+            section.classList.add('active');
+            section.setAttribute('aria-hidden', 'false');
+            document.querySelector(`[onclick="showSection('${sectionId}')"]`).classList.add('active');
+            document.querySelector(`[onclick="showSection('${sectionId}')"]`).setAttribute('aria-selected', 'true');
+
+            currentSection = sectionId;
+            stopAudio();
+        }
+
+        // Control de audio
+        function toggleAudio() {
+            const playBtn = document.getElementById('playBtn');
+            const playIcon = document.getElementById('playIcon');
+            const playText = document.getElementById('playText');
+
+            if (!isPlaying) {
+                const section = document.getElementById(currentSection);
+                const text = section.innerText;
+                currentUtterance = new SpeechSynthesisUtterance(text);
+                currentUtterance.lang = 'es-ES';
+                currentUtterance.rate = 1;
+                currentUtterance.onend = () => {
+                    isPlaying = false;
+                    playIcon.textContent = '🔊';
+                    playText.textContent = 'Reproducir';
+                    playBtn.setAttribute('aria-label', 'Reproducir contenido');
+                };
+                speechSynthesis.speak(currentUtterance);
+                isPlaying = true;
+                playIcon.textContent = '⏸️';
+                playText.textContent = 'Pausar';
+                playBtn.setAttribute('aria-label', 'Pausar reproducción');
+            } else {
+                speechSynthesis.pause();
+                isPlaying = false;
+                playIcon.textContent = '🔊';
+                playText.textContent = 'Reproducir';
+                playBtn.setAttribute('aria-label', 'Reproducir contenido');
+            }
+        }
+
+        function stopAudio() {
+            if (speechSynthesis.speaking || speechSynthesis.paused) {
+                speechSynthesis.cancel();
+                isPlaying = false;
+                document.getElementById('playIcon').textContent = '🔊';
+                document.getElementById('playText').textContent = 'Reproducir';
+                document.getElementById('playBtn').setAttribute('aria-label', 'Reproducir contenido');
+            }
+        }
+
+        // Inicializar quiz
+        function initQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            document.getElementById('quizResults').style.display = 'none';
+            renderQuestion();
+        }
+
+        // Renderizar pregunta
+        function renderQuestion() {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.innerHTML = '';
+
+            if (currentQuestionIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const question = quizData[currentQuestionIndex];
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card';
+            questionCard.setAttribute('role', 'region');
+            questionCard.setAttribute('aria-labelledby', `question-${currentQuestionIndex}`);
+
+            questionCard.innerHTML = `
+                <span class="question-number">Pregunta ${currentQuestionIndex + 1}</span>
+                <p class="question-text" id="question-${currentQuestionIndex}">${question.question}</p>
+                <div class="answer-options" role="radiogroup" aria-labelledby="question-${currentQuestionIndex}">
+                    ${question.options.map((option, index) => `
+                        <div class="answer-option" role="radio" aria-checked="false" tabindex="0" data-index="${index}" onclick="selectAnswer(${index})">
+                            <span>${String.fromCharCode(97 + index)})</span>
+                            <span>${option}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="feedback" id="feedback-${currentQuestionIndex}"></div>
+            `;
+
+            quizContainer.appendChild(questionCard);
+
+            // Soporte para navegación por teclado
+            const options = questionCard.querySelectorAll('.answer-option');
+            options.forEach(option => {
+                option.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        selectAnswer(parseInt(option.dataset.index));
+                    }
+                });
+            });
+        }
+
+        // Seleccionar respuesta
+        function selectAnswer(selectedIndex) {
+            const question = quizData[currentQuestionIndex];
+            const correctIndex = question.correctAnswer;
+            const options = document.querySelectorAll('.answer-option');
+            const feedback = document.getElementById(`feedback-${currentQuestionIndex}`);
+
+            options.forEach((option, index) => {
+                option.classList.add('disabled');
+                option.setAttribute('aria-checked', index === selectedIndex ? 'true' : 'false');
+                option.setAttribute('tabindex', '-1');
+                if (index === correctIndex) {
+                    option.classList.add('correct');
+                }
+                if (index === selectedIndex && index !== correctIndex) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            userAnswers.push(selectedIndex);
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedback.className = 'feedback correct';
+                feedback.textContent = '¡Correcto! ' + question.options[correctIndex];
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = 'Incorrecto. La respuesta correcta es: ' + question.options[correctIndex];
+            }
+            feedback.style.display = 'block';
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                renderQuestion();
+            }, 2000);
+        }
+
+        // Mostrar resultados
+        function showResults() {
+            const quizContainer = document.getElementById('quizContainer');
+            quizContainer.style.display = 'none';
+            const quizResults = document.getElementById('quizResults');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreMessage = document.getElementById('scoreMessage');
+
+            scoreDisplay.textContent = `${score}/${quizData.length}`;
+            if (score >= 8) {
+                scoreDisplay.className = 'score-display excellent';
+                scoreMessage.textContent = '¡Excelente! Dominas los fundamentos de la minería a cielo abierto.';
+            } else if (score >= 6) {
+                scoreDisplay.className = 'score-display good';
+                scoreMessage.textContent = '¡Buen trabajo! Tienes un sólido entendimiento, pero puedes repasar algunos conceptos.';
+            } else if (score >= 4) {
+                scoreDisplay.className = 'score-display needs-improvement';
+                scoreMessage.textContent = 'No está mal, pero te recomendamos revisar el módulo para reforzar tus conocimientos.';
+            } else {
+                scoreDisplay.className = 'score-display poor';
+                scoreMessage.textContent = 'Necesitas mejorar. Te sugerimos estudiar el contenido nuevamente y volver a intentar.';
+            }
+
+            quizResults.style.display = 'block';
+        }
+
+        // Reiniciar quiz
+        function restartQuiz() {
+            stopAudio();
+            initQuiz();
+            document.getElementById('quizContainer').style.display = 'block';
+        }
+
+        // Volver al inicio
+        function goToBeginning() {
+            stopAudio();
+            showSection('intro');
+            initQuiz();
+            document.getElementById('quizContainer').style.display = 'block';
+        }
+
+        // Exportar tabla a CSV (simulación)
+        function exportTableToCSV(tableId) {
+            let csv = [];
+            const table = document.querySelector(`#${tableId} table` || `table`);
+            const rows = table.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td, th');
+                const rowData = Array.from(cols).map(col => `"${col.textContent.trim().replace(/"/g, '""')}"`);
+                csv.push(rowData.join(','));
+            });
+
+            console.log('CSV:', csv.join('\n'));
+            alert('Tabla exportada a CSV (ver consola para detalles).');
+        }
+
+        // Event listeners
+        document.getElementById('playBtn').addEventListener('click', toggleAudio);
+        document.getElementById('stopBtn').addEventListener('click', stopAudio);
+
+        // Inicializar
+        initQuiz();
+    </script>
+</body>
+</html>

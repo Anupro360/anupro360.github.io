@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submódulo 2.1: Procedimientos de Carguío</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6d9eeb;
+            --background-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-color: #e9ecef;
+            --dark-color: #343a40;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .module-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .navigation {
+            background: var(--dark-color);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pildora {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .pildora h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .pildora h3::before {
+            content: "🔄";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .procedure-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .procedure-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--secondary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .procedure-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .procedure-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .procedure-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .procedure-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--light-color);
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .procedure-list li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .quiz-container {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .question {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 12px;
+            background: var(--light-color);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: #cce5ff;
+            border-color: var(--primary-color);
+        }
+
+        .submit-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .result.excellent {
+            background: #d4edda;
+            color: var(--dark-color);
+            border: 1px solid #c3e6cb;
+        }
+
+        .result.good {
+            background: #fff3cd;
+            color: var(--dark-color);
+            border: 1px solid #ffe066;
+        }
+
+        .result.needs-improvement {
+            background: #f8d7da;
+            color: var(--dark-color);
+            border: 1px solid #f5c6cb;
+        }
+
+        .back-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔄 Submódulo 2.1: Procedimientos de Carguío</h1>
+            <p>Aprende los pasos esenciales para realizar operaciones de carguío seguras y eficientes en un entorno minero.</p>
+        </div>
+
+        <div class="module-container">
+            <div class="navigation">
+                <button class="nav-btn active" onclick="showSection('introduccion')">📚 Introducción</button>
+                <button class="nav-btn" onclick="showSection('pildora1')">🔄 Preparación para el Carguío</button>
+                <button class="nav-btn" onclick="showSection('pildora2')">🔄 Carguío con Pala</button>
+                <button class="nav-btn" onclick="showSection('pildora3')">🔄 Carguío con Cargador Frontal</button>
+                <button class="nav-btn" onclick="showSection('quiz')">🎯 Quiz</button>
+            </div>
+
+            <div class="content">
+                <!-- Introducción -->
+                <div id="introduccion" class="section active">
+                    <h2>📋 Introducción a los Procedimientos de Carguío</h2>
+                    <p>El carguío es una operación crítica en actividades mineras que requiere precisión, coordinación y un estricto cumplimiento de procedimientos de seguridad. Este proceso implica la transferencia de material desde el frente de trabajo hacia los camiones de transporte, y debe realizarse siguiendo protocolos establecidos para garantizar la seguridad de los operadores y la eficiencia de las operaciones.</p>
+                    
+                    <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <h3>🛠️ Objetivos de los Procedimientos de Carguío</h3>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Garantizar la seguridad de todos los operadores involucrados</li>
+                            <li>Optimizar la eficiencia en la transferencia de materiales</li>
+                            <li>Minimizar el riesgo de accidentes y daños al equipo</li>
+                            <li>Garantizar el cumplimiento de normativas de seguridad minera</li>
+                            <li>Mantener la continuidad de las operaciones mineras</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Píldora 1 -->
+                <div id="pildora1" class="section">
+                    <div class="pildora">
+                        <h3>Preparación para el Carguío</h3>
+                        <p>Antes de iniciar cualquier operación de carguío, es esencial realizar una serie de preparativos que garanticen un proceso seguro y eficiente.</p>
+                    </div>
+
+                    <div class="procedure-container">
+                        <div class="procedure-card">
+                            <h4>Verificación del Área</h4>
+                            <ul class="procedure-list">
+                                <li>Revisar que la zona de carguío esté libre de obstáculos y personal no autorizado.</li>
+                                <li>Evaluar las condiciones del terreno y asegurar que sean adecuadas para la operación.</li>
+                                <li>Verificar la presencia y funcionamiento de señales y barreras de seguridad.</li>
+                                <li>Confirmar que las vías de escape y rutas de evacuación estén claramente marcadas.</li>
+                            </ul>
+                        </div>
+
+                        <div class="procedure-card">
+                            <h4>Preparación del Equipo</h4>
+                            <ul class="procedure-list">
+                                <li>Realizar una inspección visual del equipo de carguío (pala, cargador frontal) para detectar cualquier anomalía.</li>
+                                <li>Verificar que todos los sistemas de seguridad estén activados y en buen funcionamiento.</li>
+                                <li>Comprobar los niveles de combustible, aceite y otros fluidos esenciales.</li>
+                                <li>Garantizar que todos los equipos de comunicación estén funcionando correctamente.</li>
+                            </ul>
+                        </div>
+
+                        <div class="procedure-card">
+                            <h4>Coordinación con el Operador del Camión</h4>
+                            <ul class="procedure-list">
+                                <li>Establecer contacto radial con el operador del camión para coordinar la operación.</li>
+                                <li>Verificar que el camión esté posicionado correctamente y esté listo para recibir material.</li>
+                                <li>Confirmar que el operador del camión conoce y entiende los procedimientos de seguridad.</li>
+                                <li>Acordar señales y códigos de comunicación específicos para la operación.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Píldora 2 -->
+                <div id="pildora2" class="section">
+                    <div class="pildora">
+                        <h3>Carguío con Pala</h3>
+                        <p>El carguío con pala es uno de los métodos más comunes en operaciones mineras. Requiere una coordinación precisa entre el operador de la pala y el operador del camión.</p>
+                    </div>
+
+                    <div class="procedure-container">
+                        <div class="procedure-card">
+                            <h4>Posicionamiento de la Pala</h4>
+                            <ul class="procedure-list">
+                                <li>Ubicar la pala en una posición que permita una carga eficiente y segura.</li>
+                                <li>Asegurar que la pala esté a una distancia adecuada del frente de trabajo.</li>
+                                <li>Verificar que el área de operación esté libre de cables y equipos auxiliares.</li>
+                                <li>Estabilizar la pala en terreno firme para evitar movimientos no deseados durante la operación.</li>
+                            </ul>
+                        </div>
+
+                        <div class="procedure-card">
+                            <h4>Procedimiento de Carguío</h4>
+                            <ul class="procedure-list">
+                                <li>El operador de la pala debe cargar el material en el centro de la caja del camión para mantener el equilibrio.</li>
+                                <li>Controlar la cantidad de material cargado para no exceder la capacidad del camión.</li>
+                                <li>Usar señales acordadas con el operador del camión para indicar el inicio, pausa o finalización de la carga.</li>
+                                <li>Evitar movimientos bruscos que puedan afectar la estabilidad del camión.</li>
+                            </ul>
+                        </div>
+
+                        <div class="procedure-card">
+                            <h4>Seguridad Durante el Carguío</h4>
+                            <ul class="procedure-list">
+                                <li>Mantener una distancia segura entre la pala y el camión durante la operación.</li>
+                                <li>Evitar cargar material sobre el borde de la caja del camión.</li>
+                                <li>No permitir la presencia de personal no autorizado en el área de carguío.</li>
+                                <li>Realizar ajustes al material cargado para garantizar que esté bien distribuido y no presente riesgos de deslizamiento.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Píldora 3 -->
+                <div id="pildora3" class="section">
+                    <div class="pildora">
+                        <h3>Carguío con Cargador Frontal</h3>
+                        <p>El cargador frontal es otro equipo comúnmente utilizado para operaciones de carguío. Su uso requiere precauciones especiales debido a su diseño y modo de operación.</p>
+                    </div>
+
+                    <div class="procedure-container">
+                        <div class="procedure-card">
+                            <h4>Preparación del Cargador Frontal</h4>
+                            <ul class="procedure-list">
+                                <li>Realizar una inspección visual completa del cargador frontal antes de iniciar la operación.</li>
+                                <li>Verificar los sistemas hidráulicos y mecánicos para garantizar un funcionamiento adecuado.</li>
+                                <li>Comprobar que las palas y los accesorios estén en buen estado y correctamente instalados.</li>
+                                <li>Evaluar las condiciones del terreno donde se realizará el carguío.</li>
+                            </ul>
+                        </div>
+
+                        <div class="procedure-card">
+                            <h4>Técnicas de Carguío</h4>
+                            <ul class="procedure-list">
+                                <li>Alinear el cargador frontal con el centro de la caja del camión para una distribución uniforme del material.</li>
+                                <li>Controlar la velocidad de carga para evitar sobrecargas o distribución desigual del material.</li>
+                                <li>Usar señales acordadas con el operador del camión para coordinar la operación.</li>
+                                <li>Ajustar el material cargado para garantizar que esté bien distribuido y no presente riesgos de deslizamiento.</li>
+                            </ul>
+                        </div>
+
+                        <div class="procedure-card">
+                            <h4>Seguridad con Cargador Frontal</h4>
+                            <ul class="procedure-list">
+                                <li>Mantener una distancia segura entre el cargador frontal y el camión durante la operación.</li>
+                                <li>Evitar movimientos bruscos que puedan afectar la estabilidad del camión.</li>
+                                <li>No permitir la presencia de personal no autorizado en el área de carguío.</li>
+                                <li>Realizar ajustes al material cargado para garantizar que esté bien distribuido y no presente riesgos de deslizamiento.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div id="quiz" class="section">
+                    <div class="quiz-container">
+                        <h2>🎯 Quiz: Procedimientos de Carguío</h2>
+                        <p>Evalúa tus conocimientos sobre los procedimientos de carguío en operaciones mineras.</p>
+
+                        <form id="quizForm">
+                            <div class="question">
+                                <h4>1. ¿Cuál es el objetivo principal de los procedimientos de carguío?</h4>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="a">
+                                    a) Maximizar la velocidad de carga
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="b">
+                                    b) Garantizar la seguridad de los operadores y equipos
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q1" value="c">
+                                    c) Reducir el consumo de combustible
+                                </label>
+                            </div>
+
+                            <div class="question">
+                                <h4>2. ¿Qué debe revisar el operador de la pala antes de iniciar el carguío?</h4>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="a">
+                                    a) Solo el nivel de combustible
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="b">
+                                    b) Solo las condiciones del terreno
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q2" value="c">
+                                    c) Integridad estructural, sistemas de seguridad y condiciones del área
+                                </label>
+                            </div>
+
+                            <div class="question">
+                                <h4>3. ¿Qué debe hacer el operador si detecta una anomalía durante el carguío?</h4>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="a">
+                                    a) Ignorarla y continuar operando
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="b">
+                                    b) Registrarla y reportarla al supervisor antes de continuar
+                                </label>
+                                <label class="option">
+                                    <input type="radio" name="q3" value="c">
+                                    c) Repararla inmediatamente por cuenta propia
+                                </label>
+                            </div>
+
+                            <button type="button" class="submit-btn" onclick="evaluateQuiz()">📊 Evaluar Quiz</button>
+                        </form>
+
+                        <div id="quizResult" class="result" style="display: none;"></div>
+
+                        <button id="backToIntroduction" class="back-btn" onclick="showSection('introduccion')">⬅️ Volver a la Introducción</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'introduccion';
+
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Actualizar navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function evaluateQuiz() {
+            const answers = {
+                q1: 'b', // Garantizar la seguridad de los operadores y equipos
+                q2: 'c', // Integridad estructural, sistemas de seguridad y condiciones del área
+                q3: 'b'  // Registrarla y reportarla al supervisor antes de continuar
+            };
+            
+            let score = 0;
+            let totalQuestions = Object.keys(answers).length;
+            
+            // Mostrar retroalimentación en cada opción
+            document.querySelectorAll('.option').forEach(option => {
+                const questionName = option.querySelector('input').name;
+                const selectedValue = option.querySelector('input').value;
+                
+                if (answers[questionName] === selectedValue) {
+                    option.style.backgroundColor = '#d4edda'; // Verde para correctas
+                } else if (option.querySelector('input').checked) {
+                    option.style.backgroundColor = '#f8d7da'; // Rojo para incorrectas marcadas
+                } else {
+                    option.style.backgroundColor = ''; // Reiniciar estilo para no marcadas
+                }
+            });
+            
+            // Calcular el puntaje
+            for (let question in answers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === answers[question]) {
+                    score++;
+                }
+            }
+            
+            const percentage = (score / totalQuestions) * 100;
+            const resultDiv = document.getElementById('quizResult');
+            
+            let resultClass = '';
+            let resultMessage = '';
+            
+            if (percentage >= 80) {
+                resultClass = 'excellent';
+                resultMessage = `¡Excelente! 🎉 Has obtenido ${score}/${totalQuestions} respuestas correctas (${percentage}%). ¡Dominas los procedimientos de carguío!`;
+            } else if (percentage >= 60) {
+                resultClass = 'good';
+                resultMessage = `¡Bien! 👍 Has obtenido ${score}/${totalQuestions} respuestas correctas (${percentage}%). Tienes un buen conocimiento de los procedimientos de carguío.`;
+            } else {
+                resultClass = 'needs-improvement';
+                resultMessage = `Necesitas repasar 📚. Has obtenido ${score}/${totalQuestions} respuestas correctas (${percentage}%). Te recomendamos revisar las píldoras antes de intentar nuevamente.`;
+            }
+            
+            resultDiv.className = `result ${resultClass}`;
+            resultDiv.innerHTML = resultMessage;
+            resultDiv.style.display = 'block';
+            
+            // Mostrar el botón "Volver a la Introducción"
+            document.getElementById('backToIntroduction').style.display = 'block';
+            
+            // Scroll al resultado
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
