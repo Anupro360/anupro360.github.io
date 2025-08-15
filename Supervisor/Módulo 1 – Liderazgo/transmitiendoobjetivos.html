@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Transmitiendo Objetivos</title>
+  <meta name="description" content="Microaprendizaje dinámico: Transmitiendo objetivos, claridad y motivación (Anupro360)">
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.2), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn, .btn-ghost, .btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    .two{display:grid; gap:12px}
+    @media(min-width:780px){.two{grid-template-columns:1fr 1fr}}
+
+    input[type="text"], textarea{width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.2); color:var(--blanco)}
+
+    .checklist{display:grid; gap:8px}
+    .check{display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.04); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.12)}
+
+    /* Quiz styles + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)} /* verde */
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}    /* rojo/naranja */
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .note{font-size:.85rem; opacity:.85}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360">
+        <h1>Anupro360 · Transmitiendo Objetivos</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>3) TRANSMITIENDO OBJETIVOS</h2>
+      <p class="note"><strong>Aprendizajes esperados:</strong> 1) Explicar los objetivos del área en un lenguaje claro y adaptado al equipo. 2) Manejar técnicas de motivación e influencia para impactar en el desempeño.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda: contenido principal -->
+    <section class="card">
+      <h3>3.0 ¿Qué son los objetivos?</h3>
+      <details open>
+        <summary>Definición y jerarquía</summary>
+        <p>Los objetivos representan la situación futura que se quiere alcanzar: ¿qué se va a hacer? Se organizan en <strong>generales</strong> y <strong>específicos</strong>, como parte de una jerarquía que prioriza acciones. Los objetivos del área se conectan con la estrategia de la compañía y con la cadena de objetivos del negocio.</p>
+      </details>
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn" data-complete="intro">Marcar leído ✓</button>
+      </div>
+    </section>
+
+    <!-- Columna derecha: ficha -->
+    <aside class="card">
+      <h3>Ficha del micro‑módulo</h3>
+      <ul style="margin:0; padding-left:18px; line-height:1.7">
+        <li>Duración total: ~12–15 minutos</li>
+        <li>Formato: lecturas + generador de discurso + motivación + quiz</li>
+        <li>Objetivo: claridad de metas y motivación de equipo</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- 3.1 Seguimiento de objetivos -->
+    <section class="card">
+      <h3>3.1 Seguimiento de objetivos</h3>
+      <p>Define una <strong>frecuencia</strong> (semanal/mensual/trimestral) y usa herramientas de control para revisar avances. Si tu empresa no tiene estándar, puedes crear una matriz de indicadores y una carta Gantt.</p>
+      <div class="two">
+        <div>
+          <label class="note">Frecuencia de seguimiento</label>
+          <select id="freq" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.2); color:var(--blanco)">
+            <option>Semanal</option>
+            <option>Mensual</option>
+            <option>Trimestral</option>
+          </select>
+        </div>
+        <div>
+          <label class="note">Indicadores clave (separar por coma)</label>
+          <input type="text" id="kpis" placeholder="Ej.: Seguridad, Cumplimiento plan, Calidad, Costos">
+        </div>
+      </div>
+      <div class="checklist" style="margin-top:10px">
+        <div class="check"><input type="checkbox" id="c1"><label for="c1">Agenda reuniones de seguimiento.</label></div>
+        <div class="check"><input type="checkbox" id="c2"><label for="c2">Actualiza indicadores y evidencia.</label></div>
+        <div class="check"><input type="checkbox" id="c3"><label for="c3">Define responsables y próximos pasos.</label></div>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-ghost" id="guardarSeg">Guardar</button>
+        <button class="btn-ghost" id="copiarSeg">Copiar resumen</button>
+        <button class="btn" data-complete="seguimiento">He definido el seguimiento ✓</button>
+      </div>
+    </section>
+
+    <!-- 3.2 Proporcionando claridad (tips) + generador de discurso -->
+    <section class="card">
+      <h3>3.2 Proporcionando claridad (tips para un discurso)</h3>
+      <p>La claridad implica comunicar efectivamente lo que se quiere alcanzar, generando una <strong>interpretación compartida</strong> y motivación.</p>
+      <div class="two">
+        <div>
+          <label class="note">Objetivo principal</label>
+          <input type="text" id="g_obj" placeholder="Ej.: Reducir incidentes de seguridad en un 15%">
+          <label class="note" style="margin-top:8px">Público</label>
+          <input type="text" id="g_pub" placeholder="Ej.: Operadores turno noche">
+          <label class="note" style="margin-top:8px">3 ideas fuerza (separadas por coma)</label>
+          <input type="text" id="g_ideas" placeholder="Ej.: orden, comunicación, cuidado mutuo">
+          <label class="note" style="margin-top:8px">Recursos complementarios (opcional)</label>
+          <input type="text" id="g_rec" placeholder="Ej.: ejemplo real, foto antes/después">
+          <div style="display:flex; gap:8px; margin-top:8px">
+            <button class="btn-sec" id="generarDiscurso">Generar discurso</button>
+            <button class="btn-ghost" id="copiarDiscurso">Copiar discurso</button>
+          </div>
+        </div>
+        <div>
+          <label class="note">Discurso generado</label>
+          <textarea id="discurso" rows="10" placeholder="Aquí aparecerá tu discurso..."></textarea>
+        </div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="claridad">He trabajado mi discurso ✓</button></div>
+    </section>
+
+    <!-- 3.3 Los 10 consejos -->
+    <section class="card">
+      <h3>3.3 Los 10 consejos clave para un buen discurso</h3>
+      <details open><summary>1) Definir el objetivo de la información</summary><p>Establece qué quieres transmitir pensando en tu público. Define ideas fuerza.</p></details>
+      <details><summary>2) Conocer a tu público</summary><p>¿Cómo entenderán e interpretarán tu mensaje? Considera edad, formación, intereses y temores.</p></details>
+      <details><summary>3) Reunir máxima información</summary><p>Infórmate en profundidad y comprende el tema a cabalidad.</p></details>
+      <details><summary>4) Argumentos centrales y secundarios</summary><p>Jerarquiza los mensajes clave según tu público.</p></details>
+      <details><summary>5) Elaborar un relato</summary><p>Estructura con inicio‑desarrollo‑cierre. Los argumentos dan soporte a la idea fuerza.</p></details>
+      <details><summary>6) Usar recursos complementarios</summary><p>Ejemplos, analogías e imágenes que simplifiquen, no que compliquen.</p></details>
+      <details><summary>7) Seleccionar el lenguaje</summary><p>Adecúalo al público; evita tecnicismos innecesarios y jerga excesiva.</p></details>
+      <details><summary>8) No “vender la pomada”</summary><p>Entrega información honesta. Si pareces vendedor, bajará la credibilidad.</p></details>
+      <details><summary>9) Cierre atractivo</summary><p>Reitera lo fundamental y llama a la acción.</p></details>
+      <details><summary>10) Buscar empatía</summary><p>Conecta con la experiencia del equipo y reconoce su aporte.</p></details>
+      <div style="margin-top:10px"><button class="btn" data-complete="consejos">He revisado los consejos ✓</button></div>
+    </section>
+
+    <!-- 3.4 La Motivación (Maslow + McClelland) -->
+    <section class="card">
+      <h3>3.4 La Motivación</h3>
+      <p>La motivación canaliza la energía hacia metas. Un trabajador motivado obtiene mejores resultados, mayor creatividad e iniciativa.</p>
+      <div class="two">
+        <div>
+          <h4 style="margin:.5rem 0">Pirámide de Maslow</h4>
+          <p class="note">Abraham Maslow propuso cinco niveles: fisiológicas, seguridad, sociales, estima y autorrealización.</p>
+          <img src="priramidemaslow.webp" alt="Pirámide de Maslow" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+            <a class="btn-ghost" href="priramidemaslow.webp" download>Descargar imagen</a>
+            <a class="btn-ghost" href="priramidemaslow.webp" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+          </div>
+          <ul class="note" style="margin-top:10px">
+            <li><strong>Nivel 1:</strong> Fisiológicas (salario y condiciones mínimas).</li>
+            <li><strong>Nivel 2:</strong> Seguridad (condiciones seguras, estabilidad, seguridad social).</li>
+            <li><strong>Nivel 3:</strong> Sociales (compañerismo y relaciones).</li>
+            <li><strong>Nivel 4:</strong> Estima (reconocimiento, logro, responsabilidad).</li>
+            <li><strong>Nivel 5:</strong> Autorrealización (desarrollo pleno de habilidades).</li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="margin:.5rem 0">Teoría de McClelland</h4>
+          <p class="note">Tres necesidades: Logro, Afiliación y Poder. Las personas orientadas al logro buscan retos alcanzables, mejorar procesos y dominar su actividad.</p>
+          <img src="mc_clelland.webp" alt="Teoría de McClelland" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+          <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+            <a class="btn-ghost" href="mc_clelland.webp" download>Descargar imagen</a>
+            <a class="btn-ghost" href="mc_clelland.webp" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="motivacion">He revisado motivación ✓</button></div>
+    </section>
+
+    <!-- 3.5 Técnicas de motivación -->
+    <section class="card">
+      <h3>3.5 Técnicas de motivación (aplicables)</h3>
+      <p class="note">Selecciona las que aplicarás esta semana y copia tu plan.</p>
+      <div class="checklist" id="tacticas">
+        <label class="check"><input type="checkbox" value="Desarrollo y autorrealización (delegar, nuevos retos)">Desarrollo y autorrealización (delegar, nuevos retos)</label>
+        <label class="check"><input type="checkbox" value="Reconocimiento de logros (económico o social)">Reconocimiento de logros (económico o social)</label>
+        <label class="check"><input type="checkbox" value="Interés por la persona (apoyo a metas personales)">Interés por la persona (apoyo a metas personales)</label>
+        <label class="check"><input type="checkbox" value="Generar compromiso (responsabilidad y autonomía)">Generar compromiso (responsabilidad y autonomía)</label>
+        <label class="check"><input type="checkbox" value="Hacer sentirse útiles (participación y sugerencias)">Hacer sentirse útiles (participación y sugerencias)</label>
+        <label class="check"><input type="checkbox" value="Evitar monotonía (rotación de puestos, nuevas funciones)">Evitar monotonía (rotación de puestos, nuevas funciones)</label>
+        <label class="check"><input type="checkbox" value="Relacionamiento (equipos naturales, actividades sociales)">Relacionamiento (equipos naturales, actividades sociales)</label>
+        <label class="check"><input type="checkbox" value="Buenas condiciones de trabajo (compensaciones, beneficios)">Buenas condiciones de trabajo (compensaciones, beneficios)</label>
+        <label class="check"><input type="checkbox" value="Buen clima (infraestructura, limpieza, comodidad)">Buen clima (infraestructura, limpieza, comodidad)</label>
+        <label class="check"><input type="checkbox" value="Metas claras y desafiantes (aceptadas por el equipo)">Metas claras y desafiantes (aceptadas por el equipo)</label>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-ghost" id="copiarPlan">Copiar plan semanal</button>
+        <button class="btn" data-complete="tecnicas">He definido mis técnicas ✓</button>
+      </div>
+    </section>
+
+    <!-- Mini‑quiz con retro -->
+    <section class="card">
+      <h3>3.6 Mini‑quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Reflexión final -->
+    <section class="card">
+      <h3>3.7 Reflexión (2 líneas)</h3>
+      <textarea id="reflexion" rows="3" placeholder="¿Qué cambio harás en tu comunicación y qué táctica de motivación aplicarás esta semana?"></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+      </div>
+      <p class="note">Nota: se guarda solo en este dispositivo.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360</div>
+  </footer>
+
+  <script>
+    const $ = (s,d=document)=>d.querySelector(s);
+    const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    const state = read('anupro360_obj_v1', { done:{intro:false,seguimiento:false,claridad:false,consejos:false,motivacion:false,tecnicas:false,quiz:false}, reflexion:'', seg:{freq:'Semanal', kpis:'', c:[false,false,false]} });
+
+    function calcProgress(){ const total=Object.values(state.done).length; const ok=Object.values(state.done).filter(Boolean).length; const pct=Math.round(ok/total*100); $('#bar').style.width=pct+'%'; $('#badge').textContent=`Progreso ${pct}%`; }
+
+    // Reset
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_obj_v1'); location.reload(); });
+
+    // Seguimiento
+    $('#freq').value = state.seg?.freq || 'Semanal';
+    $('#kpis').value = state.seg?.kpis || '';
+    ['c1','c2','c3'].forEach((id,i)=>{ $('#'+id).checked = state.seg?.c?.[i] || false; $('#'+id).addEventListener('change', ()=>{ state.seg.c[i] = $('#'+id).checked; store('anupro360_obj_v1', state); }); });
+    $('#guardarSeg').addEventListener('click', ()=>{ state.seg.freq=$('#freq').value; state.seg.kpis=$('#kpis').value.trim(); store('anupro360_obj_v1', state); alert('Seguimiento guardado en este dispositivo.'); });
+    $('#copiarSeg').addEventListener('click', async()=>{ const txt = `Frecuencia: ${$('#freq').value}\nKPIs: ${($('#kpis').value||'').trim()}\nChecklist: [${['c1','c2','c3'].map(id=> $('#'+id).checked?'✓':'✗').join(' ')}]`; try{ await navigator.clipboard.writeText(txt); alert('Resumen copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+    // Generador de discurso
+    $('#generarDiscurso').addEventListener('click', ()=>{
+      const obj=($('#g_obj').value||'').trim(); const pub=($('#g_pub').value||'').trim(); const ideas=($('#g_ideas').value||'').split(',').map(x=>x.trim()).filter(Boolean); const rec=($('#g_rec').value||'').trim();
+      const inicio = obj?`Equipo ${pub||''}, nuestro objetivo es ${obj}. `:'';
+      const cuerpo = ideas.length?`Para lograrlo, pondremos foco en ${ideas.map((x,i)=> i===ideas.length-1 && i>0? 'y '+x : x).join(', ')}. `:'';
+      const recursos = rec?`Lo acompañaremos con ${rec}. `:'';
+      const cierre = 'Cada turno cuenta. Les propongo revisar avances en conjunto y ajustar cuando sea necesario. Gracias por su compromiso.';
+      $('#discurso').value = (inicio+cuerpo+recursos+cierre).trim();
+    });
+    $('#copiarDiscurso').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText(($('#discurso').value||'').trim()); alert('Discurso copiado. Pégalo en Classroom o compártelo con tu equipo.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+    // Técnicas - copiar plan
+    $('#copiarPlan').addEventListener('click', async()=>{
+      const sel = Array.from($('#tacticas').querySelectorAll('input:checked')).map(i=>`• ${i.value}`);
+      const plan = sel.length? `Plan semanal de motivación:\n${sel.join('\n')}` : 'Plan semanal de motivación: (selecciona al menos una técnica)';
+      try{ await navigator.clipboard.writeText(plan); alert('Plan copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente.'); }
+    });
+
+    // Quiz 10 preguntas con retro
+    const preguntas=[
+      {q:'Los objetivos responden principalmente a…', opts:['¿Qué se va a hacer?','¿Quiénes reciben el bono?','¿Dónde está el organigrama?'], ok:0},
+      {q:'Los objetivos del área deben…', opts:['Alinearse con la estrategia de la compañía','Ignorar la cadena de objetivos del negocio','Cambiar cada día'], ok:0},
+      {q:'Seguimiento efectivo implica…', opts:['Definir frecuencia y usar indicadores','Solo reunirse cuando haya problemas','Enviar correos largos'], ok:0},
+      {q:'En seguimiento, una carta Gantt sirve para…', opts:['Monitorear cumplimiento de actividades en el tiempo','Calcular sueldos','Hacer encuestas de clima'], ok:0},
+      {q:'Proporcionar claridad significa…', opts:['Comunicar de forma que todos compartan el sentido del objetivo','Usar tecnicismos para “verse experto”','Hablar mucho sin concretar'], ok:0},
+      {q:'En un discurso, es clave…', opts:['Definir ideas fuerza y conocer al público','Evitar preparar el cierre','Decir chistes al azar'], ok:0},
+      {q:'Según Maslow, el nivel superior es…', opts:['Autorrealización','Seguridad','Estima'], ok:0},
+      {q:'Según McClelland, una persona orientada al logro…', opts:['Busca retos alcanzables y mejorar procesos','Evita responsabilidades','Trabaja solo por dinero'], ok:0},
+      {q:'Una técnica de motivación efectiva es…', opts:['Reconocer logros y dar autonomía','Aumentar papeleo sin impacto','Ignorar sugerencias del equipo'], ok:0},
+      {q:'El lenguaje del discurso debe…', opts:['Ajustarse al público y evitar tecnicismos innecesarios','Ser lo más técnico posible','Ser tan coloquial que pierda claridad'], ok:0},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz'); wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div'); div.className='q';
+        div.dataset.index=i; div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label'); lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"><span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        wrap.appendChild(div);
+      });
+    }
+
+    function lockQuizAndColor(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, wrongCount=0, unanswered=0;
+      blocks.forEach((div)=>{
+        const ok = Number(div.dataset.ok);
+        const sel = div.querySelector('input[type="radio"]:checked');
+        // Deshabilita inputs
+        div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+        // Marca opción correcta en verde
+        const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        correctLabel?.classList.add('correct');
+        if(!sel){
+          div.classList.add('wrong');
+          unanswered++; wrongCount++;
+          return;
+        }
+        const chosen = Number(sel.value);
+        if(chosen===ok){
+          div.classList.add('correct'); okCount++;
+        } else {
+          div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++;
+        }
+      });
+      const total = preguntas.length; const pct = Math.round(okCount/total*100);
+      const msg = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      $('#quizFeedback').textContent = msg + ' Si tu resultado fue bajo, pulsa “Reiniciar quiz”, repasa las secciones del módulo y vuelve a intentarlo. También puedes usar “Reiniciar progreso” para estudiar desde cero.';
+    }
+
+    function resetQuizColors(){
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+      });
+      $('#quizFeedback').textContent='';
+    }
+
+    $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); });
+    $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); });
+
+    // Reflexión
+    const ref = $('#reflexion'); ref.value = state.reflexion||''; $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = ref.value.trim(); store('anupro360_obj_v1', state); alert('Reflexión guardada en este dispositivo.'); }); $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+    // Completar botones
+    $$('button[data-complete]').forEach(b=>{ b.addEventListener('click', e=>{ const key=e.currentTarget.dataset.complete; state.done[key]=true; store('anupro360_obj_v1', state); calcProgress(); e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost'); }); });
+
+    // Init
+    renderQuiz(); calcProgress(); $('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

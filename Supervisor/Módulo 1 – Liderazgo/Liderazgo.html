@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anupro360 · Cadena de Valor del Negocio</title>
+  <meta name="description" content="Microaprendizaje dinámico: Cadena de Valor del Negocio Minero (Anupro360)">
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.2rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.2), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.4rem}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn, .btn-ghost, .btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    .pill{display:flex; gap:10px; align-items:center; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+
+    details{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    .timeline{display:grid; gap:12px}
+    .step{border-left:4px solid var(--amarillo); padding:8px 12px 8px 12px; background:rgba(255,255,255,.04); border-radius:10px}
+    .bullet{margin:4px 0 4px 16px}
+
+    .two{display:grid; gap:12px}
+    @media(min-width:780px){.two{grid-template-columns:1fr 1fr}}
+
+    textarea{width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.2); color:var(--blanco)}
+
+    /* Quiz styles + feedback */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)} /* verde */
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}    /* rojo/naranja */
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    .note{font-size:.85rem; opacity:.85}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Anupro360">
+        <h1>Anupro360 · Cadena de Valor del Negocio</h1>
+      </div>
+      <div class="chip" id="badge">Progreso 0%</div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <h2>CADENA DE VALOR DEL NEGOCIO</h2>
+      <p class="note"><strong>Aprendizaje esperado:</strong> Explicar la cadena de valor del negocio minero y el impacto del área en ese contexto.</p>
+      <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+    </div>
+  </section>
+
+  <main class="wrap grid" id="app" role="main">
+    <!-- Columna izquierda -->
+    <section class="card">
+      <h3>1) Introducción</h3>
+      <details open>
+        <summary>¿Qué es la cadena de valor? (según Porter)</summary>
+        <p>Cada empresa es un conjunto de actividades que diseña, produce, lleva al mercado, entrega y apoya sus productos. Estas actividades se representan como <em>eslabones</em> que agregan valor paso a paso. La herramienta permite identificar fortalezas, debilidades y fuentes de ventaja competitiva.</p>
+      </details>
+      <div class="pill" style="margin-top:10px">
+        <div style="width:10px; height:10px; border-radius:50%; background:var(--amarillo)"></div>
+        <div><strong>Idea clave:</strong> entender en qué eslabón trabaja tu área para enfocar mejoras que realmente aumenten el valor final.</div>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn" data-complete="intro">Marcar leído ✓</button>
+      </div>
+    </section>
+
+    <!-- Columna derecha -->
+    <aside class="card">
+      <h3>Ficha del Micro‑módulo</h3>
+      <ul style="margin:0; padding-left:18px; line-height:1.7">
+        <li>Duración total: ~12–15 minutos</li>
+        <li>Formato: lectura + timeline + información + quiz</li>
+        <li>Objetivo: comprender la cadena y ubicar el aporte del área</li>
+      </ul>
+      <hr style="border-color:rgba(255,255,255,.12)">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+    </aside>
+
+    <!-- Diagrama genérico -->
+    <section class="card">
+      <h3>2) Cadena de valor genérica</h3>
+      <p class="note">Puedes <strong>descargar</strong> u <strong>abrir en grande</strong> el diagrama.</p>
+      <img src="diagrama_cadena_valor.webp" alt="Diagrama 2: Cadena de valor" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        <a class="btn-ghost" href="diagrama_cadena_valor.webp" download>Descargar imagen</a>
+        <a class="btn-ghost" href="diagrama_cadena_valor.webp" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+        <button class="btn" data-complete="generico">He revisado el diagrama ✓</button>
+      </div>
+    </section>
+
+    <!-- Cadena de valor en minería -->
+    <section class="card">
+      <h3>3) Cadena de valor en minería</h3>
+      <div class="timeline">
+        <div class="step">
+          <strong>Exploración</strong>
+          <ul class="bullet">
+            <li>Identifica zonas con yacimientos mediante levantamiento geológico, muestras geoquímicas y estudios geofísicos.</li>
+            <li>Perforaciones (sondajes) para observar el subsuelo.</li>
+            <li>Evaluación de factibilidad económica de extraer con ganancia.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <strong>Desarrollo</strong>
+          <ul class="bullet">
+            <li>Modelamiento del yacimiento y selección de técnicas de explotación.</li>
+            <li>Planificación de la extracción.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <strong>Extracción (rajo o subterránea)</strong>
+          <ul class="bullet">
+            <li>Extracción del mineral (explosivos, palas, etc.).</li>
+            <li>Separación mineral / estéril.</li>
+            <li>Chancado o trituración y clasificación por tamaños.</li>
+            <li>Re‑trituración si el tamaño no es adecuado.</li>
+            <li>Extracción y transporte a acopio y a la planta.</li>
+          </ul>
+        </div>
+        <div class="step">
+          <strong>Procesamiento</strong>
+          <ul class="bullet">
+            <li>Liberación del mineral: trituración, molienda y clasificación.</li>
+            <li>Concentración según mineral: lixiviación, flotación, electro‑obtención, etc.</li>
+            <li>El grado de liberación depende del costo/beneficio.</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="mineria">He revisado las etapas ✓</button></div>
+    </section>
+
+    <!-- Esquema básico minería -->
+    <section class="card">
+      <h3>4) Esquema básico de minería</h3>
+      <p class="note">Puedes <strong>descargar</strong> u <strong>abrir en grande</strong> el esquema.</p>
+      <img src="diagrama_basico_mineria.webp" alt="Diagrama 3: Esquema básico minería" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+      <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+        <a class="btn-ghost" href="diagrama_basico_mineria.webp" download>Descargar imagen</a>
+        <a class="btn-ghost" href="diagrama_basico_mineria.webp" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
+      </div>
+    </section>
+
+    <!-- Valor agregado -->
+    <section class="card">
+      <h3>5) ¿Qué es “agregar valor” en minería?</h3>
+      <div class="two">
+        <div>
+          <p>Un yacimiento adquiere valor cuando el material valioso se <em>extrae</em>, <em>procesa</em> y <em>concentra</em>. Ese producto final tiene más valor que el recurso en bruto. Este enfoque también aplica a las <strong>labores diarias</strong> del equipo: cada mejora en seguridad, coordinación o calidad aporta valor al resultado.</p>
+          <ul class="bullet">
+            <li>Identifica el lugar de tu área en la cadena.</li>
+            <li>Define fortalezas y brechas.</li>
+            <li>Propón acciones concretas de mejora.</li>
+          </ul>
+        </div>
+        <div class="pill">
+          <div style="width:10px; height:10px; border-radius:50%; background:var(--naranja)"></div>
+          <div><strong>Propósito:</strong> aumentar la contribución real del área al producto final y fortalecer identidad y sentido de propósito del equipo.</div>
+        </div>
+      </div>
+      <div style="margin-top:10px"><button class="btn" data-complete="valor">He comprendido el concepto ✓</button></div>
+    </section>
+
+    <!-- "Más información" en lugar de actividad -->
+    <section class="card">
+      <h3>6) Más información: ¿Cómo agrega valor tu área?</h3>
+      <p class="note">Lectura guiada con ejemplos por área/subárea para identificar mejoras sin completar tablas.</p>
+      <details open>
+        <summary>Transporte y logística</summary>
+        <ul class="bullet">
+          <li>Reducción de tiempos de espera en carga/descarga mediante coordinación con planta.</li>
+          <li>Rutas seguras y control de velocidad para disminuir incidentes y reprocesos.</li>
+          <li>Checklist de preoperación para evitar detenciones no planificadas.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Seleccionadora / Planta</summary>
+        <ul class="bullet">
+          <li>Calibración de equipos para minimizar rechazos y retrituración.</li>
+          <li>Monitoreo de cuellos de botella (chancado, molienda, clasificación).</li>
+          <li>Comunicación visual (andon/tablero) para priorizar órdenes.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Servicios Higiénicos y apoyo</summary>
+        <ul class="bullet">
+          <li>Disponibilidad y limpieza como factor de continuidad operacional y bienestar.</li>
+          <li>Rondas programadas según turnos de mayor tránsito.</li>
+          <li>Reporte rápido de incidencias con tiempos de respuesta.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Mantenimiento</summary>
+        <ul class="bullet">
+          <li>Mantenimiento preventivo basado en condición para prolongar vida útil de equipos.</li>
+          <li>Planificación con operaciones para disminuir tiempos fuera de servicio.</li>
+          <li>Stock crítico de repuestos para componentes de alta falla.</li>
+        </ul>
+      </details>
+      <div style="margin-top:10px"><button class="btn" data-complete="actividad">He revisado la información ✓</button></div>
+    </section>
+
+    <!-- Mini‑quiz -->
+    <section class="card">
+      <h3>7) Mini‑quiz (10 preguntas)</h3>
+      <div id="quiz"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button class="btn-sec" id="enviar">Enviar respuestas</button>
+        <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+      </div>
+      <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+      <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+    </section>
+
+    <!-- Reflexión final -->
+    <section class="card">
+      <h3>8) Reflexión (2 líneas)</h3>
+      <textarea id="reflexion" rows="3" placeholder="¿En qué eslabón se ubica tu área y qué cambio harás esta semana para agregar valor?"></textarea>
+      <div style="display:flex; gap:8px; margin-top:8px">
+        <button class="btn-ghost" id="guardarRef">Guardar</button>
+        <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+      </div>
+      <p class="note">Nota: se guarda solo en este dispositivo.</p>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>© <span id="year"></span> Anupro360 · Colores corporativos aplicados.</div>
+  </footer>
+
+  <script>
+    const $ = (s,d=document)=>d.querySelector(s);
+    const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+    const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+    const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+    const state = read('anupro360_cv_v3', { done:{intro:false,generico:false,mineria:false,valor:false,actividad:false,quiz:false}, reflexion:'' });
+
+    // Progreso
+    function calcProgress(){
+      const total = Object.values(state.done).length;
+      const ok = Object.values(state.done).filter(Boolean).length;
+      const pct = Math.round(ok/total*100);
+      $('#bar').style.width = pct+'%';
+      $('#badge').textContent = `Progreso ${pct}%`;
+    }
+
+    // Botones de completar
+    $$('button[data-complete]').forEach(b=>{
+      b.addEventListener('click', e=>{
+        const key = e.currentTarget.dataset.complete;
+        state.done[key] = true; store('anupro360_cv_v3', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      })
+    })
+
+    // Reset (en ficha)
+    $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_cv_v3'); location.reload(); });
+
+    // Quiz (10 preguntas)
+    const preguntas=[
+      {q:'¿Para qué sirve la cadena de valor en una empresa?', opts:['Para entender eslabones que agregan valor y focos de mejora','Solo para calcular sueldos','Para reemplazar el organigrama'], ok:0},
+      {q:'¿Qué ocurre en la etapa de Extracción?', opts:['Se modela el yacimiento','Se extrae, clasifica y transporta el mineral','Se realiza lixiviación y electro‑obtención'], ok:1},
+      {q:'Un ejemplo de “agregar valor” en labores diarias es…', opts:['Reducir reprocesos mediante una mejor coordinación','Aumentar papeleo sin impacto','Ignorar procedimientos para ir más rápido'], ok:0},
+      {q:'¿Qué describe mejor la etapa de Desarrollo?', opts:['Modelamiento del yacimiento y planificación de la extracción','Perforaciones y muestreo del subsuelo','Electro‑obtención del metal'], ok:0},
+      {q:'¿Cuál de estas es una técnica de concentración?', opts:['Flotación','Chancado','Sondajes'], ok:0},
+      {q:'¿Qué significa “liberar el mineral”?', opts:['Separarlo de la roca mediante trituración, molienda y clasificación','Transportarlo a planta para su venta','Aumentar la ley del mineral con documentos'], ok:0},
+      {q:'¿Quién acuñó el concepto de “cadena de valor”?', opts:['Michael Porter','Peter Drucker','W. Edwards Deming'], ok:0},
+      {q:'¿Por qué se identifican fortalezas y debilidades en la cadena?', opts:['Para detectar mejoras y ventajas competitivas','Solo para cumplir auditorías','Para asignar más papeleo'], ok:0},
+      {q:'En procesamiento, ¿cuál es el objetivo de concentrar el mineral?', opts:['Elevar el grado de mineral útil en el producto','Reducir el tamaño de roca únicamente','Aumentar el volumen sin cambiar la ley'], ok:0},
+      {q:'En extracción, “clasificación por tamaños” se refiere a…', opts:['Uso de rejillas/cribas para separar fracciones','Proceso de electro‑obtención','Sondajes geológicos'], ok:0},
+    ];
+
+    function renderQuiz(){
+      const wrap=$('#quiz');
+      wrap.innerHTML='';
+      preguntas.forEach((p,i)=>{
+        const div=document.createElement('div');
+        div.className='q';
+        div.dataset.index=i;
+        div.dataset.ok=p.ok;
+        div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+        p.opts.forEach((txt,j)=>{
+          const lab=document.createElement('label');
+          lab.className='opt';
+          lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"><span>${txt}</span>`;
+          div.appendChild(lab);
+        });
+        wrap.appendChild(div);
+      });
+    }
+
+    function lockQuizAndColor(){
+      const blocks = $$('#quiz .q');
+      let okCount=0, wrongCount=0, unanswered=0;
+      blocks.forEach((div)=>{
+        const i = Number(div.dataset.index);
+        const ok = Number(div.dataset.ok);
+        const sel = div.querySelector('input[type="radio"]:checked');
+        // disable all inputs
+        div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+        // mark correct option in green
+        const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+        correctLabel?.classList.add('correct');
+        if(!sel){
+          div.classList.add('wrong');
+          unanswered++;
+          wrongCount++;
+          return;
+        }
+        const chosen = Number(sel.value);
+        if(chosen===ok){
+          div.classList.add('correct');
+          okCount++;
+        } else {
+          div.classList.add('wrong');
+          sel.closest('label')?.classList.add('wrong');
+          wrongCount++;
+        }
+      });
+      const total = preguntas.length;
+      const pct = Math.round(okCount/total*100);
+      const msg = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+      $('#quizFeedback').textContent = msg + ' Si obtuviste un resultado bajo, te recomiendo pulsar “Reiniciar quiz” y repasar el contenido antes de intentarlo de nuevo. También puedes usar “Reiniciar progreso” para estudiar desde cero.';
+    }
+
+    function resetQuizColors(){
+      // Enable inputs, clear selections and classes
+      $$('#quiz .q').forEach(div=>{
+        div.classList.remove('correct','wrong');
+        div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+        div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+      });
+      $('#quizFeedback').textContent='';
+      // Scroll to top of quiz for a new attempt (optional)
+      // document.querySelector('#quiz').scrollIntoView({behavior:'smooth'});
+    }
+
+    $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); });
+    $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); });
+
+    // Reflexión
+    const ref = $('#reflexion'); ref.value = state.reflexion||''; $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = ref.value.trim(); store('anupro360_cv_v3', state); alert('Reflexión guardada en este dispositivo.'); }); $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+    // Init
+    renderQuiz(); calcProgress(); $('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
