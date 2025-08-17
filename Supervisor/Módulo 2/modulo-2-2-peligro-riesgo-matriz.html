@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Módulo 2.2 · Peligro vs Riesgo y Matriz de Evaluación</title>
+  <meta name="description" content="Microaprendizaje dinámico: Peligro vs Riesgo, Matriz 3×3, Riesgo Residual y Jerarquía de Controles (Anupro360) · Módulo 2.2">
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.1rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.2), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.35rem}
+    .note{font-size:.92rem; opacity:.9}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn, .btn-ghost, .btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    ul.bullet{margin:8px 0 0 18px; line-height:1.65}
+    .pill{display:flex; gap:10px; align-items:center; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+
+    /* Drag & Drop + Sort */
+    .bank, .dropzone{display:flex; gap:8px; flex-wrap:wrap; padding:10px; border-radius:12px; border:1px dashed rgba(255,255,255,.2); background:rgba(255,255,255,.04); min-height:56px}
+    .token{user-select:none; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.24); cursor:grab; font-weight:600}
+    .token.dragging{opacity:.6}
+    .drop{background:rgba(0,0,0,.22)}
+    .dz-ok{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .dz-bad{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .token.lock{cursor:not-allowed; background:rgba(75,111,68,.25); border-color:#4B6F44}
+
+    .two{display:grid; gap:12px}
+    @media(min-width:780px){.two{grid-template-columns:1fr 1fr}}
+    .sortable{display:flex; flex-direction:column; gap:8px}
+    .item{padding:10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); cursor:grab}
+    .item.ghost{opacity:.5; border-style:dashed}
+    .ok{outline:2px solid #4B6F44}
+
+    /* Quiz */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    table.matrix{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    .matrix th,.matrix td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:center}
+    .small{font-size:.85rem; opacity:.9}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    .tag{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.06)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <!-- Logo sugerido: assets/logos/imagotipoblanco.webp -->
+      <img src="imagotipoblanco.webp" alt="Anupro360">
+      <h1>Anupro360 · Módulo 2.2 · Peligro vs Riesgo y Matriz 3×3</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Peligro vs riesgo, matriz de evaluación y riesgo residual</h2>
+    <p class="note"><strong>Aprendizaje esperado:</strong> Identificar peligros, evaluar el nivel de riesgo (P×C), aplicar la jerarquía de controles y decidir ejecutar/no ejecutar en función del riesgo residual.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Columna izquierda -->
+  <section class="card">
+    <h3>1) Introducción y objetivo</h3>
+    <details open>
+      <summary>Punto de partida: mirar el trabajo como energía + consecuencias</summary>
+      <p>Todo trabajo convive con <strong>fuentes de energía</strong> (mecánica, eléctrica, química, gravitacional, térmica, cinética). Un <em>peligro</em> es la fuente con potencial de daño; el <em>riesgo</em> es la combinación de <strong>probabilidad</strong> y <strong>consecuencia</strong> de que ese daño ocurra en un escenario concreto. Este módulo te guía para evaluar con una matriz 3×3, aplicar la <strong>jerarquía de controles</strong> y decidir en base al <strong>riesgo residual</strong>.</p>
+      <p>Tu misión operativa es simple y exigente: <strong>si el riesgo residual es alto o intolerable, no ejecutas</strong>. Rediseñas controles hasta llevarlo a niveles aceptables.</p>
+    </details>
+    <div class="pill" style="margin-top:10px">
+      <div style="width:10px; height:10px; border-radius:50%; background:var(--amarillo)"></div>
+      <div><strong>Idea clave:</strong> evalúa el <em>escenario</em> real (quién, dónde, cuándo, con qué). El mismo peligro puede tener riesgo diferente según el contexto.</div>
+    </div>
+    <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn" data-complete="intro">Marcar leído ✓</button>
+    </div>
+    <!-- IMAGEN: matriz 3×3 | nombre: assets/img/mod-2-2/mod2_2_matriz_3x3.webp -->
+    <img src="mod2_2_matriz_3x3.webp" alt="Matriz 3×3 de riesgo Probabilidad × Consecuencia" style="width:100%; margin-top:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+    <p class="small"> <em></em> · </p>
+  </section>
+
+  <!-- Columna derecha -->
+  <aside class="card">
+    <h3>Ficha del Micro-módulo 2.2</h3>
+    <ul class="bullet">
+      <li>Tiempo estimado: <strong>15–20 min</strong></li>
+      <li>Formato: lectura + emparejar + ordenar + escenarios + quiz</li>
+      <li>Objetivo: distinguir peligro/riesgo, evaluar P×C, aplicar controles y decidir por residual</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.12)">
+    <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+  </aside>
+
+  <!-- Paso a paso -->
+  <section class="card">
+    <h3>2) Paso a paso (evaluación práctica)</h3>
+    <div class="two">
+      <div>
+        <ol class="bullet" style="list-style:decimal">
+          <li><strong>Identifica el peligro:</strong> altura, atrapamiento, químicos, energía eléctrica, tránsito, etc.</li>
+          <li><strong>Define el escenario:</strong> si ocurre, ¿qué pasa y a quién? (persona, equipo, ambiente).</li>
+          <li><strong>Evalúa P y C:</strong> Probabilidad <em>(B/M/A)</em> y Consecuencia <em>(L/S/G)</em>.</li>
+          <li><strong>Calcula el nivel de riesgo</strong> cruzando P×C → Bajo / Medio / Alto / <strong>Intolerable</strong>.</li>
+          <li><strong>Selecciona controles</strong> según la <em>jerarquía</em>: Eliminar → Sustituir → Ingeniería → Administrativo → EPP.</li>
+          <li><strong>Implementa y verifica</strong> que operan como se diseñó.</li>
+          <li><strong>Re-evalúa el residual:</strong> si sigue alto/intolerable, no se ejecuta; rediseña.</li>
+        </ol>
+      </div>
+      <div class="pill">
+        <div style="width:10px; height:10px; border-radius:50%; background:var(--naranja)"></div>
+        <div><strong>Regla de oro:</strong> <em>no</em> sustituyas controles de ingeniería por EPP. El EPP es la <u>última</u> capa, complementaria.</div>
+      </div>
+    </div>
+    <!-- IMAGEN: jerarquía de controles | nombre: assets/img/mod-2-2/mod2_2_jerarquia_controles.webp -->
+    <img src="mod2_2_jerarquia_controles.webp" alt="Pirámide de jerarquía de controles: Eliminar, Sustituir, Ingeniería, Administrativo, EPP" style="width:100%; margin-top:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+    <p class="small"> <em></em> · </p>
+    <div style="margin-top:10px"><button class="btn" data-complete="pasos">He comprendido el paso a paso ✓</button></div>
+  </section>
+
+  <!-- Matriz 3x3 -->
+  <section class="card">
+    <h3>3) Matriz 3×3 y codificación</h3>
+    <p class="note">Usaremos la matriz simple con <strong>Probabilidad</strong> (Baja/Media/Alta) y <strong>Consecuencia</strong> (Leve/Seria/Grave). Los códigos combinados se leen por letras: <em>B</em>/<em>M</em>/<em>A</em> y <em>L</em>/<em>S</em>/<em>G</em>.</p>
+    <table class="matrix" aria-label="Matriz 3 por 3 de evaluación de riesgo">
+      <thead>
+        <tr><th></th><th>Leve (L)</th><th>Seria (S)</th><th>Grave (G)</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>Baja (B)</th><td>BL</td><td>BS</td><td><strong>BG</strong></td></tr>
+        <tr><th>Media (M)</th><td>ML</td><td><strong>MS</strong></td><td><strong>MG</strong></td></tr>
+        <tr><th>Alta (A)</th><td><strong>AL</strong></td><td><strong>AS</strong></td><td><strong>AG</strong></td></tr>
+      </tbody>
+    </table>
+    <p class="small">Interpretación típica: normal→<em>no negrita</em> (bajo/medio); <strong>negrita</strong> requiere control robusto o <em>no ejecutar</em> según política interna.</p>
+    <div style="margin-top:10px"><button class="btn" data-complete="matriz">He revisado la matriz ✓</button></div>
+  </section>
+
+  <!-- Actividad 1: Emparejar términos -->
+  <section class="card">
+    <h3>4) Actividad: Empareja término y definición</h3>
+    <p class="note">Arrastra la <strong>definición</strong> correcta desde el <em>Banco</em> hacia cada tarjeta. Verde = correcto · Rojo = incorrecto.</p>
+    <div class="two" id="match">
+      <div>
+        <div class="tag">Banco</div>
+        <div class="bank" id="bank1" aria-label="Banco de definiciones">
+          <div class="token" draggable="true" data-key="peligro">Fuente o situación con potencial de causar daño.</div>
+          <div class="token" draggable="true" data-key="riesgo">Combinación de probabilidad y consecuencia en un escenario.</div>
+          <div class="token" draggable="true" data-key="jerarquia">Orden preferente de controles: eliminar→sustituir→ingeniería→administrativo→EPP.</div>
+          <div class="token" draggable="true" data-key="residual">Riesgo que queda después de aplicar controles.</div>
+          <div class="token" draggable="true" data-key="intolerable">Nivel no permitido: la tarea no se ejecuta.</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+          <button class="btn-ghost" id="resetMatch1">Reiniciar</button>
+        </div>
+      </div>
+      <div>
+        <div class="dropzone" data-accept="peligro"><strong>Peligro</strong></div>
+        <div class="dropzone" data-accept="riesgo" style="margin-top:8px"><strong>Riesgo</strong></div>
+        <div class="dropzone" data-accept="jerarquia" style="margin-top:8px"><strong>Jerarquía de controles</strong></div>
+        <div class="dropzone" data-accept="residual" style="margin-top:8px"><strong>Riesgo residual</strong></div>
+        <div class="dropzone" data-accept="intolerable" style="margin-top:8px"><strong>Intolerable</strong></div>
+      </div>
+    </div>
+    <p id="match1Msg" class="small" style="margin-top:8px"></p>
+  </section>
+
+  <!-- Actividad 2: Orden correcto -->
+  <section class="card">
+    <h3>5) Actividad: Ordena el proceso de evaluación</h3>
+    <p class="note">Orden correcto esperado: <strong>Identificar peligro → Definir escenario → Evaluar P y C → Seleccionar controles (jerarquía) → Implementar → Re-evaluar residual → Decidir ejecutar/no ejecutar</strong>.</p>
+    <div class="sortable" id="orden">
+      <div class="item" draggable="true" data-id="controles">Seleccionar controles (jerarquía)</div>
+      <div class="item" draggable="true" data-id="escenario">Definir escenario</div>
+      <div class="item" draggable="true" data-id="residual">Re-evaluar riesgo residual</div>
+      <div class="item" draggable="true" data-id="peligro">Identificar peligro</div>
+      <div class="item" draggable="true" data-id="decidir">Decidir ejecutar / no ejecutar</div>
+      <div class="item" draggable="true" data-id="implement">Implementar controles</div>
+      <div class="item" draggable="true" data-id="eval">Evaluar Probabilidad y Consecuencia</div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+      <button class="btn-sec" id="checkOrden">Comprobar</button>
+      <button class="btn-ghost" id="resetOrden">Reiniciar</button>
+    </div>
+    <p id="ordenMsg" class="small"></p>
+  </section>
+
+  <!-- Actividad 3: Escenarios → Tipo de control -->
+  <section class="card">
+    <h3>6) Actividad: ¿Qué control aplicarías?</h3>
+    <p class="note">Arrastra cada <strong>escenario</strong> al contenedor del <strong>tipo de control</strong> más adecuado según la jerarquía.</p>
+    <div class="two" id="esc">
+      <div>
+        <div class="tag">Escenarios</div>
+        <div class="bank" id="bank2">
+          <div class="token" draggable="true" data-key="eliminar">Borde inestable: cambia el método para <u>no trabajar</u> en el borde.</div>
+          <div class="token" draggable="true" data-key="sustituir">Uso de solvente tóxico: reemplazar por uno de menor toxicidad.</div>
+          <div class="token" draggable="true" data-key="ingenieria">Ruido alto continuo: cabina acústica/aislamiento de la fuente.</div>
+          <div class="token" draggable="true" data-key="administrativo">Trabajo en altura: exigir permiso, procedimiento y capacitación.</div>
+          <div class="token" draggable="true" data-key="epp">Polvo residual al barrer: respirador con filtro P100.</div>
+        </div>
+      </div>
+      <div>
+        <div class="dropzone" data-accept="eliminar"><strong>Eliminar</strong></div>
+        <div class="dropzone" data-accept="sustituir" style="margin-top:8px"><strong>Sustituir</strong></div>
+        <div class="dropzone" data-accept="ingenieria" style="margin-top:8px"><strong>Ingeniería</strong></div>
+        <div class="dropzone" data-accept="administrativo" style="margin-top:8px"><strong>Administrativo</strong></div>
+        <div class="dropzone" data-accept="epp" style="margin-top:8px"><strong>EPP</strong></div>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+      <button class="btn-ghost" id="resetMatch2">Reiniciar</button>
+    </div>
+    <p id="match2Msg" class="small"></p>
+  </section>
+
+  <!-- Glosario -->
+  <section class="card">
+    <h3>7) Glosario simple</h3>
+    <div class="two">
+      <div>
+        <ul class="bullet">
+          <li><strong>Jerarquía de controles:</strong> preferir eliminar/sustituir/ingeniería antes que administrativos o EPP.</li>
+          <li><strong>Riesgo residual:</strong> nivel post-controles; guía la decisión final.</li>
+          <li><strong>Intolerable:</strong> no se ejecuta la tarea; rediseño obligatorio.</li>
+        </ul>
+      </div>
+      <div>
+        <!-- IMAGEN: casos de ejemplo | nombre: assets/img/mod-2-2/mod2_2_casos.webp -->
+        <img src="mod2_2_casos.webp" alt="Ejemplos de aplicación de controles por jerarquía" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+        <p class="small"> <em></em> · </p>
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="glosario">He revisado el glosario ✓</button></div>
+  </section>
+
+  <!-- Checklist -->
+  <section class="card">
+    <h3>8) Checklist 1 minuto</h3>
+    <div class="two">
+      <div>
+        <label class="pill"><input type="checkbox" class="ck"> ¿Identifiqué peligros del lugar y de la tarea?</label>
+        <label class="pill"><input type="checkbox" class="ck"> ¿Apliqué controles de ingeniería antes que EPP?</label>
+        <label class="pill"><input type="checkbox" class="ck"> ¿Re-evalué el riesgo residual antes de ejecutar?</label>
+      </div>
+      <div>
+        <p class="small">Cuando actives las tres casillas, se marcará esta sección como completada.</p>
+        <div id="ckMsg" class="small"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quiz -->
+  <section class="card">
+    <h3>9) Mini-quiz (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+  </section>
+
+  <!-- Reflexión -->
+  <section class="card">
+    <h3>10) Reflexión final (2 líneas)</h3>
+    <textarea id="reflexion" rows="3" placeholder="¿Qué control cambiarás esta semana para reducir un riesgo alto a medio o bajo?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="small">Nota: se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Colores corporativos aplicados.</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_m2_2', {
+    done:{intro:false,pasos:false,matriz:false,act1:false,act2:false,act3:false,glosario:false,check:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_m2_2', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_m2_2'); location.reload(); });
+
+  /* ---------- DRAG & DROP: Emparejar (Actividad 1) ---------- */
+  function ddSetup(containerSelector, bankId, onCheck){
+    let dragging=null;
+    $$(containerSelector+' .token').forEach(tok=>{
+      tok.addEventListener('dragstart', ()=>{ dragging=tok; tok.classList.add('dragging'); });
+      tok.addEventListener('dragend', ()=>{ dragging=null; tok.classList.remove('dragging'); });
+      tok.addEventListener('click', ()=>{
+        const target = document.activeDropzone || null;
+        if(target) tryDrop(target, tok, bankId, onCheck);
+      });
+    });
+    $$(containerSelector+' .dropzone, '+containerSelector+' .bank').forEach(zone=>{
+      zone.addEventListener('dragover', (e)=>{ e.preventDefault(); zone.classList.add('drop'); document.activeDropzone = zone; });
+      zone.addEventListener('dragleave', ()=> zone.classList.remove('drop'));
+      zone.addEventListener('drop', (e)=>{ e.preventDefault(); zone.classList.remove('drop'); if(dragging) tryDrop(zone, dragging, bankId, onCheck); });
+      zone.addEventListener('click', ()=>{ document.activeDropzone = zone; });
+    });
+  }
+  function tryDrop(zone, tok, bankId, onCheck){
+    if(zone.classList.contains('bank')){
+      tok.classList.remove('lock'); zone.appendChild(tok);
+      zone.classList.remove('dz-ok','dz-bad');
+      onCheck && onCheck();
+      return;
+    }
+    const accept = zone.dataset.accept;
+    const key = tok.dataset.key;
+    const prev = zone.querySelector('.token'); if(prev){ $(bankId).appendChild(prev); prev.classList.remove('lock'); }
+    zone.appendChild(tok);
+    if(accept===key){ zone.classList.add('dz-ok'); zone.classList.remove('dz-bad'); tok.classList.add('lock'); }
+    else{ zone.classList.add('dz-bad'); zone.classList.remove('dz-ok'); tok.classList.remove('lock'); }
+    onCheck && onCheck();
+  }
+
+  function checkMatch1(){
+    const zones = $$('#match .dropzone');
+    const allOk = zones.every(z=> z.classList.contains('dz-ok'));
+    const anyBad = zones.some(z=> z.classList.contains('dz-bad'));
+    $('#match1Msg').textContent = allOk ? '✅ ¡Correcto! Términos emparejados.' : (anyBad ? '❌ Hay definiciones en lugares incorrectos.' : 'Arrastra definiciones a cada término.');
+    if(allOk){ state.done.act1 = true; store('anupro360_m2_2', state); calcProgress(); }
+  }
+  ddSetup('#match','#bank1',checkMatch1);
+  $('#resetMatch1')?.addEventListener('click', ()=>{
+    $$('#match .dropzone').forEach(z=>{ z.classList.remove('dz-ok','dz-bad'); const t=z.querySelector('.token'); if(t){ t.classList.remove('lock'); $('#bank1').appendChild(t);} });
+    $('#match1Msg').textContent=''; state.done.act1=false; store('anupro360_m2_2', state); calcProgress();
+  });
+
+  /* ---------- SORTABLE: Orden del proceso (Actividad 2) ---------- */
+  let dragItem=null;
+  $$('#orden .item').forEach(it=>{
+    it.addEventListener('dragstart', ()=>{ dragItem=it; it.classList.add('ghost'); });
+    it.addEventListener('dragend', ()=>{ dragItem=null; it.classList.remove('ghost'); });
+  });
+  $('#orden')?.addEventListener('dragover', e=>{
+    e.preventDefault();
+    const after = getDragAfterElement($('#orden'), e.clientY);
+    if(after==null){ $('#orden').appendChild(dragItem); }
+    else{ $('#orden').insertBefore(dragItem, after); }
+  });
+  function getDragAfterElement(container, y){
+    const els = [...container.querySelectorAll('.item:not(.ghost)')];
+    return els.reduce((closest, child)=>{
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height/2;
+      if(offset<0 && offset>closest.offset){ return {offset, element:child}; }
+      else return closest;
+    }, {offset:Number.NEGATIVE_INFINITY}).element;
+  }
+  const ordenCorrecto = ['peligro','escenario','eval','controles','implement','residual','decidir'];
+  $('#checkOrden')?.addEventListener('click', ()=>{
+    const ids = $$('#orden .item').map(i=>i.dataset.id);
+    let ok=0;
+    $$('#orden .item').forEach((i,idx)=>{
+      if(ordenCorrecto[idx]===i.dataset.id){ i.classList.add('ok'); ok++; } else { i.classList.remove('ok'); }
+    });
+    if(ok===ordenCorrecto.length){
+      $('#ordenMsg').textContent='✅ Orden correcto. Excelente práctica.';
+      state.done.act2=true; store('anupro360_m2_2', state); calcProgress();
+    }else{
+      $('#ordenMsg').textContent=`❌ Hay ${ordenCorrecto.length-ok} elemento(s) fuera de lugar. Ajusta y vuelve a comprobar.`;
+    }
+  });
+  $('#resetOrden')?.addEventListener('click', ()=>{
+    const items = $$('#orden .item');
+    items.forEach(i=> i.classList.remove('ok'));
+    items.sort(()=>Math.random()-0.5).forEach(i=> $('#orden').appendChild(i));
+    $('#ordenMsg').textContent='';
+    state.done.act2=false; store('anupro360_m2_2', state); calcProgress();
+  });
+
+  /* ---------- DRAG & DROP: Escenarios (Actividad 3) ---------- */
+  function ddSetup2(){
+    let dragging=null;
+    $$('#bank2 .token').forEach(tok=>{
+      tok.addEventListener('dragstart', ()=>{ dragging=tok; tok.classList.add('dragging'); });
+      tok.addEventListener('dragend', ()=>{ dragging=null; tok.classList.remove('dragging'); });
+      tok.addEventListener('click', ()=>{
+        const target = document.activeDropzone2 || null;
+        if(target) tryDrop2(target, tok);
+      });
+    });
+    $$('#esc .dropzone, #esc .bank').forEach(zone=>{
+      zone.addEventListener('dragover', (e)=>{ e.preventDefault(); zone.classList.add('drop'); document.activeDropzone2 = zone; });
+      zone.addEventListener('dragleave', ()=> zone.classList.remove('drop'));
+      zone.addEventListener('drop', (e)=>{ e.preventDefault(); zone.classList.remove('drop'); if(dragging) tryDrop2(zone, dragging); });
+      zone.addEventListener('click', ()=>{ document.activeDropzone2 = zone; });
+    });
+  }
+  function tryDrop2(zone, tok){
+    if(zone.classList.contains('bank')){ tok.classList.remove('lock'); zone.appendChild(tok); zone.classList.remove('dz-ok','dz-bad'); checkMatch2(); return; }
+    const accept = zone.dataset.accept;
+    const key = tok.dataset.key;
+    const prev = zone.querySelector('.token'); if(prev){ $('#bank2').appendChild(prev); prev.classList.remove('lock'); }
+    zone.appendChild(tok);
+    if(accept===key){ zone.classList.add('dz-ok'); zone.classList.remove('dz-bad'); tok.classList.add('lock'); }
+    else{ zone.classList.add('dz-bad'); zone.classList.remove('dz-ok'); tok.classList.remove('lock'); }
+    checkMatch2();
+  }
+  function checkMatch2(){
+    const zones = $$('#esc .dropzone');
+    const allOk = zones.every(z=> z.classList.contains('dz-ok'));
+    const anyBad = zones.some(z=> z.classList.contains('dz-bad'));
+    $('#match2Msg').textContent = allOk ? '✅ Escenarios resueltos correctamente.' : (anyBad ? '❌ Revisa las coincidencias.' : 'Asigna cada escenario a su acción.');
+    if(allOk){ state.done.act3 = true; store('anupro360_m2_2', state); calcProgress(); }
+  }
+  $('#resetMatch2')?.addEventListener('click', ()=>{
+    $$('#esc .dropzone').forEach(z=>{ z.classList.remove('dz-ok','dz-bad'); const t=z.querySelector('.token'); if(t){ t.classList.remove('lock'); $('#bank2').appendChild(t);} });
+    $('#match2Msg').textContent='';
+    state.done.act3=false; store('anupro360_m2_2', state); calcProgress();
+  });
+  ddSetup2();
+
+  /* ---------- Checklist ---------- */
+  $$('.ck').forEach(c=> c.addEventListener('change', ()=>{
+    const all = $$('.ck').every(x=>x.checked);
+    if(all){ $('#ckMsg').textContent='✅ Checklist completado.'; state.done.check=true; store('anupro360_m2_2', state); calcProgress(); }
+    else { $('#ckMsg').textContent='Marca las tres casillas para completar.'; state.done.check=false; store('anupro360_m2_2', state); calcProgress(); }
+  }));
+
+  /* ---------- Quiz 10 preguntas (contenido 2.2) ---------- */
+  const preguntas=[
+    {q:'¿Cuál es la diferencia correcta?', opts:['Peligro = probabilidad; Riesgo = fuente de daño','Peligro = fuente de daño; Riesgo = probabilidad × consecuencia','Peligro = consecuencia; Riesgo = uso de EPP'], ok:1},
+    {q:'La matriz 3×3 cruza…', opts:['Costo × tiempo','Probabilidad × Consecuencia','Altura × distancia'], ok:1},
+    {q:'¿Qué control está más alto en la jerarquía?', opts:['EPP','Administrativo','Eliminar'], ok:2},
+    {q:'Riesgo residual es…', opts:['Nivel antes de controlar','Nivel después de aplicar controles','El permiso escrito'], ok:1},
+    {q:'Si el residual queda alto/intolerable corresponde…', opts:['Ejecutar con cuidado','No ejecutar y rediseñar controles','Sólo entregar más EPP'], ok:1},
+    {q:'Ejemplo de control de ingeniería:', opts:['Capacitación específica','Encapsular la fuente de ruido','Checklist de preuso'], ok:1},
+    {q:'Código “AS” en la matriz significa…', opts:['Alta probabilidad y consecuencia seria','Alta probabilidad y consecuencia leve','Media probabilidad y consecuencia grave'], ok:0},
+    {q:'¿Qué va primero según la jerarquía?', opts:['EPP','Procedimientos','Eliminar/Sustituir/Ingeniería'], ok:2},
+    {q:'Una tarea con “AG” debería…', opts:['Iniciar con EPP reforzado','Ser detenida hasta bajar el nivel','Continuar con registro en bitácora'], ok:1},
+    {q:'Evaluar el escenario implica…', opts:['Definir quién podría verse afectado y cómo','Sólo medir decibeles','Revisar costos del proyecto'], ok:0},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+      p.opts.forEach((txt,j)=>{
+        const lab=document.createElement('label');
+        lab.className='opt';
+        lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"><span>${txt}</span>`;
+        div.appendChild(lab);
+      });
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_m2_2', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_m2_2', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_m2_2', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+  /* Init */
+  renderQuiz(); calcProgress(); $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
