@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Módulo · Organización operacional de la mina</title>
+  <meta name="description" content="Organización operacional de la mina: estructura, roles, RACI, flujos de comunicación, gestión de turnos y KPIs. Anupro360.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B;
+      --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.1rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.35rem}
+    .note{font-size:.95rem; opacity:.9; text-align:justify}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18);
+          border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-weight:700}
+    ul.bullet{margin:8px 0 0 18px; line-height:1.65}
+    p{ text-align:justify }
+
+    /* ====== IMÁGENES AJUSTADAS ====== */
+    figure{margin:12px 0; display:flex; flex-direction:column; gap:8px; align-items:center}
+    figure img{
+      display:block;
+      max-width:100%;
+      width:100%;
+      height:auto;
+      /* altura máxima responsiva: mínimo 200px, preferencia 35vh, tope 420px */
+      max-height:clamp(200px, 35vh, 420px);
+      object-fit:contain;
+      border-radius:12px; border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+      padding:6px;
+    }
+    figcaption{font-size:.9rem; opacity:.9; text-align:center}
+
+    /* Miniaturas de descargas: misma proporción y tamaño */
+    .downloads{display:grid; gap:12px}
+    @media(min-width:740px){.downloads{grid-template-columns:1fr 1fr}}
+    .dl{display:flex; flex-direction:column; gap:8px}
+    .downloads img{
+      width:100%;
+      height:140px;             /* miniaturas parejas */
+      object-fit:cover;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03);
+    }
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    .small{font-size:.85rem; opacity:.9}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+
+    /* Quiz */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+      <h1>Anupro360 · Módulo · Organización operacional de la mina</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Cómo se organiza, coordina y controla una mina a cielo abierto</h2>
+    <p class="note"><strong>Aprendizaje esperado:</strong> Comprender la estructura operacional de la mina, los roles clave, los flujos de comunicación y escalamiento, la gestión de turnos y el uso de KPIs para asegurar continuidad, seguridad y productividad.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- COLUMNA IZQUIERDA -->
+  <section class="card">
+    <h3>1) Introducción y objetivo</h3>
+    <div class="pill"><i>ℹ️</i><div>
+      La organización operacional traduce el plan de mina en acciones diarias. Asegura que <b>personas</b>, <b>equipos</b>, <b>rutas</b> y <b>prioridades</b> estén alineados para sostener el ciclo <em>carguío → acarreo → descarga → retorno</em> sin interrupciones. Este módulo te guía punto por punto: estructura, roles, responsabilidades, comunicaciones, gestión de turnos y control con indicadores.
+    </div></div>
+    <div style="margin-top:10px"><button class="btn" data-complete="intro">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- COLUMNA DERECHA (FICHA) -->
+  <aside class="card">
+    <h3>Ficha del Módulo</h3>
+    <ul class="bullet">
+      <li>Tiempo estimado: <b>25–35 min</b></li>
+      <li>Formato: lectura + imágenes descargables + quiz + reflexión</li>
+      <li>Objetivo: coordinar turnos y actores con foco en continuidad y seguridad</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.12)">
+    <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+  </aside>
+
+  <!-- ORGANIGRAMA -->
+  <section class="card">
+    <h3>2) Estructura organizacional (organigrama)</h3>
+    <p>Una mina típica se organiza en tres niveles: <b>dirección</b> (define metas y políticas), <b>coordinación</b> (planifica, programa y controla), y <b>ejecución</b> (opera equipos y frentes). Seguridad y geotecnia acompañan transversalmente. Observa el esquema y ubica tu rol.</p>
+    <figure>
+      <img loading="lazy" src="org_operacional_mina.webp" alt="Organigrama operacional de una mina a cielo abierto (Gerente, Superintendencias, ROC, Jefes de turno, Flotas CAEX, Palas, Mantenimiento, Geotecnia, Planta).">
+      <figcaption>Organigrama operacional – relación jerárquica y de apoyo.</figcaption>
+    </figure>
+    <ul class="bullet">
+      <li><b>Gerente de Mina:</b> responsable de seguridad, presupuesto y cumplimiento del plan.</li>
+      <li><b>Superintendencia de Operaciones:</b> prioriza destinos, balancea flotas, gestiona restricciones.</li>
+      <li><b>ROC/Despacho:</b> controla asignaciones, bloqueos, rutas y eventos en tiempo real.</li>
+      <li><b>Jefes de Turno:</b> liderazgo del turno, ejecución del plan diario y coordinación in situ.</li>
+      <li><b>Mantenimiento:</b> disponibilidad mecánica, ventanas y emergencias.</li>
+      <li><b>Geotecnia/Geología:</b> estabilidad de taludes, mapeo de frentes y leyes.</li>
+      <li><b>SSO:</b> gestión de riesgos, permisos críticos y respuesta a incidentes.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="org">Estructura comprendida ✓</button></div>
+  </section>
+
+  <!-- RACI -->
+  <section class="card">
+    <h3>3) Roles y responsabilidades (RACI)</h3>
+    <p>Para evitar ambigüedades, definimos quién es <b>Responsable (R)</b>, quién <b>Aprueba (A)</b>, quién debe ser <b>Consultado (C)</b> y quién sólo <b>Informado (I)</b> en actividades clave.</p>
+    <figure>
+      <img loading="lazy" src="matriz_RACI.webp" alt="Matriz RACI con actividades: plan diario, asignación de flota, bloqueos de ruta, fallas y reportes de incidentes.">
+      <figcaption>Matriz RACI de ejemplo. Úsala como guía para tu operación.</figcaption>
+    </figure>
+    <div style="margin-top:10px"><button class="btn" data-complete="raci">He revisado la RACI ✓</button></div>
+  </section>
+
+  <!-- FLUJOS -->
+  <section class="card">
+    <h3>4) Flujos de comunicación y escalamiento</h3>
+    <p>La continuidad depende de <b>resolver rápido</b>. El flujo base es: Operadores → Jefe de Turno → ROC → Superintendencia. Según el evento, se <b>escala</b> a Mantenimiento, Seguridad o Geotecnia. Evita canales paralelos, documenta en bitácora y confirma recepción.</p>
+    <figure>
+      <img loading="lazy" src="flujo_comunicaciones.webp" alt="Diagrama de comunicaciones y escalamiento: operadores, jefe de turno, ROC, superintendencia; ramas a mantenimiento, seguridad y geotecnia.">
+      <figcaption>Flujo de comunicaciones para eventos operacionales.</figcaption>
+    </figure>
+    <ul class="bullet">
+      <li><b>Regla 1:</b> ante <em>riesgo crítico</em>, prioriza seguridad y activa <code>HOLD/LOCK</code>.</li>
+      <li><b>Regla 2:</b> comunica con código claro (quién, dónde, qué, impacto, acción).</li>
+      <li><b>Regla 3:</b> registra 5W + evidencia para aprendizaje.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="flujos">Flujos claros ✓</button></div>
+  </section>
+
+  <!-- TURNOS -->
+  <section class="card">
+    <h3>5) Gestión de turno (pre, durante y cierre)</h3>
+    <p><b>Preturno (10 min):</b> metas, frentes activos, restricciones, clima, riesgos. <b>Durante:</b> control visual de KPIs cada 2 h, balance de flota y mitigación de cuellos. <b>Cierre:</b> handover estructurado y actualización de bitácora.</p>
+    <figure>
+      <img loading="lazy" src="checklist_cambio_turno.webp" alt="Checklist de cambio de turno con 7 puntos: handover, estado de rutas y bloqueos, flota disponible, prioridades de destino, riesgos del día, metas, plan de comunicaciones.">
+      <figcaption>Checklist recomendado para cambio de turno.</figcaption>
+    </figure>
+    <div style="margin-top:10px"><button class="btn" data-complete="turnos">Checklist entendido ✓</button></div>
+  </section>
+
+  <!-- LAYOUT -->
+  <section class="card">
+    <h3>6) Layout y zonas operacionales</h3>
+    <p>Ubicar correctamente las zonas permite rutas eficientes y seguras. El diseño debe minimizar cruces, pendientes extremas y conflictos con obras. Mantén actualizado el plano de: <b>palas</b>, <b>rampas</b>, <b>botaderos</b>, <b>chancador/planta</b>, <b>taller/combustible</b>.</p>
+    <figure>
+      <img loading="lazy" src="layout_mina_zonas.webp" alt="Lay-out de mina con Pala, Rampa asc/desc, Botadero, Chancador y Taller/Combustible y las rutas principales.">
+      <figcaption>Plano conceptual de zonas y rutas principales.</figcaption>
+    </figure>
+    <div style="margin-top:10px"><button class="btn" data-complete="layout">Zonas ubicadas ✓</button></div>
+  </section>
+
+  <!-- KPIs -->
+  <section class="card">
+    <h3>7) Indicadores y control visual</h3>
+    <p>Los KPIs alinean al equipo en un objetivo común. Para reuniones de 5 minutos usa un tablero simple, visible y accionable: <b>TPH</b>, <b>tiempo de ciclo</b>, <b>disponibilidad</b>, <b>utilización</b>, <b>colas</b> y <b>velocidad en rampa</b>. Define umbrales y gatilla acciones cuando se superan.</p>
+    <figure>
+      <img loading="lazy" src="tablero_kpis.webp" alt="Tablero con TPH flota, tiempo de ciclo, disponibilidad, utilización, colas en pala y velocidad en rampa.">
+      <figcaption>Ejemplo de tablero diario para control del turno.</figcaption>
+    </figure>
+    <div style="margin-top:10px"><button class="btn" data-complete="kpis">KPIs revisados ✓</button></div>
+  </section>
+
+  <!-- DESCARGAS -->
+  <section class="card">
+    <h3>8) Imágenes descargables (alta resolución)</h3>
+    <p class="small">Pulsa <em>Descargar</em> para verlas en grande. Guarda los archivos junto a este HTML si quieres que se muestren dentro de la app.</p>
+    <div class="downloads">
+      <div class="dl">
+        <a class="btn-ghost" href="org_operacional_mina.png" download>Descargar · Organigrama operacional</a>
+        <img loading="lazy" src="org_operacional_mina.webp" alt="Miniatura organigrama">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="flujo_comunicaciones.png" download>Descargar · Flujo de comunicaciones</a>
+        <img loading="lazy" src="flujo_comunicaciones.webp" alt="Miniatura flujo comunicaciones">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="matriz_RACI.webp" download>Descargar · Matriz RACI</a>
+        <img loading="lazy" src="matriz_RACI.webp" alt="Miniatura RACI">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="checklist_cambio_turno.png" download>Descargar · Checklist cambio de turno</a>
+        <img loading="lazy" src="checklist_cambio_turno.webp" alt="Miniatura checklist">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="layout_mina_zonas.webp" download>Descargar · Layout de zonas</a>
+        <img loading="lazy" src="layout_mina_zonas.webp" alt="Miniatura layout zonas">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="tablero_kpis.webp" download>Descargar · Tablero de KPIs</a>
+        <img loading="lazy" src="tablero_kpis.webp" alt="Miniatura tablero KPIs">
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="descargas">Descargas listas ✓</button></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="card">
+    <h3>9) Quiz (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+  </section>
+
+  <!-- REFLEXIÓN -->
+  <section class="card">
+    <h3>10) Reflexión final (2 líneas)</h3>
+    <textarea id="reflexion" rows="3" placeholder="¿Qué ajuste harías en la coordinación del turno para mejorar el TPH sin comprometer la seguridad?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar</button>
+    </div>
+    <p class="small">Nota: se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Diseño corporativo aplicado.</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $=(s,d=document)=>d.querySelector(s);
+  const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_org_mina_v1', {
+    done:{intro:false,org:false,raci:false,flujos:false,turnos:false,layout:false,kpis:false,descargas:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+
+  $$('button[data-complete]').forEach(b=>{
+    const key=b.dataset.complete;
+    if(state.done[key]){ b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+    b.addEventListener('click', e=>{
+      state.done[key]=true; store('anupro360_org_mina_v1', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    });
+  });
+
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_org_mina_v1'); location.reload(); });
+
+  /* Quiz 10 preguntas */
+  const preguntas=[
+    {q:'¿Cuál es el flujo base de comunicación operacional?', opts:['Operadores → Seguridad → Superintendencia','Operadores → Jefe de Turno → ROC → Superintendencia','Operadores → Mantención → Geotecnia'], ok:1},
+    {q:'En RACI, la letra A significa…', opts:['Analista','Aprobador','Auxiliar'], ok:1},
+    {q:'¿Qué área activa HOLD/LOCK por riesgos críticos?', opts:['Sólo ROC','Jefe de Turno/ROC según protocolo','Únicamente Gerencia'], ok:1},
+    {q:'¿Quién lidera la ejecución del plan en el terreno?', opts:['Jefe de Turno','Superintendente','Gerente de Mina'], ok:0},
+    {q:'Un tablero efectivo de 5 minutos debe incluir:', opts:['TPH, tiempo de ciclo, disponibilidad y colas','Fotos de equipos','Sólo comentarios libres'], ok:0},
+    {q:'¿Qué función cumple Geotecnia?', opts:['Gestión de permisos','Estabilidad de taludes y control de riesgos geotécnicos','Recaudación de multas'], ok:1},
+    {q:'En el cambio de turno, <em>handover</em> correcto implica:', opts:['Conversación informal sin datos','Transferir metas, desvíos y restricciones con evidencia','Solo saludar'], ok:1},
+    {q:'Planificar rutas minimiza:', opts:['Cruces y pendientes extremas','La necesidad de comunicación','El uso de KPIs'], ok:0},
+    {q:'¿Qué significa “C” en RACI?', opts:['Consultado','Controlado','Coordinado'], ok:0},
+    {q:'Si un evento supera umbral de riesgo, lo primero es:', opts:['Mantener producción','Priorizar seguridad y comunicar según flujo','Esperar indicaciones por chat no oficial'], ok:1},
+  ];
+
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+      p.opts.forEach((txt,j)=>{
+        const lab=document.createElement('label'); lab.className='opt';
+        lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+        div.appendChild(lab);
+      });
+      wrap.appendChild(div);
+    });
+  }
+
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+  }
+
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_org_mina_v1', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_org_mina_v1', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref=$('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_org_mina_v1', state); alert('Reflexión guardada.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+  /* Init */
+  renderQuiz(); calcProgress(); $('#year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
