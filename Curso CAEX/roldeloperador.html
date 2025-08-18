@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Módulo · Roles del operador vs. otros equipos</title>
+  <meta name="description" content="Roles y límites del Operador CAEX en su interacción con Mantenimiento y Supervisión/ROC. Protocolos, casos prácticos, KPIs e imágenes descargables.">
+  <style>
+    :root{ --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.1rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+    .hero{border-bottom:1px solid rgba(255,255,255,.08);
+      background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent),
+                  radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.35rem}
+    .note{font-size:.95rem; opacity:.9; text-align:justify}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+    .pill i{font-style:normal; font-weight:700}
+    ul.bullet{margin:8px 0 0 18px; line-height:1.65}
+    p{ text-align:justify }
+
+    /* Imágenes proporcionadas y miniaturas */
+    figure{margin:12px 0; display:flex; flex-direction:column; gap:8px; align-items:center}
+    figure img{
+      display:block; max-width:100%; width:100%; height:auto;
+      max-height:clamp(200px, 35vh, 420px); object-fit:contain;
+      border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); padding:6px;
+    }
+    figcaption{font-size:.9rem; opacity:.9; text-align:center}
+    .downloads{display:grid; gap:12px}
+    @media(min-width:740px){.downloads{grid-template-columns:1fr 1fr}}
+    .dl{display:flex; flex-direction:column; gap:8px}
+    .downloads img{width:100%; height:140px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03)}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+    .small{font-size:.85rem; opacity:.9}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+
+    /* Quiz */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+    code{background:rgba(0,0,0,.25); padding:.08rem .35rem; border-radius:.35rem}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+      <h1>Anupro360 · Módulo · Roles del operador vs. otros equipos</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Cómo interactúa el Operador CAEX con Mantenimiento y Supervisión</h2>
+    <p class="note"><strong>Aprendizaje esperado:</strong> Delimitar responsabilidades del Operador CAEX, coordinar de forma efectiva con Mantenimiento y Supervisión/ROC, aplicar protocolos de comunicación, ejecutar handovers de calidad, registrar evidencias y usar KPIs para mejorar la interfaz.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Columna izquierda (contenido) -->
+  <section class="card">
+    <h3>1) Introducción y objetivo</h3>
+    <div class="pill"><i>🎯</i><div>
+      El <b>operador CAEX</b> es responsable de conducir con seguridad, cumplir asignaciones y reportar condiciones. Su desempeño depende de <b>interacciones claras</b> con <b>Mantenimiento</b> (disponibilidad y confiabilidad) y <b>Supervisión/ROC</b> (prioridades, rutas, bloqueos). Este módulo define <b>qué hacer</b>, <b>qué no</b> y <b>cómo</b> coordinar en escenarios típicos.
+    </div></div>
+    <ul class="bullet">
+      <li><b>Rol base:</b> operar seguro, seguir asignaciones del ROC, mantener cuidado básico del equipo, reportar desvíos.</li>
+      <li><b>Límites:</b> el operador <em>no</em> realiza intervenciones mecánicas mayores ni autoriza desbloqueos de ruta.</li>
+      <li><b>Clave:</b> registrar 5W (<em>qué, dónde, cuándo, quién, por qué</em>) + evidencia.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="intro">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- Columna derecha (ficha) -->
+  <aside class="card">
+    <h3>Ficha del módulo</h3>
+    <ul class="bullet">
+      <li>Tiempo estimado: <b>30–40 min</b></li>
+      <li>Formato: lectura + imágenes descargables + checklist + quiz</li>
+      <li>Requiere: radio operativa, app de tickets, tablero de KPIs</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.12)">
+    <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+  </aside>
+
+  <!-- Rol del operador -->
+  <section class="card">
+    <h3>2) Rol del Operador CAEX (responsabilidades y límites)</h3>
+    <figure>
+      <img loading="lazy" src="roles_operador_overview.webp" alt="Infografía de responsabilidades del Operador CAEX: seguridad, continuidad, reporte, cuidado básico del equipo.">
+      <figcaption>Responsabilidades y límites del operador.</figcaption>
+    </figure>
+    <div class="pill"><i>✅</i><div><b>Hace:</b> lista de preuso, verificación de frenos/retardador, inspección visual, limpieza de cámaras/sensores, reporte de fallas, conducción defensiva, cumplimiento de destinos y límites de velocidad, <code>HOLD</code> ante riesgo.</div></div>
+    <div class="pill" style="margin-top:8px"><i>⛔</i><div><b>No hace:</b> ajustes mecánicos no autorizados, by-pass de protecciones, desbloquear rutas sin confirmación, ignorar señales de alerta o alarmas de fatiga.</div></div>
+    <ul class="bullet" style="margin-top:8px">
+      <li><b>Checklists:</b> preuso, postuso, parada en rampa, arranque en pendiente.</li>
+      <li><b>Registros:</b> bitácora digital, ticket de mantenimiento, parte de turno.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="rol">Rol comprendido ✓</button></div>
+  </section>
+
+  <!-- Interacción con Mantenimiento -->
+  <section class="card">
+    <h3>3) Interacciones con Mantenimiento</h3>
+    <figure>
+      <img loading="lazy" src="workflow_operador_mantencion.webp" alt="Flujo Operador↔Mantenimiento: detección, ticket, evaluación, ventana, intervención, prueba y cierre.">
+      <figcaption>Flujo estándar de atención de fallas y defectos.</figcaption>
+    </figure>
+    <ul class="bullet">
+      <li><b>Detección:</b> ante anomalía (freno, temperatura, vibración, fuga), <b>detén en zona segura</b> y comunica al Jefe/ROC.</li>
+      <li><b>Ticket:</b> crea ticket con <em>5W + foto</em>, código del equipo, hora y <b>severidad</b> (crítica/alta/media/baja).</li>
+      <li><b>Ventana:</b> ROC coordina con Mantención la <b>ventana de intervención</b> y lugar (taller/caex-spot).</li>
+      <li><b>Handover:</b> entrega llaves, describe síntomas, bloquea energía si corresponde, firma recepción.</li>
+      <li><b>Prueba y cierre:</b> prueba funcional junto a mantención, valida que <em>alarma=OK</em> y actualiza ticket.</li>
+    </ul>
+    <div class="pill"><i>🛠️</i><div><b>Defecto vs. Falla:</b> defecto = condición no crítica que permite operar con restricción; falla = detención inmediata. Usa la matriz local para decidir.</div></div>
+    <div style="margin-top:10px"><button class="btn" data-complete="mant">Interacción con Mantención ✓</button></div>
+  </section>
+
+  <!-- Interacción con Supervisión / ROC -->
+  <section class="card">
+    <h3>4) Interacciones con Supervisión/ROC</h3>
+    <figure>
+      <img loading="lazy" src="flujo_supervision_roc.webp" alt="Diagrama Operador→Jefe de turno→ROC→Superintendencia con desvíos a Seguridad/Geotecnia.">
+      <figcaption>Cadena de mando y prioridades operacionales.</figcaption>
+    </figure>
+    <ul class="bullet">
+      <li><b>Asignaciones:</b> el ROC define <em>destino</em>, <em>ruta</em> y <em>prioridad</em>. El operador confirma por radio.</li>
+      <li><b>Desvíos:</b> congestión en rampa, clima, botadero saturado → reporta, solicita <code>DIVERT</code> temporal.</li>
+      <li><b>Seguridad:</b> talud inestable, derrame, visibilidad 0 → <b>HOLD</b> y escalar.</li>
+      <li><b>Handover turno:</b> entrega estado del equipo, combustible, alertas y restricciones.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="roc">Interacción con ROC ✓</button></div>
+  </section>
+
+  <!-- Comunicación efectiva -->
+  <section class="card">
+    <h3>5) Comunicación efectiva (protocolo y ejemplos)</h3>
+    <figure>
+      <img loading="lazy" src="protocolo_comunicaciones.webp" alt="Protocolo de comunicación por radio: formato 5W, códigos estándar, confirmación y cierre.">
+      <figcaption>Formato de mensaje y confirmación.</figcaption>
+    </figure>
+    <ul class="bullet">
+      <li><b>Formato:</b> <em>Quién</em> llama a <em>Quién</em> – <em>Dónde</em> – <em>Qué</em> – <em>Impacto</em> – <em>Acción solicitada</em>.</li>
+      <li><b>Ejemplo:</b> “CAEX 312 a ROC, <em>rampa norte km 3</em>, <em>derrame de aceite</em>, <em>peligro de derrape</em>, solicito <code>LOCK</code> y motoniveladora.”</li>
+      <li><b>Confirmación:</b> repetir instrucción y código; registrar en bitácora.</li>
+      <li><b>Tiempo de respuesta objetivo:</b> &lt; 2 min para riesgos críticos; &lt; 10 min desvíos operacionales.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="comm">Protocolo comprendido ✓</button></div>
+  </section>
+
+  <!-- Casos prácticos -->
+  <section class="card">
+    <h3>6) Casos prácticos y decisiones</h3>
+    <ul class="bullet">
+      <li><b>Calor en frenos en rampa:</b> aplica retardador, baja a carril de seguridad; si persiste olor/alarma → <b>HOLD</b>, comunica y espera grúa de asistencia.</li>
+      <li><b>Visibilidad reducida:</b> reduce velocidad, aumenta headway; si &lt; 50 m → <b>HOLD</b>, solicita apoyo de seguridad.</li>
+      <li><b>Botadero con cola larga:</b> reporta a ROC, sugiere <code>DIVERT</code> a botadero alterno; confirma cambio de destino.</li>
+      <li><b>Vibración anormal:</b> detén fuera de ruta, inspección visual, ticket con video y hora; coordina evaluación.</li>
+      <li><b>Ruta bloqueada:</b> <code>LOCK</code>, señalar y desviar; sólo <b>Supervisión/ROC</b> hacen <code>UNLOCK</code> tras verificación.</li>
+    </ul>
+    <figure>
+      <img loading="lazy" src="casos_operador.webp" alt="Infografía de cinco casos típicos y acciones del operador.">
+      <figcaption>Guía rápida de decisiones del operador.</figcaption>
+    </figure>
+    <div style="margin-top:10px"><button class="btn" data-complete="casos">Casos practicados ✓</button></div>
+  </section>
+
+  <!-- Herramientas y registros -->
+  <section class="card">
+    <h3>7) Herramientas y registros</h3>
+    <figure>
+      <img loading="lazy" src="checklist_operador.webp" alt="Checklist de preuso/postuso del CAEX con puntos críticos.">
+      <figcaption>Checklist del operador.</figcaption>
+    </figure>
+    <ul class="bullet">
+      <li><b>Bitácora digital:</b> hora, evento, acción, evidencia.</li>
+      <li><b>Tickets:</b> clasifica por severidad y familia (frenos, neumáticos, motor, eléctrico, sensores).</li>
+      <li><b>Documentos rápidos:</b> instructivos de rampa, reglas de botadero, plan de comunicación.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="tools">Herramientas revisadas ✓</button></div>
+  </section>
+
+  <!-- KPIs de la interfaz -->
+  <section class="card">
+    <h3>8) KPIs de interacción Operación–Mantención–Supervisión</h3>
+    <figure>
+      <img loading="lazy" src="kpis_interfaz.webp" alt="Tablero de KPIs: tiempo de respuesta a tickets, % tickets SLA, calidad de reporte, re-trabajos, tiempos de espera.">
+      <figcaption>Indicadores sugeridos para seguimiento semanal.</figcaption>
+    </figure>
+    <ul class="bullet">
+      <li><b>TRT (Tiempo de Respuesta a Ticket):</b> min desde creación a primera acción.</li>
+      <li><b>% Tickets en SLA:</b> atendidos dentro del tiempo objetivo por severidad.</li>
+      <li><b>Calidad de reporte:</b> % tickets con 5W + evidencia clara.</li>
+      <li><b>Retrabajos:</b> tickets reabiertos por falla recurrente.</li>
+      <li><b>Espera por mantenimiento:</b> min de inactividad por ventana no disponible.</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="kpis">KPIs comprendidos ✓</button></div>
+  </section>
+
+  <!-- Descargas -->
+  <section class="card">
+    <h3>9) Imágenes descargables (alta resolución)</h3>
+    <p class="small">Haz clic en <em>Descargar</em> para abrir/guardar en grande.</p>
+    <div class="downloads">
+      <div class="dl">
+        <a class="btn-ghost" href="roles_operador_overview.png" download>Descargar · Rol del Operador (infografía)</a>
+        <img loading="lazy" src="roles_operador_overview.webp" alt="Miniatura rol operador">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="workflow_operador_mantencion.png" download>Descargar · Flujo Operador–Mantenimiento</a>
+        <img loading="lazy" src="workflow_operador_mantencion.webp" alt="Miniatura flujo mantención">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="flujo_supervision_roc.png" download>Descargar · Cadena Supervisión/ROC</a>
+        <img loading="lazy" src="flujo_supervision_roc.webp" alt="Miniatura flujo ROC">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="protocolo_comunicaciones.png" download>Descargar · Protocolo de comunicaciones</a>
+        <img loading="lazy" src="protocolo_comunicaciones.webp" alt="Miniatura protocolo">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="casos_operador.png" download>Descargar · Casos prácticos</a>
+        <img loading="lazy" src="casos_operador.webp" alt="Miniatura casos">
+      </div>
+      <div class="dl">
+        <a class="btn-ghost" href="kpis_interfaz.png" download>Descargar · KPIs de interfaz</a>
+        <img loading="lazy" src="kpis_interfaz.webp" alt="Miniatura KPIs">
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="descargas">Descargas listas ✓</button></div>
+  </section>
+
+  <!-- Quiz -->
+  <section class="card">
+    <h3>10) Quiz (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+  </section>
+
+  <!-- Reflexión -->
+  <section class="card">
+    <h3>11) Reflexión final (2 líneas)</h3>
+    <textarea id="reflexion" rows="3" placeholder="¿Qué cambio harías en tu forma de comunicarte con ROC o Mantención para reducir tiempos muertos?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar</button>
+    </div>
+    <p class="small">Se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Diseño corporativo aplicado.</div>
+</footer>
+
+<script>
+  /* Helpers */
+  const $=(s,d=document)=>d.querySelector(s);
+  const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_roles_operador_v1', {
+    done:{intro:false,rol:false,mant:false,roc:false,comm:false,casos:false,tools:false,kpis:false,descargas:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+
+  $$('button[data-complete]').forEach(b=>{
+    const key=b.dataset.complete;
+    if(state.done[key]){ b.textContent='Completado ✓'; b.disabled=true; b.classList.add('btn-ghost'); }
+    b.addEventListener('click', e=>{
+      state.done[key]=true; store('anupro360_roles_operador_v1', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    });
+  });
+
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_roles_operador_v1'); location.reload(); });
+
+  /* Quiz (10) */
+  const preguntas=[
+    {q:'¿Cuál es el límite del rol del operador CAEX frente a fallas mecánicas?', opts:['Puede ajustar componentes mayores','Sólo reporta y asegura el equipo; no interviene mecánicamente','Autoriza el desbloqueo de ruta'], ok:1},
+    {q:'Secuencia correcta Operador↔Mantención ante anomalía:', opts:['Ticket→Detener→Handover','Detener→Comunicar→Ticket con evidencia→Ventana→Intervención','Seguir operando y reportar al final'], ok:1},
+    {q:'¿Quién define cambio de destino o DIVERT?', opts:['Operador','ROC/Supervisión','Mantenimiento'], ok:1},
+    {q:'Formato recomendado de mensaje por radio:', opts:['Quiero descargar en otro botadero','Quién→Quién, Dónde, Qué, Impacto, Acción','Sólo decir “copy”'], ok:1},
+    {q:'Ante derrame en rampa, el operador debe primero:', opts:['Mantener velocidad','Aplicar HOLD/LOCK y señalizar','Pedir combustible'], ok:1},
+    {q:'Un “defecto” se diferencia de “falla” porque:', opts:['Permite operar con restricción y seguimiento','Siempre detiene de inmediato','Es sólo estético'], ok:0},
+    {q:'Handover correcto al taller incluye:', opts:['Llaves, descripción de síntomas, evidencias, bloqueo si aplica','Sólo dejar el equipo','Pedir un equipo nuevo'], ok:0},
+    {q:'KPI que mide calidad de reporte del operador:', opts:['% Tickets con 5W+evidencia','Velocidad promedio en rampa','Tiempo de descarga'], ok:0},
+    {q:'¿Quién puede hacer UNLOCK de ruta?', opts:['Operador','Jefe de Turno/ROC tras verificación','Cualquier persona en terreno'], ok:1},
+    {q:'En botadero con cola larga, el operador debe:', opts:['Decidir solo un nuevo destino','Reportar y solicitar DIVERT al ROC','Ir a mantenimiento'], ok:1},
+  ];
+
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+      p.opts.forEach((txt,j)=>{
+        const lab=document.createElement('label'); lab.className='opt';
+        lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+        div.appendChild(lab);
+      });
+      wrap.appendChild(div);
+    });
+  }
+
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); }
+    });
+    const total = preguntas.length;
+    const okCountFinal = $$('#quiz .q.correct').length;
+    const pct = Math.round(okCountFinal/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCountFinal}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_roles_operador_v1', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_roles_operador_v1', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref=$('#reflexion'); ref.value=state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_roles_operador_v1', state); alert('Reflexión guardada.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+  /* Init */
+  renderQuiz(); calcProgress(); $('#year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
