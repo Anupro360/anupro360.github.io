@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Módulo 3 · Procesos de extracción y transporte en mina</title>
+  <meta name="description" content="Microaprendizaje: ciclo de extracción y transporte en mina a cielo abierto (carguío, acarreo, descarga, retorno), KPIs, seguridad vial minera, mantenimiento y control operacional. Incluye actividades interactivas y quiz de 10 preguntas.">
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.1rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.2), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.35rem}
+    .note{font-size:.92rem; opacity:.9}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn, .btn-ghost, .btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    ul.bullet{margin:8px 0 0 18px; line-height:1.65}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+
+    /* Drag & Drop + Sort */
+    .bank, .dropzone{display:flex; gap:8px; flex-wrap:wrap; padding:10px; border-radius:12px; border:1px dashed rgba(255,255,255,.2); background:rgba(255,255,255,.04); min-height:56px}
+    .token{user-select:none; padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.24); cursor:grab; font-weight:600}
+    .token.dragging{opacity:.6}
+    .drop{background:rgba(0,0,0,.22)}
+    .dz-ok{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .dz-bad{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .token.lock{cursor:not-allowed; background:rgba(75,111,68,.25); border-color:#4B6F44}
+
+    .two{display:grid; gap:12px}
+    @media(min-width:780px){.two{grid-template-columns:1fr 1fr}}
+    .sortable{display:flex; flex-direction:column; gap:8px}
+    .item{padding:10px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); cursor:grab}
+    .item.ghost{opacity:.5; border-style:dashed}
+    .ok{outline:2px solid #4B6F44}
+
+    /* Quiz */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    .small{font-size:.85rem; opacity:.9}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    .tag{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.06)}
+
+    /* Tablas simples */
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+      <h1>Anupro360 · Módulo 3 · Procesos de extracción y transporte en mina</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Del frente de carguío al destino: cómo fluye el mineral y el estéril</h2>
+    <p class="note"><strong>Aprendizaje esperado:</strong> Comprender el ciclo <em>Perforación/Voladura → Carguío → Acarreo → Descarga → Retorno</em>, optimizar tiempos de ciclo y aplicar reglas de tránsito, seguridad y calidad de carguío para maximizar TPH con estándares de seguridad.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Columna izquierda -->
+  <section class="card">
+    <h3>1) Introducción y objetivos</h3>
+    <details open>
+      <summary>La cadena de valor del movimiento de material</summary>
+      <p>En una mina a cielo abierto, el proceso productivo se basa en un <strong>ciclo repetitivo</strong> que transforma roca en valor: perforación, voladura, carguío, acarreo, descarga y retorno. La eficiencia y la seguridad del ciclo dependen de la <strong>coordinación</strong> entre equipos (palas/cargadores, CAEX, motoniveladoras, tractores, perforadoras) y de la <strong>disponibilidad de infraestructura</strong> (rampas, bermas, radios de giro, botaderos/chancador).</p>
+      <p>Este módulo entrega criterios prácticos para equilibrar flota, controlar colas, evitar sobrecarguío/subcarguío, mantener caminos y <strong>elevar TPH</strong> sin exponer la seguridad de las personas ni el medioambiente.</p>
+    </details>
+    <div class="pill" style="margin-top:10px"><i>🎯</i><div><strong>Meta del rol:</strong> flujo continuo, colas controladas, spotting preciso y tiempos de ciclo estables.</div></div>
+    <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap"><button class="btn" data-complete="intro">Marcar leído ✓</button></div>
+    <!-- IMAGEN sugerida: assets/img/mod-3/mod3_ciclo_operativo.webp -->
+    <img src="mod3_ciclo_operativo.webp" alt="Diagrama del ciclo: carguío, acarreo, descarga y retorno" style="width:100%; margin-top:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+    <p class="small"></p>
+  </section>
+
+  <!-- Columna derecha (Ficha) -->
+  <aside class="card">
+    <h3>Ficha del Módulo 3</h3>
+    <ul class="bullet">
+      <li>Tiempo estimado: <strong>25–35 min</strong></li>
+      <li>Formato: lectura + ordenar + emparejar + escenarios + quiz</li>
+      <li>Objetivo: optimizar el ciclo y elevar TPH con seguridad vial minera</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.12)">
+    <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+  </aside>
+
+  <!-- 2) Visión del ciclo -->
+  <section class="card">
+    <h3>2) Ciclo operativo y KPIs clave</h3>
+    <div class="two">
+      <div>
+        <ol class="bullet" style="list-style:decimal">
+          <li><strong>Perforación y voladura:</strong> diseño de malla, burden/spacing, control de fragmentación.</li>
+          <li><strong>Carguío:</strong> <em>spotting</em> preciso, número de pases, control de fragmentación y segregación.</li>
+          <li><strong>Acarreo:</strong> velocidad segura, <em>headway</em> adecuado, elección de ruta y <em>DIVERT</em> cuando se requiera.</li>
+          <li><strong>Descarga:</strong> botadero o chancador; gestión de colas, guía de descarga y bermas.</li>
+          <li><strong>Retorno:</strong> elección de ruta con menor interferencia; preparación para próximo ciclo.</li>
+        </ol>
+      </div>
+      <div class="pill"><i>📊</i><div><strong>KPI de control:</strong> Tiempos de ciclo, TPH por frente y por flota, factor de llenado (payload), tiempos de espera en pala/chancador, velocidad promedio por tramo, consumo de combustible por tonelada.</div></div>
+    </div>
+    <table>
+      <thead><tr><th>KPI</th><th>Objetivo operativo</th><th>Acción correctiva típica</th></tr></thead>
+      <tbody>
+        <tr><td>TPH</td><td>Estable y creciente</td><td>Balance de flota, reducir colas, mejorar spotting</td></tr>
+        <tr><td>Tiempo de ciclo</td><td>Variación baja</td><td>Mejorar huella, rutas alternativas, señalización</td></tr>
+        <tr><td>Payload</td><td>95–100% capacidad nominal</td><td>Ajustar pases, evitar sobrecarga, calibrar básculas</td></tr>
+        <tr><td>Esperas</td><td>< 10–15% del ciclo</td><td>Coordinar ventanas, <code>DIVERT</code> temporal, priorizar destinos</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px"><button class="btn" data-complete="ciclo">He comprendido el ciclo ✓</button></div>
+  </section>
+
+  <!-- 3) Carguío eficiente -->
+  <section class="card">
+    <h3>3) Carguío eficiente en frente</h3>
+    <p class="note">El objetivo del carguío es lograr <strong>factor de llenado</strong> dentro de especificación con el menor número de pases y mínima interferencia.</p>
+    <ul class="bullet">
+      <li><strong>Spotting:</strong> ubicar el CAEX a distancia y ángulo óptimo; palas con patrón de pases predefinido.</li>
+      <li><strong>Fragmentación:</strong> voladura y control de malla impactan la productividad del carguío.</li>
+      <li><strong>Segregación:</strong> evitar mezcla indeseada (mineral/estéril). Señalización de zonas y <em>cut lines</em>.</li>
+      <li><strong>Comunicación:</strong> señales claras ROC⇄flota; evitar cruces en zona de carguío.</li>
+    </ul>
+    <div class="pill"><i>✅</i><div><strong>Buenas prácticas:</strong> dirección única, zona de espera definida, pre-spotting y <em>standby</em> ordenado; control de rocas sobredimensionadas.</div></div>
+    <div style="margin-top:10px"><button class="btn" data-complete="carguio">Carguío claro ✓</button></div>
+  </section>
+
+  <!-- 4) Acarreo y diseño de caminos -->
+  <section class="card">
+    <h3>4) Acarreo: caminos, seguridad y eficiencia</h3>
+    <div class="two">
+      <div>
+        <ul class="bullet">
+          <li><strong>Huella y pendiente:</strong> mantener pendientes dentro de especificación; bermas y anchos conforme a normativa.</li>
+          <li><strong>Visibilidad y clima:</strong> control de polvo, iluminación, velocidad segura; <code>HOLD</code> si las condiciones lo exigen.</li>
+          <li><strong>Mantenimiento vial:</strong> motoniveladora, riego y compactación; gestión de baches y washboarding.</li>
+          <li><strong>Tránsito:</strong> prioridad al que sube, mantener headway, puntos ciegos y radios de giro señalizados.</li>
+        </ul>
+      </div>
+      <div class="pill"><i>🛣️</i><div><strong>Rutas y desvíos:</strong> utiliza <code>LOCK</code>/<code>UNLOCK</code> para cierres/aperturas controladas; aplica <code>DIVERT</code> para reducir congestión en tramos críticos.</div></div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="acarreo">Acarreo comprendido ✓</button></div>
+  </section>
+
+  <!-- 5) Descarga y control de colas -->
+  <section class="card">
+    <h3>5) Descarga en botadero y chancador</h3>
+    <ul class="bullet">
+      <li><strong>Botadero:</strong> bermas de coronamiento, avance controlado, guía de descarga, segregación estéril/topsoil.</li>
+      <li><strong>Chancador:</strong> control de colas, señalista/guía, protección contra sobredimensionados y atascos.</li>
+      <li><strong>Seguridad:</strong> zonas de exclusión, backing seguro (<em>aculatamiento</em>), spotter si aplica.</li>
+      <li><strong>Calidad:</strong> conforme a especificación de destino (ley, humedad, granulometría).</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="descarga">Descarga OK ✓</button></div>
+  </section>
+
+  <!-- 6) Gestión de flota y despacho -->
+  <section class="card">
+    <h3>6) Balance de flota y despacho</h3>
+    <p class="note">El 
+      <strong>balance</strong> entre equipos de carguío y CAEX evita cuellos de botella. El despacho asigna destinos y rutas para estabilizar el TPH.</p>
+    <ul class="bullet">
+      <li><strong>Asignación dinámica:</strong> enviar CAEX a frente/destino con menor espera.</li>
+      <li><strong>Prioridad de destinos:</strong> asegurar abastecimiento del chancador; ventanas en botaderos.</li>
+      <li><strong>Telemetría:</strong> uso de FMS/ROC para tiempos en tramo, colas y ubicación en tiempo real.</li>
+      <li><strong>Eventos:</strong> registrar causas (clima, falla, ruta bloqueada) para mejora continua (5W1H).</li>
+    </ul>
+    <div style="margin-top:10px"><button class="btn" data-complete="despacho">Despacho entendido ✓</button></div>
+  </section>
+
+  <!-- 7) Seguridad vial minera y medioambiente -->
+  <section class="card">
+    <h3>7) Seguridad y medioambiente</h3>
+    <div class="two">
+      <div>
+        <ul class="bullet">
+          <li><strong>Check preuso:</strong> frenos, dirección, neumáticos, luces, alarma de retroceso, cámaras/ADAS.</li>
+          <li><strong>Fatiga y distracciones:</strong> pausas programadas, monitoreo y reporte.</li>
+          <li><strong>Control de polvo:</strong> riego, supresores, velocidad; <em>evitar nubes</em> en cruce de equipos.</li>
+          <li><strong>Derrames:</strong> plan de respuesta, kit y confinamiento en botaderos.</li>
+        </ul>
+      </div>
+      <div class="pill"><i>♻️</i><div><strong>Buenas prácticas ambientales:</strong> rutas estables para reducir consumo y emisiones; evitar sobrecargas; mantenimiento preventivo.</div></div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="seguridad">Seguridad revisada ✓</button></div>
+  </section>
+
+  <!-- 8) Actividad: Orden del ciclo -->
+  <section class="card">
+    <h3>8) Actividad: Ordena el ciclo de extracción y transporte</h3>
+    <p class="note">Orden correcto esperado: <strong>Perforación/Voladura → Carguío → Acarreo → Descarga → Retorno</strong>.</p>
+    <div class="sortable" id="orden">
+      <div class="item" draggable="true" data-id="retorno">Retorno</div>
+      <div class="item" draggable="true" data-id="carguio">Carguío</div>
+      <div class="item" draggable="true" data-id="descarga">Descarga</div>
+      <div class="item" draggable="true" data-id="acarreo">Acarreo</div>
+      <div class="item" draggable="true" data-id="voladura">Perforación/Voladura</div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+      <button class="btn-sec" id="checkOrden">Comprobar</button>
+      <button class="btn-ghost" id="resetOrden">Reiniciar</button>
+    </div>
+    <p id="ordenMsg" class="small"></p>
+  </section>
+
+  <!-- 9) Actividad: Emparejar términos -->
+  <section class="card">
+    <h3>9) Actividad: Empareja KPI con su definición</h3>
+    <div class="two" id="match">
+      <div>
+        <div class="tag">Banco</div>
+        <div class="bank" id="bank1" aria-label="Banco de definiciones">
+          <div class="token" draggable="true" data-key="tph">Toneladas por hora producidas</div>
+          <div class="token" draggable="true" data-key="ciclo">Tiempo desde carga a retorno</div>
+          <div class="token" draggable="true" data-key="payload">Carga útil vs capacidad nominal</div>
+          <div class="token" draggable="true" data-key="colas">Tiempo esperando en pala/chancador</div>
+          <div class="token" draggable="true" data-key="vel">Velocidad promedio por tramo</div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px"><button class="btn-ghost" id="resetMatch1">Reiniciar</button></div>
+      </div>
+      <div>
+        <div class="dropzone" data-accept="tph"><strong>TPH</strong></div>
+        <div class="dropzone" data-accept="ciclo" style="margin-top:8px"><strong>Tiempo de ciclo</strong></div>
+        <div class="dropzone" data-accept="payload" style="margin-top:8px"><strong>Payload</strong></div>
+        <div class="dropzone" data-accept="colas" style="margin-top:8px"><strong>Colas</strong></div>
+        <div class="dropzone" data-accept="vel" style="margin-top:8px"><strong>Velocidad</strong></div>
+      </div>
+    </div>
+    <p id="match1Msg" class="small" style="margin-top:8px"></p>
+  </section>
+
+  <!-- 10) Actividad: Escenarios de despacho -->
+  <section class="card">
+    <h3>10) Actividad: ¿Qué acción de despacho aplicarías?</h3>
+    <p class="note">Arrastra cada <strong>escenario</strong> al contenedor de <strong>acción</strong> sugerida.</p>
+    <div class="two" id="esc">
+      <div>
+        <div class="tag">Escenarios</div>
+        <div class="bank" id="bank2">
+          <div class="token" draggable="true" data-key="divert">Cola en chancador &gt; 5 CAEX</div>
+          <div class="token" draggable="true" data-key="priorizar">Stock crítico de chancador</div>
+          <div class="token" draggable="true" data-key="lock">Derrumbe parcial en rampa</div>
+          <div class="token" draggable="true" data-key="hold">Visibilidad reducida por polvo</div>
+          <div class="token" draggable="true" data-key="unlock">Reapertura tras verificación</div>
+        </div>
+      </div>
+      <div>
+        <div class="dropzone" data-accept="divert"><strong>Aplicar DIVERT</strong></div>
+        <div class="dropzone" data-accept="priorizar" style="margin-top:8px"><strong>Priorizar destino</strong></div>
+        <div class="dropzone" data-accept="lock" style="margin-top:8px"><strong>LOCK de ruta</strong></div>
+        <div class="dropzone" data-accept="hold" style="margin-top:8px"><strong>HOLD temporal</strong></div>
+        <div class="dropzone" data-accept="unlock" style="margin-top:8px"><strong>UNLOCK (con evidencia)</strong></div>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px"><button class="btn-ghost" id="resetMatch2">Reiniciar</button></div>
+    <p id="match2Msg" class="small"></p>
+  </section>
+
+  <!-- 11) Glosario rápido -->
+  <section class="card">
+    <h3>11) Glosario rápido</h3>
+    <div class="two">
+      <div>
+        <ul class="bullet">
+          <li><strong>Spotting:</strong> posicionamiento del CAEX para carguío.</li>
+          <li><strong>Headway:</strong> distancia/tiempo seguro entre vehículos.</li>
+          <li><strong>Botadero:</strong> depósito de estéril; control de taludes y bermas.</li>
+          <li><strong>Chancador:</strong> instalación de reducción de tamaño del mineral.</li>
+        </ul>
+      </div>
+      <div>
+        <img src="mod3_glosario.webp" alt="Esquema de zonas: pala, rampa, botadero y chancador" style="width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12)">
+        <p class="small">Imagen referencial para repaso.</p>
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="glosario">He revisado el glosario ✓</button></div>
+  </section>
+
+  <!-- 12) Checklist -->
+  <section class="card">
+    <h3>12) Checklist 1 minuto</h3>
+    <div class="two">
+      <div>
+        <label class="pill"><input type="checkbox" class="ck"> ¿Existe ruta definida, señalizada y con bermas conforme?</label>
+        <label class="pill"><input type="checkbox" class="ck"> ¿Se controla el número de pases y el payload objetivo?</label>
+        <label class="pill"><input type="checkbox" class="ck"> ¿Hay plan de contingencia: DIVERT / LOCK / HOLD?</label>
+      </div>
+      <div>
+        <p class="small">Cuando actives las tres casillas, se marcará esta sección como completada.</p>
+        <div id="ckMsg" class="small"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13) Quiz -->
+  <section class="card">
+    <h3>13) Quiz (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+  </section>
+
+  <!-- 14) Reflexión -->
+  <section class="card">
+    <h3>14) Reflexión final (2 líneas)</h3>
+    <textarea id="reflexion" rows="3" placeholder="¿Qué ajuste aplicarías esta semana para bajar el tiempo de ciclo sin afectar la seguridad?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="small">Nota: se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Colores corporativos aplicados.</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_m3_extraccion_transporte', {
+    done:{intro:false,ciclo:false,carguio:false,acarreo:false,descarga:false,despacho:false,seguridad:false,actOrden:false,actMatch:false,actEsc:false,glosario:false,check:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_m3_extraccion_transporte', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_m3_extraccion_transporte'); location.reload(); });
+
+  /* ---------- SORTABLE: Orden del ciclo (Actividad 8) ---------- */
+  let dragItem=null;
+  $$('#orden .item').forEach(it=>{
+    it.addEventListener('dragstart', ()=>{ dragItem=it; it.classList.add('ghost'); });
+    it.addEventListener('dragend', ()=>{ dragItem=null; it.classList.remove('ghost'); });
+  });
+  $('#orden')?.addEventListener('dragover', e=>{
+    e.preventDefault();
+    const after = getDragAfterElement($('#orden'), e.clientY);
+    if(after==null){ $('#orden').appendChild(dragItem); }
+    else{ $('#orden').insertBefore(dragItem, after); }
+  });
+  function getDragAfterElement(container, y){
+    const els = [...container.querySelectorAll('.item:not(.ghost)')];
+    return els.reduce((closest, child)=>{
+      const box = child.getBoundingClientRect();
+      const offset = y - box.top - box.height/2;
+      if(offset<0 && offset>closest.offset){ return {offset, element:child}; }
+      else return closest;
+    }, {offset:Number.NEGATIVE_INFINITY}).element;
+  }
+  const ordenCorrecto = ['voladura','carguio','acarreo','descarga','retorno'];
+  $('#checkOrden')?.addEventListener('click', ()=>{
+    const ids = $$('#orden .item').map(i=>i.dataset.id);
+    let ok=0;
+    $$('#orden .item').forEach((i,idx)=>{
+      if(ordenCorrecto[idx]===i.dataset.id){ i.classList.add('ok'); ok++; } else { i.classList.remove('ok'); }
+    });
+    if(ok===ordenCorrecto.length){
+      $('#ordenMsg').textContent='✅ Orden correcto.';
+      state.done.actOrden=true; store('anupro360_m3_extraccion_transporte', state); calcProgress();
+    }else{
+      $('#ordenMsg').textContent=`❌ Hay ${ordenCorrecto.length-ok} elemento(s) fuera de lugar.`;
+    }
+  });
+  $('#resetOrden')?.addEventListener('click', ()=>{
+    const items = $$('#orden .item');
+    items.forEach(i=> i.classList.remove('ok'));
+    items.sort(()=>Math.random()-0.5).forEach(i=> $('#orden').appendChild(i));
+    $('#ordenMsg').textContent='';
+    state.done.actOrden=false; store('anupro360_m3_extraccion_transporte', state); calcProgress();
+  });
+
+  /* ---------- DRAG & DROP: Match KPI (Actividad 9) ---------- */
+  function ddSetup(containerSelector, bankId, onCheck){
+    let dragging=null;
+    $$(containerSelector+' .token').forEach(tok=>{
+      tok.addEventListener('dragstart', ()=>{ dragging=tok; tok.classList.add('dragging'); });
+      tok.addEventListener('dragend', ()=>{ dragging=null; tok.classList.remove('dragging'); });
+      tok.addEventListener('click', ()=>{ const target = document.activeDropzone || null; if(target) tryDrop(target, tok, bankId, onCheck); });
+    });
+    $$(containerSelector+' .dropzone, '+containerSelector+' .bank').forEach(zone=>{
+      zone.addEventListener('dragover', (e)=>{ e.preventDefault(); zone.classList.add('drop'); document.activeDropzone = zone; });
+      zone.addEventListener('dragleave', ()=> zone.classList.remove('drop'));
+      zone.addEventListener('drop', (e)=>{ e.preventDefault(); zone.classList.remove('drop'); if(dragging) tryDrop(zone, dragging, bankId, onCheck); });
+      zone.addEventListener('click', ()=>{ document.activeDropzone = zone; });
+    });
+  }
+  function tryDrop(zone, tok, bankId, onCheck){
+    if(zone.classList.contains('bank')){ tok.classList.remove('lock'); zone.appendChild(tok); zone.classList.remove('dz-ok','dz-bad'); onCheck && onCheck(); return; }
+    const accept = zone.dataset.accept; const key = tok.dataset.key;
+    const prev = zone.querySelector('.token'); if(prev){ $(bankId).appendChild(prev); prev.classList.remove('lock'); }
+    zone.appendChild(tok);
+    if(accept===key){ zone.classList.add('dz-ok'); zone.classList.remove('dz-bad'); tok.classList.add('lock'); }
+    else{ zone.classList.add('dz-bad'); zone.classList.remove('dz-ok'); tok.classList.remove('lock'); }
+    onCheck && onCheck();
+  }
+  function checkMatch1(){
+    const zones = $$('#match .dropzone');
+    const allOk = zones.every(z=> z.classList.contains('dz-ok'));
+    const anyBad = zones.some(z=> z.classList.contains('dz-bad'));
+    $('#match1Msg').textContent = allOk ? '✅ ¡Correcto! Emparejado.' : (anyBad ? '❌ Hay definiciones incorrectas.' : 'Arrastra definiciones a cada KPI.');
+    if(allOk){ state.done.actMatch = true; store('anupro360_m3_extraccion_transporte', state); calcProgress(); }
+  }
+  ddSetup('#match','#bank1',checkMatch1);
+  $('#resetMatch1')?.addEventListener('click', ()=>{
+    $$('#match .dropzone').forEach(z=>{ z.classList.remove('dz-ok','dz-bad'); const t=z.querySelector('.token'); if(t){ t.classList.remove('lock'); $('#bank1').appendChild(t);} });
+    $('#match1Msg').textContent=''; state.done.actMatch=false; store('anupro360_m3_extraccion_transporte', state); calcProgress();
+  });
+
+  /* ---------- DRAG & DROP: Escenarios (Actividad 10) ---------- */
+  function ddSetup2(){
+    let dragging=null;
+    $$('#bank2 .token').forEach(tok=>{
+      tok.addEventListener('dragstart', ()=>{ dragging=tok; tok.classList.add('dragging'); });
+      tok.addEventListener('dragend', ()=>{ dragging=null; tok.classList.remove('dragging'); });
+      tok.addEventListener('click', ()=>{ const target = document.activeDropzone2 || null; if(target) tryDrop2(target, tok); });
+    });
+    $$('#esc .dropzone, #esc .bank').forEach(zone=>{
+      zone.addEventListener('dragover', (e)=>{ e.preventDefault(); zone.classList.add('drop'); document.activeDropzone2 = zone; });
+      zone.addEventListener('dragleave', ()=> zone.classList.remove('drop'));
+      zone.addEventListener('drop', (e)=>{ e.preventDefault(); zone.classList.remove('drop'); if(dragging) tryDrop2(zone, dragging); });
+      zone.addEventListener('click', ()=>{ document.activeDropzone2 = zone; });
+    });
+  }
+  function tryDrop2(zone, tok){
+    if(zone.classList.contains('bank')){ tok.classList.remove('lock'); zone.appendChild(tok); zone.classList.remove('dz-ok','dz-bad'); checkMatch2(); return; }
+    const accept = zone.dataset.accept; const key = tok.dataset.key;
+    const prev = zone.querySelector('.token'); if(prev){ $('#bank2').appendChild(prev); prev.classList.remove('lock'); }
+    zone.appendChild(tok);
+    if(accept===key){ zone.classList.add('dz-ok'); zone.classList.remove('dz-bad'); tok.classList.add('lock'); }
+    else{ zone.classList.add('dz-bad'); zone.classList.remove('dz-ok'); tok.classList.remove('lock'); }
+    checkMatch2();
+  }
+  function checkMatch2(){
+    const zones = $$('#esc .dropzone');
+    const allOk = zones.every(z=> z.classList.contains('dz-ok'));
+    const anyBad = zones.some(z=> z.classList.contains('dz-bad'));
+    $('#match2Msg').textContent = allOk ? '✅ Escenarios resueltos.' : (anyBad ? '❌ Revisa coincidencias.' : 'Asigna cada escenario.');
+    if(allOk){ state.done.actEsc = true; store('anupro360_m3_extraccion_transporte', state); calcProgress(); }
+  }
+  $('#resetMatch2')?.addEventListener('click', ()=>{
+    $$('#esc .dropzone').forEach(z=>{ z.classList.remove('dz-ok','dz-bad'); const t=z.querySelector('.token'); if(t){ t.classList.remove('lock'); $('#bank2').appendChild(t);} });
+    $('#match2Msg').textContent=''; state.done.actEsc=false; store('anupro360_m3_extraccion_transporte', state); calcProgress();
+  });
+  ddSetup2();
+
+  /* ---------- Checklist ---------- */
+  $$('.ck').forEach(c=> c.addEventListener('change', ()=>{
+    const all = $$('.ck').every(x=>x.checked);
+    if(all){ $('#ckMsg').textContent='✅ Checklist completado.'; state.done.check=true; store('anupro360_m3_extraccion_transporte', state); calcProgress(); }
+    else { $('#ckMsg').textContent='Marca las tres casillas para completar.'; state.done.check=false; store('anupro360_m3_extraccion_transporte', state); calcProgress(); }
+  }));
+
+  /* ---------- Quiz 10 preguntas ---------- */
+  const preguntas=[
+    {q:'¿Cuál es el orden correcto del ciclo?', opts:['Carguío → Descarga → Acarreo → Retorno','Perforación/Voladura → Carguío → Acarreo → Descarga → Retorno','Acarreo → Perforación → Descarga → Carguío'], ok:1},
+    {q:'El “spotting” se refiere a…', opts:['Velocidad máxima en rampa','Posicionamiento del CAEX para el carguío','Tipo de voladura secundaria'], ok:1},
+    {q:'Un payload sobre nominal provoca…', opts:['Menor consumo y mejor frenado','Riesgo en frenos/neumáticos y sanción','Ciclos más cortos sin riesgo'], ok:1},
+    {q:'Para reducir colas en chancador, una acción eficaz es…', opts:['Enviar más CAEX al mismo destino','Aplicar DIVERT y priorizar ventanas','Aumentar velocidad en zona de descarga'], ok:1},
+    {q:'El headway busca…', opts:['Minimizar la distancia entre camiones','Mantener separación segura entre vehículos','Acelerar en curvas'], ok:1},
+    {q:'Un buen mantenimiento de caminos impacta en…', opts:['Mayor tiempo de ciclo y consumo','Menor vibración, mejor velocidad promedio y seguridad','Sólo en el confort del operador'], ok:1},
+    {q:'¿Qué KPI refleja interrupciones por espera?', opts:['TPH','Colas','Payload'], ok:1},
+    {q:'Ante visibilidad severamente reducida por polvo, corresponde…', opts:['Continuar con luces altas','HOLD temporal y control de polvo','Desviar a rutas más largas sin evaluar'], ok:1},
+    {q:'La segregación mineral/estéril se controla mejor en…', opts:['Zona de carguío y en destino con señalización','Sólo en botadero','Sólo en chancador'], ok:0},
+    {q:'Asignación dinámica de flota significa…', opts:['Rutas fijas sin cambios','Enviar CAEX al frente/destino con menor espera','Detener la operación para analizar'], ok:1},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+      p.opts.forEach((txt,j)=>{
+        const lab=document.createElement('label'); lab.className='opt';
+        lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"><span>${txt}</span>`;
+        div.appendChild(lab);
+      });
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_m3_extraccion_transporte', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_m3_extraccion_transporte', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_m3_extraccion_transporte', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+  /* Init */
+  renderQuiz(); calcProgress(); $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Módulo 3 · Tipos de Camiones de Extracción</title>
+  <meta name="description" content="Módulo de microaprendizaje Anupro360: Tipos de camiones de extracción (CAT 789, 793, Komatsu 830E/930E, Liebherr T 282C). Especificaciones, operación, seguridad, autonomía y quiz (10 preguntas)."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.1rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.2), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.35rem}
+    .note{font-size:.92rem; opacity:.9}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+
+    .imgbox{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; overflow:hidden}
+    .imgbox img{display:block; width:100%; height:auto}
+    .caption{font-size:.85rem; opacity:.9; margin-top:6px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    .two{display:grid; gap:12px}
+    @media(min-width:780px){.two{grid-template-columns:1fr 1fr}}
+    .three{display:grid; gap:12px}
+    @media(min-width:980px){.three{grid-template-columns:1fr 1fr 1fr}}
+
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.06)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <img src="imagotipoblanco.webp" alt="Anupro360">
+      <h1>Anupro360 · Módulo 3 · Tipos de Camiones de Extracción</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Reconocimiento de modelos, arquitectura de potencia y usos en faena</h2>
+    <p class="note"><strong>Aprendizaje esperado:</strong> Distinguir los modelos más comunes (CAT 789/793, Komatsu 830E/930E, Liebherr T 282C), su capacidad, sistema de propulsión, contextos de uso y buenas prácticas de operación segura.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Columna izquierda -->
+  <section class="card">
+    <h3>1) Introducción y objetivo</h3>
+    <details open>
+      <summary>¿Qué define a un camión de extracción?</summary>
+      <p>Un camión de extracción (haul truck) es un equipo de gran porte diseñado para transportar material <em>cargado</em> en tajos a cielo abierto o minas extensivas. Su desempeño depende de: <strong>capacidad de carga (payload)</strong>, <strong>arquitectura de propulsión</strong> (diésel mecánica o diésel–eléctrica), <strong>relación potencia–peso</strong>, <strong>diseño de la tolva</strong>, <strong>neumáticos</strong> y <strong>gestión térmica</strong>. La productividad real se logra al equilibrar el <strong>tiempo de ciclo</strong> (carguío–acarreo–descarga–retorno), la <strong>disponibilidad mecánica</strong> y la <strong>operación segura</strong>.</p>
+      <p>Este módulo entrega un mapa claro para reconocer los modelos más frecuentes y entender <strong>cuándo conviene cada uno</strong>, cómo se integran con palas/cargadores y qué <strong>buenas prácticas</strong> sostienen el rendimiento sin comprometer la seguridad.</p>
+    </details>
+    <div style="margin-top:10px"><button class="btn" data-complete="intro">Marcar leído ✓</button></div>
+    <div class="imgbox" style="margin-top:12px">
+      <img src="ciclo_camion_caex.webp" alt="Diagrama del ciclo: carguío → acarreo → descarga → retorno">
+    </div>
+    <p class="caption">Diagrama del ciclo operativo. *Imagen de referencia de módulo previo.*</p>
+  </section>
+
+  <!-- Columna derecha -->
+  <aside class="card">
+    <h3>Ficha del módulo</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>20–30 min</strong></li>
+      <li>Formato: lectura + imágenes comparativas + tablas + quiz (10)</li>
+      <li>Objetivo: reconocer modelos, capacidades y contexto de uso seguro</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.12)">
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+      <span class="chip2">Versión: M3_v1</span>
+    </div>
+  </aside>
+
+  <!-- Arquitectura y clasificación -->
+  <section class="card">
+    <h3>2) Arquitectura de propulsión y clasificación</h3>
+    <div class="two">
+      <div>
+        <ul>
+          <li><strong>Diésel mecánico:</strong> transmisión mecánica/hidromecánica; respuesta directa y mantenimiento conocido. Usual en <em>CAT 789/793</em>.</li>
+          <li><strong>Diésel–eléctrico:</strong> el motor acciona un generador que alimenta motores de rueda (AC). Típico en <em>Komatsu 830E/930E</em> y algunos Liebherr; eficiente en rampas y cargas altas.</li>
+          <li><strong>Trolley assist (opcional):</strong> toma de energía desde catenarias en rampa para reducir consumo y aumentar velocidad de ascenso.</li>
+          <li><strong>Autonomía:</strong> paquetes AHS (Autonomous Haulage System) con control de ruta, anticolisión, gestión de flota y geocercas.</li>
+        </ul>
+      </div>
+      <div class="imgbox">
+        <img src="arquitectura_propulsion.webp" alt="Esquema comparativo de transmisión diésel mecánica vs diésel–eléctrica">
+      </div>
+    </div>
+    <p class="caption">Comparación conceptual de arquitecturas de potencia (ilustración educativa).</p>
+    <div style="margin-top:10px"><button class="btn" data-complete="arquitectura">He comprendido la arquitectura ✓</button></div>
+  </section>
+
+  <!-- Modelos representativos -->
+  <section class="card">
+    <h3>3) Modelos representativos y usos</h3>
+    <div class="three">
+      <div class="imgbox">
+        <img src="cat_789.webp" alt="Caterpillar CAT 789 lateral en rajo abierto">
+      </div>
+      <div class="imgbox">
+        <img src="cat_793.webp" alt="Caterpillar CAT 793 frontal con carguío de pala">
+      </div>
+      <div class="imgbox">
+        <img src="komatsu_830e.webp" alt="Komatsu 830E en acarreo con tolva cargada">
+      </div>
+      <div class="imgbox">
+        <img src="komatsu_930e.webp" alt="Komatsu 930E comparado con camioneta de apoyo">
+      </div>
+      <div class="imgbox">
+        <img src="liebherr_t282c.webp" alt="Liebherr T 282C descargando en chancador">
+      </div>
+      <div class="imgbox">
+        <img src="escala_camiones_vs_pickup.webp" alt="Escala visual: camión de extracción vs camioneta de apoyo y persona">
+      </div>
+    </div>
+
+    <table aria-label="Especificaciones comparativas de camiones de extracción">
+      <thead>
+        <tr>
+          <th>Modelo</th>
+          <th>Capacidad (t)</th>
+          <th>Potencia aprox.</th>
+          <th>Propulsión</th>
+          <th>Aplicación típica</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>CAT 789</td><td>~177</td><td>Alta (diésel)</td><td>Diésel mecánica</td><td>Faenas medianas / rampas moderadas</td></tr>
+        <tr><td>CAT 793</td><td>~227</td><td>Muy alta</td><td>Diésel mecánica (op. autónoma)</td><td>Faenas grandes / alto tonelaje</td></tr>
+        <tr><td>Komatsu 830E</td><td>~231</td><td>Muy alta</td><td>Diésel–eléctrica (AC)</td><td>Alta producción / eficiencia en rampa</td></tr>
+        <tr><td>Komatsu 930E</td><td>~320</td><td>Muy alta</td><td>Diésel–eléctrica (AC)</td><td>Mega proyectos / largas distancias</td></tr>
+        <tr><td>Liebherr T 282C</td><td>~363</td><td>Extrema</td><td>Diésel / híbridos disponibles</td><td>Gran escala / flujos masivos</td></tr>
+      </tbody>
+    </table>
+    <p class="caption">Valores referenciales para fines de aprendizaje (pueden variar por configuración, tolva y altitud).</p>
+    <div style="margin-top:10px"><button class="btn" data-complete="modelos">He revisado los modelos ✓</button></div>
+  </section>
+
+  <!-- Integración con carguío y productividad -->
+  <section class="card">
+    <h3>4) Integración con carguío y productividad</h3>
+    <div class="two">
+      <div>
+        <ul>
+          <li><strong>Match factor (pala ↔ camión):</strong> dimensiona la flota para que ni pala ni camiones queden ociosos. Objetivo: <em>3–5 pases por camión</em> según tamaño de cuchara.</li>
+          <li><strong>Tiempo de ciclo:</strong> carguío (cola + pases) + acarreo (ida) + descarga + retorno. Reducir variabilidad es tan importante como reducir el promedio.</li>
+          <li><strong>Rampa y pendiente:</strong> influyen en velocidad, temperatura de frenos y consumo. En descensos prolongados usar <em>retarder</em> y marchas adecuadas.</li>
+          <li><strong>Plan de tronadura y vías:</strong> huella, bermas y visibilidad determinan seguridad y velocidad. La coordinación con motoniveladora evita baches y polvo excesivo.</li>
+        </ul>
+      </div>
+      <div class="imgbox">
+        <img src="infografia_comparativa_camiones.webp" alt="Infografía comparativa: capacidades, propulsión y aplicación por modelo">
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="productividad">Productividad comprendida ✓</button></div>
+  </section>
+
+  <!-- Operación segura y autónoma -->
+  <section class="card">
+    <h3>5) Operación segura, frenos y autonomía</h3>
+    <div class="two">
+      <div>
+        <ul>
+          <li><strong>Frenos y retarder:</strong> en descensos largos prioriza el freno reductor (retarder) para disipar energía sin fatigar frenos de servicio; respeta temperatura y límites.</li>
+          <li><strong>Visibilidad y puntos ciegos:</strong> usa rutas señalizadas, espejos/cámaras, luces y <em>spotters</em> en zonas críticas; mantiene distancias de seguridad (headway).</li>
+          <li><strong>Zonas de exclusión:</strong> alrededor de pala, chancador y botadero. En reversa, <em>radio clara</em> y confirmación visual.</li>
+          <li><strong>Autonomía:</strong> los AHS gestionan ruta, velocidad, cruce y carga. Reglas clave: geocercas activas, comunicación ROC↔flota, <em>HOLD/DIVERT/LOCK</em> según condición.</li>
+        </ul>
+      </div>
+      <div>
+        <details>
+          <summary>Checklist de preuso (1 minuto)</summary>
+          <ul>
+            <li>Neumáticos y presión a la vista, sin cortes/abultamientos.</li>
+            <li>Iluminación, balizas y claxon operativos; cámaras limpias.</li>
+            <li>Nivel de fluidos, fugas visibles, temperatura normal.</li>
+            <li>Frenos de servicio/estacionamiento y retarder probados en zona segura.</li>
+            <li>Documentación/permiso y <em>radio check</em> con sala de control.</li>
+          </ul>
+        </details>
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="seguridad">Seguridad revisada ✓</button></div>
+  </section>
+
+  <!-- Autoevaluación práctica -->
+  <section class="card">
+    <h3>6) Casos rápidos de elección de camión</h3>
+    <div class="two">
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--amarillo)"></div><div><strong>Rampa prolongada con alta pendiente y distancia:</strong> prioriza camión <em>diésel–eléctrico</em> (p. ej., Komatsu 830E/930E) por eficiencia en ascenso.</div></div>
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--naranja)"></div><div><strong>Faena mediana con accesos mixtos y tolvas estándar:</strong> <em>CAT 789</em> entrega equilibrio costo–rendimiento.</div></div>
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--verde)"></div><div><strong>Alto tonelaje y pala de gran cuchara:</strong> <em>CAT 793</em> o <em>Komatsu 930E</em> para match de 3–5 pases.</div></div>
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--gris)"></div><div><strong>Megaproyecto con botadero distante:</strong> <em>Liebherr T 282C</em> si la infraestructura admite su tamaño/peso.</div></div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="casos">Casos comprendidos ✓</button></div>
+  </section>
+
+  <!-- Quiz -->
+  <section class="card">
+    <h3>7) Quiz (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+  </section>
+
+  <!-- Reflexión -->
+  <section class="card">
+    <h3>8) Reflexión final (2 líneas)</h3>
+    <textarea id="reflexion" rows="3" placeholder="¿Qué criterios usarías para escoger entre un 793 y un 930E en tu faena?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="note">Se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Colores corporativos aplicados.</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_m3_camiones', {
+    done:{intro:false,arquitectura:false,modelos:false,productividad:false,seguridad:false,casos:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_m3_camiones', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_m3_camiones'); location.reload(); });
+
+  /* ---------- Quiz 10 preguntas ---------- */
+  const preguntas=[
+    {q:'El CAT 789 se reconoce por una capacidad de carga aproximada de…', opts:['120 t','177 t','250 t'], ok:1},
+    {q:'¿Qué arquitectura de potencia usa típicamente el Komatsu 830E?', opts:['Diésel mecánica','Diésel–eléctrica (AC)','Eléctrico a baterías puro'], ok:1},
+    {q:'Un objetivo común de match factor entre pala y camión es lograr…', opts:['10–12 pases por camión','3–5 pases por camión','1–2 pases por camión'], ok:1},
+    {q:'Para descensos prolongados se debe priorizar el uso de…', opts:['Frenos de servicio continuamente','Retarder y marchas adecuadas','Neutral para ahorrar combustible'], ok:1},
+    {q:'El Komatsu 930E suele operar con un payload referencial de…', opts:['320 t','200 t','100 t'], ok:0},
+    {q:'Una ventaja del sistema diésel–eléctrico es…', opts:['Mayor eficiencia en rampas y control fino de tracción','Elimina todo mantenimiento','No requiere generador'], ok:0},
+    {q:'Trolley assist permite…', opts:['Cargar material más rápido','Tomar energía de catenarias en rampa para subir con mayor velocidad','Evitar el uso de neumáticos'], ok:1},
+    {q:'En operación segura cerca de la pala, una regla clave es…', opts:['Entrar por el lado ciego sin autorización','Mantener zonas de exclusión y comunicación clara','Reversa sin spotter ni cámaras'], ok:1},
+    {q:'El CAT 793 destaca por…', opts:['Capacidad cercana a 227 t y opciones de operación autónoma','Ser el más pequeño de la flota','Ser exclusivamente eléctrico a baterías'], ok:0},
+    {q:'La variabilidad del tiempo de ciclo…', opts:['No afecta la productividad','Es tan relevante como el promedio: debe reducirse','Sólo importa en turnos nocturnos'], ok:1},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+      p.opts.forEach((txt,j)=>{
+        const lab=document.createElement('label'); lab.className='opt';
+        lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+        div.appendChild(lab);
+      });
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_m3_camiones', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_m3_camiones', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_m3_camiones', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+  /* Init */
+  renderQuiz(); calcProgress(); $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
