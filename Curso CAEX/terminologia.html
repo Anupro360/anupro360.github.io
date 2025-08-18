@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Terminología técnica minera</title>
+  <meta name="description" content="Glosario esencial, conceptos operacionales y señalética minera para CAEX. Incluye galería descargable e instrumento de evaluación de 10 preguntas."/>
+  <style>
+    :root{ --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.1rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.20), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.35rem}
+    .note{font-size:.94rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    ul.bullet{margin:8px 0 0 18px; line-height:1.65}
+    p, li{ text-align: justify; }
+
+    .two{display:grid; gap:12px}
+    @media(min-width:780px){.two{grid-template-columns:1fr 1fr}}
+    .three{display:grid; gap:12px}
+    @media(min-width:900px){.three{grid-template-columns:1fr 1fr 1fr}}
+
+    figure{margin:0}
+    figure img{width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.12)}
+    figcaption{font-size:.85rem; opacity:.9; margin-top:6px}
+
+    .table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.2)}
+    .table th,.table td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+
+    /* Quiz */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    textarea{width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.18); padding:10px; background:rgba(255,255,255,.06); color:var(--blanco)}
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.06)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <img src="imagotipoblanco.webp" alt="Anupro360" onerror="this.style.display='none'">
+      <h1>Anupro360 · Terminología técnica minera</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Glosario esencial para operación de camiones de extracción (CAEX)</h2>
+    <p class="note"><strong>Aprendizaje esperado:</strong> Comprender la terminología fundamental de mina a rajo abierto (zonas, señales, equipos, seguridad y KPIs) para comunicarte con precisión, ejecutar instrucciones y tomar decisiones operacionales correctas.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Columna izquierda: contenido extenso -->
+  <section class="card">
+    <h3>1) Introducción: hablar el mismo idioma</h3>
+    <p>La operación segura y eficiente de un CAEX depende en gran medida de una <strong>comunicación precisa</strong>. Este módulo reúne la terminología crítica que encontrarás a diario en mina: desde elementos geométricos del rajo (banco, berma, talud), hasta <em>zonas operativas</em> (pala, rampa, botadero, chancador), <em>componentes del camión</em> (retardador, frenos, ROPS/FOPS), <em>señalética y rutas</em>, y <em>indicadores</em> como TPH y tiempo de ciclo.</p>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+      <button class="btn" data-complete="intro">Marcar leído ✓</button>
+    </div>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha de este módulo</h3>
+    <ul class="bullet">
+      <li>Tiempo estimado: <strong>25–35 min</strong></li>
+      <li>Formato: lectura + galería descargable + quiz</li>
+      <li>Objetivo: dominar vocabulario y KPIs para operar y coordinar en mina</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.12)">
+    <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+  </aside>
+
+  <!-- Glosario esencial -->
+  <section class="card">
+    <h3>2) Glosario esencial (zonas y geometría del rajo)</h3>
+    <div class="two">
+      <div>
+        <ul class="bullet">
+          <li><strong>Banco:</strong> escalón horizontal en el rajo que asegura estabilidad y acceso.</li>
+          <li><strong>Talud:</strong> inclinación del muro de banco; crítico para estabilidad.</li>
+          <li><strong>Berma:</strong> montículo/terraza de seguridad que evita caídas de rocas y vehículos.</li>
+          <li><strong>Berma de coronación:</strong> berma superior que protege el borde del banco.</li>
+          <li><strong>Rampa:</strong> vía inclinada que conecta niveles; define pendientes y radios seguros.</li>
+          <li><strong>Switchback:</strong> cambio de sentido en rampa (curva en zigzag) para ganar altura.</li>
+          <li><strong>Botadero:</strong> zona de descarga de estéril (material sin valor económico).</li>
+          <li><strong>Chancador:</strong> equipo/instalación que tritura mineral a tamaños requeridos.</li>
+          <li><strong>Zona de carguío:</strong> área segura alrededor de la pala para posicionar CAEX.</li>
+          <li><strong>Aculatar:</strong> maniobrar en retroceso para cargar o descargar con precisión.</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="bullet">
+          <li><strong>Ganga:</strong> roca acompañante sin valor; debe separarse del mineral.</li>
+          <li><strong>Sobrecarga/Overburden:</strong> material que cubre el yacimiento y se remueve primero.</li>
+          <li><strong>Relave:</strong> residuo fino con agua tras procesamiento; se dispone en tranques.</li>
+          <li><strong>Tranque de relaves:</strong> estructura de contención segura para relaves.</li>
+          <li><strong>Drenaje ácido:</strong> agua ácida por oxidación de sulfuros; requiere control estricto.</li>
+          <li><strong>Geocerca:</strong> límite o zona virtual definida en el sistema para control y seguridad.</li>
+          <li><strong>Zonas de exclusión:</strong> áreas restringidas por seguridad (trabajos especiales).</li>
+          <li><strong>Huella:</strong> superficie de rodado en caminos mineros; su mantenimiento es clave.</li>
+          <li><strong>VDT:</strong> visibilidad disponible/tiempo; criterio para ajustar velocidad o HOLD.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Componentes del camión y seguridad -->
+  <section class="card">
+    <h3>3) Componentes del CAEX y seguridad</h3>
+    <div class="two">
+      <div>
+        <ul class="bullet">
+          <li><strong>Freno de servicio:</strong> sistema principal para detener el CAEX durante la marcha.</li>
+          <li><strong>Freno de estacionamiento:</strong> inmoviliza el equipo cuando está detenido.</li>
+          <li><strong>Retardador hidráulico/eléctrico:</strong> sistema de frenado continuo para controlar velocidad en pendientes largas sin sobrecalentar frenos.</li>
+          <li><strong>Dirección asistida:</strong> mecanismo hidráulico para girar con cargas elevadas.</li>
+          <li><strong>Neumático OTR:</strong> neumático de gran diámetro y alta carga (Off-The-Road).</li>
+          <li><strong>ROPS/FOPS:</strong> estructuras de protección ante vuelco/caída de objetos.</li>
+          <li><strong>Cut-off eléctrico:</strong> interruptor de corte de energía en emergencia.</li>
+          <li><strong>Telemetría/MDT:</strong> monitoreo de datos (velocidad, combustible, fallas).</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="bullet">
+          <li><strong>Capacidad de balde (pala):</strong> volumen por cucharada que determina pases de carga.</li>
+          <li><strong>Factor de llenado:</strong> proporción real respecto del volumen nominal de balde.</li>
+          <li><strong>Factor de carga:</strong> relación entre densidad aparente y diseño de la flota.</li>
+          <li><strong>Check preuso:</strong> inspección antes de operar (frenos, luces, neumáticos, fugas).</li>
+          <li><strong>Spotter:</strong> apoyo visual/comunicación para posicionamiento seguro del CAEX.</li>
+          <li><strong>Radio protocolo:</strong> formato estándar de comunicación (quién, dónde, qué).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPIs -->
+  <section class="card">
+    <h3>4) Indicadores operacionales (KPIs)</h3>
+    <div class="two">
+      <div>
+        <table class="table" aria-label="KPIs operacionales">
+          <thead><tr><th>Indicador</th><th>Definición</th><th>Uso</th></tr></thead>
+          <tbody>
+            <tr><td><strong>TPH</strong></td><td>Toneladas procesadas por hora.</td><td>Productividad primaria del sistema.</td></tr>
+            <tr><td><strong>Tiempo de ciclo</strong></td><td>Tiempo total carguío→acarreo→descarga→retorno.</td><td>Optimización de rutas y balance de flota.</td></tr>
+            <tr><td><strong>Disponibilidad</strong></td><td>% de tiempo en que el equipo está técnicamente operativo.</td><td>Confiabilidad y mantenimiento.</td></tr>
+            <tr><td><strong>Utilización</strong></td><td>% de tiempo en que el equipo está realmente en uso.</td><td>Gestión de operación y demoras.</td></tr>
+            <tr><td><strong>Velocidad media</strong></td><td>Promedio por tramo; considera pendiente y estado de huella.</td><td>Ajuste de consignas y seguridad.</td></tr>
+            <tr><td><strong>Colas</strong></td><td>Nº/longitud de filas en pala/botadero/chancador.</td><td>Señal de congestión y desbalance.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p><strong>Interpretación rápida:</strong> TPH depende de <em>pases de carga, tiempo de ciclo</em> y <em>disponibilidad/ utilización</em>. Colas prolongadas indican <em>cuellos de botella</em>. El retardador debe usarse para controlar velocidad en rampas; el <em>freno de servicio</em> queda para detener.</p>
+        <div style="margin-top:10px"><button class="btn" data-complete="kpis">He revisado los KPIs ✓</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Galería con descarga -->
+  <section class="card">
+    <h3>5) Galería descargable (alta resolución)</h3>
+    <p class="note">Haz clic en <em>Descargar</em> para abrir la imagen en grande y guardarla. Si no se visualiza el preview, el enlace de descarga igualmente funciona.</p>
+    <div class="three">
+      <figure>
+        <img src="diagram_in_Span.webp" alt="Esquema de zonas: pala, rampa, botadero y chancador" onerror="this.style.display='none'">
+        <figcaption>Esquema de zonas (pala–rampa–botadero–chancador).<br><a class="btn-ghost" href="sandbox:/mnt/data/A_detailed_2D_digital_illustration_diagram_in_Span.png" download>Descargar PNG</a></figcaption>
+      </figure>
+      <figure>
+        <img src="illustrates_the_cy.webp" alt="Diagrama del ciclo carguío→acarreo→descarga→retorno" onerror="this.style.display='none'">
+        <figcaption>Diagrama del ciclo de transporte.<br><a class="btn-ghost" href="sandbox:/mnt/data/A_2D_digital_diagram_in_Spanish_illustrates_the_cy.png" download>Descargar PNG</a></figcaption>
+      </figure>
+      <figure>
+        <img src="infographic_is_pre.webp" alt="Infografía: antes/después mina a cielo abierto" onerror="this.style.display='none'">
+        <figcaption>Impactos: polvo, agua y relaves (antes/después).<br><a class="btn-ghost" href="sandbox:/mnt/data/An_informative_Spanish-language_infographic_is_pre.png" download>Descargar PNG</a></figcaption>
+      </figure>
+    </div>
+    <div class="three" style="margin-top:12px">
+      <figure>
+        <img src="map_of_Chile_is_depicted_.webp" alt="Mapa de Chile con minas a cielo abierto y subterráneas" onerror="this.style.display='none'">
+        <figcaption>Mapa de yacimientos (íconos por tipo de mina).<br><a class="btn-ghost" href="sandbox:/mnt/data/A_2D_digital_infographic_map_of_Chile_is_depicted_.png" download>Descargar PNG</a></figcaption>
+      </figure>
+      <figure>
+        <img src="Spanish_title.webp" alt="Comparativa: transmisión diésel–mecánica vs diésel–eléctrica" onerror="this.style.display='none'">
+        <figcaption>Transmisión: diésel–mecánica vs diésel–eléctrica (terminología correcta).<br><a class="btn-ghost" href="sandbox:/mnt/data/A_detailed_comparison_infographic_in_Spanish_title.png" download>Descargar PNG</a></figcaption>
+      </figure>
+      <figure>
+        <img src="showcases_an_extra.webp" alt="Escala: CAEX vs camioneta vs persona" onerror="this.style.display='none'">
+        <figcaption>Escala visual de equipos y persona.<br><a class="btn-ghost" href="sandbox:/mnt/data/A_scale_comparison_illustration_showcases_an_extra.png" download>Descargar PNG</a></figcaption>
+      </figure>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="galeria">He revisado la galería ✓</button></div>
+  </section>
+
+  <!-- Señalética y rutas -->
+  <section class="card">
+    <h3>6) Señalética y rutas internas</h3>
+    <div class="two">
+      <div>
+        <ul class="bullet">
+          <li><strong>Señal Pare en mina:</strong> alto total y confirmación visual/radio antes de ingresar al flujo.</li>
+          <li><strong>Prioridad de subida:</strong> en rampas con restricción, la subida suele tener preferencia.</li>
+          <li><strong>Headway:</strong> distancia temporal/espacial entre CAEX para evitar alcance.</li>
+          <li><strong>Zona de cruce:</strong> punto controlado de intersección; respeta consignas del SOP local.</li>
+          <li><strong>Speed limit por tramo:</strong> consignas definidas por pendiente, visibilidad y estado de huella.</li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>Buenas prácticas:</strong> mantener carril, respetar radios en switchbacks, comunicar desvíos (<code>DIVERT</code>) y bloqueos (<code>LOCK</code>), y usar <em>retardador</em> para conservar frenos de servicio. Reporta condiciones de huella (charcos, baches, polvo) para intervención de motoniveladora y riego.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mini casos de aplicación -->
+  <section class="card">
+    <h3>7) Casos rápidos de aplicación de términos</h3>
+    <ol class="bullet" style="list-style:decimal">
+      <li>Reportas “<strong>colas en pala</strong>” → posible desbalance de flota o baja velocidad de rampa.</li>
+      <li>“<strong>Retardador</strong> fuera de servicio” → restringir pendientes/límites de velocidad; priorizar mantenimiento.</li>
+      <li>“<strong>Geocerca</strong> de botadero actualizada” → rutas y zonas válidas cambiaron; revisa mapa en MDT.</li>
+      <li>“<strong>Berma</strong> insuficiente en borde de banco” → cerrar acceso (<code>LOCK</code>) y señalizar hasta corregir.</li>
+      <li>“<strong>Drenaje ácido</strong> en cuneta” → coordinar ambiental para contención y desvío seguro.</li>
+    </ol>
+    <div style="margin-top:10px"><button class="btn" data-complete="casos">Casos comprendidos ✓</button></div>
+  </section>
+
+  <!-- Quiz 10 preguntas -->
+  <section class="card">
+    <h3>8) Quiz (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+  </section>
+
+  <!-- Reflexión -->
+  <section class="card">
+    <h3>9) Reflexión corta</h3>
+    <textarea id="reflexion" rows="3" placeholder="Escribe dos términos nuevos que aplicarás hoy y en qué situaciones los usarás."></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="note">Se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Colores corporativos aplicados.</div>
+</footer>
+
+<script>
+  /* Utilidades y estado */
+  const $=(s,d=document)=>d.querySelector(s);
+  const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_terminologia_v1', {
+    done:{intro:false,kpis:false,galeria:false,casos:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_terminologia_v1', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_terminologia_v1'); location.reload(); });
+
+  /* Quiz 10 preguntas */
+  const preguntas=[
+    {q:'¿Qué es un banco?', opts:['Montículo de seguridad en borde de camino','Escalón horizontal del rajo para estabilidad y acceso','Área de descarga del estéril'], ok:1},
+    {q:'El talud corresponde a…', opts:['Inclinación del muro del banco','Zona de carga de la pala','Camino de retorno'], ok:0},
+    {q:'La berma sirve principalmente para…', opts:['Aumentar TPH','Evitar caídas de rocas/vehículos y dar estabilidad','Reducir el tiempo de carguío'], ok:1},
+    {q:'El retardador hidráulico/eléctrico se usa para…', opts:['Detener completamente el camión en plano','Mantener velocidad en pendientes sin sobrecalentar frenos','Girar con cargas altas'], ok:1},
+    {q:'Botadero es…', opts:['Zona de descarga del estéril','Equipo de trituración primaria','Área de inspección preuso'], ok:0},
+    {q:'TPH significa…', opts:['Toneladas por hora','Tiempo por hora','Tránsito por hora'], ok:0},
+    {q:'Tiempo de ciclo incluye…', opts:['Sólo acarreo y retorno','Carguío, acarreo, descarga y retorno','Sólo descarga y retorno'], ok:1},
+    {q:'Geocerca es…', opts:['Límite virtual en el sistema para control/seguridad','Barrera física de concreto','Línea de talud final'], ok:0},
+    {q:'ROPS/FOPS son…', opts:['Sistemas de frenado','Estructuras de protección ante vuelco/caída de objetos','Tipos de neumáticos OTR'], ok:1},
+    {q:'Una “cola en pala” indica…', opts:['Velocidad excesiva','Congestión o desbalance de flota','Fallo del retardador'], ok:1},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+      p.opts.forEach((txt,j)=>{
+        const lab=document.createElement('label'); lab.className='opt';
+        lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+        div.appendChild(lab);
+      });
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length; const pct = Math.round(okCount/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_terminologia_v1', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_terminologia_v1', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_terminologia_v1', state); alert('Reflexión guardada.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+  /* Init */
+  renderQuiz(); calcProgress(); $('#year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
