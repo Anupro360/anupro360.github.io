@@ -31,18 +31,21 @@
     ul.bullet{margin:8px 0 0 18px; line-height:1.65}
     p{ text-align:justify }
 
-    /* Imágenes proporcionadas y miniaturas */
+    /* Figuras e imágenes (ajustadas) */
     figure{margin:12px 0; display:flex; flex-direction:column; gap:8px; align-items:center}
     figure img{
       display:block; max-width:100%; width:100%; height:auto;
-      max-height:clamp(200px, 35vh, 420px); object-fit:contain;
-      border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); padding:6px;
+      max-height: clamp(220px, 38vh, 460px); /* evita desproporción */
+      object-fit:contain; border-radius:12px; border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.03); padding:6px;
     }
     figcaption{font-size:.9rem; opacity:.9; text-align:center}
+
+    /* Descargas */
     .downloads{display:grid; gap:12px}
     @media(min-width:740px){.downloads{grid-template-columns:1fr 1fr}}
     .dl{display:flex; flex-direction:column; gap:8px}
-    .downloads img{width:100%; height:140px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03)}
+    .downloads img{width:100%; height:160px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03)}
 
     .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
     .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
@@ -229,27 +232,27 @@
     <p class="small">Haz clic en <em>Descargar</em> para abrir/guardar en grande.</p>
     <div class="downloads">
       <div class="dl">
-        <a class="btn-ghost" href="roles_operador_overview.webp" download>Descargar · Rol del Operador (infografía)</a>
+        <a class="btn-ghost" href="roles_operador_overview.webp" data-dl download="Anupro360_RolOperador.webp">Descargar · Rol del Operador (infografía)</a>
         <img loading="lazy" src="roles_operador_overview.webp" alt="Miniatura rol operador">
       </div>
       <div class="dl">
-        <a class="btn-ghost" href="workflow_operador_mantencion.webp" download>Descargar · Flujo Operador–Mantenimiento</a>
+        <a class="btn-ghost" href="workflow_operador_mantencion.webp" data-dl download="Anupro360_Flujo_Operador_Mantencion.webp">Descargar · Flujo Operador–Mantenimiento</a>
         <img loading="lazy" src="workflow_operador_mantencion.webp" alt="Miniatura flujo mantención">
       </div>
       <div class="dl">
-        <a class="btn-ghost" href="flujo_supervision_roc.webp" download>Descargar · Cadena Supervisión/ROC</a>
+        <a class="btn-ghost" href="flujo_supervision_roc.webp" data-dl download="Anupro360_Cadena_Supervision_ROC.webp">Descargar · Cadena Supervisión/ROC</a>
         <img loading="lazy" src="flujo_supervision_roc.webp" alt="Miniatura flujo ROC">
       </div>
       <div class="dl">
-        <a class="btn-ghost" href="protocolo_comunicaciones.webp" download>Descargar · Protocolo de comunicaciones</a>
+        <a class="btn-ghost" href="protocolo_comunicaciones.webp" data-dl download="Anupro360_Protocolo_Comunicaciones.webp">Descargar · Protocolo de comunicaciones</a>
         <img loading="lazy" src="protocolo_comunicaciones.webp" alt="Miniatura protocolo">
       </div>
       <div class="dl">
-        <a class="btn-ghost" href="casos_operador.webp" download>Descargar · Casos prácticos</a>
+        <a class="btn-ghost" href="casos_operador.webp" data-dl download="Anupro360_Casos_Operador.webp">Descargar · Casos prácticos</a>
         <img loading="lazy" src="casos_operador.webp" alt="Miniatura casos">
       </div>
       <div class="dl">
-        <a class="btn-ghost" href="kpis_interfaz.webp" download>Descargar · KPIs de interfaz</a>
+        <a class="btn-ghost" href="kpis_interfaz.webp" data-dl download="Anupro360_KPIs_Interfaz.webp">Descargar · KPIs de interfaz</a>
         <img loading="lazy" src="kpis_interfaz.webp" alt="Miniatura KPIs">
       </div>
     </div>
@@ -315,6 +318,26 @@
 
   $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_roles_operador_v1'); location.reload(); });
 
+  /* Descargas robustas (solo .webp) */
+  document.querySelectorAll('a[data-dl]').forEach(a=>{
+    a.addEventListener('click', async (e)=>{
+      try{
+        const url = a.getAttribute('href');
+        const filename = a.getAttribute('download') || url.split('/').pop();
+        const res = await fetch(url, {cache:'no-store'});
+        if(!res.ok) return; // deja que el navegador intente
+        const blob = await res.blob();
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(()=>{ URL.revokeObjectURL(link.href); link.remove(); }, 1200);
+        e.preventDefault();
+      }catch(_){ /* si falla, el anchor sigue su curso */ }
+    });
+  });
+
   /* Quiz (10) */
   const preguntas=[
     {q:'¿Cuál es el límite del rol del operador CAEX frente a fallas mecánicas?', opts:['Puede ajustar componentes mayores','Sólo reporta y asegura el equipo; no interviene mecánicamente','Autoriza el desbloqueo de ruta'], ok:1},
@@ -346,20 +369,20 @@
 
   function lockQuizAndColor(){
     const blocks = $$('#quiz .q');
-    let okCount=0, unanswered=0;
     blocks.forEach((div)=>{
       const ok = Number(div.dataset.ok);
       const sel = div.querySelector('input[type="radio"]:checked');
       div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
       const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
       correctLabel?.classList.add('correct');
-      if(!sel){ div.classList.add('wrong'); unanswered++; return; }
+      if(!sel){ div.classList.add('wrong'); return; }
       const chosen = Number(sel.value);
       if(chosen===ok){ div.classList.add('correct'); }
       else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); }
     });
     const total = preguntas.length;
     const okCountFinal = $$('#quiz .q.correct').length;
+    const unanswered = total - $$('#quiz .q input:checked').length;
     const pct = Math.round(okCountFinal/total*100);
     $('#quizFeedback').textContent = `Resultado: ${okCountFinal}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
   }
