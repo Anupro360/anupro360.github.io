@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Sección 2 · Fundamentos de la Minería Automatizada</title>
+  <meta name="description" content="Sección 2: Fundamentos de la Minería Automatizada aplicada a CAEX autónomos (Komatsu FrontRunner y Caterpillar MineStar Command). Rol del Controlador de Terreno, tecnologías, seguridad, flujo AHS y quiz."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.75); border-bottom:1px solid rgba(255,255,255,.08)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand img{width:42px; height:42px; border-radius:12px; object-fit:contain}
+    h1{font-size:1.1rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.2), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.35rem}
+    .note{font-size:.92rem; opacity:.9}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.25fr .75fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .pill{display:flex; gap:10px; align-items:flex-start; background:rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.12); padding:12px; border-radius:12px}
+
+    .imgbox{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; overflow:hidden}
+    .imgbox img{display:block; width:100%; height:auto}
+    .caption{font-size:.85rem; opacity:.9; margin-top:6px}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.2); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    .two{display:grid; gap:12px}
+    @media(min-width:780px){.two{grid-template-columns:1fr 1fr}}
+    .three{display:grid; gap:12px}
+    @media(min-width:980px){.three{grid-template-columns:1fr 1fr 1fr}}
+
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); margin-bottom:10px}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .q.correct{border-color: rgba(75,111,68,.9); background: rgba(75,111,68,.08)}
+    .q.wrong{border-color: rgba(255,92,0,.9); background: rgba(255,92,0,.08)}
+    .opt.correct{outline:2px solid #4B6F44; border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid #FF5C00; border-radius:8px; padding:4px}
+
+    textarea{width:100%; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(0,0,0,.15); color:#fff; padding:10px}
+
+    footer{opacity:.75; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.06)}
+    .dlbar{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <img src="imagotipoblanco.webp" alt="Anupro360">
+      <h1>Anupro360 · Sección 2 · Fundamentos de la Minería Automatizada</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Base técnica para operar y supervisar CAEX autónomos</h2>
+    <p class="note"><strong>Aprendizaje esperado:</strong> Comprender los principios de la minería automatizada, las tecnologías AHS (Komatsu FrontRunner / Cat MineStar Command), el <em>flujo operativo</em>, los <em>protocolos de seguridad</em> y el <em>rol del Controlador de Terreno</em> para mantener continuidad operacional y seguridad.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Columna izquierda -->
+  <section class="card">
+    <h3>1) Introducción y alcance</h3>
+    <details open>
+      <summary>¿Qué es la minería automatizada?</summary>
+      <p>Es la integración de <strong>sensores</strong>, <strong>software de control</strong> y <strong>comunicaciones</strong> para que equipos mineros ejecuten tareas con mínima intervención humana, tomando decisiones en tiempo real bajo políticas de seguridad y producción. En CAEX autónomos, el sistema planifica rutas, controla velocidad, gestiona cruces y coordina carguío/descarga.</p>
+      <p>El <strong>Controlador de Terreno</strong> no conduce el camión; <em>supervisa</em> flota, <em>gestiona</em> eventos y <em>ajusta</em> parámetros para cumplir metas de seguridad y producción.</p>
+    </details>
+    <div class="imgbox" style="margin-top:12px">
+      <img src="s2_concepto.webp" alt="Vista de rajo con CAEX autónomos y red de comunicaciones">
+    </div>
+    <div class="dlbar">
+      <a class="btn-ghost" href="s2_concepto.webp" download>📥 Descargar imagen (webp)</a>
+      <button class="btn" data-complete="intro">Marcar leído ✓</button>
+    </div>
+    <p class="caption">Concepto general: centro de control, red de baja latencia y CAEX autónomos coordinados.</p>
+  </section>
+
+  <!-- Columna derecha -->
+  <aside class="card">
+    <h3>Ficha de la sección</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>35–45 min</strong></li>
+      <li>Formato: lectura guiada + tablas + checklist + casos + quiz (10)</li>
+      <li>Dirigido a: aspirantes a <strong>Controlador de Terreno</strong> AHS</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.12)">
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-ghost" id="reset">Reiniciar progreso</button>
+      <span class="chip2">Versión: S2_v1</span>
+    </div>
+  </aside>
+
+  <!-- Niveles de automatización -->
+  <section class="card">
+    <h3>2) Niveles de automatización</h3>
+    <p>Conocer el nivel permite definir <em>límites de intervención</em>, <em>responsabilidades</em> y <em>procedimientos</em> ante contingencias.</p>
+    <table aria-label="Niveles de automatización">
+      <thead>
+        <tr><th>Nivel</th><th>Descripción</th><th>Ejemplo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0 – Manual</td><td>Operación 100% humana.</td><td>CAEX estándar con operador en cabina.</td></tr>
+        <tr><td>1 – Asistencia</td><td>Ayudas puntuales (freno automático, cámaras, alerta colisión).</td><td>Asistencias activas en retroceso.</td></tr>
+        <tr><td>2 – Semiautónomo</td><td>Partes del ciclo automatizadas, requiere intervención frecuente.</td><td>Piloto en tramos rectos.</td></tr>
+        <tr><td>3 – Autónomo Parcial</td><td>Casi todo automatizado; operador puede tomar control remoto.</td><td>CAEX AHS con opción teleoperada.</td></tr>
+        <tr><td>4 – Autónomo Total</td><td>Operación completa bajo AHS; sala de control supervisa.</td><td>FrontRunner / MineStar Command full.</td></tr>
+      </tbody>
+    </table>
+    <div class="two" style="margin-top:10px">
+      <div class="imgbox"><img src="s2_niveles.webp" alt="Esquema visual de niveles 0 a 4"></div>
+      <div>
+        <details open>
+          <summary>Implicancias para el Controlador</summary>
+          <ul>
+            <li>Define <strong>umbrales</strong> y <strong>políticas</strong> por nivel (p. ej., cuándo forzar HOLD o DIVERT).</li>
+            <li>Monitorea <strong>telemetría</strong> y <strong>alarmas</strong> asociadas al nivel vigente.</li>
+            <li>Activa protocolos <em>Fail-Safe</em> ante pérdida de señal o sensores críticos.</li>
+          </ul>
+        </details>
+        <a class="btn-ghost" href="s2_niveles.webp" download>📥 Descargar esquema (webp)</a>
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="niveles">He comprendido niveles ✓</button></div>
+  </section>
+
+  <!-- Convencional vs Autónomo -->
+  <section class="card">
+    <h3>3) Convencional vs. autónomo</h3>
+    <table aria-label="Comparación camión convencional vs autónomo">
+      <thead>
+        <tr><th>Característica</th><th>Convencional</th><th>Autónomo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Operador en cabina</td><td>Sí</td><td>No</td></tr>
+        <tr><td>Conducción</td><td>Manual</td><td>Algoritmos + sensores</td></tr>
+        <tr><td>Rutas</td><td>Decisión del operador</td><td>Programadas y optimizadas</td></tr>
+        <tr><td>Seguridad</td><td>Reacción humana</td><td>Detección proactiva y geocercas</td></tr>
+        <tr><td>Productividad</td><td>Variable</td><td>Constante y predecible</td></tr>
+      </tbody>
+    </table>
+    <div class="two" style="margin-top:10px">
+      <div class="imgbox"><img src="s2_conv_vs_auto.webp" alt="Comparación visual de operación convencional y autónoma"></div>
+      <div class="imgbox"><img src="s2_mine_control_center.webp" alt="Sala ROC con tableros de flota y alarmas"></div>
+    </div>
+    <div class="dlbar">
+      <a class="btn-ghost" href="s2_conv_vs_auto.webp" download>📥 Descargar comparativa</a>
+      <a class="btn-ghost" href="s2_mine_control_center.webp" download>📥 Descargar ROC</a>
+      <button class="btn" data-complete="comparativa">Comparativa revisada ✓</button>
+    </div>
+  </section>
+
+  <!-- Tecnologías de soporte -->
+  <section class="card">
+    <h3>4) Tecnologías de soporte (AHS)</h3>
+    <div class="two">
+      <div>
+        <h4 style="margin:0 0 6px">a) Sensores y percepción</h4>
+        <ul>
+          <li><strong>LIDAR:</strong> nubes de puntos para mapear obstáculos.</li>
+          <li><strong>Cámaras estéreo:</strong> profundidad y clasificación visual.</li>
+          <li><strong>Radar:</strong> buen desempeño con polvo/lluvia.</li>
+          <li><strong>GPS diferencial:</strong> precisión centimétrica para rutas.</li>
+        </ul>
+        <h4 style="margin:10px 0 6px">b) Software de control</h4>
+        <p><strong>Komatsu FrontRunner</strong> y <strong>Cat MineStar Command</strong> gestionan tráfico, asignación dinámica de tareas, velocidad, cruce y prioridades.</p>
+        <h4 style="margin:10px 0 6px">c) Comunicaciones</h4>
+        <p>Redes de baja latencia (Wi‑Fi Mesh, LTE privado, 5G) con <em>enlaces redundantes</em>.</p>
+        <h4 style="margin:10px 0 6px">d) Seguridad</h4>
+        <p>Botones de emergencia, geocercas, detección de personas y <em>Speed/Separation Monitoring</em>.</p>
+      </div>
+      <div class="imgbox"><img src="s2_sensores_lidar.webp" alt="LIDAR y cámaras en CAEX con zonas de detección"></div>
+    </div>
+    <div class="dlbar">
+      <a class="btn-ghost" href="s2_sensores_lidar.webp" download>📥 Descargar sensores</a>
+      <button class="btn" data-complete="tecnologias">Tecnologías comprendidas ✓</button>
+    </div>
+  </section>
+
+  <!-- Flujo de operación AHS -->
+  <section class="card">
+    <h3>5) Flujo de operación de un CAEX autónomo (paso a paso)</h3>
+    <ol>
+      <li><strong>Asignación de tarea:</strong> el ROC envía destino, prioridad y restricciones.</li>
+      <li><strong>Plan de ruta:</strong> el AHS genera trayectoria segura y velocidad objetivo.</li>
+      <li><strong>Ejecución autónoma:</strong> seguimiento de ruta con monitoreo continuo.</li>
+      <li><strong>Carguío:</strong> posicionamiento preciso en pala/cargador (señales y geocercas).</li>
+      <li><strong>Acarreo:</strong> control de headway y cruces; gestión de rampas.</li>
+      <li><strong>Descarga:</strong> posicionamiento en botadero/chancador y verificación.</li>
+      <li><strong>Retorno:</strong> cierre de ciclo y nueva asignación.</li>
+    </ol>
+    <div class="two" style="margin-top:10px">
+      <div class="imgbox"><img src="s2_flujo_ahs.webp" alt="Diagrama del flujo AHS desde asignación a retorno"></div>
+      <div>
+        <details open>
+          <summary>Estados operativos (ROC)</summary>
+          <ul>
+            <li><strong>RUN</strong>: operación normal.</li>
+            <li><strong>HOLD</strong>: detener y esperar (riesgo/obstáculo).</li>
+            <li><strong>DIVERT</strong>: desvío a ruta alterna.</li>
+            <li><strong>LOCK-OUT</strong>: bloqueo por fallo crítico.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Protocolo ante pérdida de señal</summary>
+          <ol>
+            <li>Vehículo pasa a <em>estado seguro</em> y detiene movimiento.</li>
+            <li>ROC verifica cobertura y notifica a mantenimiento/redes.</li>
+            <li>Reinicio controlado del tramo; test de sensores antes de reanudar.</li>
+          </ol>
+        </details>
+        <a class="btn-ghost" href="s2_flujo_ahs.webp" download>📥 Descargar flujo</a>
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="flujo">Flujo comprendido ✓</button></div>
+  </section>
+
+  <!-- Rol del Controlador -->
+  <section class="card">
+    <h3>6) Rol del Controlador de Terreno</h3>
+    <div class="two">
+      <div>
+        <ul>
+          <li><strong>Supervisión:</strong> métricas de producción, alarmas, rutas y colas.</li>
+          <li><strong>Gestión de eventos:</strong> decidir <em>HOLD</em>, <em>DIVERT</em>, priorizar equipos y coordinar auxiliares.</li>
+          <li><strong>Ajustes de producción:</strong> límites de velocidad, secuencia de destinos, ventanas de mantenimiento.</li>
+          <li><strong>Comunicación:</strong> radio clara con pala, botadero, mantención y seguridad.</li>
+        </ul>
+      </div>
+      <div class="imgbox"><img src="s2_rol_controlador_dashboard.webp" alt="Tablero del Controlador con KPIs y alarmas"></div>
+    </div>
+    <div class="dlbar">
+      <a class="btn-ghost" href="s2_rol_controlador_dashboard.webp" download>📥 Descargar tablero</a>
+      <button class="btn" data-complete="rol">Rol comprendido ✓</button>
+    </div>
+  </section>
+
+  <!-- Seguridad y contingencias -->
+  <section class="card">
+    <h3>7) Seguridad operacional y contingencias</h3>
+    <div class="two">
+      <div>
+        <details open>
+          <summary>Zonas de exclusión y cruces</summary>
+          <ul>
+            <li>Geocercas activas en pala/botadero; <em>no ingreso</em> de equipos ajenos.</li>
+            <li>Cruces con prioridad definida; confirmación ROC ante anomalías.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Checklist de preuso (1 minuto)</summary>
+          <ul>
+            <li>Sensores limpios (cámaras/LIDAR), luces y balizas OK.</li>
+            <li>Estado de neumáticos y fugas visibles.</li>
+            <li>Radio-check y sistemas de emergencia operativos.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Gestión de clima/visibilidad</summary>
+          <ul>
+            <li>Polvo/lluvia: activar perfiles de velocidad y separación ampliada.</li>
+            <li>Paradas preventivas por umbrales de riesgo definidos.</li>
+          </ul>
+        </details>
+      </div>
+      <div class="imgbox"><img src="s2_seguridad_zonas_exclusion.webp" alt="Mapa de zonas de exclusión y rutas seguras"></div>
+    </div>
+    <div class="dlbar">
+      <a class="btn-ghost" href="s2_seguridad_zonas_exclusion.webp" download>📥 Descargar seguridad</a>
+      <button class="btn" data-complete="seguridad">Seguridad revisada ✓</button>
+    </div>
+  </section>
+
+  <!-- KPIs y control -->
+  <section class="card">
+    <h3>8) KPIs esenciales y tableros</h3>
+    <div class="two">
+      <div>
+        <table aria-label="KPIs de operación autónoma">
+          <thead>
+            <tr><th>KPI</th><th>Definición</th><th>Objetivo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Tiempo de ciclo</td><td>Carguío + acarreo + descarga + retorno.</td><td>Variabilidad baja (&lt;±10%).</td></tr>
+            <tr><td>Payload</td><td>Toneladas por ciclo (dentro de límites).</td><td>Al 98–100% del objetivo.</td></tr>
+            <tr><td>Headway</td><td>Distancia/tiempo entre CAEX.</td><td>≥ umbral seguro definido.</td></tr>
+            <tr><td>Disponibilidad AHS</td><td>% tiempo en estado RUN.</td><td>&gt; 90% (según faena).</td></tr>
+            <tr><td>Eventos de seguridad</td><td>Incidentes/near-miss detectados.</td><td>0 tolerancia; acción inmediata.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="imgbox"><img src="s2_kpi_tablero.webp" alt="Dashboard de KPIs con tiempos de ciclo y alertas"></div>
+    </div>
+    <div class="dlbar">
+      <a class="btn-ghost" href="s2_kpi_tablero.webp" download>📥 Descargar KPI</a>
+      <button class="btn" data-complete="kpi">KPIs comprendidos ✓</button>
+    </div>
+  </section>
+
+  <!-- Casos rápidos / decisiones del Controlador -->
+  <section class="card">
+    <h3>9) Casos rápidos de decisión (Controlador)</h3>
+    <div class="two">
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--amarillo)"></div><div><strong>Obstáculo detectado en rampa:</strong> emitir <em>HOLD</em> a flota afectada, desviar tráfico (<em>DIVERT</em>), coordinar retiro y verificar ruta antes de volver a <em>RUN</em>.</div></div>
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--naranja)"></div><div><strong>Clima con visibilidad reducida:</strong> aplicar perfil de velocidad seguro, ampliar headway y activar limpieza de sensores.</div></div>
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--verde)"></div><div><strong>Congestión en pala:</strong> reasignar destinos, balancear colas y asegurar 3–5 pases por camión.</div></div>
+      <div class="pill"><div style="width:10px; height:10px; border-radius:50%; background:var(--gris)"></div><div><strong>Pérdida de enlace CAEX:</strong> vehículo a estado seguro; diagnóstico de red; reinicio controlado tras pruebas.</div></div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="casos">Casos comprendidos ✓</button></div>
+  </section>
+
+  <!-- Quiz -->
+  <section class="card">
+    <h3>10) Quiz (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz como completado ✓</button>
+  </section>
+
+  <!-- Reflexión -->
+  <section class="card">
+    <h3>11) Reflexión final (2 líneas)</h3>
+    <textarea id="reflexion" rows="3" placeholder="Como Controlador, ¿qué variables priorizas al decidir HOLD vs DIVERT?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="note">Se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Colores corporativos aplicados · Todo el material visual en <strong>.webp</strong>.</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_s2_fundamentos', {
+    done:{intro:false,niveles:false,comparativa:false,tecnologias:false,flujo:false,rol:false,seguridad:false,kpi:false,casos:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_s2_fundamentos', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+  $('#reset')?.addEventListener('click', ()=>{ localStorage.removeItem('anupro360_s2_fundamentos'); location.reload(); });
+
+  /* ---------- Quiz 10 preguntas (contenido Sección 2) ---------- */
+  const preguntas=[
+    {q:'¿Qué sistema AHS corresponde a Komatsu?', opts:['AutoMine','FrontRunner','MineStar Command'], ok:1},
+    {q:'En nivel 4 (Autónomo total), la conducción la realiza…', opts:['Operador en cabina','Controlador con joystick','El sistema AHS sin intervención humana'], ok:2},
+    {q:'¿Qué sensor ofrece mejor desempeño con polvo/lluvia?', opts:['Radar','Cámara sola','Ultrasonido'], ok:0},
+    {q:'Ante pérdida de señal, el CAEX debe…', opts:['Seguir lentamente','Pasar a estado seguro y detenerse','Retornar a pala sin orden'], ok:1},
+    {q:'Headway se refiere a…', opts:['Distancia/tiempo entre CAEX','Tiempo de carguío','Velocidad máxima'], ok:0},
+    {q:'¿Cuál es un objetivo típico del payload?', opts:['50% del objetivo','98–100% del objetivo','120% del objetivo para compensar'], ok:1},
+    {q:'¿Qué acción del ROC aplica para desviar una unidad?', opts:['HOLD','DIVERT','LOCK-OUT'], ok:1},
+    {q:'Una práctica correcta en zona de pala es…', opts:['Entrar por el lado ciego','Esperar autorización y respetar geocerca','Frenar dentro de la zona de exclusión'], ok:1},
+    {q:'La disponibilidad AHS mide…', opts:['% del tiempo en RUN','Toneladas/hora','Número de camiones'], ok:0},
+    {q:'Un objetivo con tiempos de ciclo es…', opts:['Alta variabilidad','Variabilidad baja (≤±10%)','Eliminar el retorno'], ok:1},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>`;
+      p.opts.forEach((txt,j)=>{
+        const lab=document.createElement('label'); lab.className='opt';
+        lab.innerHTML=`<input type="radio" name="q${i}" value="${j}"> <span>${txt}</span>`;
+        div.appendChild(lab);
+      });
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s2_fundamentos', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s2_fundamentos', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_s2_fundamentos', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+  /* Init */
+  renderQuiz(); calcProgress(); $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
