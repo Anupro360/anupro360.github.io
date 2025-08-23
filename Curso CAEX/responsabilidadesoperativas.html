@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Sección 2.2 · Operador de Camión de Extracción (basado en 2_2.mp4)</title>
+  <meta name="description" content="Aplicación web didáctica basada 100% en el texto del video 2_2.mp4: responsabilidades operativas, comunicaciones, control de ruta, giros en banco, control del borde, neumáticos, reasignación, tiro quedado y chancado. Incluye 2 juegos con retroalimentación y quiz de 10 preguntas. Sin imágenes ni video."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; /* Verde fuerte (positivas) */
+      --bad:#FF1744; /* Rojo fuerte (negativas) */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    /* Feedback preguntas */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+
+    /* Drag & drop + zonas */
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+    .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
+
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <h1>Anupro360 · Sección 2.2 · Operador de Camión de Extracción</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Responsabilidades operativas y comunicaciones (basado en 2_2.mp4)</h2>
+    <p class="note"><strong>Aprenderás a:</strong> preparar el turno, usar dispositivos de seguridad (DS/DSS/control de sueño y cinturón), comunicar incidentes, proceder ante abandono temporal del equipo, controlar ruta y velocidad, girar en banco de forma segura, proteger neumáticos, coordinar reasignación, actuar ante “tiro quedado” y operar en chancado con semáforos y radio. Luego, 2 juegos + quiz de 10.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- CONTENIDO DIDÁCTICO (derivado y ampliado del video) -->
+  <section class="card">
+    <h3>1) Antes de iniciar la operación</h3>
+    <ul>
+      <li><strong>Asignación:</strong> infórmate de la <em>asignación de tu equipo</em> al inicio y durante el turno (evita atrasos y pérdidas en el proceso productivo).</li>
+      <li><strong>Reglamento:</strong> conoce el <em>reglamento de tránsito y conducción interior mina</em>.</li>
+      <li><strong>Seguridad:</strong> verifica y usa <em>DS/DSS/control de sueño</em> y <em>cinturón</em> desde el inicio del turno.</li>
+      <li><strong>Ubicación:</strong> confirma la <em>ubicación geográfica</em> del camión para partir a tiempo.</li>
+    </ul>
+    <details>
+      <summary>Checklist rápido (60 segundos)</summary>
+      <ol>
+        <li>Confirmar equipo, turno y destino asignado.</li>
+        <li>Prueba de radio (frecuencia de sector y despacho central).</li>
+        <li>DS/DSS/control de sueño activo y <em>cinturón abrochado</em>.</li>
+        <li>Ubicación en mapa/plano de faena y ruta al primer destino.</li>
+      </ol>
+    </details>
+    <div class="flex"><button class="btn" data-complete="preop">Marcar leído ✓</button></div>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha del módulo 2.2</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>30–40 min</strong></li>
+      <li>Estructura: 8 bloques breves + 2 juegos + quiz (10).</li>
+      <li>Feedback: <span style="color:var(--ok); font-weight:700">verde fuerte</span> correcto / <span style="color:var(--bad); font-weight:700">rojo fuerte</span> incorrecto.</li>
+      <li>Sin imágenes ni video.</li>
+    </ul>
+    <div class="chip2">Versión: S2_2_video_text</div>
+  </aside>
+
+  <section class="card">
+    <h3>2) Comunicaciones e informaciones</h3>
+    <p><strong>Regla de oro:</strong> si una maniobra <em>se escapa al control normal</em> o no está en el procedimiento, <strong>solicita ayuda por radio</strong> para evitar riesgos innecesarios.</p>
+    <ul>
+      <li><strong>Abandono breve del equipo:</strong> <u>avisa por radio</u>; luego <em>detén el equipo</em>, <em>freno de estacionamiento</em> y <em>detén el motor</em>.</li>
+      <li><strong>Apoyo en vía:</strong> solicita equipos de apoyo para <em>mejorar sectores deficientes</em> (huellas, rampas, cruces).</li>
+      <li><strong>Responde llamados</strong> e <strong>informa incidentes o anomalías</strong>, por insignificantes que parezcan.</li>
+    </ul>
+    <details>
+      <summary>Plantilla de mensaje radial</summary>
+      <p><em>“Despacho central de Camión 123: abandono equipo 3 minutos en rampa norte, equipo detenido, freno estacionamiento aplicado, motor apagado. Cambio.”</em></p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="coms">Comunicaciones comprendidas ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>3) Operación durante el turno</h3>
+    <ul>
+      <li><strong>Responsabilidad:</strong> eres responsable del camión y su buen uso durante tus horas de operación.</li>
+      <li><strong>Seguridad del sector:</strong> cuida a personas y equipos en tu área.</li>
+      <li><strong>Vías limpias:</strong> mantén rutas libres de <em>derrames</em>; controla <strong>velocidad</strong> para evitarlos.</li>
+      <li><strong>Giros en banco estrecho:</strong> realiza giros <em>siempre con la cabina orientada a la cresta</em>.</li>
+      <li><strong>Control del borde:</strong> respeta distancias de seguridad; no comprometas la estabilidad.</li>
+      <li><strong>Neumáticos:</strong> evita impactos, frenadas bruscas, patinadas, giros a alta velocidad o en detención.</li>
+    </ul>
+    <div class="flex"><button class="btn" data-complete="oper">Operación comprendida ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>4) Coordinaciones especiales</h3>
+    <ul>
+      <li><strong>Unidad de carguío inoperativa:</strong> avisa a <em>despacho central</em> para <strong>reasignación</strong>.</li>
+      <li><strong>Tiro quedado en la frente:</strong> comunica de <strong>inmediato</strong> al <em>supervisor del sector</em>.</li>
+      <li><strong>Chancado:</strong> abastece siguiendo <em>semáforos</em> y/o <em>radio</em> del operador de chancado; respeta <strong>asignaciones y destinos programados</strong>.</li>
+      <li><strong>Unidad cargada y operativa:</strong> <u>descarga primero</u> y <u>luego revisa</u>. <strong>Prohibido</strong> revisar con carga.</li>
+    </ul>
+    <div class="flex"><button class="btn" data-complete="coord">Coordinaciones comprendidas ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>5) Procedimientos paso a paso</h3>
+    <details open>
+      <summary>Abandono temporal del equipo (pasos)</summary>
+      <ol id="procAbandono">
+        <li>Avisar por radio el abandono breve, indicando tiempo y ubicación.</li>
+        <li>Detener completamente el equipo.</li>
+        <li>Aplicar freno de estacionamiento.</li>
+        <li>Detener el motor.</li>
+      </ol>
+    </details>
+    <details>
+      <summary>Descarga y revisión (si llegas cargado)</summary>
+      <ol>
+        <li>Notificar a despacho central que <em>descargarás primero</em>.</li>
+        <li>Ejecutar <strong>descarga</strong> en destino indicado.</li>
+        <li>Realizar <strong>revisión</strong> posterior según procedimiento.</li>
+      </ol>
+    </details>
+    <div class="flex"><button class="btn" data-complete="proced">Procedimientos comprendidos ✓</button></div>
+  </section>
+
+  <!-- JUEGOS con retroalimentación verde/rojo fuerte -->
+  <section class="card" id="juego1">
+    <h3>6) Juego 1 · Ordena el abandono temporal del equipo</h3>
+    <p>Arrastra para ordenar los pasos correctamente, según el video.</p>
+    <ul class="sortable dropzone" id="ordenar"></ul>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkOrden">Evaluar</button>
+      <span id="fbOrden" class="chip2" aria-live="polite"></span>
+      <button class="btn-ghost" id="regenOrden">Mezclar</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <section class="card" id="juego2">
+    <h3>7) Juego 2 · ¿Correcto o Prohibido?</h3>
+    <p>Clasifica cada tarjeta: <strong>Correcto</strong> (lo que indica el video) o <strong>Prohibido</strong>. Feedback inmediato en verde/rojo.</p>
+    <div class="zones">
+      <div>
+        <h4>Correcto</h4>
+        <div id="zoneOK" class="zone" aria-label="Zona Correcto"></div>
+      </div>
+      <div>
+        <h4>Prohibido</h4>
+        <div id="zoneBAD" class="zone" aria-label="Zona Prohibido"></div>
+      </div>
+    </div>
+    <div id="pool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif">Reiniciar</button>
+      <span id="fbClasif" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <!-- QUIZ 10 PREGUNTAS -->
+  <section class="card">
+    <h3>8) Quiz final (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+
+  <!-- REFLEXIÓN -->
+  <section class="card">
+    <h3>9) Reflexión final</h3>
+    <textarea id="reflexion" rows="3" placeholder="En 2-3 líneas: ¿qué harías ante un tiro quedado y por qué?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="note">Se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_s22_video', {
+    done:{preop:false,coms:false,oper:false,coord:false,proced:false,juego1:false,juego2:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_s22_video', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+
+  /* ----------------- Juego 1: Ordena pasos de abandono ----------------- */
+  const pasosAbandono = [
+    'Avisar por radio el abandono breve indicando tiempo y ubicación',
+    'Detener completamente el equipo',
+    'Aplicar freno de estacionamiento',
+    'Detener el motor'
+  ];
+  function renderOrdenar(){
+    const ul = $('#ordenar'); ul.innerHTML='';
+    const mix = pasosAbandono.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden(){
+    const lis = $$('#ordenar li');
+    const actual = lis.map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===pasosAbandono[i]);
+    const fb = $('#fbOrden');
+    if(ok){ fb.textContent='¡Correcto! Procedimiento en orden.'; fb.style.color='var(--ok)'; }
+    else{ fb.textContent='Aún no. Revisa el orden: radio → detener → freno → motor.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ----------------- Juego 2: Clasificar Correcto/Prohibido ----------------- */
+  const itemsClasif = [
+    {txt:'Descargar primero y luego revisar la unidad', tipo:'OK'},
+    {txt:'Revisar el camión estando cargado', tipo:'BAD'},
+    {txt:'Avisar por radio si abandono el equipo brevemente', tipo:'OK'},
+    {txt:'Girar con cabina orientada hacia la cresta del banco', tipo:'OK'},
+    {txt:'Girar a alta velocidad o estando detenido', tipo:'BAD'},
+    {txt:'Solicitar equipos de apoyo para mejorar un sector deficiente', tipo:'OK'},
+    {txt:'Ignorar un tiro quedado en la frente', tipo:'BAD'},
+    {txt:'Respetar semáforos e instrucciones radiales en chancado', tipo:'OK'},
+    {txt:'Circular con derrames en la vía', tipo:'BAD'},
+    {txt:'Notificar a despacho si la unidad de carguío no está operativa', tipo:'OK'}
+  ];
+  function renderClasif(){
+    const pool = $('#pool'); pool.innerHTML='';
+    const shuffled = itemsClasif.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach((it)=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneOK','zoneBAD','pool'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkClasif(){
+    let ok=0, total=itemsClasif.length;
+    const zOK = $('#zoneOK'); const zBAD = $('#zoneBAD');
+    [...zOK.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='OK'){ ok++; t.style.outline=`2px solid var(--ok)`; } else { t.style.outline=`2px solid var(--bad)`; }});
+    [...zBAD.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='BAD'){ ok++; t.style.outline=`2px solid var(--ok)`; } else { t.style.outline=`2px solid var(--bad)`; }});
+    const fb=$('#fbClasif'); const pct=Math.round(ok/total*100);
+    fb.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+    fb.style.color = ok===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetClasif(){ $('#zoneOK').innerHTML=''; $('#zoneBAD').innerHTML=''; renderClasif(); }
+
+  /* ----------------- Quiz 10 preguntas (basado en el video) ----------------- */
+  const preguntas=[
+    {q:'El operador debe informarse de la asignación de su equipo…', opts:['Solo al inicio del turno','Al inicio y durante el turno','Solo si lo llama el supervisor'], ok:1},
+    {q:'Antes de iniciar el turno, respecto a seguridad, corresponde…', opts:['Usar DS/DSS/control de sueño y cinturón','Solo cinturón','Nada hasta estar en ruta'], ok:0},
+    {q:'Si requiere abandonar brevemente el equipo, primero…', opts:['Detener motor sin avisar','Avisar por radio','Aplicar freno y seguir'], ok:1},
+    {q:'Orden correcto ante abandono breve (según video):', opts:['Radio → Detener → Freno → Motor','Detener → Motor → Freno → Radio','Freno → Radio → Motor → Detener'], ok:0},
+    {q:'El operador debe mantener las vías…', opts:['Con derrames controlados','Libres de derrames','Solo señalizadas'], ok:1},
+    {q:'En giros sobre banco estrecho, la cabina debe orientarse…', opts:['Hacia la cresta del banco','Hacia el pie del banco','Es indistinto'], ok:0},
+    {q:'Sobre neumáticos, es correcto…', opts:['Girar detenido para ahorrar tiempo','Evitar impactos y giros a alta velocidad','Frenadas bruscas para acomodar carga'], ok:1},
+    {q:'Si la unidad de carguío no está operativa, el operador…', opts:['Espera sin informar','Avisa a despacho central para reasignación','Va a otro frente sin permiso'], ok:1},
+    {q:'Un “tiro quedado” detectado en la frente debe…', opts:['Ignorarse si no estorba','Comunicarse de inmediato al supervisor del sector','Ser retirado por el operador del camión'], ok:1},
+    {q:'En chancado, el abastecimiento se rige por…', opts:['Semáforos y/o radio del operador de chancado','Decisión del operador del camión','Turno y hora'], ok:0},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join('');
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    const fb = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').textContent = fb;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+
+  // Enlaces UI
+  $('#checkOrden').addEventListener('click', checkOrden);
+  $('#regenOrden').addEventListener('click', renderOrdenar);
+  $('#checkClasif').addEventListener('click', checkClasif);
+  $('#resetClasif').addEventListener('click', resetClasif);
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s22_video', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s22_video', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_s22_video', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+  /* Init */
+  renderOrdenar();
+  renderClasif();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
