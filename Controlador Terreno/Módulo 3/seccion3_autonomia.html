@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Sección 3 · Tecnología de Camiones Autónomos (Komatsu y Caterpillar)</title>
+  <meta name="description" content="Aplicación web didáctica Sección 3: Sistemas autónomos Komatsu FrontRunner y Caterpillar MineStar Command. Arquitectura, funciones, interfaz, flujos operativos, rol del Controlador y competencias. Incluye 2 juegos y quiz de 10 preguntas."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; /* Verde fuerte (positivas) */
+      --bad:#FF1744; /* Rojo fuerte (negativas) */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    /* Feedback preguntas */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+
+    /* Drag & drop + zonas */
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+    .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
+
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+
+    /* Imágenes dentro de tarjetas */
+    .figure{border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:10px; margin-top:8px; text-align:center}
+    .figure img{max-width:100%; height:auto; border-radius:8px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <h1>Anupro360 · Sección 3 · Tecnología de Camiones Autónomos (Komatsu y Caterpillar)</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Komatsu FrontRunner vs. Caterpillar MineStar Command</h2>
+    <p class="note"><strong>Aprenderás a:</strong> comprender la arquitectura, funciones e interfaces de FrontRunner (Komatsu) y MineStar Command (Caterpillar), comparar similitudes/diferencias, analizar flujos operativos y definir el rol y competencias del Controlador de Terreno. Incluye 2 juegos + quiz de 10.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- 1) INTRODUCCIÓN -->
+  <section class="card">
+    <h3>1) 3.1 · Introducción</h3>
+    <p>En la minería de gran escala, los camiones de extracción autónomos (CAEX) son operados y gestionados por sistemas especializados desarrollados por fabricantes líderes como <strong>Komatsu</strong> y <strong>Caterpillar</strong>. Estos sistemas permiten el control simultáneo de decenas de camiones, asegurando rutas seguras, productivas y con mínima interferencia humana en terreno.</p>
+    <details>
+      <summary>Idea clave</summary>
+      <p>El Controlador de Terreno <em>no conduce</em> un camión: supervisa el sistema, interpreta alertas y toma decisiones tácticas para mantener la continuidad operacional.</p>
+    </details>
+    <div class="figure">
+      <img src="s3_intro_autonomia.webp" alt="Esquema general de operación autónoma en mina (ROC + flota CAEX)"/>
+      <a class="btn-ghost" href="s3_intro_autonomia.webp" download>Descargar s3_intro_autonomia.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="intro">Marcar leído ✓</button></div>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha de la Sección 3</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>35–45 min</strong></li>
+      <li>Estructura: 7 bloques + 2 juegos + quiz (10).</li>
+      <li>Feedback: <span style="color:var(--ok); font-weight:700">verde</span> correcto / <span style="color:var(--bad); font-weight:700">rojo</span> incorrecto.</li>
+      <li>Imágenes: formato <strong>.webp</strong> descargable (excepto logo).</li>
+    </ul>
+    <div class="chip2">Versión: S3_Autonomía</div>
+  </aside>
+
+  <!-- 2) KOMATSU FRONTRUNNER -->
+  <section class="card">
+    <h3>2) 3.2 · Sistema Autónomo de Komatsu – FrontRunner</h3>
+    <h4>a) Arquitectura del sistema</h4>
+    <ul>
+      <li><strong>Centro de Control Remoto (ROC):</strong> sala con estaciones de trabajo, pantallas múltiples y enlaces redundantes.</li>
+      <li><strong>Servidores de gestión de flota:</strong> procesan ubicación, velocidad, estado mecánico y asignaciones de trabajo.</li>
+      <li><strong>Camiones autónomos equipados con:</strong>
+        <ul>
+          <li>GPS diferencial (precisión centimétrica).</li>
+          <li>Sensores LIDAR, radar y cámaras.</li>
+          <li>Computadora de a bordo con software autónomo.</li>
+          <li>Sistemas de seguridad: freno automático y control de tracción.</li>
+        </ul>
+      </li>
+    </ul>
+    <div class="figure">
+      <img src="s3_frontrunner_roc.webp" alt="ROC de FrontRunner con consolas y videowall"/>
+      <a class="btn-ghost" href="s3_frontrunner_roc.webp" download>Descargar s3_frontrunner_roc.webp</a>
+    </div>
+    <h4>b) Funciones principales</h4>
+    <ul>
+      <li>Asignación de rutas y tareas en tiempo real.</li>
+      <li>Priorización automática según condiciones de carga/descarga.</li>
+      <li>Monitoreo continuo del estado mecánico.</li>
+      <li>Bloqueo de rutas por emergencias o trabajos en terreno.</li>
+    </ul>
+    <div class="figure">
+      <img src="s3_frontrunner_sensores.webp" alt="Suite de sensores: LIDAR, radar y cámaras en CAEX Komatsu"/>
+      <a class="btn-ghost" href="s3_frontrunner_sensores.webp" download>Descargar s3_frontrunner_sensores.webp</a>
+    </div>
+    <h4>c) Interfaz del operador</h4>
+    <ul>
+      <li>Mapa en tiempo real de la mina.</li>
+      <li>Estado de cada camión (carga, tránsito, descarga, detenido).</li>
+      <li>Alertas visuales y sonoras por incidentes.</li>
+      <li>Herramientas para reasignar rutas o retirar camiones de servicio.</li>
+    </ul>
+    <div class="figure">
+      <img src="s3_frontrunner_ui.webp" alt="Interfaz tipo mapa/lista de FrontRunner"/>
+      <a class="btn-ghost" href="s3_frontrunner_ui.webp" download>Descargar s3_frontrunner_ui.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="komatsu">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 3) CATERPILLAR MINESTAR COMMAND -->
+  <section class="card">
+    <h3>3) 3.3 · Sistema Autónomo de Caterpillar – MineStar Command for Hauling</h3>
+    <h4>a) Componentes clave</h4>
+    <ul>
+      <li><strong>Centro de Control MineStar:</strong> operadores supervisan la flota con software especializado.</li>
+      <li><strong>Unidades CAEX autónomas con:</strong> navegación inercial, radar y cámaras de detección de obstáculos, computadora con software Command y sensores redundantes.</li>
+      <li><strong>Infraestructura de red:</strong> LTE privado o Wi‑Fi mesh.</li>
+    </ul>
+    <div class="figure">
+      <img src="s3_minestar_center.webp" alt="Centro de control Caterpillar MineStar"/>
+      <a class="btn-ghost" href="s3_minestar_center.webp" download>Descargar s3_minestar_center.webp</a>
+    </div>
+    <h4>b) Funciones del sistema Command</h4>
+    <ul>
+      <li>Control automático de tráfico en intersecciones y rampas.</li>
+      <li>Coordinación con equipos de carga.</li>
+      <li>Asignación dinámica de botaderos y chancadores.</li>
+      <li>Modificación inmediata de rutas ante cierres o accidentes.</li>
+    </ul>
+    <h4>c) Interfaz de usuario</h4>
+    <ul>
+      <li>Visualización de la posición exacta de cada camión.</li>
+      <li>Identificación del tiempo de ciclo por unidad.</li>
+      <li>Comandos de “detener”, “reanudar” o “desviar”.</li>
+      <li>Gestión de prioridad de carga.</li>
+    </ul>
+    <div class="figure">
+      <img src="s3_minestar_ui.webp" alt="Consola de MineStar Command con capas dinámicas"/>
+      <a class="btn-ghost" href="s3_minestar_ui.webp" download>Descargar s3_minestar_ui.webp</a>
+    </div>
+    <div class="figure">
+      <img src="s3_cat_radar_camaras.webp" alt="Redundancia sensorial por radar y cámaras en CAEX Caterpillar"/>
+      <a class="btn-ghost" href="s3_cat_radar_camaras.webp" download>Descargar s3_cat_radar_camaras.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="cat">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 4) COMPARATIVA -->
+  <section class="card">
+    <h3>4) 3.4 · Similitudes y diferencias</h3>
+    <table aria-label="Comparativa de sistemas autónomos">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th>Komatsu FrontRunner</th>
+          <th>Caterpillar MineStar Command</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Precisión GPS</td>
+          <td>Alta, diferencial</td>
+          <td>Alta, diferencial e inercial</td>
+        </tr>
+        <tr>
+          <td>Gestión de rutas</td>
+          <td>Manual o automática</td>
+          <td>Automática con IA avanzada</td>
+        </tr>
+        <tr>
+          <td>Interfaz</td>
+          <td>Visual tipo mapa y lista</td>
+          <td>Visual con capas dinámicas</td>
+        </tr>
+        <tr>
+          <td>Integración con otros equipos</td>
+          <td>Modular Mining Systems</td>
+          <td>MineStar Fleet, Terrain, Detect</td>
+        </tr>
+        <tr>
+          <td>Operación en mal clima</td>
+          <td>Buen rendimiento; LIDAR con limitaciones en niebla intensa</td>
+          <td>Alta redundancia con radar y cámaras</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="figure">
+      <img src="s3_comparativa_vis.webp" alt="Visual comparativa FrontRunner vs MineStar"/>
+      <a class="btn-ghost" href="s3_comparativa_vis.webp" download>Descargar s3_comparativa_vis.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="comp">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 5) FLUJOS OPERATIVOS -->
+  <section class="card">
+    <h3>5) 3.5 · Flujos operativos</h3>
+    <h4>Ejemplo Komatsu FrontRunner</h4>
+    <ol>
+      <li>Se asigna tarea de acarreo desde pala 03 a botadero norte.</li>
+      <li>El camión recibe ruta y comienza ciclo.</li>
+      <li>Sensores detectan vehículo en cruce → el sistema detiene y reanuda sin intervención humana.</li>
+      <li>El Controlador puede reasignar a otro botadero si el primero está congestionado.</li>
+    </ol>
+    <div class="figure">
+      <img src="s3_flujo_komatsu.webp" alt="Diagrama de flujo operativo FrontRunner"/>
+      <a class="btn-ghost" href="s3_flujo_komatsu.webp" download>Descargar s3_flujo_komatsu.webp</a>
+    </div>
+
+    <h4>Ejemplo Caterpillar MineStar Command</h4>
+    <ol>
+      <li>Se asigna ciclo desde pala 05 al chancador 2.</li>
+      <li>Command optimiza ruta para evitar congestión en rampa.</li>
+      <li>Detecta mantenimiento en punto intermedio → desvía automáticamente.</li>
+      <li>Controlador recibe notificación y confirma en consola.</li>
+    </ol>
+    <div class="figure">
+      <img src="s3_flujo_cat.webp" alt="Diagrama de flujo operativo MineStar Command"/>
+      <a class="btn-ghost" href="s3_flujo_cat.webp" download>Descargar s3_flujo_cat.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="flujos">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 6) ROL DEL CONTROLADOR -->
+  <section class="card">
+    <h3>6) 3.6 · Rol del Controlador de Terreno</h3>
+    <ul>
+      <li>Conocer la navegación del software y atajos para acciones rápidas.</li>
+      <li>Interpretar alertas y tomar decisiones inmediatas.</li>
+      <li>Coordinar con terreno ante bloqueos que requieran intervención humana.</li>
+      <li>Mantener un registro de incidencias y cambios en la operación.</li>
+    </ul>
+    <div class="figure">
+      <img src="s3_playbooks_alertas.webp" alt="Playbooks de respuesta y panel de alertas"/>
+      <a class="btn-ghost" href="s3_playbooks_alertas.webp" download>Descargar s3_playbooks_alertas.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="rol">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 7) COMPETENCIAS -->
+  <section class="card">
+    <h3>7) 3.7 · Competencias técnicas necesarias</h3>
+    <ul>
+      <li>Manejo de interfaces gráficas y sistemas de gestión de flotas.</li>
+      <li>Comprensión de mapas operativos y rutas.</li>
+      <li>Conocimiento básico de redes de comunicación minera.</li>
+      <li>Familiaridad con protocolos de seguridad en minería autónoma.</li>
+    </ul>
+    <details>
+      <summary>Ruta de aprendizaje sugerida</summary>
+      <ol>
+        <li>Fundamentos de HMI y telemetría de flotas.</li>
+        <li>Lectura de mapas, capas y geocercas.</li>
+        <li>Redes industriales (LTE privado / Wi‑Fi mesh) y KPIs.</li>
+        <li>SOP de seguridad y gestión de incidentes.</li>
+      </ol>
+    </details>
+    <div class="figure">
+      <img src="s3_competencias_mapa.webp" alt="Competencias y mapa de ruta formativa"/>
+      <a class="btn-ghost" href="s3_competencias_mapa.webp" download>Descargar s3_competencias_mapa.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="compet">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- JUEGO 1 -->
+  <section class="card" id="juego1">
+    <h3>8) Juego 1 · Ordena la respuesta ante obstáculo detectado (FrontRunner)</h3>
+    <p>Arrastra para ordenar los pasos correctos cuando FrontRunner detecta un obstáculo en cruce.</p>
+    <ul class="sortable dropzone" id="ordenar"></ul>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkOrden">Evaluar</button>
+      <span id="fbOrden" class="chip2" aria-live="polite"></span>
+      <button class="btn-ghost" id="regenOrden">Mezclar</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 2 -->
+  <section class="card" id="juego2">
+    <h3>9) Juego 2 · ¿Correcto o Prohibido? (operación autónoma)</h3>
+    <p>Clasifica: <strong>Correcto</strong> vs <strong>Prohibido</strong>. Feedback inmediato en verde/rojo.</p>
+    <div class="zones">
+      <div>
+        <h4>Correcto</h4>
+        <div id="zoneOK" class="zone" aria-label="Zona Correcto"></div>
+      </div>
+      <div>
+        <h4>Prohibido</h4>
+        <div id="zoneBAD" class="zone" aria-label="Zona Prohibido"></div>
+      </div>
+    </div>
+    <div id="pool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif">Reiniciar</button>
+      <span id="fbClasif" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <!-- QUIZ 10 PREGUNTAS -->
+  <section class="card">
+    <h3>10) Quiz final (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+
+  <!-- DESCARGAS (Listado completo) -->
+  <section class="card">
+    <h3>Descargas · Imágenes (.webp)</h3>
+    <ul>
+      <li><a class="btn-ghost" href="s3_intro_autonomia.webp" download>Descargar s3_intro_autonomia.webp</a></li>
+      <li><a class="btn-ghost" href="s3_frontrunner_roc.webp" download>Descargar s3_frontrunner_roc.webp</a></li>
+      <li><a class="btn-ghost" href="s3_frontrunner_sensores.webp" download>Descargar s3_frontrunner_sensores.webp</a></li>
+      <li><a class="btn-ghost" href="s3_frontrunner_ui.webp" download>Descargar s3_frontrunner_ui.webp</a></li>
+      <li><a class="btn-ghost" href="s3_minestar_center.webp" download>Descargar s3_minestar_center.webp</a></li>
+      <li><a class="btn-ghost" href="s3_minestar_ui.webp" download>Descargar s3_minestar_ui.webp</a></li>
+      <li><a class="btn-ghost" href="s3_cat_radar_camaras.webp" download>Descargar s3_cat_radar_camaras.webp</a></li>
+      <li><a class="btn-ghost" href="s3_comparativa_vis.webp" download>Descargar s3_comparativa_vis.webp</a></li>
+      <li><a class="btn-ghost" href="s3_flujo_komatsu.webp" download>Descargar s3_flujo_komatsu.webp</a></li>
+      <li><a class="btn-ghost" href="s3_flujo_cat.webp" download>Descargar s3_flujo_cat.webp</a></li>
+      <li><a class="btn-ghost" href="s3_playbooks_alertas.webp" download>Descargar s3_playbooks_alertas.webp</a></li>
+      <li><a class="btn-ghost" href="s3_competencias_mapa.webp" download>Descargar s3_competencias_mapa.webp</a></li>
+    </ul>
+    <p class="note">Todas las imágenes son descargables. El <strong>logo</strong> de Anupro360 se mantiene fuera de este listado para no permitir su descarga desde aquí.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_s3_autonomia', {
+    done:{intro:false,komatsu:false,cat:false,comp:false,flujos:false,rol:false,compet:false,juego1:false,juego2:false,quiz:false}
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_s3_autonomia', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+
+  /* ----------------- Juego 1: Orden de respuesta (FrontRunner) ----------------- */
+  const pasosRespuesta = [
+    'Detención automática segura al detectar obstáculo',
+    'Emisión de alerta en la consola del Controlador',
+    'Confirmación y evaluación del evento por el Controlador',
+    'Reasignación/Desvío temporal de ruta si aplica',
+    'Reanudación automática cuando el cruce queda despejado'
+  ];
+  function renderOrdenar(){
+    const ul = $('#ordenar'); ul.innerHTML='';
+    const mix = pasosRespuesta.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden(){
+    const lis = $$('#ordenar li');
+    const actual = lis.map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===pasosRespuesta[i]);
+    const fb = $('#fbOrden');
+    if(ok){ fb.textContent='¡Correcto! Secuencia de respuesta adecuada.'; fb.style.color='var(--ok)'; }
+    else{ fb.textContent='Aún no. Revisa: Detención → Alerta → Confirmación → Desvío → Reanudación.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ----------------- Juego 2: Clasificar Correcto/Prohibido ----------------- */
+  const itemsClasif = [
+    {txt:'Modificar manualmente prioridades de carga ante congestión', tipo:'OK'},
+    {txt:'Ignorar alertas de colisión si el camión ya se detuvo', tipo:'BAD'},
+    {txt:'Bloquear una ruta por trabajos en terreno', tipo:'OK'},
+    {txt:'Operar sin cobertura de red conocida', tipo:'BAD'},
+    {txt:'Emitir “detener” y “reanudar” con doble confirmación', tipo:'OK'},
+    {txt:'Desviar unidades sin registrar en bitácora', tipo:'BAD'},
+    {txt:'Coordinar con terreno ante cierre no planificado', tipo:'OK'},
+    {txt:'Revisar con carga antes de descargar', tipo:'BAD'},
+    {txt:'Usar mapas y capas dinámicas para gestionar intersecciones', tipo:'OK'},
+    {txt:'Aumentar velocidad para compensar latencia de red', tipo:'BAD'}
+  ];
+  function renderClasif(){
+    const pool = $('#pool'); pool.innerHTML='';
+    const shuffled = itemsClasif.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach((it)=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneOK','zoneBAD','pool'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkClasif(){
+    let ok=0, total=itemsClasif.length;
+    const zOK = $('#zoneOK'); const zBAD = $('#zoneBAD');
+    [...zOK.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='OK'){ ok++; t.style.outline=`2px solid var(--ok)`; } else { t.style.outline=`2px solid var(--bad)`; }});
+    [...zBAD.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='BAD'){ ok++; t.style.outline=`2px solid var(--ok)`; } else { t.style.outline=`2px solid var(--bad)`; }});
+    const fb=$('#fbClasif'); const pct=Math.round(ok/total*100);
+    fb.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+    fb.style.color = ok===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetClasif(){ $('#zoneOK').innerHTML=''; $('#zoneBAD').innerHTML=''; renderClasif(); }
+
+  /* ----------------- Quiz 10 preguntas ----------------- */
+  const preguntas=[
+    {q:'FrontRunner utiliza, entre otros, ¿qué sensor para percepción del entorno?', opts:['Sólo cámaras','LIDAR, radar y cámaras','Ultrasonido únicamente'], ok:1},
+    {q:'MineStar Command suele operar sobre redes…', opts:['LTE privado o Wi‑Fi mesh','Bluetooth público','Satélite exclusivamente'], ok:0},
+    {q:'Una ventaja del GPS diferencial es…', opts:['Mejorar el consumo de combustible','Lograr precisión centimétrica','Eliminar la necesidad de mapas'], ok:1},
+    {q:'Ante mantenimiento en ruta, Command…', opts:['Sigue la ruta original','Desvía automáticamente si es seguro','Detiene toda la flota indefinidamente'], ok:1},
+    {q:'Bloqueo de rutas en FrontRunner sirve para…', opts:['Aumentar la producción','Impedir que unidades ingresen a zonas intervenidas','Cambiar el clima'], ok:1},
+    {q:'Interfaz típica de MineStar Command permite…', opts:['Modificar hardware de sensores','Emitir “detener”, “reanudar” o “desviar”','Controlar manualmente cada giro del camión'], ok:1},
+    {q:'Diferencia citada: en mal clima, MineStar destaca por…', opts:['Redundancia con radar y cámaras','Dependencia exclusiva de LIDAR','Operar sin sensores'], ok:0},
+    {q:'Rol del Controlador de Terreno:', opts:['Conducir el camión remotamente','Interpretar alertas y coordinar respuestas','Reparar sensores en terreno'], ok:1},
+    {q:'Flujo Komatsu: si hay vehículo en cruce…', opts:['Acelera para salir rápido','Se detiene y reanuda automáticamente','Requiere confirmación para detener'], ok:1},
+    {q:'Integraciones típicas de Caterpillar:', opts:['MineStar Fleet, Terrain, Detect','Modular Mining Systems','Ninguna'], ok:0},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join('');
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    const fb = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').textContent = fb;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+
+  // Enlaces UI
+  $('#checkOrden').addEventListener('click', checkOrden);
+  $('#regenOrden').addEventListener('click', renderOrdenar);
+  $('#checkClasif').addEventListener('click', checkClasif);
+  $('#resetClasif').addEventListener('click', resetClasif);
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s3_autonomia', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s3_autonomia', state); calcProgress(); });
+
+  /* Init */
+  renderOrdenar();
+  renderClasif();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
