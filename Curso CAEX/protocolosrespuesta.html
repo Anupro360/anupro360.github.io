@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · S2.3 · Emergencias: Protocolo del Operador CAEX</title>
+  <meta name="description" content="Aplicación web didáctica basada en el guion del video: aviso por radio, botón de emergencia (tracking/dispatch), mensaje estándar (ID-UBICACIÓN-EQUIPO-EMERGENCIA-PERSONAS-AYUDA), manejo de lesionados, cadena de mando, detención de equipos, normalización, conocimiento del procedimiento general y uso de extintores. Incluye 2 juegos y un quiz de 10 preguntas. Sin imágenes ni video."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853;   /* Verde fuerte (positivas) */
+      --bad:#FF1744;  /* Rojo fuerte (negativas) */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    h1{font-size:1.05rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    /* Feedback preguntas */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+
+    /* Drag & drop */
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media(min-width:980px){.zones{grid-template-columns:1fr 1fr 1fr 1fr}}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:140px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+
+    /* Ordenar (lista) */
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <h1>Anupro360 · S2.3 · Emergencias: Protocolo del Operador CAEX</h1>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Del aviso inicial a la normalización — paso a paso</h2>
+    <p class="note"><strong>Aprenderás:</strong> cómo alertar por radio y/o botones de emergencia, qué decir exactamente (ID → ubicación → equipo → emergencia → personas → ayuda), cómo actuar ante lesionados, quién dirige la respuesta (despacho central / producción), cuándo detener equipos y cómo se normalizan las operaciones. Incluye 2 juegos + quiz de 10 preguntas. <strong>Sin imágenes ni video.</strong></p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Contenido didáctico ampliado -->
+  <section class="card">
+    <h3>1) Alerta inicial por radio (0:09–0:34)</h3>
+    <ul>
+      <li><strong>Rol del operador:</strong> frente a cualquier emergencia, <u>avisa por radio</u> de inmediato y <strong>activa</strong> el <em>botón rojo</em> de emergencia del sistema de tracking.</li>
+      <li><strong>Mensaje estándar</strong> (en orden): <u>Nombre/ID</u> → <u>Ubicación exacta</u> → <u>Equipo</u> → <u>Tipo de emergencia</u> → <u>Nº de personas</u> → <u>Ayuda requerida</u>.</li>
+    </ul>
+    <details>
+      <summary>Plantilla de mensaje radial</summary>
+      <p><em>“Despacho central, aquí Operador 243 (<strong>ID</strong>), en <strong>Frente 7 – rampa norte km 3</strong> (<strong>Ubicación</strong>), operando <strong>CAEX 930E</strong> (<strong>Equipo</strong>). <strong>Incendio en neumático trasero</strong> (<strong>Emergencia</strong>), <strong>0 personas atrapadas</strong> (<strong>Personas</strong>). Requiero <strong>brigada contra incendios y corte de energía</strong> (<strong>Ayuda</strong>). Cambio.”</em></p>
+    </details>
+    <button class="btn" data-complete="alerta">Marcado como leído ✓</button>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha de la sección</h3>
+    <ul>
+      <li>Tiempo: <strong>30–40 min</strong></li>
+      <li>Estructura: 6 bloques + 2 juegos + quiz (10)</li>
+      <li>Feedback: <span style="color:var(--ok);font-weight:700">verde fuerte</span> / <span style="color:var(--bad);font-weight:700">rojo fuerte</span></li>
+      <li>Sin imágenes ni video</li>
+    </ul>
+    <hr style="border-color:rgba(255,255,255,.15)">
+    <span class="chip2">Versión: S23_emerg_v1</span>
+    <button class="btn-ghost" id="resetAll" style="margin-top:8px">Reiniciar progreso</button>
+  </aside>
+
+  <section class="card">
+    <h3>2) Redundancia: si la radio falla (0:34–0:47)</h3>
+    <ul>
+      <li>Si <strong>no hay comunicación radial</strong>, <u>activa</u> el botón de emergencia del <strong>sistema dispatch</strong>.</li>
+      <li>Si es posible, <strong>envía un mensaje escrito</strong> desde la pantalla del sistema indicando: ID, ubicación, equipo, emergencia, personas, ayuda.</li>
+      <li>Mantén la calma y reintenta la radio cuando haya cobertura.</li>
+    </ul>
+    <details>
+      <summary>Ejemplo de mensaje escrito (dispatch)</summary>
+      <p><em>“Operador 243 – Frente 7 rampa norte km 3 – CAEX 930E – Incendio neumático trasero – 0 atrapados – Requiero brigada y espuma.”</em></p>
+    </details>
+    <button class="btn" data-complete="redund">Redundancia comprendida ✓</button>
+  </section>
+
+  <section class="card">
+    <h3>3) Lesionados: qué hacer y qué evitar (0:47–1:02)</h3>
+    <ul>
+      <li><strong>No mover a los heridos</strong>, salvo <u>riesgo inminente</u> (fuego, derrumbe, gases, atropello).</li>
+      <li><strong>Espera al personal especializado</strong>; mientras tanto, <u>mantén la calma</u> y controla peligros alrededor.</li>
+      <li><strong>Primeros auxilios básicos</strong> sólo si estás entrenado: evaluar consciencia y respiración, proteger la vía aérea, controlar hemorragias visibles con compresión.</li>
+    </ul>
+    <details>
+      <summary>Micro‑pasos de seguridad inmediata</summary>
+      <ol>
+        <li>Señaliza y <strong>aisla el área</strong> (no improvisar rescates inseguros).</li>
+        <li>Apaga el equipo si es seguro hacerlo y corta fuentes de energía.</li>
+        <li>Reporta nuevas condiciones al despacho (cambios de viento, derrames, humo).</li>
+      </ol>
+    </details>
+    <button class="btn" data-complete="lesion">Atención a lesionados ✓</button>
+  </section>
+
+  <section class="card">
+    <h3>4) Cadena de mando y uso de frecuencia (1:02–1:22)</h3>
+    <ul>
+      <li>Todos se mantienen <strong>atentos a las instrucciones</strong> del <u>supervisor senior despacho central</u>.</li>
+      <li><strong>No usar la frecuencia</strong> para temas no vinculados a la emergencia.</li>
+      <li><strong>No acudir</strong> al lugar de la emergencia salvo que el <u>supervisor senior de producción</u> lo solicite.</li>
+    </ul>
+    <details>
+      <summary>Buenas prácticas de radio en emergencias</summary>
+      <ul>
+        <li>Mensajes <strong>breves</strong>, con datos críticos primero.</li>
+        <li>Confirmar <strong>recepción</strong> ("recibido") y <strong>acción</strong> ("en curso").</li>
+        <li>Evitar uso de códigos no estándar que generen confusión.</li>
+      </ul>
+    </details>
+    <button class="btn" data-complete="cadena">Cadena de mando ✓</button>
+  </section>
+
+  <section class="card">
+    <h3>5) Detención segura de equipos (1:22–1:46)</h3>
+    <ul>
+      <li>Camiones de extracción y otros equipos deben <strong>detenerse inmediatamente</strong> cuando lo solicite despacho central o el supervisor senior de producción.</li>
+      <li><strong>Procedimiento de detención segura</strong> (según manual): lugar seguro, freno de estacionamiento, transmisión en neutro, bajar implementos, motor en ralentí y detener si corresponde, aplicar bloqueo/segregación cuando proceda.</li>
+      <li>Permanecer en el sector <strong>hasta nueva instrucción</strong>.</li>
+    </ul>
+    <details>
+      <summary>Checklist de detención segura</summary>
+      <ol>
+        <li>Verifica entorno y <u>elige zona segura</u>.</li>
+        <li>Freno de estacionamiento y transmisión en neutro.</li>
+        <li>Comunica “equipo detenido, esperando instrucciones”.</li>
+      </ol>
+    </details>
+    <button class="btn" data-complete="detencion">Detención segura ✓</button>
+  </section>
+
+  <section class="card">
+    <h3>6) Normalización y reporte (1:46–2:21)</h3>
+    <ul>
+      <li>Todos en frecuencia <strong>se mantienen atentos</strong> hasta la <u>normalización</u> informada oficialmente.</li>
+      <li>El <strong>superintendente mina</strong> comunica por <em>frecuencia abierta</em> el tipo de emergencia, estado de salud de los involucrados y el cierre del evento.</li>
+      <li>Conoce el <strong>procedimiento general de emergencias</strong> y los sistemas de <strong>extinción de incendios</strong> del equipo (portátiles y a bordo).</li>
+    </ul>
+    <details>
+      <summary>Recordatorio sobre extintores portátiles</summary>
+      <ul>
+        <li>Usarlos <strong>solo si es seguro</strong> y tienes capacitación.</li>
+        <li>Mantenerse <strong>aguas arriba del viento</strong>, apuntar a la base del fuego y barrer.</li>
+        <li>Reportar su uso para reposición inmediata.</li>
+      </ul>
+    </details>
+    <button class="btn" data-complete="normal">Normalización comprendida ✓</button>
+  </section>
+
+  <!-- JUEGO 1: Clasifica acciones de emergencia -->
+  <section class="card" id="juego1">
+    <h3>7) Juego 1 · Clasifica cada acción</h3>
+    <p>Arrastra cada tarjeta a su categoría. Al evaluar, verás feedback inmediato (✅/❌).</p>
+    <div class="zones" style="margin-bottom:8px">
+      <div>
+        <h4>Alerta inicial</h4>
+        <div id="zoneALERTA" class="zone" aria-label="Zona Alerta inicial"></div>
+      </div>
+      <div>
+        <h4>Comunicación/Redundancia</h4>
+        <div id="zoneCOMMS" class="zone" aria-label="Zona Comunicación"></div>
+      </div>
+      <div>
+        <h4>Seguridad personal/Lesionados</h4>
+        <div id="zoneSEGURIDAD" class="zone" aria-label="Zona Seguridad"></div>
+      </div>
+      <div>
+        <h4>Control/Normalización</h4>
+        <div id="zoneCONTROL" class="zone" aria-label="Zona Control"></div>
+      </div>
+    </div>
+    <div id="pool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif">Reiniciar</button>
+      <span id="fbClasif" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 2: Ordena secuencia de emergencia -->
+  <section class="card" id="juego2">
+    <h3>8) Juego 2 · Ordena: Secuencia de respuesta</h3>
+    <p>Arrastra para dejar la secuencia correcta del video.</p>
+    <ul class="sortable" id="ordenEmerg"></ul>
+    <div class="note" style="margin-top:4px">Pista: comienza con el <strong>aviso por radio</strong> y termina con la <strong>normalización</strong>.</div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkOrden">Evaluar</button>
+      <button class="btn-ghost" id="regenOrden">Mezclar</button>
+      <span id="fbOrden" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="card">
+    <h3>9) Quiz final (10 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+
+  <!-- Reflexión -->
+  <section class="card">
+    <h3>10) Reflexión (2–3 líneas)</h3>
+    <textarea id="reflexion" rows="3" placeholder="¿Qué reforzarás esta semana: frase radial estándar, uso de botones de emergencia, manejo de lesionados o detención segura?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="note">Se guarda solo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · S2.3 · Emergencias: Protocolo del Operador</div>
+</footer>
+
+<script>
+  /* Utilidades y estado */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('s23_emergencias_operador', {
+    done:{alerta:false,redund:false,lesion:false,cadena:false,detencion:false,normal:false,juego1:false,juego2:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('s23_emergencias_operador', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+  $('#resetAll')?.addEventListener('click', ()=>{ localStorage.removeItem('s23_emergencias_operador'); location.reload(); });
+
+  /* ----------------- Juego 1: Clasificar acciones ----------------- */
+  const itemsClasif = [
+    {txt:'Dar aviso por radio con ID y ubicación', tipo:'ALERTA'},
+    {txt:'Activar botón rojo del tracking', tipo:'ALERTA'},
+    {txt:'Describir tipo de emergencia y ayuda', tipo:'ALERTA'},
+    {txt:'Usar botón de emergencia en dispatch', tipo:'COMMS'},
+    {txt:'Enviar mensaje escrito por pantalla', tipo:'COMMS'},
+    {txt:'Mantener la calma y actualizar cambios', tipo:'COMMS'},
+    {txt:'No mover heridos salvo riesgo inminente', tipo:'SEGURIDAD'},
+    {txt:'Aislar el área y señalizar', tipo:'SEGURIDAD'},
+    {txt:'Esperar personal especializado', tipo:'SEGURIDAD'},
+    {txt:'Detener equipos por instrucción de despacho', tipo:'CONTROL'},
+    {txt:'Permanecer en sector hasta nueva orden', tipo:'CONTROL'},
+    {txt:'Escuchar solo mensajes de emergencia', tipo:'CONTROL'},
+    {txt:'Superintendente informa cierre y estado', tipo:'CONTROL'}
+  ];
+  function renderClasif(){
+    const pool = $('#pool'); pool.innerHTML='';
+    const shuffled = itemsClasif.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach((it)=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneALERTA','zoneCOMMS','zoneSEGURIDAD','zoneCONTROL','pool'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=> e.preventDefault());
+      z.addEventListener('drop', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging){ z.appendChild(dragging); }
+      });
+    });
+  }
+  function checkClasif(){
+    const map = {zoneALERTA:'ALERTA', zoneCOMMS:'COMMS', zoneSEGURIDAD:'SEGURIDAD', zoneCONTROL:'CONTROL'};
+    let ok=0, total=itemsClasif.length;
+    Object.entries(map).forEach(([id,tipo])=>{
+      [...document.getElementById(id).querySelectorAll('.tag')].forEach(t=>{
+        if(t.dataset.tipo===tipo){ ok++; t.style.outline='2px solid var(--ok)'; }
+        else{ t.style.outline='2px solid var(--bad)'; }
+      });
+    });
+    const pct = Math.round(ok/total*100);
+    const fb = $('#fbClasif');
+    fb.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+    fb.style.color = ok===total? 'var(--ok)' : 'var(--bad)';
+  }
+  function resetClasif(){ ['zoneALERTA','zoneCOMMS','zoneSEGURIDAD','zoneCONTROL'].forEach(id=> document.getElementById(id).innerHTML=''); renderClasif(); }
+
+  /* ----------------- Juego 2: Ordenar secuencia de respuesta ----------------- */
+  const pasosEmerg = [
+    'Aviso por radio con ID y ubicación',
+    'Activación de botón de emergencia (tracking)',
+    'Si radio falla: botón en dispatch y mensaje escrito',
+    'No mover heridos salvo riesgo inminente',
+    'Escuchar instrucciones de despacho central',
+    'Detener equipos cuando se solicite',
+    'Permanecer atentos hasta normalización',
+    'Superintendente informa cierre y estado'
+  ];
+  function renderOrdenar(){
+    const ul = $('#ordenEmerg'); ul.innerHTML='';
+    const mix = pasosEmerg.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
+    }, {once:true});
+  }
+  function currentOrden(){
+    return $$('#ordenEmerg li').map(li=>li.textContent.trim());
+  }
+  function checkOrden(){
+    const actual = currentOrden();
+    const ok = actual.every((t,i)=> t===pasosEmerg[i]);
+    const fb = $('#fbOrden');
+    if(ok){ fb.textContent='¡Correcto! Secuencia de respuesta confirmada.'; fb.style.color='var(--ok)'; }
+    else{ fb.textContent='Aún no. Pista: aviso por radio → botones de emergencia → lesionados → instrucciones → detención → normalización → informe.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ----------------- Quiz 10 preguntas (del texto) ----------------- */
+  const preguntas = [
+    {q:'Al detectar una emergencia, lo primero es…', opts:['Ir al lugar para ayudar','Avisar por radio y activar botón de emergencia','Esperar al supervisor'], ok:1},
+    {q:'Orden correcto del mensaje estándar:', opts:['Ubicación, ID, ayuda, equipo, emergencia, personas','ID, ubicación, equipo, emergencia, personas, ayuda','Equipo, personas, ID, ayuda, ubicación, emergencia'], ok:1},
+    {q:'Si no hay comunicación radial, debes…', opts:['Seguir trabajando','Activar botón en dispatch y enviar mensaje escrito','Esperar 10 minutos'], ok:1},
+    {q:'Sobre lesionados, corresponde…', opts:['Moverlos a un lugar cómodo','No moverlos salvo riesgo inminente y esperar personal especializado','Pedirles que caminen si pueden'], ok:1},
+    {q:'Durante la emergencia, la frecuencia se usa para…', opts:['Cualquier conversación','Solo mensajes vinculados a la emergencia','Saludar a otros equipos'], ok:1},
+    {q:'¿Quién dirige la respuesta por radio?', opts:['Cualquier operador cercano','Supervisor senior despacho central','Visitante en terreno'], ok:1},
+    {q:'Los equipos deben detenerse…', opts:['Solo si hay humo visible','Cuando lo instruya despacho central o producción','Nunca en rampa'], ok:1},
+    {q:'Hasta cuándo permanecer atento en frecuencia?', opts:['Hasta terminar mi turno','Hasta que el superintendente informe normalización','Solo 5 minutos'], ok:1},
+    {q:'El conocimiento obligatorio incluye…', opts:['Procedimiento general de emergencias y uso de extintores/sistemas del equipo','Solo la lista de teléfonos','Nada, porque es trabajo de brigada'], ok:0},
+    {q:'Buena práctica con extintores portátil:', opts:['Usarlo aunque el viento vaya hacia ti','Apuntar a la base del fuego y barrer, solo si es seguro','No reportar su uso'], ok:1}
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join('');
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    $('#quizFeedback').textContent = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)' : 'var(--bad)';
+    state.done.quiz = true; store('s23_emergencias_operador', state); calcProgress();
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+    state.done.quiz = false; store('s23_emergencias_operador', state); calcProgress();
+  }
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('s23_emergencias_operador', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+  /* Enlaces UI */
+  $('#checkClasif').addEventListener('click', checkClasif);
+  $('#resetClasif').addEventListener('click', resetClasif);
+  $('#checkOrden').addEventListener('click', checkOrden);
+  $('#regenOrden').addEventListener('click', renderOrdenar);
+  $('#enviar').addEventListener('click', lockQuizAndColor);
+  $('#resetQuiz').addEventListener('click', resetQuizColors);
+
+  /* Init */
+  renderClasif();
+  renderOrdenar();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
