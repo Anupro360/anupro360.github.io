@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Sección 4 · Funciones del Controlador de Terreno</title>
+  <meta name="description" content="Sección 4: Objetivo del rol, responsabilidades diarias, flujo operativo, protocolos de acción rápida, KPIs, casos reales y competencias del Controlador de Terreno. Incluye 6 juegos con retroalimentación y un quiz de 15 preguntas."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; /* Verde fuerte (positivas) */
+      --bad:#FF1744; /* Rojo fuerte (negativas) */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    /* Feedback preguntas */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+
+    /* Drag & drop + zonas */
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+    .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
+
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+
+    /* Imagen/descarga */
+    .figure{border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:10px; margin-top:8px; text-align:center}
+    .figure img{max-width:100%; height:auto; border-radius:8px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <h1>Anupro360 · Sección 4 · Funciones del Controlador de Terreno</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Rol, responsabilidades, protocolos y KPIs · Con práctica aplicada</h2>
+    <p class="note"><strong>:</strong> profundizo el quehacer del Controlador para asegurar ciclos seguros, continuos y eficientes. Incluye 6 juegos con feedback inmediato y un quiz de 15 preguntas.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- 4.1 OBJETIVO GENERAL -->
+  <section class="card">
+    <h3>1) 4.1 · Objetivo General del Rol</h3>
+    <p>Garantizar que la flota de camiones autónomos de extracción (CAEX) cumpla sus <strong>ciclos de acarreo</strong> de forma <strong>segura</strong>, <strong>continua</strong> y <strong>eficiente</strong>, apoyándose en herramientas tecnológicas (FrontRunner/MineStar), comunicación efectiva y protocolos de seguridad establecidos.</p>
+    <details>
+      <summary>En términos operativos</summary>
+      <ul>
+        <li>Minimizar <strong>tiempos muertos</strong> y <strong>riesgos</strong> (personas/equipos).</li>
+        <li>Maximizar <strong>disponibilidad</strong> y <strong>cumplimiento de rutas</strong>.</li>
+        <li>Resguardar la <strong>trazabilidad</strong> de decisiones y eventos.</li>
+      </ul>
+    </details>
+    <div class="figure">
+      <img src="s4_intro_rol.webp" alt="Esquema del rol del Controlador de Terreno"/>
+      <a class="btn-ghost" href="s4_intro_rol.webp" download>Descargar s4_intro_rol.webp</a>
+    </div>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha de la Sección 4</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>45–60 min</strong></li>
+      <li>Estructura: 7 bloques + 6 juegos + quiz (15).</li>
+      <li>Feedback: <span style="color:var(--ok); font-weight:700">verde</span> correcto / <span style="color:var(--bad); font-weight:700">rojo</span> incorrecto.</li>
+      <li>Imágenes: formato <strong>.webp</strong> descargable.</li>
+    </ul>
+    <div class="chip2">Versión: S4_Controlador</div>
+  </aside>
+
+  <!-- 4.2 RESPONSABILIDADES -->
+  <section class="card">
+    <h3>2) 4.2 · Responsabilidades Diarias</h3>
+    <h4>1) Monitoreo de Flota</h4>
+    <ul>
+      <li>Supervisar en tiempo real el estado de todos los CAEX en operación.</li>
+      <li>Verificar ubicación GPS, velocidad y estado de cada unidad.</li>
+      <li>Confirmar que las rutas asignadas se ejecuten según planificación.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_monitor_fleet.webp" alt="Pantalla de monitoreo de flota con estados"/>
+      <a class="btn-ghost" href="s4_monitor_fleet.webp" download>Descargar s4_monitor_fleet.webp</a>
+    </div>
+
+    <h4>2) Gestión de Rutas</h4>
+    <ul>
+      <li>Modificar rutas por incidentes, congestión o cambios operativos.</li>
+      <li>Reasignar puntos de carga/descarga en forma inmediata.</li>
+      <li>Bloquear zonas de riesgo o vías en mantenimiento.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_route_mgmt.webp" alt="Gestión de rutas y bloqueos temporales"/>
+      <a class="btn-ghost" href="s4_route_mgmt.webp" download>Descargar s4_route_mgmt.webp</a>
+    </div>
+
+    <h4>3) Control de Seguridad</h4>
+    <ul>
+      <li>Activar protocolos de emergencia ante incidentes detectados por sensores.</li>
+      <li>Coordinar con supervisores de terreno y equipos de rescate.</li>
+      <li>Mantener registro de incidentes y acciones tomadas.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_safety_protocols.webp" alt="Panel de seguridad y activación de protocolos"/>
+      <a class="btn-ghost" href="s4_safety_protocols.webp" download>Descargar s4_safety_protocols.webp</a>
+    </div>
+
+    <h4>4) Coordinación con Equipos Auxiliares</h4>
+    <ul>
+      <li>Comunicación con palas, cargadores frontales y motoniveladoras.</li>
+      <li>Avisar cambios en asignaciones para evitar detenciones innecesarias.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_aux_equip_coord.webp" alt="Coordinación con palas y equipos auxiliares"/>
+      <a class="btn-ghost" href="s4_aux_equip_coord.webp" download>Descargar s4_aux_equip_coord.webp</a>
+    </div>
+
+    <h4>5) Reporte y Documentación</h4>
+    <ul>
+      <li>Informes de producción y seguridad al final del turno.</li>
+      <li>Registro de eventos, desvíos, fallas y acciones correctivas.</li>
+      <li>Trazabilidad de decisiones operativas.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_reporting.webp" alt="Reportabilidad y trazabilidad operativa"/>
+      <a class="btn-ghost" href="s4_reporting.webp" download>Descargar s4_reporting.webp</a>
+    </div>
+  </section>
+
+  <!-- 4.3 FLUJO OPERATIVO -->
+  <section class="card">
+    <h3>3) 4.3 · Flujo Operativo Típico del Controlador</h3>
+    <h4>📌 Inicio de Turno</h4>
+    <ol>
+      <li>Recibir informe del turno anterior (estado de flota, incidentes pendientes, cambios en rutas/botaderos).</li>
+      <li>Verificar comunicaciones, software y SLA de red.</li>
+      <li>Validar disponibilidad de camiones, palas y botaderos.</li>
+    </ol>
+    <h4>📌 Durante el Turno</h4>
+    <ol>
+      <li>Monitorear operación en consola (FrontRunner/MineStar).</li>
+      <li>Atender alertas: obstáculos, fallas mecánicas, congestiones.</li>
+      <li>Coordinar mantenimiento ante alertas críticas.</li>
+      <li>Ajustar rutas y prioridades de carga.</li>
+      <li>Comunicar con supervisores y equipos auxiliares.</li>
+    </ol>
+    <h4>📌 Cierre de Turno</h4>
+    <ol>
+      <li>Reporte de producción (TPH, horas efectivas, detenciones y causas).</li>
+      <li>Documentar incidentes y soluciones.</li>
+      <li>Traspaso de información al siguiente controlador.</li>
+    </ol>
+    <div class="figure">
+      <img src="s4_shift_flow.webp" alt="Diagrama de flujo de inicio, operación y cierre de turno"/>
+      <a class="btn-ghost" href="s4_shift_flow.webp" download>Descargar s4_shift_flow.webp</a>
+    </div>
+  </section>
+
+  <!-- 4.4 PROTOCOLOS -->
+  <section class="card">
+    <h3>4) 4.4 · Protocolos de Acción Rápida</h3>
+    <h4>a) Falla Mecánica Crítica</h4>
+    <ul>
+      <li>Detención automática del camión por el sistema.</li>
+      <li>Confirmación por cámaras del evento.</li>
+      <li>Bloqueo de ruta, aviso a mantenimiento/seguridad y reasignación.</li>
+    </ul>
+
+    <h4>b) Obstáculo en Ruta</h4>
+    <ul>
+      <li>Detectado por LIDAR/radar → revisión de imágenes en tiempo real.</li>
+      <li>Evaluar retiro con equipo auxiliar; desviar camiones afectados.</li>
+      <li>Actualizar mapa de rutas y comunicar.</li>
+    </ul>
+
+    <h4>c) Clima Adverso</h4>
+    <ul>
+      <li>Ajustar velocidades máximas.</li>
+      <li>Coordinar limpieza/mejoras de vía.</li>
+      <li>Mantener alerta activa con comunicación a supervisores.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_rapid_action.webp" alt="Playbooks y acciones rápidas ante incidentes"/>
+      <a class="btn-ghost" href="s4_rapid_action.webp" download>Descargar s4_rapid_action.webp</a>
+    </div>
+  </section>
+
+  <!-- 4.5 KPIs -->
+  <section class="card">
+    <h3>5) 4.5 · Indicadores Clave (KPIs)</h3>
+    <ul>
+      <li><strong>TPH (Ton/hora):</strong> productividad de la flota.</li>
+      <li><strong>Tiempo de ciclo promedio:</strong> referencia para asignaciones y congestión.</li>
+      <li><strong>Disponibilidad mecánica/operacional:</strong> salud y continuidad.</li>
+      <li><strong>Tiempo promedio de detención por incidente:</strong> eficacia de respuesta.</li>
+      <li><strong>% de rutas optimizadas:</strong> calidad de la planificación dinámica.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_kpis.webp" alt="KPIs de productividad y continuidad operativa"/>
+      <a class="btn-ghost" href="s4_kpis.webp" download>Descargar s4_kpis.webp</a>
+    </div>
+  </section>
+
+  <!-- 4.6 ESCENARIO REAL -->
+  <section class="card">
+    <h3>6) 4.6 · Ejemplo de Situación Real y Respuesta</h3>
+    <p><strong>Escenario:</strong> un CAEX autónomo en ruta al botadero se detiene al detectar una motoniveladora trabajando sin programación.</p>
+    <ol>
+      <li>Confirmar visualmente el trabajo no programado.</li>
+      <li>Comunicar con el operador de la motoniveladora (ETA).</li>
+      <li>Reasignar rutas temporales a otros camiones.</li>
+      <li>Despejada la zona, desbloquear y normalizar flujo.</li>
+      <li>Registrar evento y reportar en cierre de turno.</li>
+    </ol>
+    <div class="figure">
+      <img src="s4_scenario_grader.webp" alt="Gestión de cruce con motoniveladora no programada"/>
+      <a class="btn-ghost" href="s4_scenario_grader.webp" download>Descargar s4_scenario_grader.webp</a>
+    </div>
+  </section>
+
+  <!-- 4.7 COMPETENCIAS -->
+  <section class="card">
+    <h3>7) 4.7 · Competencias Específicas del Controlador</h3>
+    <h4>Técnicas</h4>
+    <ul>
+      <li>Manejo avanzado de FrontRunner y/o MineStar.</li>
+      <li>Interpretación de mapas y datos en tiempo real.</li>
+      <li>Conocimiento básico de mantenimiento de CAEX.</li>
+    </ul>
+    <h4>Blandas</h4>
+    <ul>
+      <li>Comunicación efectiva bajo presión.</li>
+      <li>Toma de decisiones rápida y fundamentada.</li>
+      <li>Trabajo coordinado con equipos multidisciplinarios.</li>
+    </ul>
+    <div class="figure">
+      <img src="s4_competencias.webp" alt="Competencias técnicas y blandas del Controlador"/>
+      <a class="btn-ghost" href="s4_competencias.webp" download>Descargar s4_competencias.webp</a>
+    </div>
+  </section>
+
+  <!-- JUEGO 1: ORDENAR INICIO DE TURNO -->
+  <section class="card" id="juego1">
+    <h3>8) Juego 1 · Ordena el inicio de turno</h3>
+    <p>Arrastra para ordenar los pasos correctos del <strong>inicio de turno</strong>.</p>
+    <ul class="sortable dropzone" id="ordenar1"></ul>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkOrden1">Evaluar</button>
+      <span id="fbOrden1" class="chip2" aria-live="polite"></span>
+      <button class="btn-ghost" id="regenOrden1">Mezclar</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 2: CORRECTO / PROHIBIDO -->
+  <section class="card" id="juego2">
+    <h3>9) Juego 2 · ¿Correcto o Prohibido?</h3>
+    <p>Clasifica cada tarjeta. Feedback inmediato en verde/rojo.</p>
+    <div class="zones">
+      <div>
+        <h4>Correcto</h4>
+        <div id="zoneOK2" class="zone" aria-label="Zona Correcto"></div>
+      </div>
+      <div>
+        <h4>Prohibido</h4>
+        <div id="zoneBAD2" class="zone" aria-label="Zona Prohibido"></div>
+      </div>
+    </div>
+    <div id="pool2" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif2">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif2">Reiniciar</button>
+      <span id="fbClasif2" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 3: MATCH KPIs -->
+  <section class="card" id="juego3">
+    <h3>10) Juego 3 · Asocia KPI ↔ Definición</h3>
+    <p>Arrastra cada definición al KPI correspondiente.</p>
+    <div class="zones" style="grid-template-columns:1fr 1fr">
+      <div id="kpiZones" class="zone" style="min-height: auto">
+        <div class="dropzone" data-target="TPH" style="margin-bottom:8px; padding:8px">TPH (Ton/hora)</div>
+        <div class="dropzone" data-target="CICLO" style="margin-bottom:8px; padding:8px">Tiempo de ciclo</div>
+        <div class="dropzone" data-target="DISP" style="margin-bottom:8px; padding:8px">Disponibilidad</div>
+        <div class="dropzone" data-target="DET" style="margin-bottom:8px; padding:8px">Detención por incidente</div>
+        <div class="dropzone" data-target="ROPT" style="margin-bottom:8px; padding:8px">% Rutas optimizadas</div>
+      </div>
+      <div id="kpiPool" class="zone" aria-label="Definiciones"></div>
+    </div>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkMatch">Evaluar</button>
+      <button class="btn-ghost" id="resetMatch">Reiniciar</button>
+      <span id="fbMatch" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g3">Marcar juego 3 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 4: SELECCIÓN MÚLTIPLE SOP FALLA MECÁNICA -->
+  <section class="card" id="juego4">
+    <h3>11) Juego 4 · Checklist de acción (Falla Mecánica Crítica)</h3>
+    <p>Marca <strong>todas</strong> las acciones correctas del SOP ante una falla mecánica crítica.</p>
+    <div id="sopMulti"></div>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkSOP">Evaluar</button>
+      <button class="btn-ghost" id="resetSOP">Reiniciar</button>
+      <span id="fbSOP" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g4">Marcar juego 4 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 5: ASIGNACIÓN DE CAMIONES A DESTINO -->
+  <section class="card" id="juego5">
+    <h3>12) Juego 5 · Reasignación rápida de flota</h3>
+    <p>Arrastra cada camión al destino correcto según su condición.</p>
+    <div class="zones">
+      <div>
+        <h4>Destinos</h4>
+        <div id="zoneBot" class="zone" data-dest="BOT">Botadero Norte</div>
+        <div id="zoneCha" class="zone" data-dest="CHA">Chancador 2</div>
+        <div id="zoneTal" class="zone" data-dest="TAL">Taller/Mantención</div>
+      </div>
+      <div>
+        <h4>Camiones</h4>
+        <div id="pool5" class="zone"></div>
+      </div>
+    </div>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkAssign">Evaluar</button>
+      <button class="btn-ghost" id="resetAssign">Reiniciar</button>
+      <span id="fbAssign" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g5">Marcar juego 5 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 6: PRIORIZA ALERTAS -->
+  <section class="card" id="juego6">
+    <h3>13) Juego 6 · Prioriza la cola de alertas</h3>
+    <p>Ordena de <strong>mayor a menor prioridad</strong> (1 = atender primero).</p>
+    <ol class="sortable dropzone" id="ordenar6" style="list-style:decimal"></ol>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkOrden6">Evaluar</button>
+      <span id="fbOrden6" class="chip2" aria-live="polite"></span>
+      <button class="btn-ghost" id="regenOrden6">Mezclar</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g6">Marcar juego 6 ✓</button></div>
+  </section>
+
+  <!-- QUIZ 15 PREGUNTAS -->
+  <section class="card">
+    <h3>14) Quiz final (15 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+
+  <!-- DESCARGAS -->
+  <section class="card">
+    <h3>Descargas · Imágenes (.webp)</h3>
+    <ul>
+      <li><a class="btn-ghost" href="s4_intro_rol.webp" download>Descargar s4_intro_rol.webp</a></li>
+      <li><a class="btn-ghost" href="s4_monitor_fleet.webp" download>Descargar s4_monitor_fleet.webp</a></li>
+      <li><a class="btn-ghost" href="s4_route_mgmt.webp" download>Descargar s4_route_mgmt.webp</a></li>
+      <li><a class="btn-ghost" href="s4_safety_protocols.webp" download>Descargar s4_safety_protocols.webp</a></li>
+      <li><a class="btn-ghost" href="s4_aux_equip_coord.webp" download>Descargar s4_aux_equip_coord.webp</a></li>
+      <li><a class="btn-ghost" href="s4_reporting.webp" download>Descargar s4_reporting.webp</a></li>
+      <li><a class="btn-ghost" href="s4_shift_flow.webp" download>Descargar s4_shift_flow.webp</a></li>
+      <li><a class="btn-ghost" href="s4_rapid_action.webp" download>Descargar s4_rapid_action.webp</a></li>
+      <li><a class="btn-ghost" href="s4_kpis.webp" download>Descargar s4_kpis.webp</a></li>
+      <li><a class="btn-ghost" href="s4_scenario_grader.webp" download>Descargar s4_scenario_grader.webp</a></li>
+      <li><a class="btn-ghost" href="s4_competencias.webp" download>Descargar s4_competencias.webp</a></li>
+      <li><a class="btn-ghost" href="s4_playbooks.webp" download>Descargar s4_playbooks.webp</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360</div>
+</footer>
+
+<script>
+  /* Utilidades base (mismo diseño) */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_s4_controlador', { done:{} });
+  // Claves de progreso (7 secciones + 6 juegos + quiz)
+  ['sec1','sec2','sec3','sec4','sec5','sec6','sec7','g1','g2','g3','g4','g5','g6','quiz'].forEach(k=>{ if(!(k in state.done)) state.done[k]=false; });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+
+  // Botones de completado para cada sección/card (inserción automática)
+  (function injectSectionButtons(){
+    const cards = $$('#app > .card');
+    const keys  = ['sec1','sec2','sec3','sec4','sec5','sec6','sec7'];
+    cards.forEach((c,i)=>{
+      if(i>=keys.length) return;
+      const btn = document.createElement('button');
+      btn.className='btn'; btn.dataset.complete=keys[i];
+      btn.textContent=`Marcar leído ✓`;
+      c.appendChild(document.createElement('div')).style.marginTop='8px';
+      c.lastElementChild.appendChild(btn);
+      btn.addEventListener('click', e=>{
+        const key = e.currentTarget.dataset.complete;
+        state.done[key] = true; store('anupro360_s4_controlador', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+  })();
+
+  // Escuchar todos los botones data-complete ya presentes
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_s4_controlador', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+
+  /* ------------------------ JUEGO 1: Ordenar inicio de turno ------------------------ */
+  const pasosInicio = [
+    'Recibir informe del turno anterior',
+    'Verificar comunicaciones y software',
+    'Validar disponibilidad de camiones/palas/botaderos'
+  ];
+  function renderOrden1(){
+    const ul = $('#ordenar1'); ul.innerHTML='';
+    const mix = pasosInicio.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      const items = [...ul.querySelectorAll('li:not(.dragging)')];
+      const after = items.find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden1(){
+    const actual = $$('#ordenar1 li').map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===pasosInicio[i]);
+    const fb = $('#fbOrden1');
+    if(ok){ fb.textContent='¡Correcto! Secuencia de inicio de turno OK.'; fb.style.color='var(--ok)'; }
+    else{ fb.textContent='Revisa: Informe → Comunicaciones → Disponibilidad.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ------------------------ JUEGO 2: Correcto/Prohibido ------------------------ */
+  const itemsC2 = [
+    {txt:'Bloquear ruta ante trabajos en terreno', tipo:'OK'},
+    {txt:'Aumentar velocidad para compensar latencia', tipo:'BAD'},
+    {txt:'Registrar desvíos y comandos críticos en bitácora', tipo:'OK'},
+    {txt:'Ignorar alerta si el camión se detuvo solo', tipo:'BAD'},
+    {txt:'Reasignar destino por congestión', tipo:'OK'},
+    {txt:'Operar sin cobertura conocida', tipo:'BAD'},
+    {txt:'Coordinar con equipos auxiliares al cambiar asignaciones', tipo:'OK'},
+    {txt:'Revisar el camión con carga', tipo:'BAD'}
+  ];
+  function renderClasif2(){
+    const pool = $('#pool2'); pool.innerHTML='';
+    const shuffled = itemsC2.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach(it=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=>tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=>tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneOK2','zoneBAD2','pool2'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkClasif2(){
+    let ok=0,total=itemsC2.length;
+    const zOK=$('#zoneOK2'), zBAD=$('#zoneBAD2');
+    [...zOK.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='OK'){ok++; t.style.outline='2px solid var(--ok)'; } else{ t.style.outline='2px solid var(--bad)'; }});
+    [...zBAD.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='BAD'){ok++; t.style.outline='2px solid var(--ok)'; } else{ t.style.outline='2px solid var(--bad)'; }});
+    const pct=Math.round(ok/total*100); const fb=$('#fbClasif2');
+    fb.textContent=`Resultado: ${ok}/${total} (${pct}%).`; fb.style.color= ok===total?'var(--ok)':'var(--bad)';
+  }
+  function resetClasif2(){ $('#zoneOK2').innerHTML=''; $('#zoneBAD2').innerHTML=''; renderClasif2(); }
+
+  /* ------------------------ JUEGO 3: Match KPI ↔ Definición ------------------------ */
+  const defs = [
+    {txt:'Toneladas movidas por hora de flota', key:'TPH'},
+    {txt:'Tiempo medio desde carga hasta descarga', key:'CICLO'},
+    {txt:'Porcentaje de tiempo disponible vs plan', key:'DISP'},
+    {txt:'Promedio de minutos detenidos por evento', key:'DET'},
+    {txt:'Porcentaje de rutas activas con optimización', key:'ROPT'}
+  ];
+  function renderMatch(){
+    const pool = $('#kpiPool'); pool.innerHTML='';
+    defs.slice().sort(()=>Math.random()-0.5).forEach(d=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=d.txt; tag.draggable=true; tag.dataset.key=d.key;
+      tag.addEventListener('dragstart', ()=>tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=>tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    // activar drop en todas las dropzones KPI
+    $$('#kpiZones .dropzone').forEach(z=>{
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging=document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging){ z.appendChild(dragging); }
+      });
+    });
+  }
+  function checkMatch(){
+    let ok=0;
+    $$('#kpiZones .dropzone').forEach(z=>{
+      const need = z.dataset.target;
+      const tag = z.querySelector('.tag');
+      if(tag && tag.dataset.key===need){ ok++; z.style.outline='2px solid var(--ok)'; }
+      else { z.style.outline='2px solid var(--bad)'; }
+    });
+    const fb=$('#fbMatch');
+    fb.textContent = ok===5?'¡Perfecto! Todas las asociaciones son correctas.':`Aciertos: ${ok}/5. Revisa las definiciones.`;
+    fb.style.color = ok===5?'var(--ok)':'var(--bad)';
+  }
+  function resetMatch(){
+    $('#fbMatch').textContent=''; $('#fbMatch').style.color='';
+    $$('#kpiZones .dropzone').forEach(z=>{ z.style.outline='none'; const tag=z.querySelector('.tag'); if(tag) $('#kpiPool').appendChild(tag); });
+    renderMatch();
+  }
+
+  /* ------------------------ JUEGO 4: SOP Multi-selección ------------------------ */
+  const sopOptions = [
+    {txt:'Confirmar por cámaras el evento', ok:true},
+    {txt:'Desbloquear la ruta inmediatamente', ok:false},
+    {txt:'Bloquear la ruta en el software', ok:true},
+    {txt:'Avisar a mantenimiento y seguridad', ok:true},
+    {txt:'Reasignar rutas para evitar la zona', ok:true},
+    {txt:'Ignorar la alerta si el camión ya está detenido', ok:false}
+  ];
+  function renderSOP(){
+    const box = $('#sopMulti'); box.innerHTML='';
+    sopOptions.forEach((o,i)=>{
+      const div=document.createElement('div'); div.className='q';
+      div.innerHTML = `<label class="opt"><input type="checkbox" value="${i}"> <span>${o.txt}</span></label>`;
+      box.appendChild(div);
+    });
+  }
+  function checkSOP(){
+    let ok=0,wrong=0;
+    sopOptions.forEach((o,i)=>{
+      const chk = document.querySelector(`#sopMulti input[value="${i}"]`);
+      const label = chk.closest('label');
+      if(chk.checked && o.ok){ ok++; label.classList.add('correct'); }
+      else if(chk.checked && !o.ok){ wrong++; label.classList.add('wrong'); }
+      else if(!chk.checked && o.ok){ wrong++; }
+    });
+    const total = sopOptions.filter(o=>o.ok).length;
+    const fb=$('#fbSOP');
+    fb.textContent = `Correctas: ${ok}/${total}. ${wrong? 'Revisa las que marcaste o te faltaron.':''}`;
+    fb.style.color = wrong? 'var(--bad)':'var(--ok)';
+    $$('#sopMulti input').forEach(i=>i.disabled=true);
+  }
+  function resetSOP(){
+    $('#fbSOP').textContent='';
+    $$('#sopMulti .opt').forEach(l=>l.classList.remove('correct','wrong'));
+    $('#sopMulti').innerHTML=''; renderSOP();
+  }
+
+  /* ------------------------ JUEGO 5: Reasignación rápida ------------------------ */
+  const trucks = [
+    {txt:'Camión 101 · Sin fallas · Cola en Pala 03', dest:'BOT'},
+    {txt:'Camión 202 · Ruta al Chancador 2', dest:'CHA'},
+    {txt:'Camión 286 · Falla mecánica leve reportada', dest:'TAL'},
+    {txt:'Camión 194 · Congestión en Botadero Norte', dest:'CHA'},
+    {txt:'Camión 241 · Post-mantención liberado', dest:'BOT'}
+  ];
+  function renderAssign(){
+    const pool = $('#pool5'); pool.innerHTML='';
+    trucks.slice().sort(()=>Math.random()-0.5).forEach(t=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=t.txt; tag.draggable=true; tag.dataset.dest=t.dest;
+      tag.addEventListener('dragstart', ()=>tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=>tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneBot','zoneCha','zoneTal','pool5'].forEach(id=>{
+      const z=document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging=document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkAssign(){
+    let ok=0, total=trucks.length;
+    [['zoneBot','BOT'],['zoneCha','CHA'],['zoneTal','TAL']].forEach(([id,code])=>{
+      const z=document.getElementById(id);
+      [...z.querySelectorAll('.tag')].forEach(t=>{
+        if(t.dataset.dest===code){ ok++; t.style.outline='2px solid var(--ok)'; } else { t.style.outline='2px solid var(--bad)'; }
+      });
+    });
+    const fb=$('#fbAssign'); const pct=Math.round(ok/total*100);
+    fb.textContent=`Resultado: ${ok}/${total} (${pct}%).`; fb.style.color = ok===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetAssign(){
+    $('#fbAssign').textContent='';
+    ['zoneBot','zoneCha','zoneTal'].forEach(id=>{ const z=document.getElementById(id); z.innerHTML=''; z.style.outline=''; });
+    renderAssign();
+  }
+
+  /* ------------------------ JUEGO 6: Priorizar alertas ------------------------ */
+  const alertas = [
+    'Colisión inminente detectada',
+    'Pérdida de red prolongada',
+    'Obstáculo en cruce principal',
+    'Falla mecánica leve (sensor auxiliar)',
+    'Detención planificada de pala'
+  ];
+  const ordenCorrecto6 = [
+    'Colisión inminente detectada',
+    'Pérdida de red prolongada',
+    'Obstáculo en cruce principal',
+    'Falla mecánica leve (sensor auxiliar)',
+    'Detención planificada de pala'
+  ];
+  function renderOrden6(){
+    const ol=$('#ordenar6'); ol.innerHTML='';
+    alertas.slice().sort(()=>Math.random()-0.5).forEach(a=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=a;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ol.appendChild(li);
+    });
+    ol.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging=ol.querySelector('.dragging');
+      const after=[...ol.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ol.insertBefore(dragging, after); else ol.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden6(){
+    const actual=$$('#ordenar6 li').map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===ordenCorrecto6[i]);
+    const fb=$('#fbOrden6');
+    if(ok){ fb.textContent='¡Prioridad perfecta!'; fb.style.color='var(--ok)'; }
+    else { fb.textContent='Revisa: Colisión → Red → Obstáculo → Falla leve → Planificada.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ------------------------ QUIZ (15) ------------------------ */
+  const preguntas=[
+    {q:'Objetivo del Controlador de Terreno:', opts:['Conducir el CAEX de forma remota','Asegurar ciclos seguros, continuos y eficientes','Modificar hardware en terreno'], ok:1},
+    {q:'En monitoreo de flota, corresponde:', opts:['Verificar GPS, velocidad y estado por unidad','Solo revisar alarmas críticas','Esperar reporte del operador'], ok:0},
+    {q:'Gestión de rutas implica:', opts:['Bloquear zonas en mantenimiento y reasignar destinos','Solo ver mapas sin intervenir','Cambiar sensores'], ok:0},
+    {q:'Ante falla mecánica crítica el primer paso del controlador es:', opts:['Desbloquear de inmediato','Confirmar por cámaras y bloquear ruta','Enviar a botadero'], ok:1},
+    {q:'En clima adverso se debe:', opts:['Subir velocidad para recuperar tiempo','Ajustar límites y coordinar limpieza','Ignorar mientras mejore'], ok:1},
+    {q:'KPI TPH mide:', opts:['Disponibilidad','Toneladas por hora','Detenciones por incidente'], ok:1},
+    {q:'Tiempo de ciclo promedio sirve para:', opts:['Definir asignaciones y detectar congestión','Calibrar cámaras','Medir combustible'], ok:0},
+    {q:'Disponibilidad operacional indica:', opts:['Porcentaje de tiempo útil de operación','Temperatura ambiente','Horas de mantención planificada'], ok:0},
+    {q:'Detención por incidente (promedio) refleja:', opts:['Eficacia de respuesta','Costo de neumáticos','Consumo eléctrico'], ok:0},
+    {q:'% de rutas optimizadas evalúa:', opts:['Calidad de planificación dinámica','Número de radios', 'Cantidad de operadores'], ok:0},
+    {q:'En el inicio de turno, el orden correcto es:', opts:['Comunicaciones → Disponibilidad → Informe anterior','Informe anterior → Comunicaciones → Disponibilidad','Disponibilidad → Informe → Comunicaciones'], ok:1},
+    {q:'Correcto ante obstáculo en ruta:', opts:['Desviar camiones y actualizar mapa','Pedir acelerar para despejar','Ignorar si no hay colisión'], ok:0},
+    {q:'Comunicación con equipos auxiliares busca:', opts:['Evitar detenciones innecesarias','Auditar RR.HH.','Bajar carga útil'], ok:0},
+    {q:'Bitácora debe registrar:', opts:['Solo accidentes graves','Eventos, desvíos, fallas y acciones','Nada si se resolvió rápido'], ok:1},
+    {q:'Prioridad de alertas (de mayor a menor):', opts:['Red → Obstáculo → Colisión → Falla leve → Planificada','Colisión → Red → Obstáculo → Falla leve → Planificada','Planificada → Falla leve → Obstáculo → Red → Colisión'], ok:1},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join('');
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    const fb = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').textContent = fb;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+
+  // Enlaces UI + Init
+  $('#checkOrden1').addEventListener('click', checkOrden1);
+  $('#regenOrden1').addEventListener('click', renderOrden1);
+  $('#checkClasif2').addEventListener('click', checkClasif2);
+  $('#resetClasif2').addEventListener('click', resetClasif2);
+  $('#checkMatch').addEventListener('click', checkMatch);
+  $('#resetMatch').addEventListener('click', resetMatch);
+  $('#checkSOP').addEventListener('click', checkSOP);
+  $('#resetSOP').addEventListener('click', resetSOP);
+  $('#checkAssign').addEventListener('click', checkAssign);
+  $('#resetAssign').addEventListener('click', resetAssign);
+  $('#checkOrden6').addEventListener('click', checkOrden6);
+  $('#regenOrden6').addEventListener('click', renderOrden6);
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s4_controlador', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s4_controlador', state); calcProgress(); });
+
+  renderOrden1();
+  renderClasif2();
+  renderMatch();
+  renderSOP();
+  renderAssign();
+  renderOrden6();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
