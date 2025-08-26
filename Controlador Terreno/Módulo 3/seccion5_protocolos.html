@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Sección 5 · Protocolos de Seguridad</title>
+  <meta name="description" content="Sección 5: Protocolos de seguridad para minería autónoma: normativa chilena e internacional, principios de seguridad, procedimientos, señalización, simulación de riesgos, responsabilidades y checklist. Incluye 5 juegos y quiz de 15 preguntas."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; --bad:#FF1744;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    /* Feedback preguntas */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+
+    /* Drag & drop + zonas */
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+    .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
+
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+
+    /* Imágenes */
+    .figure{border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:10px; margin-top:8px; text-align:center}
+    .figure img{max-width:100%; height:auto; border-radius:8px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <h1>Anupro360 · Sección 5 · Protocolos de Seguridad</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Protocolos de Seguridad · Marco normativo, principios y operación</h2>
+    <p class="note"><strong>:</strong> profundizo los protocolos, su sustento normativo y la ejecución práctica en terreno/centro de control. Esta sección integra juegos aplicados y un quiz de 15 preguntas con retroalimentación inmediata.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- 5.1 OBJETIVO -->
+  <section class="card">
+    <h3>1) 5.1 · Objetivo de los Protocolos de Seguridad</h3>
+    <p>Garantizar una operación <strong>sin riesgos</strong> para personas, equipos y medio ambiente, cumpliendo legislación vigente, políticas corporativas y estándares internacionales aplicables a minería autónoma. El objetivo se operacionaliza en <em>prevención</em> (diseño de zonas y barreras), <em>detección</em> (sensores/telemetría), <em>respuesta</em> (playbooks/mandos seguros) y <em>mejora continua</em> (bitácora, auditorías).</p>
+    <details>
+      <summary>Principios didácticos (andragogía)</summary>
+      <ul>
+        <li>Aprendizaje basado en casos y simulaciones controladas.</li>
+        <li>Transferencia rápida: protocolos sencillos, visibles y repetibles.</li>
+        <li>Retroalimentación inmediata en consola y en terreno.</li>
+      </ul>
+    </details>
+    <div class="figure">
+      <img src="s5_intro_objetivo.webp" alt="Esquema del objetivo de los protocolos de seguridad"/>
+      <a class="btn-ghost" href="s5_intro_objetivo.webp" download>Descargar s5_intro_objetivo.webp</a>
+    </div>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha de la Sección 5</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>45–60 min</strong></li>
+      <li>Estructura: 9 bloques + 5 juegos + quiz (15).</li>
+      <li>Feedback: <span style="color:var(--ok); font-weight:700">verde</span> correcto / <span style="color:var(--bad); font-weight:700">rojo</span> incorrecto.</li>
+      <li>Imágenes en formato <strong>.webp</strong> descargables.</li>
+    </ul>
+    <div class="chip2">Versión: S5_Protocolos</div>
+  </aside>
+
+  <!-- 5.2 NORMATIVA CHILENA -->
+  <section class="card">
+    <h3>2) 5.2 · Normativa Chilena Aplicable</h3>
+    <p>Marco regulatorio base para toda operación minera en Chile (autónoma o convencional):</p>
+    <ul>
+      <li><strong>DS N°132 / 2004 – Sernageomin</strong>
+        <ul>
+          <li><em>Art. 55:</em> condiciones mínimas de seguridad en transporte de mineral.</li>
+          <li><em>Art. 56:</em> señalización y demarcación de rutas.</li>
+          <li><em>Art. 174:</em> control de tráfico en caminos mineros.</li>
+          <li><em>Art. 189:</em> mantenimiento y revisión de equipos.</li>
+        </ul>
+      </li>
+      <li><strong>Ley N° 16.744</strong>: prevención de riesgos laborales y accidentes del trabajo.</li>
+      <li><strong>Reglamentos internos de tránsito minero</strong> por faena: integran y particularizan el DS 132.</li>
+    </ul>
+    <div class="figure">
+      <img src="s5_normativa_cl.webp" alt="Infografía de normativa chilena aplicable a minería autónoma"/>
+      <a class="btn-ghost" href="s5_normativa_cl.webp" download>Descargar s5_normativa_cl.webp</a>
+    </div>
+  </section>
+
+  <!-- 5.3 ESTÁNDARES INTERNACIONALES -->
+  <section class="card">
+    <h3>3) 5.3 · Normas y Estándares Internacionales</h3>
+    <ul>
+      <li><strong>ISO 17757:2017</strong>: requisitos de seguridad para maquinaria minera autónoma/semiautónoma, HMI y emergencias.</li>
+      <li><strong>ISO 45001</strong>: sistemas de gestión de Seguridad y Salud en el Trabajo.</li>
+      <li><strong>ICMM</strong>: guías para operación segura de maquinaria autónoma y control de cambios.</li>
+      <li><strong>ANSI/ISA-99</strong> (IEC 62443): ciberseguridad industrial en sistemas de control.</li>
+    </ul>
+    <details>
+      <summary>Traducción operativa</summary>
+      <ul>
+        <li>Diseñar <em>zonas</em> y <em>modos</em> con límites claros (no-go, reduced speed, e-stop).</li>
+        <li>Aplicar <em>defensa en profundidad</em> OT: segmentación, autenticación, registro.</li>
+        <li>Capacitación recurrente con simulación de emergencias.</li>
+      </ul>
+    </details>
+    <div class="figure">
+      <img src="s5_estandares_int.webp" alt="Mapa de estándares internacionales aplicables"/>
+      <a class="btn-ghost" href="s5_estandares_int.webp" download>Descargar s5_estandares_int.webp</a>
+    </div>
+  </section>
+
+  <!-- 5.4 PRINCIPIOS DE SEGURIDAD -->
+  <section class="card">
+    <h3>4) 5.4 · Principios de Seguridad en Minería Autónoma</h3>
+    <ol>
+      <li><strong>Exclusión física de personal:</strong> cierre/señalización de zonas autónomas; solo personal autorizado.</li>
+      <li><strong>Zonas de seguridad virtuales:</strong> no-go zones; detención automática por intrusión.</li>
+      <li><strong>Parada de emergencia:</strong> botón físico y virtual; pruebas periódicas documentadas.</li>
+      <li><strong>Control de accesos y autenticación:</strong> credenciales únicas y registro por operador.</li>
+      <li><strong>Intervención en terreno:</strong> desactivar autonomía antes de aproximarse; LOTO (bloqueo y etiquetado).</li>
+    </ol>
+    <div class="figure">
+      <img src="s5_zonas_exclusion.webp" alt="Zonas de exclusión física y virtual no-go"/>
+      <a class="btn-ghost" href="s5_zonas_exclusion.webp" download>Descargar s5_zonas_exclusion.webp</a>
+    </div>
+    <div class="figure">
+      <img src="s5_no_go_ui.webp" alt="Ejemplo de no-go zones en software de control"/>
+      <a class="btn-ghost" href="s5_no_go_ui.webp" download>Descargar s5_no_go_ui.webp</a>
+    </div>
+    <div class="figure">
+      <img src="s5_parada_emergencia.webp" alt="Parada de emergencia física y virtual"/>
+      <a class="btn-ghost" href="s5_parada_emergencia.webp" download>Descargar s5_parada_emergencia.webp</a>
+    </div>
+    <div class="figure">
+      <img src="s5_control_accesos.webp" alt="Control de accesos y autenticación en OT"/>
+      <a class="btn-ghost" href="s5_control_accesos.webp" download>Descargar s5_control_accesos.webp</a>
+    </div>
+    <div class="figure">
+      <img src="s5_loto.webp" alt="Bloqueo y etiquetado LOTO"/>
+      <a class="btn-ghost" href="s5_loto.webp" download>Descargar s5_loto.webp</a>
+    </div>
+  </section>
+
+  <!-- 5.5 PROCEDIMIENTOS -->
+  <section class="card">
+    <h3>5) 5.5 · Procedimientos de Seguridad Clave</h3>
+    <h4>a) Ingreso a Zona Autónoma</h4>
+    <ol>
+      <li>Solicitar autorización al Centro de Control.</li>
+      <li>Confirmar detención/desvío total de CAEX en la zona.</li>
+      <li>Señalizar ingreso y usar EPP requerido.</li>
+      <li>Mantener comunicación radial durante la permanencia.</li>
+      <li>Registrar ingreso/egreso en bitácora.</li>
+    </ol>
+    <div class="figure">
+      <img src="s5_ingreso_zona.webp" alt="Procedimiento de ingreso a zona autónoma"/>
+      <a class="btn-ghost" href="s5_ingreso_zona.webp" download>Descargar s5_ingreso_zona.webp</a>
+    </div>
+
+    <h4>b) Desbloqueo de Rutas</h4>
+    <ol>
+      <li>Verificar ruta libre de obstáculos y personal.</li>
+      <li>Confirmar condiciones climáticas seguras en sistema.</li>
+      <li>Registrar desbloqueo con hora, responsable y evidencia.</li>
+    </ol>
+    <div class="figure">
+      <img src="s5_desbloqueo_ruta.webp" alt="Checklist de desbloqueo de rutas"/>
+      <a class="btn-ghost" href="s5_desbloqueo_ruta.webp" download>Descargar s5_desbloqueo_ruta.webp</a>
+    </div>
+
+    <h4>c) Falla Crítica en CAEX Autónomo</h4>
+    <ol>
+      <li>Detener el equipo de forma remota (parada segura).</li>
+      <li>Activar señal de advertencia y bloquear ruta.</li>
+      <li>Coordinar asistencia de mantenimiento y seguridad.</li>
+    </ol>
+    <div class="figure">
+      <img src="s5_falla_critica.webp" alt="Gestión de falla crítica en CAEX autónomo"/>
+      <a class="btn-ghost" href="s5_falla_critica.webp" download>Descargar s5_falla_critica.webp</a>
+    </div>
+  </section>
+
+  <!-- 5.6 SEÑALIZACIÓN -->
+  <section class="card">
+    <h3>6) 5.6 · Señalización y Comunicación de Seguridad</h3>
+    <ul>
+      <li><strong>Señales físicas en terreno:</strong> “Zona Autónoma”, barreras y portones controlados.</li>
+      <li><strong>Señalización en software:</strong> iconos de peligro, alertas visuales y sonoras.</li>
+    </ul>
+    <div class="figure">
+      <img src="s5_senalizacion_terreno.webp" alt="Señalización física en faena"/>
+      <a class="btn-ghost" href="s5_senalizacion_terreno.webp" download>Descargar s5_senalizacion_terreno.webp</a>
+    </div>
+    <div class="figure">
+      <img src="as5_senalizacion_software.webp" alt="Señalización y alertas en software de control"/>
+      <a class="btn-ghost" href="s5_senalizacion_software.webp" download>Descargar s5_senalizacion_software.webp</a>
+    </div>
+  </section>
+
+  <!-- 5.7 SIMULACIONES -->
+  <section class="card">
+    <h3>7) 5.7 · Simulación de Situaciones de Riesgo</h3>
+    <p>La práctica recurrente reduce tiempos de respuesta y errores. Debe incluir ingreso no autorizado, desvíos por clima y parada de emergencia global.</p>
+    <div class="figure">
+      <img src="s5_simulaciones.webp" alt="Simulaciones de ingreso no autorizado, clima y e-stop"/>
+      <a class="btn-ghost" href="s5_simulaciones.webp" download>Descargar s5_simulaciones.webp</a>
+    </div>
+  </section>
+
+  <!-- 5.8 RESPONSABILIDADES -->
+  <section class="card">
+    <h3>8) 5.8 · Responsabilidades Específicas del Controlador</h3>
+    <ul>
+      <li>Verificar zonas autónomas libres de personal no autorizado.</li>
+      <li>Aplicar protocolos de emergencia de inmediato.</li>
+      <li>Comunicar incidentes a seguridad industrial y supervisión.</li>
+      <li>Documentar evento con hora, ubicación y acciones.</li>
+    </ul>
+    <div class="figure">
+      <img src="s5_resp_controlador.webp" alt="Responsabilidades específicas del controlador en seguridad"/>
+      <a class="btn-ghost" href="s5_resp_controlador.webp" download>Descargar s5_resp_controlador.webp</a>
+    </div>
+  </section>
+
+  <!-- 5.9 CHECKLIST -->
+  <section class="card">
+    <h3>9) 5.9 · Checklist de Seguridad para el Turno</h3>
+    <ol>
+      <li>Funcionamiento de comunicaciones.</li>
+      <li>Estado de cámaras y sensores por CAEX.</li>
+      <li>Integridad de rutas virtuales y zonas de exclusión.</li>
+      <li>Disponibilidad de rutas alternativas.</li>
+      <li>Botones de parada de emergencia operativos.</li>
+    </ol>
+    <div class="figure">
+      <img src="s5_checklist_turno.webp" alt="Checklist de seguridad para el turno"/>
+      <a class="btn-ghost" href="s5_checklist_turno.webp" download>Descargar s5_checklist_turno.webp</a>
+    </div>
+  </section>
+
+  <!-- JUEGO 1: ORDENAR (Ingreso a zona autónoma) -->
+  <section class="card" id="juego1">
+    <h3>10) Juego 1 · Ordena “Ingreso a Zona Autónoma”</h3>
+    <p>Arrastra para ordenar los pasos correctos del procedimiento de <strong>ingreso</strong>.</p>
+    <ul class="sortable dropzone" id="ordenar1"></ul>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkOrden1">Evaluar</button>
+      <span id="fbOrden1" class="chip2" aria-live="polite"></span>
+      <button class="btn-ghost" id="regenOrden1">Mezclar</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 2: CLASIFICAR Correcto/Prohibido -->
+  <section class="card" id="juego2">
+    <h3>11) Juego 2 · ¿Correcto o Prohibido? (Seguridad)</h3>
+    <p>Clasifica cada tarjeta. Retroalimentación inmediata en verde/rojo.</p>
+    <div class="zones">
+      <div>
+        <h4>Correcto</h4>
+        <div id="zoneOK2" class="zone" aria-label="Zona Correcto"></div>
+      </div>
+      <div>
+        <h4>Prohibido</h4>
+        <div id="zoneBAD2" class="zone" aria-label="Zona Prohibido"></div>
+      </div>
+    </div>
+    <div id="pool2" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif2">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif2">Reiniciar</button>
+      <span id="fbClasif2" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 3: MATCH Norma ↔ Descripción -->
+  <section class="card" id="juego3">
+    <h3>12) Juego 3 · Asocia Norma/Estándar ↔ Descripción</h3>
+    <p>Arrastra cada <strong>descripción</strong> hacia su <strong>norma</strong> correspondiente.</p>
+    <div class="zones" style="grid-template-columns:1fr 1fr">
+      <div id="normZones" class="zone" style="min-height:auto">
+        <div class="dropzone" data-target="DS132"  style="margin-bottom:8px; padding:8px">DS 132 (Sernageomin)</div>
+        <div class="dropzone" data-target="LEYL"   style="margin-bottom:8px; padding:8px">Ley 16.744</div>
+        <div class="dropzone" data-target="ISO177"  style="margin-bottom:8px; padding:8px">ISO 17757</div>
+        <div class="dropzone" data-target="ISO45"   style="margin-bottom:8px; padding:8px">ISO 45001</div>
+        <div class="dropzone" data-target="ICMM"    style="margin-bottom:8px; padding:8px">ICMM</div>
+        <div class="dropzone" data-target="ISA99"   style="margin-bottom:8px; padding:8px">ANSI/ISA-99</div>
+      </div>
+      <div id="normPool" class="zone" aria-label="Descripciones"></div>
+    </div>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkNorm">Evaluar</button>
+      <button class="btn-ghost" id="resetNorm">Reiniciar</button>
+      <span id="fbNorm" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g3">Marcar juego 3 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 4: MULTI-SELECCIÓN SOP Falla Crítica -->
+  <section class="card" id="juego4">
+    <h3>13) Juego 4 · Checklist SOP “Falla Crítica en CAEX”</h3>
+    <p>Marca <strong>todas</strong> las acciones que corresponden al SOP.</p>
+    <div id="sopMulti"></div>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkSOP">Evaluar</button>
+      <button class="btn-ghost" id="resetSOP">Reiniciar</button>
+      <span id="fbSOP" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g4">Marcar juego 4 ✓</button></div>
+  </section>
+
+  <!-- JUEGO 5: PRIORIZA RIESGOS -->
+  <section class="card" id="juego5">
+    <h3>14) Juego 5 · Prioriza la respuesta (1 = Atender primero)</h3>
+    <p>Ordena de mayor a menor criticidad.</p>
+    <ol class="sortable dropzone" id="ordenar5" style="list-style:decimal"></ol>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkOrden5">Evaluar</button>
+      <span id="fbOrden5" class="chip2" aria-live="polite"></span>
+      <button class="btn-ghost" id="regenOrden5">Mezclar</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="g5">Marcar juego 5 ✓</button></div>
+  </section>
+
+  <!-- QUIZ 15 -->
+  <section class="card">
+    <h3>15) Quiz final (15 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+
+  <!-- DESCARGAS -->
+  <section class="card">
+    <h3>Descargas · Imágenes (.webp)</h3>
+    <ul>
+      <li><a class="btn-ghost" href="s5_intro_objetivo.webp" download>Descargar s5_intro_objetivo.webp</a></li>
+      <li><a class="btn-ghost" href="s5_normativa_cl.webp" download>Descargar s5_normativa_cl.webp</a></li>
+      <li><a class="btn-ghost" href="s5_estandares_int.webp" download>Descargar s5_estandares_int.webp</a></li>
+      <li><a class="btn-ghost" href="s5_zonas_exclusion.webp" download>Descargar s5_zonas_exclusion.webp</a></li>
+      <li><a class="btn-ghost" href="s5_no_go_ui.webp" download>Descargar s5_no_go_ui.webp</a></li>
+      <li><a class="btn-ghost" href="s5_parada_emergencia.webp" download>Descargar s5_parada_emergencia.webp</a></li>
+      <li><a class="btn-ghost" href="s5_control_accesos.webp" download>Descargar s5_control_accesos.webp</a></li>
+      <li><a class="btn-ghost" href="s5_loto.webp" download>Descargar s5_loto.webp</a></li>
+      <li><a class="btn-ghost" href="s5_ingreso_zona.webp" download>Descargar s5_ingreso_zona.webp</a></li>
+      <li><a class="btn-ghost" href="s5_desbloqueo_ruta.webp" download>Descargar s5_desbloqueo_ruta.webp</a></li>
+      <li><a class="btn-ghost" href="s5_falla_critica.webp" download>Descargar s5_falla_critica.webp</a></li>
+      <li><a class="btn-ghost" href="s5_senalizacion_terreno.webp" download>Descargar s5_senalizacion_terreno.webp</a></li>
+      <li><a class="btn-ghost" href="s5_senalizacion_software.webp" download>Descargar s5_senalizacion_software.webp</a></li>
+      <li><a class="btn-ghost" href="s5_simulaciones.webp" download>Descargar s5_simulaciones.webp</a></li>
+      <li><a class="btn-ghost" href="s5_resp_controlador.webp" download>Descargar s5_resp_controlador.webp</a></li>
+      <li><a class="btn-ghost" href="s5_checklist_turno.webp" download>Descargar s5_checklist_turno.webp</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360</div>
+</footer>
+
+<script>
+  /* Utilidades base */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_s5_protocolos', { done:{} });
+  // Progreso: 9 secciones + 5 juegos + quiz
+  ['sec1','sec2','sec3','sec4','sec5','sec6','sec7','sec8','sec9','g1','g2','g3','g4','g5','quiz'].forEach(k=>{ if(!(k in state.done)) state.done[k]=false; });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+
+  // Insertar botones "Marcar leído" automáticamente en las 9 primeras cards
+  (function injectSectionButtons(){
+    const cards = $$('#app > .card');
+    const keys  = ['sec1','sec2','sec3','sec4','sec5','sec6','sec7','sec8','sec9'];
+    cards.forEach((c,i)=>{
+      if(i>=keys.length) return;
+      const btn = document.createElement('button');
+      btn.className='btn'; btn.dataset.complete=keys[i];
+      btn.textContent=`Marcar leído ✓`;
+      c.appendChild(document.createElement('div')).style.marginTop='8px';
+      c.lastElementChild.appendChild(btn);
+      btn.addEventListener('click', e=>{
+        const key = e.currentTarget.dataset.complete;
+        state.done[key] = true; store('anupro360_s5_protocolos', state); calcProgress();
+        e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+      });
+    });
+  })();
+
+  // Listener genérico para cualquier botón con data-complete
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_s5_protocolos', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+
+  /* ----------------- Juego 1: Ordenar Ingreso a Zona Autónoma ----------------- */
+  const pasosIngreso = [
+    'Solicitar autorización al Centro de Control',
+    'Confirmar detención/desvío total de CAEX en la zona',
+    'Señalizar ingreso y usar EPP requerido',
+    'Mantener comunicación radial durante la permanencia',
+    'Registrar ingreso y egreso en bitácora'
+  ];
+  function renderOrden1(){
+    const ul = $('#ordenar1'); ul.innerHTML='';
+    const mix = pasosIngreso.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden1(){
+    const actual = $$('#ordenar1 li').map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===pasosIngreso[i]);
+    const fb = $('#fbOrden1');
+    if(ok){ fb.textContent='¡Correcto! Secuencia validada.'; fb.style.color='var(--ok)'; }
+    else{ fb.textContent='Revisa: Autorización → Confirmación → Señalización/EPP → Comunicación → Registro.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ----------------- Juego 2: Correcto/Prohibido (Seguridad) ----------------- */
+  const itemsC2 = [
+    {txt:'Probar periódicamente el botón de parada de emergencia', tipo:'OK'},
+    {txt:'Ingresar a zona autónoma sin autorización', tipo:'BAD'},
+    {txt:'Desactivar autonomía antes de aproximarse a un CAEX', tipo:'OK'},
+    {txt:'Retirar barreras físicas para ganar tiempo', tipo:'BAD'},
+    {txt:'Aplicar LOTO antes de intervenir', tipo:'OK'},
+    {txt:'Compartir credenciales con otro turno', tipo:'BAD'},
+    {txt:'Bloquear ruta ante trabajos en terreno', tipo:'OK'},
+    {txt:'Operar sin registro de bitácora', tipo:'BAD'}
+  ];
+  function renderClasif2(){
+    const pool = $('#pool2'); pool.innerHTML='';
+    const shuffled = itemsC2.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach(it=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=>tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=>tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneOK2','zoneBAD2','pool2'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkClasif2(){
+    let ok=0,total=itemsC2.length;
+    const zOK=$('#zoneOK2'), zBAD=$('#zoneBAD2');
+    [...zOK.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='OK'){ok++; t.style.outline='2px solid var(--ok)'; } else{ t.style.outline='2px solid var(--bad)'; }});
+    [...zBAD.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='BAD'){ok++; t.style.outline='2px solid var(--ok)'; } else{ t.style.outline='2px solid var(--bad)'; }});
+    const pct=Math.round(ok/total*100); const fb=$('#fbClasif2');
+    fb.textContent=`Resultado: ${ok}/${total} (${pct}%).`; fb.style.color= ok===total?'var(--ok)':'var(--bad)';
+  }
+  function resetClasif2(){ $('#zoneOK2').innerHTML=''; $('#zoneBAD2').innerHTML=''; renderClasif2(); }
+
+  /* ----------------- Juego 3: Match Norma ↔ Descripción ----------------- */
+  const normDefs = [
+    {txt:'Condiciones mínimas para transporte, señalización y mantenimiento en faenas mineras', key:'DS132'},
+    {txt:'Prevención de riesgos laborales y seguros de accidentes', key:'LEYL'},
+    {txt:'Requisitos de seguridad para maquinaria minera autónoma/HMI/emergencias', key:'ISO177'},
+    {txt:'Sistema de gestión de Seguridad y Salud en el Trabajo', key:'ISO45'},
+    {txt:'Guías de operación segura y gobernanza en minería', key:'ICMM'},
+    {txt:'Ciberseguridad industrial para sistemas de control (OT)', key:'ISA99'}
+  ];
+  function renderNorm(){
+    const pool = $('#normPool'); pool.innerHTML='';
+    normDefs.slice().sort(()=>Math.random()-0.5).forEach(d=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=d.txt; tag.draggable=true; tag.dataset.key=d.key;
+      tag.addEventListener('dragstart', ()=>tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=>tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    $$('#normZones .dropzone').forEach(z=>{
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging=document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging){ z.appendChild(dragging); }
+      });
+    });
+  }
+  function checkNorm(){
+    let ok=0;
+    $$('#normZones .dropzone').forEach(z=>{
+      const need = z.dataset.target;
+      const tag = z.querySelector('.tag');
+      if(tag && tag.dataset.key===need){ ok++; z.style.outline='2px solid var(--ok)'; }
+      else { z.style.outline='2px solid var(--bad)'; }
+    });
+    const fb=$('#fbNorm');
+    fb.textContent = ok===6?'¡Excelente! Asociaciones correctas.':`Aciertos: ${ok}/6. Revisa las definiciones.`;
+    fb.style.color = ok===6?'var(--ok)':'var(--bad)';
+  }
+  function resetNorm(){
+    $('#fbNorm').textContent=''; $('#fbNorm').style.color='';
+    $$('#normZones .dropzone').forEach(z=>{ z.style.outline='none'; const tag=z.querySelector('.tag'); if(tag) $('#normPool').appendChild(tag); });
+    renderNorm();
+  }
+
+  /* ----------------- Juego 4: SOP Multi-selección ----------------- */
+  const sopOptions = [
+    {txt:'Detener el equipo de forma remota (parada segura)', ok:true},
+    {txt:'Desbloquear la ruta de inmediato', ok:false},
+    {txt:'Activar señal de advertencia y bloquear ruta', ok:true},
+    {txt:'Coordinar mantenimiento y seguridad', ok:true},
+    {txt:'Ignorar el evento si el CAEX se detuvo solo', ok:false}
+  ];
+  function renderSOP(){
+    const box = $('#sopMulti'); box.innerHTML='';
+    sopOptions.forEach((o,i)=>{
+      const div=document.createElement('div'); div.className='q';
+      div.innerHTML = `<label class="opt"><input type="checkbox" value="${i}"> <span>${o.txt}</span></label>`;
+      box.appendChild(div);
+    });
+  }
+  function checkSOP(){
+    let ok=0,wrong=0;
+    sopOptions.forEach((o,i)=>{
+      const chk = document.querySelector(`#sopMulti input[value="${i}"]`);
+      const label = chk.closest('label');
+      if(chk.checked && o.ok){ ok++; label.classList.add('correct'); }
+      else if(chk.checked && !o.ok){ wrong++; label.classList.add('wrong'); }
+      else if(!chk.checked && o.ok){ wrong++; }
+    });
+    const total = sopOptions.filter(o=>o.ok).length;
+    const fb=$('#fbSOP');
+    fb.textContent = `Correctas: ${ok}/${total}. ${wrong? 'Revisa las marcadas/omitidas.':''}`;
+    fb.style.color = wrong? 'var(--bad)':'var(--ok)';
+    $$('#sopMulti input').forEach(i=>i.disabled=true);
+  }
+  function resetSOP(){
+    $('#fbSOP').textContent='';
+    $$('#sopMulti .opt').forEach(l=>l.classList.remove('correct','wrong'));
+    $('#sopMulti').innerHTML=''; renderSOP();
+  }
+
+  /* ----------------- Juego 5: Prioriza riesgos ----------------- */
+  const riesgos = [
+    'Persona no autorizada en zona autónoma',
+    'Colisión inminente detectada por sensores',
+    'Pérdida de red prolongada',
+    'Obstáculo en cruce principal',
+    'Clima adverso severo (niebla intensa)'
+  ];
+  const ordenCorrecto5 = [
+    'Persona no autorizada en zona autónoma',
+    'Colisión inminente detectada por sensores',
+    'Pérdida de red prolongada',
+    'Obstáculo en cruce principal',
+    'Clima adverso severo (niebla intensa)'
+  ];
+  function renderOrden5(){
+    const ol=$('#ordenar5'); ol.innerHTML='';
+    riesgos.slice().sort(()=>Math.random()-0.5).forEach(a=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=a;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ol.appendChild(li);
+    });
+    ol.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging=ol.querySelector('.dragging');
+      const after=[...ol.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ol.insertBefore(dragging, after); else ol.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden5(){
+    const actual=$$('#ordenar5 li').map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===ordenCorrecto5[i]);
+    const fb=$('#fbOrden5');
+    if(ok){ fb.textContent='¡Prioridad correcta!'; fb.style.color='var(--ok)'; }
+    else { fb.textContent='Revisa: Persona → Colisión → Red → Obstáculo → Clima.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ----------------- Quiz (15) ----------------- */
+  const preguntas=[
+    {q:'Propósito central de los protocolos de seguridad:', opts:['Evitar multas','Garantizar operación sin riesgos para personas, equipos y medio ambiente','Acelerar la producción a cualquier costo'], ok:1},
+    {q:'DS 132 Art. 56 refiere a:', opts:['Señalización y demarcación de rutas','Velocidad máxima de CAEX','Uso de EPP'], ok:0},
+    {q:'ISO 17757 establece:', opts:['Ciberseguridad TI','Requisitos de seguridad para maquinaria minera autónoma y HMI','Reglas de transporte urbano'], ok:1},
+    {q:'Ejemplo de “zona de seguridad virtual” es:', opts:['Área de estacionamiento','No-Go Zone configurada en software','Patio de camiones'], ok:1},
+    {q:'Parada de emergencia debe:', opts:['Ser probada regularmente y documentada','Usarse solo una vez por año','Permanecer deshabilitada'], ok:0},
+    {q:'Control de accesos correcto:', opts:['Credenciales únicas y registro por operador','Usuarios compartidos','Claves genéricas'], ok:0},
+    {q:'Antes de aproximarse a un CAEX en terreno se debe:', opts:['Desactivar la autonomía','Subir la tolva','Aumentar velocidad'], ok:0},
+    {q:'LOTO significa:', opts:['Lock Out Tag Out (bloqueo y etiquetado)','Level Of Truck Operation','Loss Of Time Operations'], ok:0},
+    {q:'Ingreso a zona autónoma: primer paso es:', opts:['Registrar ingreso en bitácora','Solicitar autorización al Centro de Control','Señalizar y usar EPP'], ok:1},
+    {q:'Desbloqueo de rutas requiere:', opts:['Verificar ruta libre y condiciones seguras','Solo quitar el cono','Aviso posterior al turno'], ok:0},
+    {q:'Ante falla crítica en CAEX el controlador debe:', opts:['Detener de forma remota, bloquear y coordinar mantenimiento','Esperar a que pase','Enviar a botadero'], ok:0},
+    {q:'Señalización en software incluye:', opts:['Iconos de peligro y alertas visuales/sonoras','Carteles físicos','EPP obligatorio'], ok:0},
+    {q:'Simulaciones de riesgo buscan:', opts:['Reducir tiempos de respuesta y errores','Aumentar carga útil','Eliminar documentación'], ok:0},
+    {q:'Responsabilidad clave del controlador:', opts:['Aplicar protocolos de emergencia de inmediato','Modificar sensores en terreno','Operar palas'], ok:0},
+    {q:'Checklist de seguridad del turno considera:', opts:['Comunicaciones, sensores, zonas virtuales, rutas alternativas y e-stop','Solamente nivel de combustible','Temperatura ambiente'], ok:0},
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join('');
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    const fb = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').textContent = fb;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+
+  // Enlaces + Init
+  $('#checkOrden1').addEventListener('click', checkOrden1);
+  $('#regenOrden1').addEventListener('click', renderOrden1);
+  $('#checkClasif2').addEventListener('click', checkClasif2);
+  $('#resetClasif2').addEventListener('click', resetClasif2);
+  $('#checkNorm').addEventListener('click', checkNorm);
+  $('#resetNorm').addEventListener('click', resetNorm);
+  $('#checkSOP').addEventListener('click', checkSOP);
+  $('#resetSOP').addEventListener('click', resetSOP);
+  $('#checkOrden5').addEventListener('click', checkOrden5);
+  $('#regenOrden5').addEventListener('click', renderOrden5);
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s5_protocolos', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s5_protocolos', state); calcProgress(); });
+
+  renderOrden1();
+  renderClasif2();
+  renderNorm();
+  renderSOP();
+  renderOrden5();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
