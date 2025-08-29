@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Sección 2.2 · Reventón de Neumáticos · Operador de Camión de Extracción</title>
+  <meta name="description" content="Aplicación web didáctica 100% texto: procedimiento ante reventón de neumáticos en frente de carguío, roles y comunicaciones. Incluye 5 juegos con retroalimentación y un quiz de 20 preguntas. Sin imágenes."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; /* Verde fuerte (positivas) */
+      --bad:#FF1744; /* Rojo fuerte (negativas) */
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+    .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+    .timer{font-weight:700; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.25)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <h1>Anupro360 · Sección 2.2 · Reventón de Neumáticos</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Actuación Segura ante Reventón de Neumáticos en Frente de Carguío</h2>
+    <p class="note"><strong>Aprenderás a:</strong> reaccionar en los primeros 30 segundos, comunicar por radio a <em>supervisor de sector</em> y <em>despacho central</em>, mantenerte en cabina, coordinar protección con pala, segregar área, detener carguío, verificar estado de salud, coordinar personal de neumáticos, vaciar carga, retirar equipos no involucrados, evaluar desde zona segura y reanudar en forma controlada.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- CONTENIDO DIDÁCTICO AMPLIADO -->
+  <section class="card">
+    <h3>1) Primeros 30 segundos del operador (reacción crítica)</h3>
+    <ul>
+      <li><strong>Detén el equipo de inmediato.</strong> Evita desplazamientos que puedan dañar rim/talón o generar un segundo reventón.</li>
+      <li><strong>Comunica por radio al supervisor del sector</strong> que hubo reventón e indica <em>ubicación exacta</em>.</li>
+      <li><strong>Informa a despacho central</strong> usando la frecuencia establecida e indica <em>posición</em>.</li>
+      <li><strong>Permanecer en cabina</strong> con cinturón abrochado hasta que el supervisor del sector tome control.</li>
+    </ul>
+    <details>
+      <summary>Plantilla de mensaje radial (operador)</summary>
+      <p><em>“Supervisor sector, de Camión 123: reventón de neumático en frente de carguío norte, coordenada X/Y. Equipo detenido, mantengo cabina. Solicito instrucciones. Cambio.”</em></p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="primeros30">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>2) Rol del operador del equipo de carguío</h3>
+    <ul>
+      <li><strong>Girar la pala para proteger la cabina del camión</strong> ante posibilidad de <em>nuevo reventón</em>.</li>
+      <li><strong>Detener operaciones de carguío inmediatamente</strong> al tener noticia del evento.</li>
+    </ul>
+    <details>
+      <summary>Justificación técnica</summary>
+      <p>La pala como escudo reduce proyección de fragmentos. La detención evita vibraciones y tránsito innecesario cerca del neumático comprometido.</p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="rolCarguio">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>3) Rol del supervisor del sector</h3>
+    <ul>
+      <li><strong>Detiene el carguío</strong> y <strong>verifica el estado de salud</strong> de los operadores.</li>
+      <li>Si procede, <strong>activa procedimiento de emergencia</strong>.</li>
+      <li><strong>Segrega el área con conos</strong> y <strong>avisa por frecuencia abierta</strong> para evitar ingresos al sector.</li>
+      <li><strong>Coordina retiro de equipos</strong> no involucrados.</li>
+    </ul>
+    <details>
+      <summary>Checklist del supervisor de sector</summary>
+      <ol>
+        <li>Paralización segura del frente.</li>
+        <li>Evaluación de lesiones y primeros auxilios.</li>
+        <li>Corte de tránsito y demarcación (conos/cintas).</li>
+        <li>Comunicación abierta para despejar la zona.</li>
+      </ol>
+    </details>
+    <div class="flex"><button class="btn" data-complete="supSector">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>4) Rol del supervisor de despacho central</h3>
+    <ul>
+      <li><strong>Coordina con supervisor de sector</strong> la presencia de <em>personal de neumáticos</em> en sitio.</li>
+      <li><strong>Gestiona el vaciado de la carga</strong> del camión en la frente de carguío si corresponde.</li>
+      <li>Soporta <strong>reprogramación de flota</strong> y rutas alternativas.</li>
+    </ul>
+    <details>
+      <summary>Plantilla de coordinación (despacho)</summary>
+      <p><em>“Personal de neumáticos a frente norte, evento reventón camión 123. Supervisión en sitio. Preparar evaluación sin ingresar a zona de carguío. Cambio.”</em></p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="supDespacho">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>5) Personal de neumáticos: evaluación y salida a zona segura</h3>
+    <ul>
+      <li>Al llegar, <strong>evalúan junto al supervisor del sector</strong> <em>sin ingresar</em> al área de carguío.</li>
+      <li>Si procede, <strong>coordinan con el operador del camión</strong> la <em>salida del equipo</em> a un lugar seguro para chequeo.</li>
+    </ul>
+    <details>
+      <summary>Notas operativas</summary>
+      <p>La evaluación <em>fuera de zona de riesgo</em> reduce exposición a proyectiles y colapsos. El desplazamiento a lugar seguro debe ser lento, en línea recta y con escolta si se requiere.</p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="neumaticos">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>6) Reanudación controlada de la operación</h3>
+    <ul>
+      <li>Una vez normalizada la situación, <strong>supervisor del sector</strong> comunica por <em>frecuencia abierta</em> la <strong>reanudación</strong>.</li>
+      <li>Despacho actualiza asignaciones y rutas si hubo desvíos.</li>
+    </ul>
+    <details>
+      <summary>Condiciones mínimas para reanudar</summary>
+      <ul>
+        <li>Área segregada y limpia.</li>
+        <li>Operadores sin lesiones y aptos.</li>
+        <li>Equipo verificado por personal competente.</li>
+      </ul>
+    </details>
+    <div class="flex"><button class="btn" data-complete="reanudar">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- JUEGOS (5) -->
+  <section class="card" id="juego1">
+    <h3>7) Juego 1 · Ordena los pasos del operador tras el reventón</h3>
+    <p>Arrastra para ordenar los pasos correctos (primeros 30 segundos).</p>
+    <ul class="sortable dropzone" id="ordenar"></ul>
+    <div class="flex" style="margin-top:8px">
+      <button class="btn-sec" id="checkOrden">Evaluar</button>
+      <span id="fbOrden" class="chip2" aria-live="polite"></span>
+      <button class="btn-ghost" id="regenOrden">Mezclar</button>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <section class="card" id="juego2">
+    <h3>8) Juego 2 · ¿Correcto o Prohibido?</h3>
+    <p>Clasifica cada tarjeta: <strong>Correcto</strong> o <strong>Prohibido</strong>. Feedback verde/rojo inmediato.</p>
+    <div class="zones">
+      <div>
+        <h4>Correcto</h4>
+        <div id="zoneOK" class="zone" aria-label="Zona Correcto"></div>
+      </div>
+      <div>
+        <h4>Prohibido</h4>
+        <div id="zoneBAD" class="zone" aria-label="Zona Prohibido"></div>
+      </div>
+    </div>
+    <div id="pool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif">Reiniciar</button>
+      <span id="fbClasif" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <section class="card" id="juego3">
+    <h3>9) Juego 3 · Completa la frase (arrastrar a huecos)</h3>
+    <p>Arrastra los términos correctos a los espacios subrayados.</p>
+    <p id="fillSentence" style="line-height:1.9"></p>
+    <div id="fillPool" style="margin-top:8px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkFill">Evaluar</button>
+      <button class="btn-ghost" id="resetFill">Reiniciar</button>
+      <span id="fbFill" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego3">Marcar juego 3 ✓</button></div>
+  </section>
+
+  <section class="card" id="juego4">
+    <h3>10) Juego 4 · Relaciona roles con responsabilidades</h3>
+    <p>Arrastra cada tarjeta al rol que corresponde.</p>
+    <div class="zones" style="grid-template-columns:1fr 1fr">
+      <div>
+        <h4>Operador Camión</h4>
+        <div id="role_camion" class="zone"></div>
+      </div>
+      <div>
+        <h4>Operador Carguío</h4>
+        <div id="role_carguio" class="zone"></div>
+      </div>
+      <div>
+        <h4>Supervisor Sector</h4>
+        <div id="role_sector" class="zone"></div>
+      </div>
+      <div>
+        <h4>Supervisor Despacho</h4>
+        <div id="role_despacho" class="zone"></div>
+      </div>
+      <div>
+        <h4>Personal Neumáticos</h4>
+        <div id="role_neumaticos" class="zone"></div>
+      </div>
+    </div>
+    <div id="rolesPool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkRoles">Evaluar</button>
+      <button class="btn-ghost" id="resetRoles">Reiniciar</button>
+      <span id="fbRoles" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego4">Marcar juego 4 ✓</button></div>
+  </section>
+
+  <section class="card" id="juego5">
+    <h3>11) Juego 5 · Decisiones en 10 segundos</h3>
+    <p>Lee el escenario y elige <strong>la mejor acción</strong> antes de que el tiempo llegue a 0.</p>
+    <div class="timer" id="timer">Tiempo: 10</div>
+    <div id="timedQuestion" style="margin-top:8px"></div>
+    <div id="timedOpts" style="margin-top:8px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="nextTimed">Siguiente</button>
+      <span id="fbTimed" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego5">Marcar juego 5 ✓</button></div>
+  </section>
+
+  <!-- QUIZ 20 PREGUNTAS -->
+  <section class="card">
+    <h3>12) Quiz final (20 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+
+  <!-- REFLEXIÓN -->
+  <section class="card">
+    <h3>13) Reflexión final</h3>
+    <textarea id="reflexion" rows="3" placeholder="En 2-3 líneas: ¿por qué permanecer en cabina reduce el riesgo tras un reventón?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="note">Se guarda sólo en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_s22_reventon', {
+    done:{primeros30:false,rolCarguio:false,supSector:false,supDespacho:false,neumaticos:false,reanudar:false,juego1:false,juego2:false,juego3:false,juego4:false,juego5:false,quiz:false},
+    reflexion:''
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_s22_reventon', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+
+  /* ----------------- Juego 1: Ordenar pasos (operador) ----------------- */
+  const pasosOperador = [
+    'Detener completamente el equipo',
+    'Comunicar al supervisor del sector indicando ubicación',
+    'Avisar a despacho central con la posición',
+    'Permanecer en cabina hasta arribo del supervisor'
+  ];
+  function renderOrdenar(){
+    const ul = $('#ordenar'); ul.innerHTML='';
+    const mix = pasosOperador.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden(){
+    const lis = $$('#ordenar li');
+    const actual = lis.map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===pasosOperador[i]);
+    const fb = $('#fbOrden');
+    if(ok){ fb.textContent='¡Correcto! Orden seguro aplicado.'; fb.style.color='var(--ok)'; }
+    else{ fb.textContent='Aún no. Revisa el orden: detener → supervisor → despacho → permanecer en cabina.'; fb.style.color='var(--bad)'; }
+  }
+
+  /* ----------------- Juego 2: Clasificación ----------------- */
+  const itemsClasif = [
+    {txt:'Permanecer en cabina hasta que llegue el supervisor.', tipo:'OK'},
+    {txt:'Bajar a revisar el neumático inmediatamente.', tipo:'BAD'},
+    {txt:'Girar la pala para proteger cabina del camión.', tipo:'OK'},
+    {txt:'Segregar el área con conos y avisar por frecuencia abierta.', tipo:'OK'},
+    {txt:'Continuar el carguío para no atrasar la producción.', tipo:'BAD'},
+    {txt:'Evaluar con personal de neumáticos sin ingresar al área de carguío.', tipo:'OK'},
+    {txt:'Retirar equipos no involucrados del frente.', tipo:'OK'},
+    {txt:'Vaciar la carga del camión en la frente si corresponde.', tipo:'OK'},
+    {txt:'Ignorar estado de salud de operadores si hablan por radio.', tipo:'BAD'},
+    {txt:'Reanudar operación solo cuando el supervisor lo comunique.', tipo:'OK'}
+  ];
+  function renderClasif(){
+    const pool = $('#pool'); pool.innerHTML='';
+    const shuffled = itemsClasif.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach((it)=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneOK','zoneBAD','pool'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkClasif(){
+    let ok=0, total=itemsClasif.length;
+    const zOK = $('#zoneOK'); const zBAD = $('#zoneBAD');
+    [...zOK.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='OK'){ ok++; t.style.outline=`2px solid var(--ok)`; } else { t.style.outline=`2px solid var(--bad)`; }});
+    [...zBAD.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='BAD'){ ok++; t.style.outline=`2px solid var(--ok)`; } else { t.style.outline=`2px solid var(--bad)`; }});
+    const fb=$('#fbClasif'); const pct=Math.round(ok/total*100);
+    fb.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+    fb.style.color = ok===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetClasif(){ $('#zoneOK').innerHTML=''; $('#zoneBAD').innerHTML=''; renderClasif(); }
+
+  /* ----------------- Juego 3: Fill-in-the-blanks ----------------- */
+  const fillTargets = [
+    {slot:'[1]', word:'pala'},
+    {slot:'[2]', word:'frecuencia abierta'},
+    {slot:'[3]', word:'conos'},
+    {slot:'[4]', word:'neumáticos'},
+    {slot:'[5]', word:'vaciado de la carga'}
+  ];
+  const fillTextTemplate = 'Tras el reventón, el operador de carguío gira la <u data-slot="[1]" class="dropSlot">[1]</u> para proteger la cabina; el supervisor del sector detiene el carguío y avisa por <u data-slot="[2]" class="dropSlot">[2]</u>, segrega el área con <u data-slot="[3]" class="dropSlot">[3]</u> y coordina la llegada de personal de <u data-slot="[4]" class="dropSlot">[4]</u>. En conjunto con despacho central, gestionan el <u data-slot="[5]" class="dropSlot">[5]</u> si corresponde.';
+  function renderFill(){
+    $('#fillSentence').innerHTML = fillTextTemplate;
+    const pool = $('#fillPool'); pool.innerHTML='';
+    fillTargets.slice().sort(()=>Math.random()-0.5).forEach(({word})=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=word; tag.draggable=true;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    $$('.dropSlot').forEach(slot=>{
+      slot.addEventListener('dragover', e=>{ e.preventDefault(); });
+      slot.addEventListener('drop', e=>{
+        const dragging=document.querySelector('.dragging'); if(!dragging) return;
+        slot.textContent = dragging.textContent; slot.dataset.filled=dragging.textContent; dragging.remove();
+      });
+    });
+  }
+  function checkFill(){
+    let ok=0;
+    $$('.dropSlot').forEach(slot=>{
+      const key = slot.getAttribute('data-slot');
+      const target = fillTargets.find(t=>t.slot===key)?.word;
+      if((slot.dataset.filled||'').trim().toLowerCase() === target.toLowerCase()){
+        ok++; slot.style.outline='2px solid var(--ok)'; slot.style.borderRadius='6px'; 
+      }else{
+        slot.style.outline='2px solid var(--bad)'; slot.style.borderRadius='6px';
+      }
+    });
+    const fb=$('#fbFill');
+    fb.textContent = ok===fillTargets.length ? '¡Perfecto! Frase completada.' : `Correctas: ${ok}/${fillTargets.length}.`;
+    fb.style.color = ok===fillTargets.length ? 'var(--ok)' : 'var(--bad)';
+  }
+  function resetFill(){ renderFill(); $('#fbFill').textContent=''; }
+
+  /* ----------------- Juego 4: Match roles ----------------- */
+  const rolesItems = [
+    {txt:'Permanecer en cabina y comunicar ubicación', role:'camion'},
+    {txt:'Girar la pala para proteger cabina', role:'carguio'},
+    {txt:'Detener carguío y evaluar salud', role:'sector'},
+    {txt:'Segregar el área y avisar por frecuencia abierta', role:'sector'},
+    {txt:'Coordinar personal de neumáticos', role:'despacho'},
+    {txt:'Vaciado de la carga si procede', role:'despacho'},
+    {txt:'Evaluar desde zona segura', role:'neumaticos'},
+    {txt:'Coordinar salida del camión a lugar seguro', role:'neumaticos'}
+  ];
+  const roleMap = {
+    'role_camion':'camion',
+    'role_carguio':'carguio',
+    'role_sector':'sector',
+    'role_despacho':'despacho',
+    'role_neumaticos':'neumaticos'
+  };
+  function renderRoles(){
+    $('#role_camion').innerHTML=''; $('#role_carguio').innerHTML=''; $('#role_sector').innerHTML=''; $('#role_despacho').innerHTML=''; $('#role_neumaticos').innerHTML=''; $('#rolesPool').innerHTML='';
+    rolesItems.slice().sort(()=>Math.random()-0.5).forEach(it=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.role=it.role;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      $('#rolesPool').appendChild(tag);
+    });
+    Object.keys(roleMap).forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{ e.preventDefault(); });
+      z.addEventListener('drop', e=>{
+        const dragging=document.querySelector('.dragging'); if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkRoles(){
+    let ok=0, total=rolesItems.length;
+    Object.keys(roleMap).forEach(id=>{
+      const expected = roleMap[id];
+      [...document.getElementById(id).querySelectorAll('.tag')].forEach(t=>{
+        if(t.dataset.role===expected){ ok++; t.style.outline='2px solid var(--ok)'; } else { t.style.outline='2px solid var(--bad)'; }
+      });
+    });
+    const fb=$('#fbRoles'); const pct=Math.round(ok/total*100);
+    fb.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+    fb.style.color = ok===total ? 'var(--ok)' : 'var(--bad)';
+  }
+  function resetRoles(){ renderRoles(); $('#fbRoles').textContent=''; }
+
+  /* ----------------- Juego 5: Timed decisions ----------------- */
+  const timedQuestions = [
+    {q:'Reventón en el frente; el camión está estable. ¿Primera acción?', opts:['Bajar a revisar el daño','Detener completamente el equipo','Moverse hacia zona de estacionamiento'], ok:1},
+    {q:'Tras detenerte, ¿qué comunicación priorizas?', opts:['Llamar a familia','A supervisor del sector con ubicación','Al operador de carguío por chat'], ok:1},
+    {q:'El supervisor no ha llegado aún. ¿Qué haces?', opts:['Permanecer en cabina','Bajar y poner conos','Caminar hacia la pala'], ok:0},
+    {q:'Llegan neumáticos. ¿Cómo evalúan?', opts:['Ingresan a zona de carguío rápidamente','Evalúan junto al supervisor sin ingresar','Piden al operador que baje la llanta'], ok:1},
+    {q:'Al normalizarse, ¿quién comunica reanudación?', opts:['Operador de camión','Supervisor de sector','Despacho central'], ok:1}
+  ];
+  let timedIndex=0, timedScore=0, remaining=10, timerId=null;
+  function startTimer(){
+    remaining=10; $('#timer').textContent='Tiempo: '+remaining;
+    clearInterval(timerId);
+    timerId = setInterval(()=>{
+      remaining--; $('#timer').textContent='Tiempo: '+remaining;
+      if(remaining<=0){ clearInterval(timerId); lockTimed(false); $('#fbTimed').textContent='Tiempo agotado.'; $('#fbTimed').style.color='var(--bad)'; }
+    },1000);
+  }
+  function renderTimed(){
+    const t = timedQuestions[timedIndex];
+    $('#timedQuestion').innerHTML = '<strong>Escenario '+(timedIndex+1)+'</strong>: '+t.q;
+    const wrap = $('#timedOpts'); wrap.innerHTML='';
+    t.opts.forEach((txt,i)=>{
+      const btn=document.createElement('button'); btn.className='btn-ghost'; btn.textContent=txt;
+      btn.addEventListener('click', ()=>{ lockTimed(i===t.ok); });
+      wrap.appendChild(btn);
+    });
+    $('#fbTimed').textContent=''; startTimer();
+  }
+  function lockTimed(correct){
+    clearInterval(timerId);
+    const t = timedQuestions[timedIndex];
+    const buttons = $$('#timedOpts button');
+    buttons.forEach((b,i)=>{
+      b.disabled=true;
+      if(i===t.ok){ b.classList.add('btn-sec'); }
+      if(correct && i===t.ok){ b.style.outline='2px solid var(--ok)'; }
+      if(!correct && i!==t.ok && b.textContent){ /* no-op */ }
+    });
+    if(correct){ timedScore++; $('#fbTimed').textContent='¡Correcto!'; $('#fbTimed').style.color='var(--ok)'; }
+    else { $('#fbTimed').textContent='Respuesta incorrecta o fuera de tiempo.'; $('#fbTimed').style.color='var(--bad)'; }
+  }
+  $('#nextTimed').addEventListener('click', ()=>{
+    if(timedIndex<timedQuestions.length-1){ timedIndex++; renderTimed(); }
+    else { $('#fbTimed').textContent = `Puntaje final: ${timedScore}/${timedQuestions.length}.`; $('#fbTimed').style.color = timedScore===timedQuestions.length?'var(--ok)':'var(--bad)'; }
+  });
+
+  /* ----------------- Quiz 20 preguntas ----------------- */
+  const preguntas=[
+    {q:'Al producirse un reventón, la primera acción del operador es…', opts:['Avisar por radio','Detener completamente el equipo','Bajar a revisar'], ok:1},
+    {q:'Tras detenerse, el operador debe…', opts:['Comunicar al supervisor del sector indicando ubicación','Esperar 10 minutos sin avisar','Moverse por su cuenta a zona segura'], ok:0},
+    {q:'El aviso a despacho central debe incluir…', opts:['La posición del camión','Estado del clima','Modelo del neumático'], ok:0},
+    {q:'Hasta que llegue el supervisor del sector, el operador…', opts:['Permanece en cabina','Baja a poner conos','Se traslada a la pala'], ok:0},
+    {q:'El operador del carguío debe…', opts:['Seguir cargando a menor ritmo','Girar la pala para proteger cabina y detener carguío','Pedir al operador que baje'], ok:1},
+    {q:'El supervisor del sector, al llegar, primero…', opts:['Coordina reanudación inmediata','Verifica estado de salud','Saca fotos para el reporte'], ok:1},
+    {q:'Al segregar el área, corresponde…', opts:['Usar conos y comunicar por frecuencia abierta','Solo cinta plástica sin avisar','Nada si no hay tránsito'], ok:0},
+    {q:'Equipos no involucrados deben…', opts:['Permanecer en espera en el frente','Retirarse del frente','Acercarse para apoyar sin instrucción'], ok:1},
+    {q:'El despacho central coordina…', opts:['Personal de neumáticos y vaciado de carga si corresponde','Entrega de EPP','Cambio de neumáticos inmediato en el lugar'], ok:0},
+    {q:'El personal de neumáticos evalúa…', opts:['Ingresando a la zona de carguío','Desde zona segura con el supervisor','Por teléfono'], ok:1},
+    {q:'La salida del camión a zona segura…', opts:['Se coordina con operador y neumáticos','Se realiza a máxima velocidad','La decide el operador solo'], ok:0},
+    {q:'Reanudar operaciones corresponde comunicarlo…', opts:['Al supervisor de sector por frecuencia abierta','Al operador de carguío por WhatsApp','Al jefe de guardia por correo'], ok:0},
+    {q:'Permanecer en cabina reduce riesgo porque…', opts:['Evita exposición a proyectiles y colapsos','Permite ver el daño de cerca','Ahorra combustible'], ok:0},
+    {q:'Girar la pala funciona como…', opts:['Escudo protector ante proyección de fragmentos','Señal de reanudación','Apoyo para levantar el camión'], ok:0},
+    {q:'La comunicación por frecuencia abierta busca…', opts:['Llamar a una sola persona','Evitar ingreso de equipos al sector','Anunciar el fin de turno'], ok:1},
+    {q:'Retirar equipos no involucrados…', opts:['Reduce congestión y riesgo en el frente','Es opcional','Solo aplica de día'], ok:0},
+    {q:'Si hay lesionados, el supervisor del sector…', opts:['Aplica procedimiento de emergencia','Espera al servicio externo sin hacer nada','Pide a operadores que se autogestionen'], ok:0},
+    {q:'El vaciado de carga en la frente…', opts:['Debe coordinarse por despacho central','Lo decide el operador del camión solo','Nunca se realiza'], ok:0},
+    {q:'La evaluación de neumáticos se realiza…', opts:['Ingresando con el camión en marcha','Sin ingresar al área de carguío','Con el camión elevando la caja'], ok:1},
+    {q:'La reprogramación de flota y rutas alternativas es parte del rol…', opts:['Del operador de carguío','Del supervisor de despacho central','Del personal de neumáticos'], ok:1}
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join('');
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    const fb = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').textContent = fb;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)':'var(--bad)';
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+    });
+    $('#quizFeedback').textContent='';
+  }
+
+  // Enlaces UI
+  $('#checkOrden').addEventListener('click', checkOrden);
+  $('#regenOrden').addEventListener('click', renderOrdenar);
+  $('#checkClasif').addEventListener('click', checkClasif);
+  $('#resetClasif').addEventListener('click', resetClasif);
+  $('#checkFill').addEventListener('click', checkFill);
+  $('#resetFill').addEventListener('click', resetFill);
+  $('#checkRoles').addEventListener('click', checkRoles);
+  $('#resetRoles').addEventListener('click', resetRoles);
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s22_reventon', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s22_reventon', state); calcProgress(); });
+
+  /* Reflexión */
+  const ref = $('#reflexion'); ref.value = state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_s22_reventon', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
+
+  /* Init */
+  renderOrdenar();
+  renderClasif();
+  renderFill();
+  renderRoles();
+  renderTimed();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
