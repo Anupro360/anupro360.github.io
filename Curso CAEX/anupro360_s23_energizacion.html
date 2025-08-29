@@ -3,13 +3,12 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Anupro360 · Sección 2.2 · Reventón de Neumáticos · Operador de Camión de Extracción</title>
-  <meta name="description" content="Aplicación web didáctica 100% texto: procedimiento ante reventón de neumáticos en frente de carguío, roles y comunicaciones. Incluye 5 juegos con retroalimentación y un quiz de 20 preguntas. Sin imágenes."/>
+  <title>Anupro360 · Sección 2.3 · Energización del Equipo · Operador de Camión de Extracción</title>
+  <meta name="description" content="Aplicación web didáctica 100% texto: procedimiento ante energización del equipo por contacto o inducción con líneas de alta tensión. Incluye 5 juegos con retroalimentación y un quiz de 20 preguntas. Sin imágenes."/>
   <style>
     :root{
       --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
-      --ok:#00C853; /* Verde fuerte (positivas) */
-      --bad:#FF1744; /* Rojo fuerte (negativas) */
+      --ok:#00C853; --bad:#FF1744;
     }
     *{box-sizing:border-box}
     body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
@@ -61,7 +60,7 @@
 <header>
   <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
     <div class="brand">
-      <h1>Anupro360 · Sección 2.2 · Reventón de Neumáticos</h1>
+      <h1>Anupro360 · Sección 2.3 · Energización del Equipo</h1>
     </div>
     <div class="chip" id="badge">Progreso 0%</div>
   </div>
@@ -69,8 +68,8 @@
 
 <section class="hero">
   <div class="wrap">
-    <h2>Actuación Segura ante Reventón de Neumáticos en Frente de Carguío</h2>
-    <p class="note"><strong>Aprenderás a:</strong> reaccionar en los primeros 30 segundos, comunicar por radio a <em>supervisor de sector</em> y <em>despacho central</em>, mantenerte en cabina, coordinar protección con pala, segregar área, detener carguío, verificar estado de salud, coordinar personal de neumáticos, vaciar carga, retirar equipos no involucrados, evaluar desde zona segura y reanudar en forma controlada.</p>
+    <h2>Actuación Segura ante Energización por Líneas de Alta Tensión</h2>
+    <p class="note"><strong>Aprenderás a:</strong> reconocer contacto directo o por inducción, activar botón de emergencia (<em>TRACKING</em>), comunicar por radio datos críticos (nombre, ubicación exacta, equipo, tipo de emergencia, personas y requerimientos), usar <em>DISPATCH</em> si no hay radio, verificar ausencia de energía antes de evacuar, evitar movimiento del camión, posicionar vehículo de apoyo para extracción sin <em>hacer tierra</em> y aislar el equipo 24 h.</p>
     <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
   </div>
 </section>
@@ -78,101 +77,72 @@
 <main class="wrap grid" id="app" role="main">
   <!-- CONTENIDO DIDÁCTICO AMPLIADO -->
   <section class="card">
-    <h3>1) Primeros 30 segundos del operador (reacción crítica)</h3>
+    <h3>1) Detección y primera comunicación (operador)</h3>
     <ul>
-      <li><strong>Detén el equipo de inmediato.</strong> Evita desplazamientos que puedan dañar rim/talón o generar un segundo reventón.</li>
-      <li><strong>Comunica por radio al supervisor del sector</strong> que hubo reventón e indica <em>ubicación exacta</em>.</li>
-      <li><strong>Informa a despacho central</strong> usando la frecuencia establecida e indica <em>posición</em>.</li>
-      <li><strong>Permanecer en cabina</strong> con cinturón abrochado hasta que el supervisor del sector tome control.</li>
+      <li><strong>Identifica el evento:</strong> contacto directo o <em>inducción</em> con líneas de alta tensión.</li>
+      <li><strong>Acciona el botón rojo del sistema TRACKING</strong> y <strong>avisa por radio</strong> al instante.</li>
+      <li><strong>Entrega datos críticos</strong>: nombre, ubicación exacta, equipo que operas, tipo de emergencia, cantidad de personas involucradas y ayuda requerida.</li>
+      <li>Si <strong>no hay comunicación radial</strong>, <strong>activa emergencia en DISPATCH</strong> y envía <em>mensaje escrito</em> en la pantalla si es posible.</li>
     </ul>
     <details>
-      <summary>Plantilla de mensaje radial (operador)</summary>
-      <p><em>“Supervisor sector, de Camión 123: reventón de neumático en frente de carguío norte, coordenada X/Y. Equipo detenido, mantengo cabina. Solicito instrucciones. Cambio.”</em></p>
+      <summary>Plantilla de mensaje radial</summary>
+      <p><em>“Supervisor sector/Control, de Camión 123: energización por contacto/inducción con línea AT en rampa norte, punto X/Y. Botón rojo TRACKING activado. Opero Camión 793, 1 persona a bordo, solicito evaluación eléctrica y apoyo para extracción. Mantengo cabina. Cambio.”</em></p>
     </details>
-    <div class="flex"><button class="btn" data-complete="primeros30">Marcar leído ✓</button></div>
+    <div class="flex"><button class="btn" data-complete="deteccion">Marcar leído ✓</button></div>
   </section>
 
   <section class="card">
-    <h3>2) Rol del operador del equipo de carguío</h3>
+    <h3>2) Verificación de energía y decisión de evacuación (supervisor sector)</h3>
     <ul>
-      <li><strong>Girar la pala para proteger la cabina del camión</strong> ante posibilidad de <em>nuevo reventón</em>.</li>
-      <li><strong>Detener operaciones de carguío inmediatamente</strong> al tener noticia del evento.</li>
+      <li><strong>Asegura que el camión no está en contacto con cables energizados</strong>.</li>
+      <li><strong>Solo cuando el equipo esté libre de energía</strong>, inicia la <strong>evacuación del operador</strong>.</li>
+      <li><strong>El operador no mueve el camión</strong>, excepto si el supervisor del sector se lo indica expresamente.</li>
     </ul>
     <details>
-      <summary>Justificación técnica</summary>
-      <p>La pala como escudo reduce proyección de fragmentos. La detención evita vibraciones y tránsito innecesario cerca del neumático comprometido.</p>
-    </details>
-    <div class="flex"><button class="btn" data-complete="rolCarguio">Marcar leído ✓</button></div>
-  </section>
-
-  <section class="card">
-    <h3>3) Rol del supervisor del sector</h3>
-    <ul>
-      <li><strong>Detiene el carguío</strong> y <strong>verifica el estado de salud</strong> de los operadores.</li>
-      <li>Si procede, <strong>activa procedimiento de emergencia</strong>.</li>
-      <li><strong>Segrega el área con conos</strong> y <strong>avisa por frecuencia abierta</strong> para evitar ingresos al sector.</li>
-      <li><strong>Coordina retiro de equipos</strong> no involucrados.</li>
-    </ul>
-    <details>
-      <summary>Checklist del supervisor de sector</summary>
+      <summary>Checklist rápido (supervisor de sector)</summary>
       <ol>
-        <li>Paralización segura del frente.</li>
-        <li>Evaluación de lesiones y primeros auxilios.</li>
-        <li>Corte de tránsito y demarcación (conos/cintas).</li>
-        <li>Comunicación abierta para despejar la zona.</li>
+        <li>Confirmar aislamiento/ausencia de energía (vía personal eléctrico o protocolo).</li>
+        <li>Definir método de extracción sin que el operador haga tierra.</li>
+        <li>Coordinar vehículo de apoyo y rutas seguras.</li>
       </ol>
     </details>
-    <div class="flex"><button class="btn" data-complete="supSector">Marcar leído ✓</button></div>
+    <div class="flex"><button class="btn" data-complete="verificacion">Marcar leído ✓</button></div>
   </section>
 
   <section class="card">
-    <h3>4) Rol del supervisor de despacho central</h3>
+    <h3>3) Extracción segura sin hacer tierra</h3>
     <ul>
-      <li><strong>Coordina con supervisor de sector</strong> la presencia de <em>personal de neumáticos</em> en sitio.</li>
-      <li><strong>Gestiona el vaciado de la carga</strong> del camión en la frente de carguío si corresponde.</li>
-      <li>Soporta <strong>reprogramación de flota</strong> y rutas alternativas.</li>
+      <li>La máquina debe ser llevada a un lugar apartado <em>solo si así lo instruye el supervisor</em>.</li>
+      <li><strong>Estacionar</strong> para que un vehículo de similares características pueda <strong>acercarse de frente</strong>.</li>
+      <li><strong>Objetivo de la maniobra:</strong> evitar que el trabajador <strong>tome contacto con el suelo</strong> (no hacer tierra) durante la extracción.</li>
     </ul>
     <details>
-      <summary>Plantilla de coordinación (despacho)</summary>
-      <p><em>“Personal de neumáticos a frente norte, evento reventón camión 123. Supervisión en sitio. Preparar evaluación sin ingresar a zona de carguío. Cambio.”</em></p>
+      <summary>Notas de seguridad</summary>
+      <p>La aproximación frontal permite transferencia sin descarga a tierra. Evitar saltos o descensos improvisados. Mantener comunicación visual y radial en todo momento.</p>
     </details>
-    <div class="flex"><button class="btn" data-complete="supDespacho">Marcar leído ✓</button></div>
+    <div class="flex"><button class="btn" data-complete="extraccion">Marcar leído ✓</button></div>
   </section>
 
   <section class="card">
-    <h3>5) Personal de neumáticos: evaluación y salida a zona segura</h3>
+    <h3>4) Cierre del evento y restricción del equipo</h3>
     <ul>
-      <li>Al llegar, <strong>evalúan junto al supervisor del sector</strong> <em>sin ingresar</em> al área de carguío.</li>
-      <li>Si procede, <strong>coordinan con el operador del camión</strong> la <em>salida del equipo</em> a un lugar seguro para chequeo.</li>
+      <li>Una vez evacuado el operador, <strong>aislar el camión en lugar seguro y restringido por 24 horas</strong>.</li>
+      <li>Registrar comunicaciones y hora de activación de <em>TRACKING/DISPATCH</em>.</li>
     </ul>
     <details>
-      <summary>Notas operativas</summary>
-      <p>La evaluación <em>fuera de zona de riesgo</em> reduce exposición a proyectiles y colapsos. El desplazamiento a lugar seguro debe ser lento, en línea recta y con escolta si se requiere.</p>
-    </details>
-    <div class="flex"><button class="btn" data-complete="neumaticos">Marcar leído ✓</button></div>
-  </section>
-
-  <section class="card">
-    <h3>6) Reanudación controlada de la operación</h3>
-    <ul>
-      <li>Una vez normalizada la situación, <strong>supervisor del sector</strong> comunica por <em>frecuencia abierta</em> la <strong>reanudación</strong>.</li>
-      <li>Despacho actualiza asignaciones y rutas si hubo desvíos.</li>
-    </ul>
-    <details>
-      <summary>Condiciones mínimas para reanudar</summary>
+      <summary>Condiciones para levantar la restricción</summary>
       <ul>
-        <li>Área segregada y limpia.</li>
-        <li>Operadores sin lesiones y aptos.</li>
-        <li>Equipo verificado por personal competente.</li>
+        <li>Verificación técnica de ausencia de daño eléctrico.</li>
+        <li>Autorización de personal competente.</li>
       </ul>
     </details>
-    <div class="flex"><button class="btn" data-complete="reanudar">Marcar leído ✓</button></div>
+    <div class="flex"><button class="btn" data-complete="cierre">Marcar leído ✓</button></div>
   </section>
 
   <!-- JUEGOS (5) -->
   <section class="card" id="juego1">
-    <h3>7) Juego 1 · Ordena los pasos del operador tras el reventón</h3>
-    <p>Arrastra para ordenar los pasos correctos (primeros 30 segundos).</p>
+    <h3>5) Juego 1 · Ordena las acciones inmediatas (operador)</h3>
+    <p>Arrastra para ordenar los pasos correctos durante el primer minuto.</p>
     <ul class="sortable dropzone" id="ordenar"></ul>
     <div class="flex" style="margin-top:8px">
       <button class="btn-sec" id="checkOrden">Evaluar</button>
@@ -183,7 +153,7 @@
   </section>
 
   <section class="card" id="juego2">
-    <h3>8) Juego 2 · ¿Correcto o Prohibido?</h3>
+    <h3>6) Juego 2 · ¿Correcto o Prohibido?</h3>
     <p>Clasifica cada tarjeta: <strong>Correcto</strong> o <strong>Prohibido</strong>. Feedback verde/rojo inmediato.</p>
     <div class="zones">
       <div>
@@ -205,7 +175,7 @@
   </section>
 
   <section class="card" id="juego3">
-    <h3>9) Juego 3 · Completa la frase (arrastrar a huecos)</h3>
+    <h3>7) Juego 3 · Completa la frase (arrastrar a huecos)</h3>
     <p>Arrastra los términos correctos a los espacios subrayados.</p>
     <p id="fillSentence" style="line-height:1.9"></p>
     <div id="fillPool" style="margin-top:8px"></div>
@@ -218,28 +188,28 @@
   </section>
 
   <section class="card" id="juego4">
-    <h3>10) Juego 4 · Relaciona roles con responsabilidades</h3>
+    <h3>8) Juego 4 · Relaciona roles con responsabilidades</h3>
     <p>Arrastra cada tarjeta al rol que corresponde.</p>
     <div class="zones" style="grid-template-columns:1fr 1fr">
       <div>
-        <h4>Operador Camión</h4>
-        <div id="role_camion" class="zone"></div>
-      </div>
-      <div>
-        <h4>Operador Carguío</h4>
-        <div id="role_carguio" class="zone"></div>
+        <h4>Operador</h4>
+        <div id="role_operador" class="zone"></div>
       </div>
       <div>
         <h4>Supervisor Sector</h4>
         <div id="role_sector" class="zone"></div>
       </div>
       <div>
-        <h4>Supervisor Despacho</h4>
+        <h4>Despacho/Control</h4>
         <div id="role_despacho" class="zone"></div>
       </div>
       <div>
-        <h4>Personal Neumáticos</h4>
-        <div id="role_neumaticos" class="zone"></div>
+        <h4>Personal Eléctrico</h4>
+        <div id="role_electrico" class="zone"></div>
+      </div>
+      <div>
+        <h4>Vehículo de Apoyo</h4>
+        <div id="role_apoyo" class="zone"></div>
       </div>
     </div>
     <div id="rolesPool" style="margin-top:10px"></div>
@@ -252,7 +222,7 @@
   </section>
 
   <section class="card" id="juego5">
-    <h3>11) Juego 5 · Decisiones en 10 segundos</h3>
+    <h3>9) Juego 5 · Decisiones en 10 segundos</h3>
     <p>Lee el escenario y elige <strong>la mejor acción</strong> antes de que el tiempo llegue a 0.</p>
     <div class="timer" id="timer">Tiempo: 10</div>
     <div id="timedQuestion" style="margin-top:8px"></div>
@@ -266,7 +236,7 @@
 
   <!-- QUIZ 20 PREGUNTAS -->
   <section class="card">
-    <h3>12) Quiz final (20 preguntas)</h3>
+    <h3>10) Quiz final (20 preguntas)</h3>
     <div id="quiz"></div>
     <div style="display:flex; gap:8px; flex-wrap:wrap">
       <button class="btn-sec" id="enviar">Enviar respuestas</button>
@@ -278,8 +248,8 @@
 
   <!-- REFLEXIÓN -->
   <section class="card">
-    <h3>13) Reflexión final</h3>
-    <textarea id="reflexion" rows="3" placeholder="En 2-3 líneas: ¿por qué permanecer en cabina reduce el riesgo tras un reventón?"></textarea>
+    <h3>11) Reflexión final</h3>
+    <textarea id="reflexion" rows="3" placeholder="En 2-3 líneas: ¿cómo evita la extracción con vehículo de apoyo que el operador haga tierra?"></textarea>
     <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
       <button class="btn-ghost" id="guardarRef">Guardar</button>
       <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
@@ -299,8 +269,8 @@
   const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
   const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
 
-  const state = read('anupro360_s22_reventon', {
-    done:{primeros30:false,rolCarguio:false,supSector:false,supDespacho:false,neumaticos:false,reanudar:false,juego1:false,juego2:false,juego3:false,juego4:false,juego5:false,quiz:false},
+  const state = read('anupro360_s23_energizacion', {
+    done:{deteccion:false,verificacion:false,extraccion:false,cierre:false,juego1:false,juego2:false,juego3:false,juego4:false,juego5:false,quiz:false},
     reflexion:''
   });
 
@@ -314,17 +284,17 @@
   $$('button[data-complete]').forEach(b=>{
     b.addEventListener('click', e=>{
       const key = e.currentTarget.dataset.complete;
-      state.done[key] = true; store('anupro360_s22_reventon', state); calcProgress();
+      state.done[key] = true; store('anupro360_s23_energizacion', state); calcProgress();
       e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
     })
   });
 
   /* ----------------- Juego 1: Ordenar pasos (operador) ----------------- */
   const pasosOperador = [
-    'Detener completamente el equipo',
-    'Comunicar al supervisor del sector indicando ubicación',
-    'Avisar a despacho central con la posición',
-    'Permanecer en cabina hasta arribo del supervisor'
+    'Activar botón rojo TRACKING y avisar por radio',
+    'Entregar nombre y ubicación exacta',
+    'Indicar equipo, tipo de emergencia y personas involucradas',
+    'Solicitar ayuda necesaria y permanecer en cabina'
   ];
   function renderOrdenar(){
     const ul = $('#ordenar'); ul.innerHTML='';
@@ -335,7 +305,7 @@
       li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
       ul.appendChild(li);
     });
-    // Drag & drop PERSISTENTE y robusto
+    // Drag & drop robusto (persistente)
     ul.ondragover = (e)=>{
       e.preventDefault();
       const dragging = ul.querySelector('.dragging');
@@ -344,7 +314,7 @@
       if(after==null){ ul.appendChild(dragging); }
       else { ul.insertBefore(dragging, after); }
     };
-    ul.ondrop = (e)=>{ e.preventDefault(); };
+    // reset feedback si existe
     const fb = $('#fbOrden'); if(fb) fb.textContent='';
   }
   function getDragAfterElement(container, y){
@@ -363,21 +333,21 @@
     const ok = actual.every((t,i)=> t===pasosOperador[i]);
     const fb = $('#fbOrden');
     if(ok){ fb.textContent='¡Correcto! Orden seguro aplicado.'; fb.style.color='var(--ok)'; }
-    else{ fb.textContent='Aún no. Revisa el orden: detener → supervisor → despacho → permanecer en cabina.'; fb.style.color='var(--bad)'; }
+    else{ fb.textContent='Aún no. Revisa el orden: botón/aviso → identificación/ubicación → detalles del evento → ayuda y permanecer en cabina.'; fb.style.color='var(--bad)'; }
   }
 
-  /* ----------------- Juego 2: Clasificación ----------------- */
+  /* ----------------- Juego 2: Clasificación Correcto/Prohibido ----------------- */
   const itemsClasif = [
-    {txt:'Permanecer en cabina hasta que llegue el supervisor.', tipo:'OK'},
-    {txt:'Bajar a revisar el neumático inmediatamente.', tipo:'BAD'},
-    {txt:'Girar la pala para proteger cabina del camión.', tipo:'OK'},
-    {txt:'Segregar el área con conos y avisar por frecuencia abierta.', tipo:'OK'},
-    {txt:'Continuar el carguío para no atrasar la producción.', tipo:'BAD'},
-    {txt:'Evaluar con personal de neumáticos sin ingresar al área de carguío.', tipo:'OK'},
-    {txt:'Retirar equipos no involucrados del frente.', tipo:'OK'},
-    {txt:'Vaciar la carga del camión en la frente si corresponde.', tipo:'OK'},
-    {txt:'Ignorar estado de salud de operadores si hablan por radio.', tipo:'BAD'},
-    {txt:'Reanudar operación solo cuando el supervisor lo comunique.', tipo:'OK'}
+    {txt:'Activar botón rojo de TRACKING.', tipo:'OK'},
+    {txt:'Bajar del camión para revisar el contacto.', tipo:'BAD'},
+    {txt:'Enviar mensaje escrito por DISPATCH si no hay radio.', tipo:'OK'},
+    {txt:'Mover el camión sin autorización del supervisor.', tipo:'BAD'},
+    {txt:'Esperar confirmación de que el equipo está libre de energía antes de evacuar.', tipo:'OK'},
+    {txt:'Acercar vehículo de apoyo de frente para extracción.', tipo:'OK'},
+    {txt:'Saltar al suelo desde la cabina.', tipo:'BAD'},
+    {txt:'Aislar el camión por 24 horas tras el evento.', tipo:'OK'},
+    {txt:'No informar cantidad de personas involucradas.', tipo:'BAD'},
+    {txt:'Comunicar equipo, tipo de emergencia y ayuda requerida.', tipo:'OK'}
   ];
   function renderClasif(){
     const pool = $('#pool'); pool.innerHTML='';
@@ -408,13 +378,13 @@
 
   /* ----------------- Juego 3: Fill-in-the-blanks ----------------- */
   const fillTargets = [
-    {slot:'[1]', word:'pala'},
-    {slot:'[2]', word:'frecuencia abierta'},
-    {slot:'[3]', word:'conos'},
-    {slot:'[4]', word:'neumáticos'},
-    {slot:'[5]', word:'vaciado de la carga'}
+    {slot:'[1]', word:'TRACKING'},
+    {slot:'[2]', word:'botón rojo'},
+    {slot:'[3]', word:'DISPATCH'},
+    {slot:'[4]', word:'hacer tierra'},
+    {slot:'[5]', word:'24 horas'}
   ];
-  const fillTextTemplate = 'Tras el reventón, el operador de carguío gira la <u data-slot="[1]" class="dropSlot">[1]</u> para proteger la cabina; el supervisor del sector detiene el carguío y avisa por <u data-slot="[2]" class="dropSlot">[2]</u>, segrega el área con <u data-slot="[3]" class="dropSlot">[3]</u> y coordina la llegada de personal de <u data-slot="[4]" class="dropSlot">[4]</u>. En conjunto con despacho central, gestionan el <u data-slot="[5]" class="dropSlot">[5]</u> si corresponde.';
+  const fillTextTemplate = 'Ante energización, el operador activa <u data-slot="[1]" class="dropSlot">[1]</u> mediante el <u data-slot="[2]" class="dropSlot">[2]</u> y comunica por radio; si no hay radio, usa <u data-slot="[3]" class="dropSlot">[3]</u> y envía mensaje. La extracción evita que el trabajador <u data-slot="[4]" class="dropSlot">[4]</u> y el equipo se aísla por <u data-slot="[5]" class="dropSlot">[5]</u>.';
   function renderFill(){
     $('#fillSentence').innerHTML = fillTextTemplate;
     const pool = $('#fillPool'); pool.innerHTML='';
@@ -453,24 +423,26 @@
 
   /* ----------------- Juego 4: Match roles ----------------- */
   const rolesItems = [
-    {txt:'Permanecer en cabina y comunicar ubicación', role:'camion'},
-    {txt:'Girar la pala para proteger cabina', role:'carguio'},
-    {txt:'Detener carguío y evaluar salud', role:'sector'},
-    {txt:'Segregar el área y avisar por frecuencia abierta', role:'sector'},
-    {txt:'Coordinar personal de neumáticos', role:'despacho'},
-    {txt:'Vaciado de la carga si procede', role:'despacho'},
-    {txt:'Evaluar desde zona segura', role:'neumaticos'},
-    {txt:'Coordinar salida del camión a lugar seguro', role:'neumaticos'}
+    {txt:'Activar botón rojo y comunicar datos críticos', role:'operador'},
+    {txt:'No mover el camión sin autorización', role:'operador'},
+    {txt:'Verificar ausencia de energía antes de evacuar', role:'sector'},
+    {txt:'Definir método de extracción sin hacer tierra', role:'sector'},
+    {txt:'Recibir alarmas de emergencia y mensajes', role:'despacho'},
+    {txt:'Coordinar recursos y registrar evento', role:'despacho'},
+    {txt:'Confirmar desenergización y seguridad eléctrica', role:'electrico'},
+    {txt:'Monitorear posible inducción residual', role:'electrico'},
+    {txt:'Aproximación frontal para transferencia segura', role:'apoyo'},
+    {txt:'Mantener comunicación con supervisor durante extracción', role:'apoyo'}
   ];
   const roleMap = {
-    'role_camion':'camion',
-    'role_carguio':'carguio',
+    'role_operador':'operador',
     'role_sector':'sector',
     'role_despacho':'despacho',
-    'role_neumaticos':'neumaticos'
+    'role_electrico':'electrico',
+    'role_apoyo':'apoyo'
   };
   function renderRoles(){
-    Object.keys(roleMap).forEach(id=> document.getElementById(id).innerHTML='');
+    Object.keys(roleMap).forEach(id=>{ document.getElementById(id).innerHTML=''; });
     $('#rolesPool').innerHTML='';
     rolesItems.slice().sort(()=>Math.random()-0.5).forEach(it=>{
       const tag=document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.role=it.role;
@@ -504,11 +476,11 @@
 
   /* ----------------- Juego 5: Timed decisions ----------------- */
   const timedQuestions = [
-    {q:'Reventón en el frente; el camión está estable. ¿Primera acción?', opts:['Bajar a revisar el daño','Detener completamente el equipo','Moverse hacia zona de estacionamiento'], ok:1},
-    {q:'Tras detenerte, ¿qué comunicación priorizas?', opts:['Llamar a familia','A supervisor del sector con ubicación','Al operador de carguío por chat'], ok:1},
-    {q:'El supervisor no ha llegado aún. ¿Qué haces?', opts:['Permanecer en cabina','Bajar y poner conos','Caminar hacia la pala'], ok:0},
-    {q:'Llegan neumáticos. ¿Cómo evalúan?', opts:['Ingresan a zona de carguío rápidamente','Evalúan junto al supervisor sin ingresar','Piden al operador que baje la llanta'], ok:1},
-    {q:'Al normalizarse, ¿quién comunica reanudación?', opts:['Operador de camión','Supervisor de sector','Despacho central'], ok:1}
+    {q:'Percibes posible inducción por línea AT; ¿acción inmediata?', opts:['Bajar a revisar visualmente','Activar botón rojo TRACKING y avisar por radio','Mover el camión lentamente'], ok:1},
+    {q:'Sin radio disponible, ¿qué haces?', opts:['Esperar a que vuelva la radio','Activar emergencia en DISPATCH y enviar mensaje','Gritar por ayuda'], ok:1},
+    {q:'El supervisor no confirma desenergización aún. ¿Qué haces?', opts:['Permanecer en cabina','Saltar al suelo','Bajar a poner conos'], ok:0},
+    {q:'Para extracción, ¿cómo se posiciona el apoyo?', opts:['De frente al camión','Desde un costado','Desde atrás a distancia'], ok:0},
+    {q:'Tras evacuar, ¿qué se hace con el camión?', opts:['Se usa normalmente','Se aísla 24 horas en lugar restringido','Se lava y vuelve a producción'], ok:1}
   ];
   let timedIndex=0, timedScore=0, remaining=10, timerId=null;
   function startTimer(){
@@ -549,26 +521,26 @@
 
   /* ----------------- Quiz 20 preguntas ----------------- */
   const preguntas=[
-    {q:'Al producirse un reventón, la primera acción del operador es…', opts:['Avisar por radio','Detener completamente el equipo','Bajar a revisar'], ok:1},
-    {q:'Tras detenerse, el operador debe…', opts:['Comunicar al supervisor del sector indicando ubicación','Esperar 10 minutos sin avisar','Moverse por su cuenta a zona segura'], ok:0},
-    {q:'El aviso a despacho central debe incluir…', opts:['La posición del camión','Estado del clima','Modelo del neumático'], ok:0},
-    {q:'Hasta que llegue el supervisor del sector, el operador…', opts:['Permanece en cabina','Baja a poner conos','Se traslada a la pala'], ok:0},
-    {q:'El operador del carguío debe…', opts:['Seguir cargando a menor ritmo','Girar la pala para proteger cabina y detener carguío','Pedir al operador que baje'], ok:1},
-    {q:'El supervisor del sector, al llegar, primero…', opts:['Coordina reanudación inmediata','Verifica estado de salud','Saca fotos para el reporte'], ok:1},
-    {q:'Al segregar el área, corresponde…', opts:['Usar conos y comunicar por frecuencia abierta','Solo cinta plástica sin avisar','Nada si no hay tránsito'], ok:0},
-    {q:'Equipos no involucrados deben…', opts:['Permanecer en espera en el frente','Retirarse del frente','Acercarse para apoyar sin instrucción'], ok:1},
-    {q:'El despacho central coordina…', opts:['Personal de neumáticos y vaciado de carga si corresponde','Entrega de EPP','Cambio de neumáticos inmediato en el lugar'], ok:0},
-    {q:'El personal de neumáticos evalúa…', opts:['Ingresando a la zona de carguío','Desde zona segura con el supervisor','Por teléfono'], ok:1},
-    {q:'La salida del camión a zona segura…', opts:['Se coordina con operador y neumáticos','Se realiza a máxima velocidad','La decide el operador solo'], ok:0},
-    {q:'Reanudar operaciones corresponde comunicarlo…', opts:['Al supervisor de sector por frecuencia abierta','Al operador de carguío por WhatsApp','Al jefe de guardia por correo'], ok:0},
-    {q:'Permanecer en cabina reduce riesgo porque…', opts:['Evita exposición a proyectiles y colapsos','Permite ver el daño de cerca','Ahorra combustible'], ok:0},
-    {q:'Girar la pala funciona como…', opts:['Escudo protector ante proyección de fragmentos','Señal de reanudación','Apoyo para levantar el camión'], ok:0},
-    {q:'La comunicación por frecuencia abierta busca…', opts:['Llamar a una sola persona','Evitar ingreso de equipos al sector','Anunciar el fin de turno'], ok:1},
-    {q:'Retirar equipos no involucrados…', opts:['Reduce congestión y riesgo en el frente','Es opcional','Solo aplica de día'], ok:0},
-    {q:'Si hay lesionados, el supervisor del sector…', opts:['Aplica procedimiento de emergencia','Espera al servicio externo sin hacer nada','Pide a operadores que se autogestionen'], ok:0},
-    {q:'El vaciado de carga en la frente…', opts:['Debe coordinarse por despacho central','Lo decide el operador del camión solo','Nunca se realiza'], ok:0},
-    {q:'La evaluación de neumáticos se realiza…', opts:['Ingresando con el camión en marcha','Sin ingresar al área de carguío','Con el camión elevando la caja'], ok:1},
-    {q:'La reprogramación de flota y rutas alternativas es parte del rol…', opts:['Del operador de carguío','Del supervisor de despacho central','Del personal de neumáticos'], ok:1}
+    {q:'La energización puede ocurrir por…', opts:['Solo contacto directo','Contacto directo o inducción','Solo inducción'], ok:1},
+    {q:'Primer paso recomendado del operador ante energización es…', opts:['Bajar a revisar','Activar botón rojo TRACKING y avisar por radio','Mover el camión'], ok:1},
+    {q:'Los datos críticos en la comunicación incluyen…', opts:['Nombre, ubicación exacta, equipo, tipo de emergencia, personas y requerimientos','Solo nombre y equipo','Solo ubicación'], ok:0},
+    {q:'Si no hay comunicación radial, corresponde…', opts:['Esperar a que vuelva la radio','Activar emergencia por DISPATCH y enviar mensaje escrito','Usar luces altas'], ok:1},
+    {q:'El supervisor del sector debe asegurar…', opts:['Que el camión esté libre de energía eléctrica antes de evacuar','Que el operador baje rápido','Que la producción continúe'], ok:0},
+    {q:'El operador moverá el camión…', opts:['Cuando quiera','Solo si el supervisor del sector se lo indica','Nunca, aunque lo indique el supervisor'], ok:1},
+    {q:'La extracción con vehículo de apoyo debe permitir…', opts:['Aproximación de frente para transferencia','Llegada lateral para comodidad','Saltos rápidos al suelo'], ok:0},
+    {q:'El objetivo de la maniobra de extracción es…', opts:['Evitar que el trabajador haga tierra','Ahorrar tiempo','Reducir combustible'], ok:0},
+    {q:'Tras el evento, el camión debe…', opts:['Quedar aislado 24 h en lugar seguro y restringido','Volver a producción','Ir a taller sin restricción'], ok:0},
+    {q:'El mensaje por radio debe incluir…', opts:['Nombre y ubicación exacta','Horario de colación','Número de teléfono personal'], ok:0},
+    {q:'El sistema de emergencia principal mencionado es…', opts:['TRACKING','GPS','CCTV'], ok:0},
+    {q:'El botón de emergencia se identifica como…', opts:['Botón rojo','Botón azul','Palanca amarilla'], ok:0},
+    {q:'El sistema alternativo cuando no hay radio es…', opts:['DISPATCH','WhatsApp','Correo'], ok:0},
+    {q:'“Hacer tierra” significa…', opts:['Tomar contacto con el suelo y cerrar circuito','Encender el equipo','Conectar el GPS'], ok:0},
+    {q:'Antes de evacuar, debe verificarse…', opts:['Ausencia de energía eléctrica','Que no haya polvo','Que funcione el aire acondicionado'], ok:0},
+    {q:'¿Quién comunica la instrucción de mover el camión si procede?', opts:['Operador','Supervisor del sector','Cualquier compañero'], ok:1},
+    {q:'En la comunicación inicial, también debes indicar…', opts:['Cantidad de personas involucradas','Marca de tu casco','Nombre del guardia de puerta'], ok:0},
+    {q:'La aproximación del vehículo de apoyo es preferentemente…', opts:['Frontal','Trasera','Lateral'], ok:0},
+    {q:'Una vez aislado el camión 24 h, se levanta la restricción cuando…', opts:['Se verifica técnicamente y autoriza personal competente','Pasa el tiempo y ya','Lo pide el operador'], ok:0},
+    {q:'El registro del evento debe considerar…', opts:['Activación de TRACKING/DISPATCH y comunicaciones','Fotos para redes sociales','Comentarios informales'], ok:0}
   ];
   function renderQuiz(){
     const wrap=$('#quiz'); wrap.innerHTML='';
@@ -617,12 +589,12 @@
   $('#resetFill').addEventListener('click', resetFill);
   $('#checkRoles').addEventListener('click', checkRoles);
   $('#resetRoles').addEventListener('click', resetRoles);
-  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s22_reventon', state); calcProgress(); });
-  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s22_reventon', state); calcProgress(); });
+  $('#enviar').addEventListener('click', ()=>{ lockQuizAndColor(); state.done.quiz=true; store('anupro360_s23_energizacion', state); calcProgress(); });
+  $('#resetQuiz').addEventListener('click', ()=>{ resetQuizColors(); state.done.quiz=false; store('anupro360_s23_energizacion', state); calcProgress(); });
 
   /* Reflexión */
   const ref = $('#reflexion'); ref.value = state.reflexion||'';
-  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_s22_reventon', state); alert('Reflexión guardada en este dispositivo.'); });
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion = (ref.value||'').trim(); store('anupro360_s23_energizacion', state); alert('Reflexión guardada en este dispositivo.'); });
   $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado. Pégalo en Classroom.'); }catch(e){ alert('No se pudo copiar automáticamente. Copia manualmente.'); } });
 
   /* Init */
