@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Sección 6 · Herramientas y Software del Controlador</title>
+  <meta name="description" content="Aplicación web didáctica Sección 6: Herramientas y software del Controlador de Terreno (Komatsu FrontRunner y Caterpillar MineStar Command). Explicación paso a paso, imágenes .webp, 5 juegos con retroalimentación y quiz de 20 preguntas."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; --bad:#FF1744;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    /* Feedback preguntas */
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+
+    /* Drag & drop + zonas */
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+    .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
+
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+
+    /* Imágenes dentro de tarjetas */
+    .figure{border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:10px; margin-top:8px; text-align:center}
+    .figure img{max-width:100%; height:auto; border-radius:8px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand">
+      <h1>Anupro360 · Sección 6 · Herramientas y Software del Controlador</h1>
+    </div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>FrontRunner (Komatsu) y MineStar Command (Caterpillar)</h2>
+    <p class="note"><strong>Aprenderás a:</strong> navegar las interfaces clave, ejecutar comandos seguros (STOP, RESUME, REROUTE, HOLD, CLEAR, DIVERT), usar Power BI/SCADA para análisis y comunicarte correctamente por radio. Incluye <strong>5 juegos</strong> y <strong>quiz de 20 preguntas</strong>.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- 6.1 OBJETIVO -->
+  <section class="card">
+    <h3>1) 6.1 · Objetivo de las Herramientas</h3>
+    <p>Las herramientas y software del Controlador permiten: (1) <strong>monitorear</strong> posición/estado de cada CAEX, (2) <strong>gestionar</strong> rutas y prioridades, (3) <strong>responder</strong> a incidentes en tiempo real y (4) <strong>analizar</strong> la productividad para mejorar turnos siguientes.</p>
+    <details>
+      <summary>¿Qué significa “tomar decisiones con datos”?</summary>
+      <p>Equivale a actuar solo tras <em>verificar</em> (mapa, cámaras, alertas), <em>comunicar</em> (radio/mensajería) y <em>dejar trazabilidad</em> (historial/evento). Ejemplo: ante un obstáculo, confirma por cámara, ejecuta REROUTE/DIVERT, informa y registra.</p>
+    </details>
+    <div class="figure">
+      <img src="s6_contexto_operativo.webp" alt="Contexto operativo: ROC, SCADA, flota y reportes"/>
+      <a class="btn-ghost" href="s6_contexto_operativo.webp" download>Descargar s6_contexto_operativo.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="obj">Marcar leído ✓</button></div>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha de la Sección 6</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>45–60 min</strong></li>
+      <li>Estructura: 7 bloques + 5 juegos + quiz (20).</li>
+      <li>Feedback: <span style="color:var(--ok); font-weight:700">verde</span> correcto / <span style="color:var(--bad); font-weight:700">rojo</span> incorrecto.</li>
+      <li>Imágenes: formato <strong>.webp</strong> descargable.</li>
+    </ul>
+    <div class="chip2">Versión: S6_Herramientas</div>
+  </aside>
+
+  <!-- 6.2 FRONTRUNNER -->
+  <section class="card">
+    <h3>2) 6.2 · Komatsu FrontRunner</h3>
+    <h4>a) Interfaz principal (paso a paso)</h4>
+    <ol>
+      <li><strong>Mapa en tiempo real:</strong> muestra rutas activas, posición GPS y estado de cada CAEX (carga, tránsito, descarga, detenido). <em>Ejemplo:</em> si una unidad aparece en rojo en rampa, abre su tarjeta y revisa la alerta antes de actuar.</li>
+      <li><strong>Lista de equipos:</strong> panel lateral con número de unidad, tarea, destino y estado mecánico. <em>Tip:</em> usa filtros por estado para encontrar rápido unidades detenidas.</li>
+      <li><strong>Panel de alertas:</strong> al hacer clic, centra el mapa y sugiere acciones (p. ej., desvío por ruta 3B). <em>Regla:</em> nunca borres una alerta (<code>CLEAR</code>) sin resolver la causa.</li>
+    </ol>
+    <div class="figure">
+      <img src="s6_frontrunner_ui.webp" alt="Interfaz tipo FrontRunner: mapa/lista/alertas"/>
+      <a class="btn-ghost" href="s6_frontrunner_ui.webp" download>Descargar s6_frontrunner_ui.webp</a>
+    </div>
+    <h4>b) Funciones clave con ejemplos</h4>
+    <ul>
+      <li><strong>Asignación de rutas:</strong> selecciona camión → carga → descarga → prioridad. <em>Ejemplo:</em> mineral de alta ley a chancador primario.</li>
+      <li><strong>Gestión de bloqueos:</strong> crea <em>zonas no‑go</em> temporales/permanentes (tronadura, derrumbe, barro).</li>
+      <li><strong>Reasignación dinámica:</strong> cambia destino en medio del ciclo ante saturación del botadero.</li>
+      <li><strong>Historial de eventos:</strong> trazabilidad de detenciones, desvíos y fallas para mejora continua.</li>
+    </ul>
+    <h4>c) Comandos rápidos</h4>
+    <ul>
+      <li><code>STOP</code> — detención segura inmediata.</li>
+      <li><code>RESUME</code> — reanudar el ciclo tras verificación.</li>
+      <li><code>REROUTE</code> — asignar nueva ruta/destino en segundos.</li>
+    </ul>
+    <div class="flex"><button class="btn" data-complete="fr">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 6.3 MINESTAR -->
+  <section class="card">
+    <h3>3) 6.3 · Caterpillar MineStar Command for Hauling</h3>
+    <h4>a) Interfaz principal (paso a paso)</h4>
+    <ul>
+      <li><strong>Vista de flota:</strong> mapa con capas (rutas, clima, zonas de riesgo). Activa solo lo necesario para evitar saturar la pantalla.</li>
+      <li><strong>Panel de control:</strong> comandos rápidos por unidad y gestor de intersecciones.</li>
+      <li><strong>Panel de productividad:</strong> ciclo promedio, toneladas por hora (TPH) y disponibilidad.</li>
+    </ul>
+    <div class="figure">
+      <img src="s6_minestar_ui.webp" alt="Interfaz tipo MineStar con capas y KPIs"/>
+      <a class="btn-ghost" href="s6_minestar_ui.webp" download>Descargar s6_minestar_ui.webp</a>
+    </div>
+    <h4>b) Funciones clave</h4>
+    <ol>
+      <li><strong>Control de tráfico autónomo:</strong> prioriza paso en rampas y cruces críticos.</li>
+      <li><strong>Asignación inteligente:</strong> algoritmo optimiza rutas según carga/destino.</li>
+      <li><strong>Desvíos automáticos:</strong> ante cierre de ruta, reasigna sin intervención humana.</li>
+      <li><strong>Registro de alertas:</strong> hora, ubicación y tipo quedan documentados.</li>
+    </ol>
+    <h4>c) Comandos rápidos</h4>
+    <ul>
+      <li><code>HOLD</code> — pausa en punto seguro.</li>
+      <li><code>CLEAR</code> — levantar una alerta resuelta.</li>
+      <li><code>DIVERT</code> — enviar a destino alternativo.</li>
+    </ul>
+    <div class="flex"><button class="btn" data-complete="cat">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 6.4 ANÁLISIS Y REPORTE -->
+  <section class="card">
+    <h3>4) 6.4 · Herramientas de Análisis y Reporte</h3>
+    <h4>a) Power BI / Tableau — de dato a decisión</h4>
+    <ol>
+      <li>Conecta dataset del sistema (eventos, ciclos, tonelaje).</li>
+      <li>Modela fechas (turno/día/semana) y entidades (camión/ruta/destino).</li>
+      <li>Calcula KPIs: <em>TPH</em>, <em>tiempo de ciclo</em>, <em>% espera</em>, <em>% disponibilidad</em>.</li>
+      <li>Diseña visuales para responder: ¿dónde se pierde tiempo?</li>
+      <li>Publica informe ligero para sala de control y jefatura.</li>
+    </ol>
+    <div class="figure">
+      <img src="s6_powerbi_dashboard.webp" alt="Dashboard con TPH/ciclo/alertas"/>
+      <a class="btn-ghost" href="s6_powerbi_dashboard.webp" download>Descargar s6_powerbi_dashboard.webp</a>
+    </div>
+    <h4>b) SCADA — salud de infraestructura</h4>
+    <p>Monitorea antenas, repetidores y servidores. <strong>Latencia alta</strong> retrasa comandos y puede activar modo seguro en CAEX. Coordina con TI/Comunicaciones para restablecer.</p>
+    <div class="figure">
+      <img src="s6_scada_topologia.webp" alt="Topología SCADA: antenas y servidores"/>
+      <a class="btn-ghost" href="s6_scada_topologia.webp" download>Descargar s6_scada_topologia.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="analitica">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 6.5 COMUNICACIÓN -->
+  <section class="card">
+    <h3>5) 6.5 · Herramientas de Comunicación</h3>
+    <ul>
+      <li><strong>Radio digital troncalizada (TETRA/DMR):</strong> canales dedicados para control, mantención y seguridad.</li>
+      <li><strong>Mensajería interna:</strong> útil para coordinar con otros controladores sin saturar la radio.</li>
+      <li><strong>Líneas directas de emergencia:</strong> uso exclusivo en incidentes reales.</li>
+    </ul>
+    <p><em>Formato recomendado:</em> “Centro Control, Unidad 793‑12, en Ruta 3, obstáculo detectado, solicitud desvío, cambio”.</p>
+    <div class="flex"><button class="btn" data-complete="comms">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 6.6 FLUJO DE TRABAJO -->
+  <section class="card">
+    <h3>6) 6.6 · Flujo de Trabajo con Herramientas (escenario real)</h3>
+    <ol>
+      <li><strong>Alerta:</strong> FrontRunner indica “Obstáculo en ruta 3”.</li>
+      <li><strong>Verificación:</strong> abres cámara del camión y confirmas neumático caído.</li>
+      <li><strong>Contención:</strong> ejecutas <code>REROUTE</code> / <code>DIVERT</code> para desviar la flota.</li>
+      <li><strong>Comunicación:</strong> informas por radio a mantención y seguridad; registras hora y coordenadas.</li>
+      <li><strong>Cierre:</strong> documentas en Power BI y aplicas <code>CLEAR</code> tras retirar el peligro.</li>
+    </ol>
+    <div class="figure">
+      <img src="s6_flujo_operativo.webp" alt="Flujo operativo ante obstáculo"/>
+      <a class="btn-ghost" href="s6_flujo_operativo.webp" download>Descargar s6_flujo_operativo.webp</a>
+    </div>
+    <div class="flex"><button class="btn" data-complete="flujo">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- 6.7 COMPETENCIAS -->
+  <section class="card">
+    <h3>7) 6.7 · Competencias Tecnológicas del Controlador</h3>
+    <ul>
+      <li>Navegación rápida en mapas y capas.</li>
+      <li>Interpretación de KPIs (TPH, ciclo, disponibilidad).</li>
+      <li>Configuración de rutas/prioridades bajo presión.</li>
+      <li>Integración de datos para reportes y seguridad.</li>
+    </ul>
+    <details>
+      <summary>Ruta de aprendizaje sugerida</summary>
+      <ol>
+        <li>HMI y telemetría de flotas.</li>
+        <li>Mapas, capas, geocercas y zonas no‑go.</li>
+        <li>Redes industriales y KPIs operacionales.</li>
+        <li>SOP de seguridad y gestión de incidentes.</li>
+      </ol>
+    </details>
+    <div class="flex"><button class="btn" data-complete="compet">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- ========================= JUEGOS (5) ========================= -->
+  <!-- Juego 1: Orden de respuesta (FrontRunner) -->
+  <section class="card" id="juego1">
+    <h3>8) Juego 1 · Ordena la respuesta ante obstáculo (FrontRunner)</h3>
+    <p>Arrastra para ordenar los pasos correctos cuando FrontRunner detecta un obstáculo en cruce.</p>
+    <ul class="sortable dropzone" id="ordenar"></ul>
+    <div class="flex" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkOrden">Evaluar</button>
+      <button class="btn-ghost" id="regenOrden">Mezclar</button>
+      <span id="fbOrden" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <!-- Juego 2: Clasificar Correcto/Prohibido -->
+  <section class="card" id="juego2">
+    <h3>9) Juego 2 · ¿Correcto o Prohibido? (operación autónoma)</h3>
+    <p>Clasifica: <strong>Correcto</strong> vs <strong>Prohibido</strong>. Feedback inmediato en verde/rojo.</p>
+    <div class="zones">
+      <div>
+        <h4>Correcto</h4>
+        <div id="zoneOK" class="zone" aria-label="Zona Correcto"></div>
+      </div>
+      <div>
+        <h4>Prohibido</h4>
+        <div id="zoneBAD" class="zone" aria-label="Zona Prohibido"></div>
+      </div>
+    </div>
+    <div id="pool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif">Reiniciar</button>
+      <span id="fbClasif" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <!-- Juego 3: Etiquetar interfaz (Mapa/Lista/Alertas) -->
+  <section class="card" id="juego3">
+    <h3>10) Juego 3 · Etiqueta la interfaz (Mapa/Lista/Alertas)</h3>
+    <p>Arrastra cada etiqueta al área correcta del layout de la consola.</p>
+    <div class="figure">
+      <img src="s6_ui_base.webp" alt="Base de interfaz con áreas de mapa, lista y alertas"/>
+      <a class="btn-ghost" href="s6_ui_base.webp" download>Descargar s6_ui_base.webp</a>
+    </div>
+    <div class="zones" style="grid-template-columns:1fr 1fr">
+      <div>
+        <h4>Mapa</h4>
+        <div id="zMapa" class="zone" data-id="mapa"></div>
+      </div>
+      <div>
+        <h4>Lista</h4>
+        <div id="zLista" class="zone" data-id="lista"></div>
+      </div>
+      <div style="grid-column:1/3">
+        <h4>Alertas</h4>
+        <div id="zAlertas" class="zone" data-id="alertas"></div>
+      </div>
+    </div>
+    <div id="poolEtiq" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkEtiq">Evaluar</button>
+      <button class="btn-ghost" id="resetEtiq">Reiniciar</button>
+      <span id="fbEtiq" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego3">Marcar juego 3 ✓</button></div>
+  </section>
+
+  <!-- Juego 4: Decisiones de comando -->
+  <section class="card" id="juego4">
+    <h3>11) Juego 4 · ¿Qué comando usarías?</h3>
+    <p>Selecciona el comando más seguro/eficiente para cada caso y valida.</p>
+    <div id="cases"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkCases">Evaluar</button>
+      <button class="btn-ghost" id="resetCases">Reiniciar</button>
+      <span id="fbCases" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego4">Marcar juego 4 ✓</button></div>
+  </section>
+
+  <!-- Juego 5: KPI -->
+  <section class="card" id="juego5">
+    <h3>12) Juego 5 · Cálculo de KPI</h3>
+    <p>Completa los campos. Se acepta ±5% de tolerancia.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+      <div>
+        <h4>Datos del turno</h4>
+        <ul>
+          <li>Toneladas movidas: <strong>4,800 t</strong></li>
+          <li>Horas efectivas: <strong>6.0 h</strong></li>
+          <li>Ciclos completados: <strong>24</strong></li>
+        </ul>
+        <p class="note">TPH = ton/hora. Tiempo de ciclo = horas / ciclos.</p>
+      </div>
+      <div>
+        <label>TPH esperado:
+          <input id="kpi-tph" type="number" step="0.1" placeholder="Ingresa TPH" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1); color:#fff">
+        </label><br><br>
+        <label>Tiempo de ciclo (h):
+          <input id="kpi-ciclo" type="number" step="0.001" placeholder="Ingresa horas" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1); color:#fff">
+        </label>
+        <div id="fbKPI" class="chip2" style="display:inline-block; margin-top:8px"></div><br>
+        <button class="btn-sec" id="checkKPI">Evaluar</button>
+        <button class="btn-ghost" id="resetKPI">Reiniciar</button>
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego5">Marcar juego 5 ✓</button></div>
+  </section>
+
+  <!-- ========================= QUIZ 20 PREGUNTAS ========================= -->
+  <section class="card">
+    <h3>13) Quiz final (20 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+
+  <!-- DESCARGAS -->
+  <section class="card">
+    <h3>Descargas · Imágenes (.webp)</h3>
+    <ul>
+      <li><a class="btn-ghost" href="s6_contexto_operativo.webp" download>Descargar s6_contexto_operativo.webp</a></li>
+      <li><a class="btn-ghost" href="s6_frontrunner_ui.webp" download>Descargar s6_frontrunner_ui.webp</a></li>
+      <li><a class="btn-ghost" href="s6_minestar_ui.webp" download>Descargar s6_minestar_ui.webp</a></li>
+      <li><a class="btn-ghost" href="s6_powerbi_dashboard.webp" download>Descargar s6_powerbi_dashboard.webp</a></li>
+      <li><a class="btn-ghost" href="s6_scada_topologia.webp" download>Descargar s6_scada_topologia.webp</a></li>
+      <li><a class="btn-ghost" href="s6_ui_base.webp" download>Descargar s6_ui_base.webp</a></li>
+      <li><a class="btn-ghost" href="s6_flujo_operativo.webp" download>Descargar s6_flujo_operativo.webp</a></li>
+    </ul>
+    <p class="note">Todas las imágenes son descargables en formato <strong>.webp</strong>.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360</div>
+</footer>
+
+<script>
+  /* Utilidades básicas */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_s6_herrsoftware', {
+    done:{obj:false,fr:false,cat:false,analitica:false,comms:false,flujo:false,compet:false,juego1:false,juego2:false,juego3:false,juego4:false,juego5:false,quiz:false}
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_s6_herrsoftware', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+
+  /* ----------------- Juego 1: Orden de respuesta ----------------- */
+  const pasosRespuesta = [
+    'Detención automática segura al detectar obstáculo',
+    'Emisión de alerta en la consola del Controlador',
+    'Confirmación y evaluación del evento por el Controlador',
+    'Ejecutar REROUTE / DIVERT para desviar por ruta segura',
+    'Registrar y aplicar CLEAR/RESUME al resolver'
+  ];
+  function renderOrdenar(){
+    const ul = $('#ordenar'); ul.innerHTML='';
+    const mix = pasosRespuesta.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(dragging && after) ul.insertBefore(dragging, after); else if(dragging) ul.appendChild(dragging);
+    }, {once:true});
+  }
+  function checkOrden(){
+    const lis = $$('#ordenar li');
+    const actual = lis.map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===pasosRespuesta[i]);
+    const fb = $('#fbOrden');
+    if(ok){ fb.textContent='¡Correcto! Secuencia segura aplicada.'; fb.style.color='var(--ok)'; state.done.juego1=true; }
+    else{ fb.textContent='Aún no. Orden sugerido: Detención → Alerta → Confirmación → REROUTE/DIVERT → CLEAR/RESUME.'; fb.style.color='var(--bad)'; state.done.juego1=false; }
+    store('anupro360_s6_herrsoftware', state); calcProgress();
+  }
+
+  /* ----------------- Juego 2: Clasificar Correcto/Prohibido ----------------- */
+  const itemsClasif = [
+    {txt:'Definir zona no‑go por tronadura', tipo:'OK'},
+    {txt:'Desactivar alertas para trabajar más rápido', tipo:'BAD'},
+    {txt:'Usar HOLD mientras evalúas la situación', tipo:'OK'},
+    {txt:'Reanudar sin verificar en mapa/cámara', tipo:'BAD'},
+    {txt:'Aplicar CLEAR solo cuando el peligro se retiró', tipo:'OK'},
+    {txt:'Desviar unidades sin informar por radio', tipo:'BAD'},
+    {txt:'Registrar el incidente en historial/Power BI', tipo:'OK'},
+    {txt:'Pasar por rampa cerrada para ahorrar tiempo', tipo:'BAD'},
+    {txt:'Priorizar mineral de alta ley al chancador', tipo:'OK'},
+    {txt:'Ignorar latencia alta de la red SCADA', tipo:'BAD'}
+  ];
+  function renderClasif(){
+    const pool = $('#pool'); pool.innerHTML='';
+    const shuffled = itemsClasif.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach((it)=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneOK','zoneBAD','pool'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+    });
+  }
+  function checkClasif(){
+    let ok=0, total=itemsClasif.length;
+    const zOK = $('#zoneOK'); const zBAD = $('#zoneBAD');
+    [...zOK.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='OK'){ ok++; t.style.outline='2px solid var(--ok)'; } else { t.style.outline='2px solid var(--bad)'; }});
+    [...zBAD.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='BAD'){ ok++; t.style.outline='2px solid var(--ok)'; } else { t.style.outline='2px solid var(--bad)'; }});
+    const fb=$('#fbClasif'); const pct=Math.round(ok/total*100);
+    fb.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+    fb.style.color = ok===total? 'var(--ok)':'var(--bad)';
+    state.done.juego2 = ok===total; store('anupro360_s6_herrsoftware', state); calcProgress();
+  }
+  function resetClasif(){ $('#zoneOK').innerHTML=''; $('#zoneBAD').innerHTML=''; renderClasif(); }
+
+  /* ----------------- Juego 3: Etiquetar interfaz ----------------- */
+  const etiquetas = [
+    {txt:'Mapa en tiempo real', target:'mapa'},
+    {txt:'Lista de equipos', target:'lista'},
+    {txt:'Panel de alertas', target:'alertas'},
+  ];
+  function renderEtiquetas(){
+    const pool = $('#poolEtiq'); pool.innerHTML='';
+    etiquetas.slice().sort(()=>Math.random()-0.5).forEach(e=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.textContent=e.txt; tag.draggable=true; tag.dataset.target=e.target;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zMapa','zLista','zAlertas','poolEtiq'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(!dragging) return;
+        if(z.id==='poolEtiq'){ pool.appendChild(dragging); return; }
+        z.appendChild(dragging);
+      });
+    });
+  }
+  function checkEtiquetas(){
+    let ok=0;
+    const m = $('#zMapa'); const l=$('#zLista'); const a=$('#zAlertas');
+    const getTarget = el => el.querySelector('.tag')?.dataset.target;
+    if(getTarget(m)==='mapa') ok++;
+    if(getTarget(l)==='lista') ok++;
+    if(getTarget(a)==='alertas') ok++;
+    const fb = $('#fbEtiq');
+    if(ok===3){ fb.textContent='¡Excelente! Zonas etiquetadas correctamente.'; fb.style.color='var(--ok)'; state.done.juego3=true; }
+    else{ fb.textContent=`Correctas ${ok}/3. Revisa que cada zona tenga la etiqueta apropiada.`; fb.style.color='var(--bad)'; state.done.juego3=false; }
+    store('anupro360_s6_herrsoftware', state); calcProgress();
+  }
+  function resetEtiquetas(){ $('#zMapa').innerHTML=''; $('#zLista').innerHTML=''; $('#zAlertas').innerHTML=''; renderEtiquetas(); }
+
+  /* ----------------- Juego 4: Decisiones de comando ----------------- */
+  const caseData = [
+    { id:'c1', text:'Camión detenido por objeto en pista, tráfico detrás acumulándose.', answer:'HOLD', why:'HOLD congela la situación en un punto seguro mientras evalúas.' },
+    { id:'c2', text:'Ruta principal cerrada por tronadura programada.', answer:'DIVERT', why:'DIVERT redirige a destino alternativo planificado.' },
+    { id:'c3', text:'Se retiró el obstáculo y la vía fue verificada.', answer:'CLEAR', why:'CLEAR cierra alerta y restaura operación normal.' },
+    { id:'c4', text:'Camión reporta falla crítica de frenos en rampa.', answer:'STOP', why:'STOP prioriza la seguridad del equipo y entorno.' },
+    { id:'c5', text:'Botadero prioritario saturado temporalmente.', answer:'REROUTE', why:'REROUTE reasigna a botadero alterno sin detener la flota.' }
+  ];
+  function renderCases(){
+    const box = $('#cases'); box.innerHTML='';
+    caseData.forEach(c=>{
+      const el = document.createElement('div'); el.style.border='1px dashed rgba(255,255,255,.35)'; el.style.borderRadius='10px'; el.style.padding='10px'; el.style.margin='8px 0';
+      el.innerHTML = `<p><strong>Caso:</strong> ${c.text}</p>
+        <select data-id="${c.id}" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.1); color:#fff">
+          <option value="">Selecciona…</option>
+          <option>STOP</option><option>RESUME</option><option>REROUTE</option>
+          <option>HOLD</option><option>CLEAR</option><option>DIVERT</option>
+        </select>
+        <div class="chip2" id="${c.id}-fb" style="display:inline-block; margin-top:6px"></div>`;
+      box.appendChild(el);
+    });
+  }
+  function checkCases(){
+    let ok=0;
+    caseData.forEach(c=>{
+      const sel = document.querySelector(`select[data-id="${c.id}"]`).value;
+      const fb = document.getElementById(`${c.id}-fb`);
+      if(sel===c.answer){ fb.textContent = 'Correcto: '+c.why; fb.style.color='var(--ok)'; ok++; }
+      else if(sel){ fb.textContent = `Incorrecto. Esperado: ${c.answer}. ${c.why}`; fb.style.color='var(--bad)'; }
+      else { fb.textContent = 'Debes seleccionar una opción.'; fb.style.color='var(--bad)'; }
+    });
+    const fbAll = $('#fbCases');
+    fbAll.textContent = ok===caseData.length ? '¡Excelente! Decisiones perfectas.' : `Aciertos ${ok}/${caseData.length}`;
+    fbAll.style.color = ok===caseData.length ? 'var(--ok)' : 'var(--bad)';
+    state.done.juego4 = ok===caseData.length; store('anupro360_s6_herrsoftware', state); calcProgress();
+  }
+  function resetCases(){ renderCases(); }
+
+  /* ----------------- Juego 5: KPI ----------------- */
+  function checkKPI(){
+    const tph = parseFloat($('#kpi-tph').value);
+    const ciclo = parseFloat($('#kpi-ciclo').value);
+    const expTph = 4800/6; // 800
+    const expCiclo = 6/24; // 0.25 h
+    const tol = 0.05;
+    const okTph = !isNaN(tph) && Math.abs(tph-expTph) <= expTph*tol;
+    const okCiclo = !isNaN(ciclo) && Math.abs(ciclo-expCiclo) <= expCiclo*tol;
+    const fb = $('#fbKPI');
+    if(okTph && okCiclo){ fb.textContent = `Correcto: TPH≈${expTph.toFixed(0)} y ciclo≈${expCiclo.toFixed(2)} h.`; fb.style.color='var(--ok)'; state.done.juego5=true; }
+    else{ fb.textContent = `Revisa: TPH≈${expTph.toFixed(0)}; Ciclo≈${expCiclo.toFixed(2)} h.`; fb.style.color='var(--bad)'; state.done.juego5=false; }
+    store('anupro360_s6_herrsoftware', state); calcProgress();
+  }
+  function resetKPI(){ $('#kpi-tph').value=''; $('#kpi-ciclo').value=''; $('#fbKPI').textContent=''; }
+
+  /* ----------------- Quiz 20 preguntas ----------------- */
+  const preguntas=[
+    {q:'¿Cuál es la función del mapa en FrontRunner?', opts:['Ver reportes de fin de mes','Visualizar mina y posición/estado de CAEX en tiempo real','Editar contratos de mantenimiento','Firmar permisos de trabajo'], ok:1, e:'El mapa muestra rutas/posición/estado en tiempo real.'},
+    {q:'¿Qué comando detiene un camión de forma segura e inmediata?', opts:['RESUME','STOP','HOLD','CLEAR'], ok:1, e:'STOP prioriza la seguridad.'},
+    {q:'En MineStar, ¿qué hace HOLD?', opts:['Redirige a un destino alterno','Pausa temporal en punto seguro','Cierra una alerta','Reasigna ruta prioritaria'], ok:1, e:'HOLD inmoviliza temporalmente la unidad.'},
+    {q:'¿Cuándo usar REROUTE?', opts:['Tras confirmar bloqueo/saturación del destino','Siempre al inicio del turno','Para actualizar firmware','Para limpiar alertas'], ok:0, e:'REROUTE reasigna destino/ruta cuando cambia la prioridad/camino.'},
+    {q:'DIVERT sirve para…', opts:['Enviar a destino alternativo predefinido','Pausar en punto seguro','Reanudar ciclo','Borrar alertas'], ok:0, e:'DIVERT redirige a un destino alternativo.'},
+    {q:'CLEAR debe aplicarse…', opts:['Antes de verificar','Después de resolver/aliviar la condición','En cualquier momento','Nunca'], ok:1, e:'CLEAR solo tras resolver y documentar.'},
+    {q:'¿Qué indicador muestra Toneladas por hora?', opts:['TPH','MTBF','OEE','TPM'], ok:0, e:'TPH = Toneladas por Hora.'},
+    {q:'Si moviste 4800 t en 6 h, el TPH aproximado es…', opts:['400','600','800','1200'], ok:2, e:'4800/6 = 800 TPH.'},
+    {q:'Tiempo de ciclo con 6 h y 24 ciclos es…', opts:['0.10 h','0.25 h','0.5 h','1 h'], ok:1, e:'6/24 = 0.25 h.'},
+    {q:'SCADA alerta principalmente sobre…', opts:['Latencia/red, antenas y servidores','Salud del operador','Clima regional','Precio del combustible'], ok:0, e:'SCADA monitorea infraestructura y conectividad.'},
+    {q:'Buena práctica antes de RESUME:', opts:['Verificar mapa y radio','Eliminar logs','Cambiar turno','Desactivar GPS'], ok:0, e:'Verifica que la vía esté segura y anunciada.'},
+    {q:'Zonas no‑go sirven para…', opts:['Acelerar en rampas','Restringir tránsitos inseguros','Aumentar TPH siempre','Parquear camiones'], ok:1, e:'Bloquean el paso en zonas riesgosas/restringidas.'},
+    {q:'El formato de radio recomendado incluye…', opts:['Chistes para relajar','Destinatario, unidad, ubicación, evento, solicitud, cierre','Solo emoticones','Hablar largo y rápido'], ok:1, e:'Estructura clara para decisión rápida.'},
+    {q:'Panel de productividad ayuda a…', opts:['Juegos','Identificar cuellos de botella y oportunidades','Cambiar neumáticos','Asignar vacaciones'], ok:1, e:'Permite detectar pérdidas y optimizar ciclos.'},
+    {q:'¿Qué comando usarías si el botadero se satura temporalmente?', opts:['CLEAR','STOP','REROUTE','HOLD'], ok:2, e:'REROUTE reasigna a botadero alterno.'},
+    {q:'¿Qué hacer si una alerta no está clara?', opts:['Ignorarla','Verificar con cámaras/mapa y coordinar por radio','Desactivar alarmas','Reanudar al azar'], ok:1, e:'Verifica y coordina; documenta antes de actuar.'},
+    {q:'MineStar — Control de tráfico autónomo prioriza…', opts:['Cruces y rampas','Estacionamientos','Casino','Dormitorios'], ok:0, e:'Reduce encuentros en puntos críticos.'},
+    {q:'Historial de eventos sirve para…', opts:['Auditoría y mejora continua','Eliminar datos','Solo decoración','Juegos'], ok:0, e:'Permite trazabilidad y lecciones aprendidas.'},
+    {q:'En SCADA, alta latencia puede provocar…', opts:['Comandos tardíos y modo seguro','Mayor velocidad','Baja temperatura','Mejor WiFi'], ok:0, e:'La red lenta impacta tiempos de reacción.'},
+    {q:'Antes de CLEAR debes…', opts:['Confirmar que el peligro se retiró y registrar','Acelerar el camión','Cambiar a manual sin permiso','Silenciar radios'], ok:0, e:'Cierre responsable y documentado.'}
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok; div.dataset.exp=p.e;
+      div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join('');
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const exp = div.dataset.exp;
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; div.insertAdjacentHTML('beforeend', `<div class="note">Explicación: ${exp}</div>`); return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; div.insertAdjacentHTML('beforeend', `<div class="note">✔ ${exp}</div>`); }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; div.insertAdjacentHTML('beforeend', `<div class="note">✘ ${exp}</div>`); }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    const fb = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').textContent = fb;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)':'var(--bad)';
+    state.done.quiz=true; store('anupro360_s6_herrsoftware', state); calcProgress();
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+      const notes = div.querySelectorAll('.note'); notes.forEach(n=> n.remove());
+    });
+    $('#quizFeedback').textContent='';
+    state.done.quiz=false; store('anupro360_s6_herrsoftware', state); calcProgress();
+  }
+
+  /* Enlaces UI */
+  $('#checkOrden').addEventListener('click', checkOrden);
+  $('#regenOrden').addEventListener('click', renderOrdenar);
+  $('#checkClasif').addEventListener('click', checkClasif);
+  $('#resetClasif').addEventListener('click', resetClasif);
+  $('#checkEtiq').addEventListener('click', checkEtiquetas);
+  $('#resetEtiq').addEventListener('click', resetEtiquetas);
+  $('#checkCases').addEventListener('click', checkCases);
+  $('#resetCases').addEventListener('click', resetCases);
+  $('#checkKPI').addEventListener('click', checkKPI);
+  $('#resetKPI').addEventListener('click', resetKPI);
+  $('#enviar').addEventListener('click', lockQuizAndColor);
+  $('#resetQuiz').addEventListener('click', resetQuizColors);
+
+  /* Init */
+  renderOrdenar();
+  renderClasif();
+  renderEtiquetas();
+  renderCases();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

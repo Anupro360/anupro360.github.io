@@ -299,7 +299,7 @@
     <h3>10) Juego 1 · Ordena “Ingreso a Zona Autónoma”</h3>
     <p>Arrastra para ordenar los pasos correctos del procedimiento de <strong>ingreso</strong>.</p>
     <ul class="sortable dropzone" id="ordenar1"></ul>
-    <div class="flex" style="margin-top:8px">
+    <div class="flex" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
       <button class="btn-sec" id="checkOrden1">Evaluar</button>
       <span id="fbOrden1" class="chip2" aria-live="polite"></span>
       <button class="btn-ghost" id="regenOrden1">Mezclar</button>
@@ -345,7 +345,7 @@
       </div>
       <div id="normPool" class="zone" aria-label="Descripciones"></div>
     </div>
-    <div class="flex" style="margin-top:8px">
+    <div class="flex" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
       <button class="btn-sec" id="checkNorm">Evaluar</button>
       <button class="btn-ghost" id="resetNorm">Reiniciar</button>
       <span id="fbNorm" class="chip2" aria-live="polite"></span>
@@ -358,7 +358,7 @@
     <h3>13) Juego 4 · Checklist SOP “Falla Crítica en CAEX”</h3>
     <p>Marca <strong>todas</strong> las acciones que corresponden al SOP.</p>
     <div id="sopMulti"></div>
-    <div class="flex" style="margin-top:8px">
+    <div class="flex" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
       <button class="btn-sec" id="checkSOP">Evaluar</button>
       <button class="btn-ghost" id="resetSOP">Reiniciar</button>
       <span id="fbSOP" class="chip2" aria-live="polite"></span>
@@ -371,7 +371,7 @@
     <h3>14) Juego 5 · Prioriza la respuesta (1 = Atender primero)</h3>
     <p>Ordena de mayor a menor criticidad.</p>
     <ol class="sortable dropzone" id="ordenar5" style="list-style:decimal"></ol>
-    <div class="flex" style="margin-top:8px">
+    <div class="flex" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
       <button class="btn-sec" id="checkOrden5">Evaluar</button>
       <span id="fbOrden5" class="chip2" aria-live="polite"></span>
       <button class="btn-ghost" id="regenOrden5">Mezclar</button>
@@ -474,6 +474,23 @@
     'Mantener comunicación radial durante la permanencia',
     'Registrar ingreso y egreso en bitácora'
   ];
+
+  function bindSortable(container){
+    function onDragOver(e){
+      e.preventDefault();
+      const dragging = container.querySelector('.dragging');
+      if(!dragging) return;
+      const items = [...container.querySelectorAll('li:not(.dragging)')];
+      let after = null;
+      for(const el of items){
+        const rect = el.getBoundingClientRect();
+        if(e.clientY <= rect.top + rect.height/2){ after = el; break; }
+      }
+      if(after) container.insertBefore(dragging, after); else container.appendChild(dragging);
+    }
+    container.ondragover = onDragOver; // asegura que no se elimine tras el primer evento
+  }
+
   function renderOrden1(){
     const ul = $('#ordenar1'); ul.innerHTML='';
     const mix = pasosIngreso.slice().sort(()=>Math.random()-0.5);
@@ -483,13 +500,9 @@
       li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
       ul.appendChild(li);
     });
-    ul.addEventListener('dragover', e=>{
-      e.preventDefault();
-      const dragging = ul.querySelector('.dragging');
-      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
-      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
-    }, {once:true});
+    bindSortable(ul);
   }
+
   function checkOrden1(){
     const actual = $$('#ordenar1 li').map(li=>li.textContent.trim());
     const ok = actual.every((t,i)=> t===pasosIngreso[i]);
@@ -523,8 +536,8 @@
       z.addEventListener('dragover', e=>{
         e.preventDefault();
         const dragging = document.querySelector('.dragging');
-        if(dragging && z.contains(dragging)) return;
-        if(dragging) z.appendChild(dragging);
+        if(!dragging) return;
+        if(!z.contains(dragging)) z.appendChild(dragging);
       });
     });
   }
@@ -559,8 +572,8 @@
       z.addEventListener('dragover', e=>{
         e.preventDefault();
         const dragging=document.querySelector('.dragging');
-        if(dragging && z.contains(dragging)) return;
-        if(dragging){ z.appendChild(dragging); }
+        if(!dragging) return;
+        if(!z.contains(dragging)) z.appendChild(dragging);
       });
     });
   }
@@ -642,12 +655,20 @@
       li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
       ol.appendChild(li);
     });
-    ol.addEventListener('dragover', e=>{
+    // FIX: no usar {once:true}, mantener el handler activo
+    function onDragOver(e){
       e.preventDefault();
       const dragging=ol.querySelector('.dragging');
-      const after=[...ol.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(!dragging) return;
+      const items=[...ol.querySelectorAll('li:not(.dragging)')];
+      let after=null;
+      for(const el of items){
+        const r=el.getBoundingClientRect();
+        if(e.clientY <= r.top + r.height/2){ after=el; break; }
+      }
       if(after) ol.insertBefore(dragging, after); else ol.appendChild(dragging);
-    }, {once:true});
+    }
+    ol.ondragover = onDragOver;
   }
   function checkOrden5(){
     const actual=$$('#ordenar5 li').map(li=>li.textContent.trim());

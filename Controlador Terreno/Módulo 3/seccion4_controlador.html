@@ -482,6 +482,23 @@
     })
   });
 
+  /* ------------------------ helper de ordenamiento persistente ------------------------ */
+  function bindSortable(container){
+    function onDragOver(e){
+      e.preventDefault();
+      const dragging = container.querySelector('.dragging');
+      if(!dragging) return;
+      const items = [...container.querySelectorAll('li:not(.dragging)')];
+      let after = null;
+      for(const el of items){
+        const rect = el.getBoundingClientRect();
+        if(e.clientY <= rect.top + rect.height/2){ after = el; break; }
+      }
+      if(after) container.insertBefore(dragging, after); else container.appendChild(dragging);
+    }
+    container.ondragover = onDragOver; // evita {once:true}; el handler queda activo siempre
+  }
+
   /* ------------------------ JUEGO 1: Ordenar inicio de turno ------------------------ */
   const pasosInicio = [
     'Recibir informe del turno anterior',
@@ -497,13 +514,7 @@
       li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
       ul.appendChild(li);
     });
-    ul.addEventListener('dragover', e=>{
-      e.preventDefault();
-      const dragging = ul.querySelector('.dragging');
-      const items = [...ul.querySelectorAll('li:not(.dragging)')];
-      const after = items.find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
-      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
-    }, {once:true});
+    bindSortable(ul);
   }
   function checkOrden1(){
     const actual = $$('#ordenar1 li').map(li=>li.textContent.trim());
@@ -701,12 +712,7 @@
       li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
       ol.appendChild(li);
     });
-    ol.addEventListener('dragover', e=>{
-      e.preventDefault();
-      const dragging=ol.querySelector('.dragging');
-      const after=[...ol.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
-      if(after) ol.insertBefore(dragging, after); else ol.appendChild(dragging);
-    }, {once:true});
+    bindSortable(ol); // FIX: handler persistente
   }
   function checkOrden6(){
     const actual=$$('#ordenar6 li').map(li=>li.textContent.trim());

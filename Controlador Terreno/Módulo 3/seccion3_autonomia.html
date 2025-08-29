@@ -56,13 +56,13 @@
 
     /* Drag & drop + zonas */
     .sortable{list-style:none; padding:0; margin:0}
-    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab; touch-action:none}
     .sortable li.dragging{opacity:.6}
     .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
 
     .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
     .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
-    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab; touch-action:none}
     .dragging{opacity:.6}
 
     footer{opacity:.8; font-size:.85rem; padding:24px 0}
@@ -424,6 +424,26 @@
     'Reasignación/Desvío temporal de ruta si aplica',
     'Reanudación automática cuando el cruce queda despejado'
   ];
+  function bindSortableListTouch(list){
+    let dragging=null, ghost=null;
+    function cleanup(){ dragging=null; if(ghost){ghost.remove(); ghost=null;} }
+    list.addEventListener('touchstart', (e)=>{
+      const li=e.target.closest('li'); if(!li) return;
+      e.preventDefault(); dragging=li; li.classList.add('dragging');
+      ghost=li.cloneNode(true); ghost.style.position='fixed'; ghost.style.opacity='0.6';
+      ghost.style.pointerEvents='none'; ghost.style.left='-9999px'; ghost.style.top='-9999px';
+      document.body.appendChild(ghost);
+    }, {passive:false});
+    list.addEventListener('touchmove', (e)=>{
+      if(!dragging || !ghost) return;
+      const t=e.touches[0];
+      ghost.style.left=(t.clientX+6)+'px'; ghost.style.top=(t.clientY+6)+'px';
+      const after=[...list.querySelectorAll('li:not(.dragging)')].find(el=> t.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
+      if(after) list.insertBefore(dragging, after); else list.appendChild(dragging);
+    }, {passive:false});
+    list.addEventListener('touchend', ()=>{ if(dragging) dragging.classList.remove('dragging'); cleanup(); });
+    list.addEventListener('touchcancel', cleanup);
+  }
   function renderOrdenar(){
     const ul = $('#ordenar'); ul.innerHTML='';
     const mix = pasosRespuesta.slice().sort(()=>Math.random()-0.5);
@@ -433,12 +453,15 @@
       li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
       ul.appendChild(li);
     });
+    // Desktop DnD (sin once:true para no romper el arrastre)
     ul.addEventListener('dragover', e=>{
       e.preventDefault();
       const dragging = ul.querySelector('.dragging');
       const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
-      if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging);
-    }, {once:true});
+      if(dragging){ if(after) ul.insertBefore(dragging, after); else ul.appendChild(dragging); }
+    });
+    // Soporte táctil
+    bindSortableListTouch(ul);
   }
   function checkOrden(){
     const lis = $$('#ordenar li');
@@ -462,6 +485,30 @@
     {txt:'Usar mapas y capas dinámicas para gestionar intersecciones', tipo:'OK'},
     {txt:'Aumentar velocidad para compensar latencia de red', tipo:'BAD'}
   ];
+  function bindZonesTouch(zoneIds, poolId){
+    let dragging=null, ghost=null;
+    function cleanup(){ dragging=null; if(ghost){ghost.remove(); ghost=null;} }
+    [poolId, ...zoneIds].forEach(id=>{
+      const cont=document.getElementById(id);
+      cont.addEventListener('touchstart', (e)=>{
+        const tag=e.target.closest('.tag'); if(!tag) return;
+        e.preventDefault(); dragging=tag; tag.classList.add('dragging');
+        ghost=tag.cloneNode(true); ghost.style.position='fixed'; ghost.style.opacity='0.6';
+        ghost.style.pointerEvents='none'; ghost.style.left='-9999px'; ghost.style.top='-9999px';
+        document.body.appendChild(ghost);
+      }, {passive:false});
+      cont.addEventListener('touchmove', (e)=>{
+        if(!dragging || !ghost) return;
+        const t=e.touches[0];
+        ghost.style.left=(t.clientX+6)+'px'; ghost.style.top=(t.clientY+6)+'px';
+        const target=document.elementFromPoint(t.clientX, t.clientY);
+        const drop=target?.closest('#'+id);
+        if(drop && !drop.contains(dragging)){ drop.appendChild(dragging); }
+      }, {passive:false});
+      cont.addEventListener('touchend', ()=>{ if(dragging) dragging.classList.remove('dragging'); cleanup(); });
+      cont.addEventListener('touchcancel', cleanup);
+    });
+  }
   function renderClasif(){
     const pool = $('#pool'); pool.innerHTML='';
     const shuffled = itemsClasif.slice().sort(()=>Math.random()-0.5);
@@ -480,6 +527,8 @@
         if(dragging) z.appendChild(dragging);
       });
     });
+    // Soporte táctil
+    bindZonesTouch(['zoneOK','zoneBAD'], 'pool');
   }
   function checkClasif(){
     let ok=0, total=itemsClasif.length;
