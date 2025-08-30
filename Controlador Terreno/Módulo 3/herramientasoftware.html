@@ -54,9 +54,9 @@
     .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
 
     /* Drag & drop + zonas */
-    .sortable{list-style:none; padding:0; margin:0}
+    .sortable{list-style:none; padding:0; margin:0; touch-action:none; user-select:none}
     .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
-    .sortable li.dragging{opacity:.6}
+    .sortable li.dragging{opacity:.6; cursor:grabbing}
     .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
 
     .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
@@ -254,7 +254,7 @@
   <section class="card" id="juego1">
     <h3>8) Juego 1 · Ordena la respuesta ante obstáculo (FrontRunner)</h3>
     <p>Arrastra para ordenar los pasos correctos cuando FrontRunner detecta un obstáculo en cruce.</p>
-    <ul class="sortable dropzone" id="ordenar"></ul>
+    <ul class="sortable dropzone" id="ordenar" aria-label="Lista ordenable de pasos"></ul>
     <div class="flex" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
       <button class="btn-sec" id="checkOrden">Evaluar</button>
       <button class="btn-ghost" id="regenOrden">Mezclar</button>
@@ -425,22 +425,70 @@
     'Ejecutar REROUTE / DIVERT para desviar por ruta segura',
     'Registrar y aplicar CLEAR/RESUME al resolver'
   ];
+
+  function makeLi(txt){
+    const li=document.createElement('li');
+    li.textContent=txt;
+    li.setAttribute('role','listitem');
+    li.draggable=true;
+
+    // Mouse/desktop drag & drop (HTML5)
+    li.addEventListener('dragstart', ev=>{
+      li.classList.add('dragging');
+      ev.dataTransfer.effectAllowed='move';
+    });
+    li.addEventListener('dragend', ()=> li.classList.remove('dragging'));
+
+    // Touch / Pointer support
+    li.addEventListener('pointerdown', (ev)=>{
+      if(ev.pointerType==='touch'){
+        ev.preventDefault();
+        li.classList.add('dragging');
+        const ul = li.parentElement;
+        const move = (e)=>{
+          const target = document.elementFromPoint(e.clientX, e.clientY);
+          const overLi = target?.closest('#ordenar li:not(.dragging)');
+          if(overLi){
+            const rect = overLi.getBoundingClientRect();
+            const before = (e.clientY - rect.top) < rect.height/2;
+            if(before) ul.insertBefore(li, overLi); else ul.insertBefore(li, overLi.nextSibling);
+          }else if(target?.closest('#ordenar')){
+            ul.appendChild(li);
+          }
+        };
+        const up = ()=>{
+          li.classList.remove('dragging');
+          window.removeEventListener('pointermove', move);
+          window.removeEventListener('pointerup', up);
+        };
+        window.addEventListener('pointermove', move);
+        window.addEventListener('pointerup', up);
+      }
+    });
+
+    return li;
+  }
+
   function renderOrdenar(){
     const ul = $('#ordenar'); ul.innerHTML='';
     const mix = pasosRespuesta.slice().sort(()=>Math.random()-0.5);
-    mix.forEach(txt=>{
-      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
-      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
-      li.addEventListener('dragend',   ()=> li.classList.remove('dragging'));
-      ul.appendChild(li);
-    });
+    mix.forEach(txt=> ul.appendChild(makeLi(txt)) );
+
+    // Keep the dragover listener persistent (bugfix: removed {once:true})
     ul.addEventListener('dragover', e=>{
       e.preventDefault();
       const dragging = ul.querySelector('.dragging');
-      const after = [...ul.querySelectorAll('li:not(.dragging)')].find(el=> e.clientY <= el.getBoundingClientRect().top + el.offsetHeight/2);
-      if(dragging && after) ul.insertBefore(dragging, after); else if(dragging) ul.appendChild(dragging);
-    }, {once:true});
+      if(!dragging) return;
+      const siblings = [...ul.querySelectorAll('li:not(.dragging)')];
+      let nextEl = null;
+      for(const el of siblings){
+        const rect = el.getBoundingClientRect();
+        if(e.clientY <= rect.top + rect.height/2){ nextEl = el; break; }
+      }
+      if(nextEl) ul.insertBefore(dragging, nextEl); else ul.appendChild(dragging);
+    });
   }
+
   function checkOrden(){
     const lis = $$('#ordenar li');
     const actual = lis.map(li=>li.textContent.trim());
@@ -481,6 +529,14 @@
         if(dragging && z.contains(dragging)) return;
         if(dragging) z.appendChild(dragging);
       });
+      // Simple pointer support for touch
+      z.addEventListener('pointerup', e=>{
+        const dragging = document.querySelector('.dragging');
+        if(dragging && (e.pointerType === 'touch' || e.pointerType === 'pen')){
+          z.appendChild(dragging);
+          dragging.classList.remove('dragging');
+        }
+      });
     });
   }
   function checkClasif(){
@@ -517,6 +573,13 @@
         if(!dragging) return;
         if(z.id==='poolEtiq'){ pool.appendChild(dragging); return; }
         z.appendChild(dragging);
+      });
+      z.addEventListener('pointerup', e=>{
+        const dragging = document.querySelector('.dragging');
+        if(dragging && (e.pointerType==='touch'||e.pointerType==='pen')){
+          if(z.id==='poolEtiq'){ pool.appendChild(dragging); } else { z.appendChild(dragging); }
+          dragging.classList.remove('dragging');
+        }
       });
     });
   }
@@ -655,7 +718,7 @@
 
   /* Enlaces UI */
   $('#checkOrden').addEventListener('click', checkOrden);
-  $('#regenOrden').addEventListener('click', renderOrdenar);
+  $('#regenOrden').addEventListener('click', ()=>{ renderOrdenar(); $('#fbOrden').textContent=''; });
   $('#checkClasif').addEventListener('click', checkClasif);
   $('#resetClasif').addEventListener('click', resetClasif);
   $('#checkEtiq').addEventListener('click', checkEtiquetas);
