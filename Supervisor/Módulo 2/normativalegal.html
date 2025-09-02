@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Módulo · Normativa Legal en Minería</title>
+  <meta name="description" content="Aplicación web didáctica: Normativa Legal para Supervisores de Área Mina. Explicación paso a paso, juegos (5) y quiz (20). 100% virtual, con soporte táctil."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; --bad:#FF1744; --panel:rgba(255,255,255,.06); --borde:rgba(255,255,255,.18);
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+    a{color:#ffd67a}
+
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+
+    .card{background:var(--panel); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    table{width:100%; border-collapse:collapse; border:1px solid var(--borde); margin-top:8px}
+    th,td{border:1px solid var(--borde); padding:8px; text-align:left}
+    thead th{text-align:center}
+
+    /* ======= Tarjetas / feedback (común a juegos y quiz) ======= */
+    .q,.panel{padding:12px; border-radius:12px; border:1px solid var(--borde); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .correct{border-color: var(--ok) !important; background: rgba(0,200,83,.12) !important}
+    .wrong{border-color: var(--bad) !important; background: rgba(255,23,68,.12) !important}
+
+    /* Opción estilo tarjeta (quiz y selectables) */
+    .opt{display:flex; align-items:center; gap:12px; padding:10px 12px; margin:8px 0; border:1px solid var(--borde); background:var(--panel); border-radius:12px}
+    .opt input{flex:0 0 auto; width:18px; height:18px; margin:0}
+    .opt span{flex:1 1 auto; color:#fff; text-align:left}
+    .opt.correct{outline:2px solid var(--ok)}
+    .opt.wrong{outline:2px solid var(--bad)}
+
+    /* Formularios de alto contraste */
+    select, input, textarea {background:rgba(255,255,255,.1); color:#fff; border:1px solid rgba(255,255,255,.25); padding:10px; border-radius:10px; width:100%}
+    option{background:#0b1116; color:#fff}
+
+    /* Drag & drop + zonas (mismo look) */
+    .sortable{list-style:none; padding:0; margin:0; touch-action:none; user-select:none}
+    .sortable li{background:var(--panel); border:1px solid var(--borde); padding:12px; border-radius:12px; margin:8px 0; cursor:grab; color:#fff}
+    .sortable li.dragging{opacity:.6; cursor:grabbing}
+    .dropzone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:6px}
+
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-flex; align-items:center; gap:8px; margin:6px; padding:10px 12px; background:var(--panel); border:1px solid var(--borde); border-radius:12px; cursor:grab; color:#fff}
+    .tag .dot{width:10px; height:10px; border-radius:999px; background:#fff; opacity:.6}
+    .dragging{opacity:.6}
+
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+
+    .figure{border:1px dashed rgba(255,255,255,.25); border-radius:12px; padding:10px; margin-top:8px; text-align:center}
+    .figure svg{max-width:100%}
+    .figure img{max-width:100%; border-radius:10px; margin:8px 0}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand"><h1>Anupro360 · Módulo · Normativa Legal</h1></div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Gestión de Seguridad y Salud Ocupacional · Marco Legal Clave</h2>
+    <p class="note"><strong>Aprenderás a:</strong> reconocer <b>Ley 16.744</b>, <b>D.S. Nº132</b>, <b>D.S. Nº40</b>, <b>D.S. Nº54</b>, <b>D.S. Nº76</b> y <b>Protocolos MINSAL</b>; aplicar responsabilidades de supervisión; y tomar decisiones correctas frente a incidentes. Incluye <strong>5 juegos</strong> y <strong>quiz de 20 preguntas</strong>.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- Objetivo y contexto -->
+  <section class="card">
+    <h3>1) Objetivo del módulo</h3>
+    <p>Que el Supervisor de primera línea identifique rápidamente el marco legal aplicable ante eventos de seguridad y salud ocupacional y <strong>actúe conforme a ley</strong> (denuncia, control de riesgos, registro y mejora).</p>
+    <details>
+      <summary>¿Por qué es clave conocer la norma?</summary>
+      <p>Permite decidir mejor bajo presión, evitar sanciones y proteger a las personas. El 80% de los errores legales proviene de <em>no denunciar</em> o <em>no documentar</em> a tiempo.</p>
+    </details>
+    <div class="figure">
+      <svg viewBox="0 0 820 180" role="img" aria-label="Mapa mental marco legal">
+        <rect x="10" y="10" width="800" height="160" rx="14" fill="none" stroke="rgba(255,255,255,.35)"/>
+        <text x="30" y="40" fill="#fff" font-size="16">Marco Legal Clave</text>
+        <g fill="none" stroke="#ffd67a">
+          <rect x="40" y="60" width="120" height="40" rx="8"/><rect x="190" y="60" width="120" height="40" rx="8"/>
+          <rect x="340" y="60" width="120" height="40" rx="8"/><rect x="490" y="60" width="120" height="40" rx="8"/>
+          <rect x="640" y="60" width="120" height="40" rx="8"/>
+        </g>
+        <g fill="#fff" font-size="14">
+          <text x="55" y="85">Ley 16.744</text><text x="203" y="85">D.S. Nº132</text>
+          <text x="360" y="85">D.S. Nº40</text><text x="513" y="85">D.S. Nº54</text>
+          <text x="655" y="85">D.S. Nº76</text>
+        </g>
+      </svg>
+    </div>
+    <div class="flex"><button class="btn" data-complete="obj">Marcar leído ✓</button></div>
+  </section>
+
+  <aside class="card">
+    <h3>Ficha del micromódulo</h3>
+    <ul>
+      <li>Tiempo estimado: <strong>40–60 min</strong></li>
+      <li>Estructura: 6 bloques + 5 juegos + quiz (20).</li>
+      <li>Feedback: <span style="color:var(--ok); font-weight:700">verde</span> correcto / <span style="color:var(--bad); font-weight:700">rojo</span> incorrecto.</li>
+      <li>100% virtual y compatible con pantallas móviles (arrastre táctil).</li>
+    </ul>
+    <div class="chip2">Versión: NL_1.1</div>
+  </aside>
+
+  <!-- Normas clave -->
+  <section class="card">
+    <h3>2) Marco legal resumido (lo esencial que debes recordar)</h3>
+    <table>
+      <thead><tr><th>Norma</th><th>En síntesis</th><th>Como supervisor debes…</th></tr></thead>
+      <tbody>
+        <tr><td><b>Ley 16.744</b> (Seguridad Social – Accidentes y Enfermedades)</td><td>Define cobertura, denuncias (DIAT/DIEP), calificación y prestaciones.</td><td>Denunciar oportunamente, colaborar con OAL (ACHS/IST, etc.), asegurar atención y registro.</td></tr>
+        <tr><td><b>D.S. Nº132</b> (Reglamento de Seguridad Minera)</td><td>Marco preventivo mínimo en minería; obligaciones del <i>Administrador</i>.</td><td>Aplicar procedimientos, resguardar integridad y cumplimiento en faena.</td></tr>
+        <tr><td><b>D.S. Nº40</b> (Prevención de Riesgos – Minsal)</td><td>Programa de prevención, investigación de accidentes/incidentes.</td><td>Investigar, registrar causas y establecer medidas correctivas.</td></tr>
+        <tr><td><b>D.S. Nº54</b> (Comités Paritarios)</td><td>Constitución y funcionamiento del Comité Paritario de Higiene y Seguridad.</td><td>Coordinar con el Comité, levantar medidas y difundir lecciones.</td></tr>
+        <tr><td><b>D.S. Nº76</b> (Sistemas de Gestión de SST)</td><td>Establece gestión y roles en la organización para SST.</td><td>Integrar objetivos, indicadores y auditorías internas.</td></tr>
+        <tr><td><b>Protocolos MINSAL</b> (p. ej. Psicosocial)</td><td>Lineamientos específicos por factores de riesgo.</td><td>Aplicar evaluaciones y planes de acción cuando corresponda.</td></tr>
+      </tbody>
+    </table>
+    <div class="flex"><button class="btn" data-complete="marco">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- Responsabilidades -->
+  <section class="card">
+    <h3>3) Responsabilidad del Supervisor</h3>
+    <ol>
+      <li><b>Anticipar</b>: identificar peligros críticos (personas, procesos, entorno).</li>
+      <li><b>Actuar</b>: detener, contener y comunicar; priorizar la vida y salud.</li>
+      <li><b>Documentar</b>: denuncia, investigación, medidas y seguimiento.</li>
+      <li><b>Mejorar</b>: lecciones aprendidas y control de efectividad.</li>
+    </ol>
+    <details><summary>Tip de campo</summary><p>Si tienes dudas, <b>activa control</b> (STOP/HOLD), comunica por radio, registra hora y testigos; luego aplicas la norma correspondiente.</p></details>
+    <div class="flex"><button class="btn" data-complete="resp">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- Flujo legal -->
+  <section class="card">
+    <h3>4) Flujo rápido ante accidente/incidente</h3>
+    <ol>
+      <li><b>Atención y contención</b> inmediata.</li>
+      <li><b>Denuncia</b> (Ley 16.744) a organismo administrador.</li>
+      <li><b>Investigación</b> (D.S. 40) con causas y controles.</li>
+      <li><b>Medidas</b> correctivas y verificación de efectividad.</li>
+      <li><b>Comunicación</b> a Comité Paritario (D.S. 54) y cierre.</li>
+    </ol>
+    <div class="flex"><button class="btn" data-complete="flujo">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- Casos legales prácticos -->
+  <section class="card">
+    <h3>5) Casos frecuentes</h3>
+    <ul>
+      <li><b>Accidente de trayecto:</b> aplica Ley 16.744; denuncia DIAT, registrar antecedentes.</li>
+      <li><b>Incidente sin lesión pero con alto potencial:</b> investiga (D.S. 40), reporta y aplica medidas.</li>
+      <li><b>Trabajo en altura sin barandas:</b> incumplimiento D.S. 132; detener, bloquear y corregir.</li>
+    </ul>
+    <div class="flex"><button class="btn" data-complete="casos">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- Competencias -->
+  <section class="card">
+    <h3>6) Competencias legales del Supervisor</h3>
+    <ul>
+      <li>Reconoce norma aplicable por escenario.</li>
+      <li>Comunica y documenta de forma clara y oportuna.</li>
+      <li>Integra Comité Paritario en la mejora.</li>
+    </ul>
+    <div class="flex"><button class="btn" data-complete="compet">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- ========================= JUEGOS (5) ========================= -->
+  <!-- Juego 1: Orden de procedimiento legal -->
+  <section class="card" id="juego1">
+    <h3>7) Juego 1 · Ordena el procedimiento legal</h3>
+    <p><b>Cómo se juega:</b> Arrastra los pasos hasta dejarlos en el orden correcto.</p>
+    <p><b>¿Para qué es bueno?</b> Refuerza el <u>flujo mental</u> correcto bajo presión: <em>Atención → Denuncia → Investigación → Medidas → Comité/Cierre</em>.</p>
+    <ul class="sortable dropzone" id="ordenar" aria-label="Lista ordenable de pasos"></ul>
+    <div class="flex" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkOrden">Evaluar</button>
+      <button class="btn-ghost" id="regenOrden">Mezclar</button>
+      <span id="fbOrden" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego1">Marcar juego 1 ✓</button></div>
+  </section>
+
+  <!-- Juego 2: Clasificar obligaciones -->
+  <section class="card" id="juego2">
+    <h3>8) Juego 2 · ¿De quién es la obligación?</h3>
+    <p><b>Cómo se juega:</b> Arrastra cada tarjeta a la columna <em>Empleador</em> o <em>Trabajador/Supervisor</em>.</p>
+    <p><b>¿Para qué es bueno?</b> Aclara <u>responsabilidades legales</u> para exigir y cumplir lo que corresponde.</p>
+    <div class="zones">
+      <div>
+        <h4>Empleador</h4>
+        <div id="zoneEMP" class="zone" aria-label="Zona Empleador"></div>
+      </div>
+      <div>
+        <h4>Trabajador/Supervisor</h4>
+        <div id="zoneTRAB" class="zone" aria-label="Zona Trabajador"></div>
+      </div>
+    </div>
+    <div id="pool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkClasif">Evaluar</button>
+      <button class="btn-ghost" id="resetClasif">Reiniciar</button>
+      <span id="fbClasif" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego2">Marcar juego 2 ✓</button></div>
+  </section>
+
+  <!-- Juego 3: Etiquetar norma correcta -->
+  <section class="card" id="juego3">
+    <h3>9) Juego 3 · Relaciona cada concepto con su norma</h3>
+    <p><b>Cómo se juega:</b> Arrastra cada etiqueta a la norma correcta.</p>
+    <p><b>¿Para qué es bueno?</b> Entrena la <u>memoria de referencia normativa</u> y acelera tus decisiones.</p>
+    <div class="zones" style="grid-template-columns:1fr 1fr">
+      <div>
+        <h4>Ley 16.744</h4>
+        <div id="zLey" class="zone" data-id="ley"></div>
+      </div>
+      <div>
+        <h4>D.S. Nº132</h4>
+        <div id="z132" class="zone" data-id="132"></div>
+      </div>
+      <div>
+        <h4>D.S. Nº40</h4>
+        <div id="z40" class="zone" data-id="40"></div>
+      </div>
+      <div>
+        <h4>D.S. Nº54</h4>
+        <div id="z54" class="zone" data-id="54"></div>
+      </div>
+      <div style="grid-column:1/3">
+        <h4>Protocolos MINSAL</h4>
+        <div id="zPS" class="zone" data-id="ps"></div>
+      </div>
+    </div>
+    <div id="poolEtiq" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkEtiq">Evaluar</button>
+      <button class="btn-ghost" id="resetEtiq">Reiniciar</button>
+      <span id="fbEtiq" class="chip2" aria-live="polite"></span>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego3">Marcar juego 3 ✓</button></div>
+  </section>
+
+  <!-- Juego 4: Decisiones legales (selección) -->
+  <section class="card" id="juego4">
+    <h3>10) Juego 4 · ¿Qué norma aplica?</h3>
+    <p><b>Cómo se juega:</b> Lee cada caso y selecciona en el menú la norma que corresponde. Pulsa <em>Evaluar</em> para ver el feedback.</p>
+    <p><b>¿Para qué es bueno?</b> Potencia la <u>decisión rápida</u> y la aplicación correcta de la <u>norma principal</u> ante incidentes reales.</p>
+    <div id="cases"></div>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="checkCases">Evaluar</button>
+      <button class="btn-ghost" id="resetCases">Reiniciar</button>
+      <span id="fbCases" class="chip2" aria-live="polite"></span>
+    </div>
+    <div class="figure" aria-label="Imágenes de apoyo">
+      <img src="Hammer_and_books.webp" alt="Normativa laboral"/>
+      <img src="Hard_hat_icon.webp" alt="Seguridad minera"/>
+      <img src="Accident_icon.webp" alt="Accidente laboral"/>
+      <img src="Scales_icon.webp" alt="Justicia"/>
+      <img src="Checklist_icon.webp" alt="Checklist seguridad"/>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego4">Marcar juego 4 ✓</button></div>
+  </section>
+
+  <!-- Juego 5: Indicadores legales básicos -->
+  <section class="card" id="juego5">
+    <h3>11) Juego 5 · Indicadores legales</h3>
+    <p><b>Cómo se juega:</b> Calcula la tasa (%) e IF y complétalos. Hay tolerancia ±5%.</p>
+    <p><b>¿Para qué es bueno?</b> Desarrolla <u>criterio numérico legal</u> para reportes formales de SST.</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+      <div class="panel">
+        <h4>Datos</h4>
+        <ul>
+          <li>Trabajadores promedio: <b>250</b></li>
+          <li>Accidentes con tiempo perdido en el mes: <b>3</b></li>
+          <li>Jornadas-hombre del mes: <b>50,000</b></li>
+        </ul>
+        <p class="note">Tasa de accidentabilidad mensual (%) = (accidentes c/tiempo perdido / trabajadores) × 100.</p>
+        <p class="note">Índice de frecuencia (IF) = (accidentes c/tiempo perdido × 1,000,000) / horas-hombre (aprox. 50,000).</p>
+      </div>
+      <div class="panel">
+        <label>Tasa de accidentabilidad (%):
+          <input id="kpi-acc" type="number" step="0.01" placeholder="%">
+        </label><br><br>
+        <label>IF (aprox.):
+          <input id="kpi-if" type="number" step="0.01" placeholder="Índice de frecuencia">
+        </label>
+        <div id="fbKPI" class="chip2" style="display:inline-block; margin-top:8px"></div><br>
+        <button class="btn-sec" id="checkKPI">Evaluar</button>
+        <button class="btn-ghost" id="resetKPI">Reiniciar</button>
+      </div>
+    </div>
+    <div style="margin-top:10px"><button class="btn" data-complete="juego5">Marcar juego 5 ✓</button></div>
+  </section>
+
+  <!-- ========================= QUIZ 20 PREGUNTAS ========================= -->
+  <section class="card">
+    <h3>12) Quiz final (20 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+    <button class="btn" data-complete="quiz" style="margin-top:8px">Marcar quiz completado ✓</button>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360 · Módulo Normativa Legal</div>
+</footer>
+
+<script>
+  /* Utilidades */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store = (k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read  = (k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_normativa_legal', {
+    done:{obj:false,marco:false,resp:false,flujo:false,casos:false,compet:false,juego1:false,juego2:false,juego3:false,juego4:false,juego5:false,quiz:false}
+  });
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = `Progreso ${pct}%`;
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key = e.currentTarget.dataset.complete;
+      state.done[key] = true; store('anupro360_normativa_legal', state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    })
+  });
+
+  /* ----------------- Juego 1: Orden de procedimiento ----------------- */
+  const pasos = [
+    'Atención y control del área (proteger vida)',
+    'Realizar Denuncia (Ley 16.744) a OAL',
+    'Investigar el accidente (D.S. 40)',
+    'Implementar medidas correctivas',
+    'Comunicar a Comité Paritario y cerrar con lecciones'
+  ];
+  function makeLi(txt){
+    const li=document.createElement('li');
+    li.textContent=txt;
+    li.setAttribute('role','listitem');
+    li.draggable=true;
+    li.addEventListener('dragstart', ev=>{ li.classList.add('dragging'); ev.dataTransfer.effectAllowed='move'; });
+    li.addEventListener('dragend', ()=> li.classList.remove('dragging'));
+    // Soporte táctil
+    li.addEventListener('pointerdown', (ev)=>{
+      if(ev.pointerType==='touch'){
+        ev.preventDefault();
+        li.classList.add('dragging');
+        const ul = li.parentElement;
+        const move = (e)=>{
+          const target = document.elementFromPoint(e.clientX, e.clientY);
+          const overLi = target?.closest('#ordenar li:not(.dragging)');
+          if(overLi){
+            const rect = overLi.getBoundingClientRect();
+            const before = (e.clientY - rect.top) < rect.height/2;
+            if(before) ul.insertBefore(li, overLi); else ul.insertBefore(li, overLi.nextSibling);
+          }else if(target?.closest('#ordenar')){ ul.appendChild(li); }
+        };
+        const up = ()=>{ li.classList.remove('dragging'); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+        window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+      }
+    });
+    return li;
+  }
+  function renderOrdenar(){
+    const ul = $('#ordenar'); ul.innerHTML='';
+    const mix = pasos.slice().sort(()=>Math.random()-0.5);
+    mix.forEach(txt=> ul.appendChild(makeLi(txt)) );
+    ul.addEventListener('dragover', e=>{
+      e.preventDefault();
+      const dragging = ul.querySelector('.dragging');
+      if(!dragging) return;
+      const siblings = [...ul.querySelectorAll('li:not(.dragging)')];
+      let nextEl = null;
+      for(const el of siblings){
+        const rect = el.getBoundingClientRect();
+        if(e.clientY <= rect.top + rect.height/2){ nextEl = el; break; }
+      }
+      if(nextEl) ul.insertBefore(dragging, nextEl); else ul.appendChild(dragging);
+    });
+  }
+  function checkOrden(){
+    const lis = $$('#ordenar li');
+    const actual = lis.map(li=>li.textContent.trim());
+    const ok = actual.every((t,i)=> t===pasos[i]);
+    const fb = $('#fbOrden');
+    if(ok){ fb.textContent='¡Correcto! Flujo legal en orden.'; fb.style.color='var(--ok)'; state.done.juego1=true; }
+    else{ fb.textContent='Revisa: Atención → Denuncia → Investigación → Medidas → Comité/Cierre.'; fb.style.color='var(--bad)'; state.done.juego1=false; }
+    store('anupro360_normativa_legal', state); calcProgress();
+  }
+
+  /* ----------------- Juego 2: Clasificar obligaciones ----------------- */
+  const itemsClasif = [
+    {txt:'Proveer EPIs y capacitación', tipo:'EMP'},
+    {txt:'Denunciar accidentes oportunamente', tipo:'TRAB'},
+    {txt:'Mantener procedimientos escritos', tipo:'EMP'},
+    {txt:'Detener trabajos inseguros', tipo:'TRAB'},
+    {txt:'Constituir Comité Paritario', tipo:'EMP'},
+    {txt:'Participar en investigación de accidentes', tipo:'TRAB'},
+    {txt:'Implementar medidas correctivas', tipo:'EMP'},
+    {txt:'Cumplir normas y usar EPI correctamente', tipo:'TRAB'},
+    {txt:'Evaluar riesgos y programa de prevención', tipo:'EMP'},
+    {txt:'Reportar condiciones subestándar', tipo:'TRAB'}
+  ];
+  function renderClasif(){
+    const pool = $('#pool'); pool.innerHTML='';
+    const shuffled = itemsClasif.slice().sort(()=>Math.random()-0.5);
+    shuffled.forEach((it)=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.innerHTML='<span class="dot"></span>'+it.txt; tag.draggable=true; tag.dataset.tipo=it.tipo;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zoneEMP','zoneTRAB','pool'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(dragging && z.contains(dragging)) return;
+        if(dragging) z.appendChild(dragging);
+      });
+      z.addEventListener('pointerup', e=>{
+        const dragging = document.querySelector('.dragging');
+        if(dragging && (e.pointerType === 'touch' || e.pointerType === 'pen')){
+          z.appendChild(dragging);
+          dragging.classList.remove('dragging');
+        }
+      });
+    });
+  }
+  function checkClasif(){
+    let ok=0, total=itemsClasif.length;
+    const zEMP = $('#zoneEMP'); const zTRAB = $('#zoneTRAB');
+    [...zEMP.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='EMP'){ ok++; t.classList.add('correct'); } else { t.classList.add('wrong'); }});
+    [...zTRAB.querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='TRAB'){ ok++; t.classList.add('correct'); } else { t.classList.add('wrong'); }});
+    const fb=$('#fbClasif'); const pct=Math.round(ok/total*100);
+    fb.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+    fb.style.color = ok===total? 'var(--ok)':'var(--bad)';
+    state.done.juego2 = ok===total; store('anupro360_normativa_legal', state); calcProgress();
+  }
+  function resetClasif(){ $('#zoneEMP').innerHTML=''; $('#zoneTRAB').innerHTML=''; $('#pool').innerHTML=''; renderClasif(); }
+
+  /* ----------------- Juego 3: Relacionar normas ----------------- */
+  const etiquetas = [
+    {txt:'DIAT/DIEP – Denuncia', target:'ley'},
+    {txt:'Administrador de la Faena', target:'132'},
+    {txt:'Investigación de accidentes', target:'40'},
+    {txt:'Comité Paritario', target:'54'},
+    {txt:'Riesgo Psicosocial', target:'ps'},
+    {txt:'Programa de prevención', target:'40'},
+    {txt:'Obligaciones de seguridad minera', target:'132'},
+    {txt:'Prestaciones médicas y económicas', target:'ley'}
+  ];
+  function renderEtiquetas(){
+    const pool = $('#poolEtiq'); pool.innerHTML='';
+    etiquetas.slice().sort(()=>Math.random()-0.5).forEach(e=>{
+      const tag = document.createElement('span'); tag.className='tag'; tag.innerHTML='<span class="dot"></span>'+e.txt; tag.draggable=true; tag.dataset.target=e.target;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    ['zLey','z132','z40','z54','zPS','poolEtiq'].forEach(id=>{
+      const z = document.getElementById(id);
+      z.addEventListener('dragover', e=>{
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if(!dragging) return;
+        if(z.id==='poolEtiq'){ pool.appendChild(dragging); return; }
+        z.appendChild(dragging);
+      });
+      z.addEventListener('pointerup', e=>{
+        const dragging = document.querySelector('.dragging');
+        if(dragging && (e.pointerType==='touch'||e.pointerType==='pen')){
+          if(z.id==='poolEtiq'){ pool.appendChild(dragging); } else { z.appendChild(dragging); }
+          dragging.classList.remove('dragging');
+        }
+      });
+    });
+  }
+  function checkEtiquetas(){
+    let ok=0;
+    const zones = [{id:'zLey',t:'ley'},{id:'z132',t:'132'},{id:'z40',t:'40'},{id:'z54',t:'54'},{id:'zPS',t:'ps'}];
+    zones.forEach(z=>{
+      const el = document.getElementById(z.id);
+      const tags = [...el.querySelectorAll('.tag')];
+      const allOk = tags.length>0 && tags.every(t=>t.dataset.target===z.t);
+      tags.forEach(t=> { if(t.dataset.target===z.t){ t.classList.add('correct'); } else { t.classList.add('wrong'); } });
+      if(allOk) ok++;
+    });
+    const fb = $('#fbEtiq');
+    if(ok===zones.length){ fb.textContent='¡Excelente! Todas las etiquetas en su norma.'; fb.style.color='var(--ok)'; state.done.juego3=true; }
+    else{ fb.textContent=`Correctas ${ok}/${zones.length}. Puedes volver a intentar.`; fb.style.color='var(--bad)'; state.done.juego3=false; }
+    store('anupro360_normativa_legal', state); calcProgress();
+  }
+  function resetEtiquetas(){ ['zLey','z132','z40','z54','zPS'].forEach(id=> document.getElementById(id).innerHTML=''); $('#poolEtiq').innerHTML=''; renderEtiquetas(); }
+
+  /* ----------------- Juego 4: Casos/norma aplica ----------------- */
+  const caseData = [
+    { id:'c1', text:'Trabajador sufre caída al mismo nivel durante traslado interno a su puesto.', answer:'Ley 16.744', why:'Corresponde denuncia DIAT y prestaciones del seguro.' },
+    { id:'c2', text:'Se detecta trabajo en altura sin línea de vida en la planta.', answer:'D.S. Nº132', why:'Reglamento de Seguridad Minera y control de riesgos críticos.' },
+    { id:'c3', text:'Incidente de alto potencial sin lesión requiere análisis de causas.', answer:'D.S. Nº40', why:'Programa de prevención e investigación de incidentes/accidentes.' },
+    { id:'c4', text:'Constitución y funcionamiento del Comité Paritario.', answer:'D.S. Nº54', why:'Norma específica del Comité Paritario.' },
+    { id:'c5', text:'Evaluación y control de riesgo psicosocial en equipos.', answer:'Protocolos MINSAL', why:'Aplicación del Protocolo de Riesgo Psicosocial.' }
+  ];
+  function renderCases(){
+    const box = $('#cases'); box.innerHTML='';
+    caseData.forEach(c=>{
+      const el = document.createElement('div'); el.className='panel';
+      el.innerHTML = `<p><strong>Caso:</strong> ${c.text}</p>
+        <select data-id="${c.id}" aria-label="Selecciona la norma aplicable">
+          <option value="">Selecciona…</option>
+          <option>Ley 16.744</option><option>D.S. Nº132</option><option>D.S. Nº40</option>
+          <option>D.S. Nº54</option><option>Protocolos MINSAL</option>
+        </select>
+        <div class="chip2" id="${c.id}-fb" style="display:inline-block; margin-top:6px"></div>`;
+      box.appendChild(el);
+    });
+  }
+  function checkCases(){
+    let ok=0;
+    caseData.forEach(c=>{
+      const sel = document.querySelector(`select[data-id="${c.id}"]`).value;
+      const fb = document.getElementById(`${c.id}-fb`);
+      const panel = fb.closest('.panel');
+      panel.classList.remove('correct','wrong');
+      if(sel===c.answer){ fb.textContent = 'Correcto: '+c.why; fb.style.color='var(--ok)'; panel.classList.add('correct'); ok++; }
+      else if(sel){ fb.textContent = `Incorrecto. Esperado: ${c.answer}. ${c.why}`; fb.style.color='var(--bad)'; panel.classList.add('wrong'); }
+      else { fb.textContent = 'Debes seleccionar una opción.'; fb.style.color='var(--bad)'; panel.classList.add('wrong'); }
+    });
+    const fbAll = $('#fbCases');
+    fbAll.textContent = ok===caseData.length ? '¡Excelente! Decisiones perfectas.' : `Aciertos ${ok}/${caseData.length}`;
+    fbAll.style.color = ok===caseData.length ? 'var(--ok)' : 'var(--bad)';
+    state.done.juego4 = ok===caseData.length; store('anupro360_normativa_legal', state); calcProgress();
+  }
+  function resetCases(){ renderCases(); $('#fbCases').textContent=''; }
+
+  /* ----------------- Juego 5: Indicadores ----------------- */
+  function checkKPI(){
+    const tasa = parseFloat($('#kpi-acc').value); // (3/250)*100 = 1.2%
+    const ifv = parseFloat($('#kpi-if').value);   // (3*1,000,000)/50,000 = 60
+    const expTasa = (3/250)*100; // 1.2
+    const expIF = (3*1000000)/50000; // 60
+    const tol = 0.05;
+    const okT = !isNaN(tasa) && Math.abs(tasa-expTasa) <= expTasa*tol;
+    const okI = !isNaN(ifv) && Math.abs(ifv-expIF) <= expIF*tol;
+    const fb = $('#fbKPI');
+    const panel = fb.closest('.panel');
+    panel.classList.remove('correct','wrong');
+    if(okT && okI){ fb.textContent = `Correcto: Tasa≈${expTasa.toFixed(2)}% e IF≈${expIF.toFixed(0)}.`; fb.style.color='var(--ok)'; panel.classList.add('correct'); state.done.juego5=true; }
+    else{ fb.textContent = `Revisa: Tasa≈${expTasa.toFixed(2)}% ; IF≈${expIF.toFixed(0)}.`; fb.style.color='var(--bad)'; panel.classList.add('wrong'); state.done.juego5=false; }
+    store('anupro360_normativa_legal', state); calcProgress();
+  }
+  function resetKPI(){ $('#kpi-acc').value=''; $('#kpi-if').value=''; $('#fbKPI').textContent=''; const p=$('#fbKPI').closest('.panel'); p.classList.remove('correct','wrong'); }
+
+  /* ----------------- Quiz 20 preguntas ----------------- */
+  const preguntas=[
+    {q:'Ley 16.744 regula principalmente…', opts:['Licencias de conducir','Seguridad Social por accidentes y enfermedades laborales','Contratos de arriendo','Impuestos internos'], ok:1, e:'Establece cobertura, denuncias y prestaciones.'},
+    {q:'El D.S. Nº132 corresponde a…', opts:['Reglamento de Seguridad Minera','Reglamento de tránsito','Código Sanitario','Ley Eléctrica'], ok:0, e:'Marco preventivo mínimo en minería.'},
+    {q:'La investigación de accidentes está en…', opts:['D.S. Nº40','D.S. Nº54','Ley 16.744','D.S. Nº76'], ok:0, e:'D.S. 40 define investigación y programa de prevención.'},
+    {q:'El Comité Paritario está regulado por…', opts:['D.S. Nº54','Ley 16.744','D.S. Nº132','D.S. Nº40'], ok:0, e:'D.S. 54 establece constitución y funciones.'},
+    {q:'Ante un accidente con lesión, lo primero es…', opts:['Llenar planilla Excel','Atender y controlar el área','Enviar informe mensual','Esperar al gerente'], ok:1, e:'Prioriza vida y control del peligro.'},
+    {q:'La DIAT/DIEP pertenece a…', opts:['D.S. 40','Ley 16.744','D.S. 132','D.S. 54'], ok:1, e:'Instrumentos de denuncia para el OAL.'},
+    {q:'¿Quién debe proveer EPI?', opts:['Trabajador','Empleador','Comité Paritario','Mutual'], ok:1, e:'Obligación del empleador.'},
+    {q:'La denuncia extemporánea puede…', opts:['No tener efectos','Generar observaciones y demoras en calificación','Mejorar beneficios','Cambiar contrato'], ok:1, e:'Afecta prestaciones y procesos.'},
+    {q:'Un incidente sin lesión debe…', opts:['Ignorarse','Investigarse y registrarse','Tratarse como broma','Publicarse en redes sociales'], ok:1, e:'D.S. 40 exige investigación para aprendizaje.'},
+    {q:'Trabajo en altura sin baranda corresponde a…', opts:['D.S. 132','D.S. 54','Ley 16.744','Protocolo psicosocial'], ok:0, e:'Seguridad minera; detén y controla.'},
+    {q:'El Supervisor debe…', opts:['Asegurar denuncia y registro','Evitar cualquier comunicación','Delegar todo al Comité','Esperar al prevencionista'], ok:0, e:'Rol activo y trazable.'},
+    {q:'¿Qué documento participa en la mejora continua?', opts:['Historial de eventos y medidas','Libro de visitas del casino','Boleta electrónica','Carta Gantt'], ok:0, e:'Lecciones aprendidas y control de efectividad.'},
+    {q:'Protocolos MINSAL se aplican para…', opts:['Riesgos específicos como psicosocial','Sueldo base','Beneficios de colación','Feriados'], ok:0, e:'Guían evaluación e intervención específicas.'},
+    {q:'El Administrador de la Faena se menciona en…', opts:['D.S. 132','D.S. 40','D.S. 54','Ley 21.000'], ok:0, e:'Responsable legal de seguridad minera.'},
+    {q:'Comité Paritario debe…', opts:['Sancionar con multas','Investigar y proponer medidas','Aprobar vacaciones','Vender EPP'], ok:1, e:'Rol de participación y asesoría.'},
+    {q:'Si hubo alta energía liberada pero sin lesión, se trata de…', opts:['Incidente de alto potencial','Accidente leve','Hecho no relevante','Evento social'], ok:0, e:'Debe investigarse y controlar.'},
+    {q:'El Índice de Frecuencia se calcula con…', opts:['Accidentes con tiempo perdido y horas-hombre','Pesos chilenos y UF','Toneladas y TPH','Notas del colegio'], ok:0, e:'IF = (Accidentes c/TP × 1.000.000)/Horas-hombre.'},
+    {q:'Quién integra la investigación de accidentes?', opts:['Supervisor y Comité Paritario, entre otros','Solo gerencia','Personal externo desconocido','Nadie'], ok:0, e:'Participación de áreas clave.'},
+    {q:'¿Qué hacer antes de cerrar un caso?', opts:['Verificar efectividad de medidas','Borrar registros','Festejar','Cambiar dotación'], ok:0, e:'Comprobar control del riesgo.'},
+    {q:'No denunciar un accidente puede…', opts:['No traer consecuencias','Generar incumplimiento legal y riesgos para el trabajador','Mejorar KPI','Evitar trabajo'], ok:1, e:'Incumplimiento grave.'}
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    preguntas.forEach((p,i)=>{
+      const div=document.createElement('div');
+      div.className='q'; div.dataset.index=i; div.dataset.ok=p.ok; div.dataset.exp=p.e;
+      const opts = p.opts.map((txt,j)=>`
+        <label class="opt">
+          <input type="radio" name="q${i}" value="${j}" aria-label="${txt}">
+          <span>${txt}</span>
+        </label>`).join('');
+      div.innerHTML=`<div style="font-weight:700; margin-bottom:6px">${i+1}. ${p.q}</div>${opts}<div class="note exp" style="display:none; margin-top:6px"></div>`;
+      wrap.appendChild(div);
+    });
+  }
+  function lockQuizAndColor(){
+    const blocks = $$('#quiz .q');
+    let okCount=0, wrongCount=0, unanswered=0;
+    blocks.forEach((div)=>{
+      const ok = Number(div.dataset.ok);
+      const exp = div.dataset.exp;
+      const sel = div.querySelector('input[type="radio"]:checked');
+      div.querySelectorAll('input').forEach(inp=> inp.disabled=true);
+      const correctLabel = div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      const e = div.querySelector('.exp'); e.style.display='block';
+      if(!sel){ div.classList.add('wrong'); unanswered++; wrongCount++; e.textContent=`Explicación: ${exp}`; return; }
+      const chosen = Number(sel.value);
+      if(chosen===ok){ div.classList.add('correct'); okCount++; e.textContent=`✔ ${exp}`; }
+      else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongCount++; e.textContent=`✘ ${exp}`; }
+    });
+    const total = preguntas.length;
+    const pct = Math.round(okCount/total*100);
+    const fb = `Resultado: ${okCount}/${total} (${pct}%). ✅ Correctas en verde · ❌ Incorrectas en rojo${unanswered?` · ${unanswered} sin responder`:''}.`;
+    $('#quizFeedback').textContent = fb;
+    $('#quizFeedback').style.color = okCount===total? 'var(--ok)':'var(--bad)';
+    state.done.quiz=true; store('anupro360_normativa_legal', state); calcProgress();
+  }
+  function resetQuizColors(){
+    $$('#quiz .q').forEach(div=>{
+      div.classList.remove('correct','wrong');
+      div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong'));
+      div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; });
+      const e = div.querySelector('.exp'); if(e){ e.style.display='none'; e.textContent=''; }
+    });
+    $('#quizFeedback').textContent='';
+    state.done.quiz=false; store('anupro360_normativa_legal', state); calcProgress();
+    window.scrollTo({top:$('#quiz').offsetTop-80, behavior:'smooth'});
+  }
+
+  /* Enlaces UI */
+  $('#checkOrden').addEventListener('click', checkOrden);
+  $('#regenOrden').addEventListener('click', ()=>{ renderOrdenar(); $('#fbOrden').textContent=''; });
+  $('#checkClasif').addEventListener('click', checkClasif);
+  $('#resetClasif').addEventListener('click', resetClasif);
+  $('#checkEtiq').addEventListener('click', checkEtiquetas);
+  $('#resetEtiq').addEventListener('click', resetEtiquetas);
+  $('#checkCases').addEventListener('click', checkCases);
+  $('#resetCases').addEventListener('click', resetCases);
+  $('#checkKPI').addEventListener('click', checkKPI);
+  $('#resetKPI').addEventListener('click', resetKPI);
+  $('#enviar').addEventListener('click', lockQuizAndColor);
+  $('#resetQuiz').addEventListener('click', resetQuizColors);
+
+  /* Init */
+  renderOrdenar();
+  renderClasif();
+  renderEtiquetas();
+  renderCases();
+  renderQuiz();
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
