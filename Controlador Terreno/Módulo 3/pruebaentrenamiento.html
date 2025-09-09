@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Anupro360 · Prueba de Entrenamiento · Controlador de Terreno</title>
+<meta name="description" content="20 minijuegos variados + quiz de 20 preguntas, con retroalimentación inmediata. Sin imágenes. Diseñado para adultos: AHS, seguridad, normativa, inspección, Power BI y coordinación."/>
+<style>
+  :root{
+    --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+    --ok:#00C853; --error:#D50000; --fondo:#0b1624; --card:#14253a; --muted:#cfd8dc; --borde:#2e4a6b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;background:#0a1725;color:var(--blanco)}
+  header{position:sticky;top:0;z-index:10;background:#102132;border-bottom:1px solid var(--borde)}
+  .wrap{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;gap:10px;align-items:center}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--amarillo),var(--naranja));display:grid;place-items:center;color:#102132;font-weight:900}
+  h1{font-size:1.1rem;margin:0}
+  main{max-width:1200px;margin:0 auto;padding:18px 16px 120px}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media (min-width:900px){.grid{grid-template-columns:1fr 1fr}}
+  .card{background:linear-gradient(180deg,rgba(20,37,58,.95),rgba(13,26,42,.95));border:1px solid var(--borde);border-radius:14px;padding:14px}
+  .card h2{margin:0 0 6px 0;font-size:1rem;color:var(--amarillo)}
+  .lead{color:var(--muted);margin:0 0 8px}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .btn{background:#0f3454;color:#e9f2ff;border:1px solid var(--borde);padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:700}
+  .btn.secondary{background:#2a4056}
+  .feedback{font-weight:800;margin-left:auto}
+  .ok{color:var(--ok)} .bad{color:var(--error)}
+  .bank,.target{min-height:44px;padding:8px;border:1px dashed #446;border-radius:10px;background:rgba(255,255,255,.03);margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+  .chip{background:#223a57;border:1px solid #446;padding:6px 10px;border-radius:10px;cursor:grab;user-select:none}
+  .chip.selected{outline:2px solid var(--amarillo)}
+  .col{flex:1;min-width:220px}
+  .tag{display:inline-block;background:rgba(255,255,255,.08);border:1px solid var(--borde);padding:4px 8px;border-radius:999px;color:#cfe2ff}
+  label.item{display:block;border:1px solid #446;border-radius:10px;padding:8px;margin:6px 0;color:#eaf2ff}
+  label.item input{transform:scale(1.2);margin-right:8px}
+  select{appearance:none;background:#1c3250;color:#fff;border:1px solid #446;border-radius:10px;padding:8px;width:100%}
+  details{border:1px solid var(--borde);border-radius:10px;padding:6px 8px;background:rgba(255,255,255,.03);margin-top:6px}
+  summary{cursor:pointer;font-weight:800}
+  .vf-row{display:flex;gap:10px;align-items:center}
+  .vf-row .pill{background:#1c3250;padding:4px 8px;border-radius:999px;border:1px solid #446}
+  /* Memory */
+  .memory{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .cardm{background:#1a304c;border:1px solid #446;border-radius:10px;display:grid;place-items:center;height:70px;cursor:pointer;font-weight:800}
+  .cardm.open{background:#264d7a}
+  .cardm.matched{background:rgba(0,200,83,.25);border-color:rgba(0,200,83,1)}
+  /* Ranking */
+  .rank-item{display:flex;gap:8px;align-items:center;border:1px solid #446;padding:6px;border-radius:10px;margin:4px 0}
+  .rank-item .mv{background:#24425f;border:1px solid #446;color:#fff;border-radius:6px;padding:4px 8px;cursor:pointer}
+  /* Sopa */
+  .sopa-wrap{display:flex;gap:16px;flex-wrap:wrap}
+  .sopa-grid{display:grid;gap:4px;user-select:none}
+  .sopa-cell{width:28px;height:28px;display:grid;place-items:center;border:1px solid #446;border-radius:6px;background:#1b2f4a;font-weight:800}
+  .sopa-cell.found{background:rgba(0,200,83,.25);border-color:rgba(0,200,83,1)}
+  .clock{background:#1c3250;border:1px solid #446;border-radius:999px;padding:4px 10px}
+  /* Decision sim */
+  .dec-card{border:1px solid #446;border-radius:10px;padding:8px;margin:6px 0;background:rgba(255,255,255,.03)}
+  .lock{opacity:.6;pointer-events:none}
+  .score{font-size:1.2rem;font-weight:900}
+  .floating-nav{position:fixed;right:12px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px}
+  .jump{background:#0f2a44;border:1px solid var(--borde);color:#d9e7ff;padding:6px 8px;border-radius:10px;text-decoration:none;font-weight:800}
+  /* Quiz */
+  .quiz-q{border:1px solid #446;border-radius:10px;padding:10px;margin:10px 0;background:rgba(255,255,255,.03)}
+  .quiz-q.correct{border-color:rgba(0,200,83,.7);background:rgba(0,200,83,.08)}
+  .quiz-q.incorrect{border-color:rgba(213,0,0,.7);background:rgba(213,0,0,.08)}
+  .quiz-q .q{font-weight:800;margin-bottom:4px}
+  .quiz-q .exp{font-size:.95rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="logo">A</div>
+    <h1>Prueba de Entrenamiento · Controlador de Terreno</h1>
+    <span class="tag">20 juegos + Quiz (20)</span>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Instrucciones</h2>
+    <p class="lead">Juega en cualquier dispositivo. Para arrastrar en móvil: toca un chip para <b>seleccionarlo</b> y luego toca la zona destino para soltarlo. Todos los juegos y el quiz tienen <b>retroalimentación inmediata</b>. Los juegos con reloj otorgan puntaje según <b>tiempo y calidad</b> de la decisión.</p>
+    <div class="row">
+      <button class="btn" id="resetAll">Reiniciar todo</button>
+      <span class="feedback" id="progressTxt">Progreso 0/20</span>
+    </div>
+  </section>
+
+  <div class="grid" id="games"></div>
+
+  <section id="quiz" class="card">
+    <h2>Quiz de 20 preguntas</h2>
+    <p class="lead">Las correctas se verán <b style="color:var(--ok)">VERDE</b>, las incorrectas <b style="color:var(--error)">ROJO</b>, con explicación.</p>
+    <div id="quizBody"></div>
+    <div class="row">
+      <button class="btn" id="gradeQuiz">Calificar</button>
+      <button class="btn secondary" id="resetQuiz">Limpiar</button>
+      <span class="score" id="quizScore"></span>
+    </div>
+  </section>
+</main>
+
+<nav class="floating-nav" id="jumpNav"></nav>
+
+<script>
+const $=(s,c=document)=>c.querySelector(s);const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+const state={done:new Set()}; function setProgress(){ $("#progressTxt").textContent=`Progreso ${state.done.size}/20`; }
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+/* ====== Helpers ====== */
+function enableDnD(scope){
+  let selected=null;
+  $$('.chip',scope).forEach(ch=>{
+    ch.draggable=true;
+    ch.addEventListener('dragstart',()=>{selected=ch;});
+    ch.addEventListener('click',()=>{
+      if(selected===ch){ ch.classList.remove('selected'); selected=null; }
+      else { $$('.chip',scope).forEach(c=>c.classList.remove('selected')); selected=ch; ch.classList.add('selected'); }
+    });
+  });
+  $$('.target,.bank',scope).forEach(zone=>{
+    zone.addEventListener('dragover',e=>e.preventDefault());
+    zone.addEventListener('drop',()=>{ if(selected) zone.appendChild(selected); $$('.chip',scope).forEach(c=>c.classList.remove('selected')); selected=null; });
+    zone.addEventListener('click',()=>{ if(selected){ zone.appendChild(selected); $$('.chip',scope).forEach(c=>c.classList.remove('selected')); selected=null; }});
+  });
+}
+
+function makeVF(container, items, gid){
+  items.forEach((it,idx)=>{
+    const row=document.createElement('div'); row.className='vf-row';
+    row.innerHTML=`<span class="pill">${String(idx+1).padStart(2,'0')}</span>
+      <label class="item"><input type="radio" name="${gid}-${idx}" value="V"> V</label>
+      <label class="item"><input type="radio" name="${gid}-${idx}" value="F"> F</label>
+      <div class="tag" style="flex:1">${it[0]}</div>`;
+    container.appendChild(row);
+  });
+}
+
+function makeMemory(container, pairs){
+  const cards=[]; pairs.forEach(([k,v])=>{ cards.push({k,txt:k}); cards.push({k,txt:v}); });
+  shuffle(cards);
+  const grid=document.createElement('div'); grid.className='memory';
+  cards.forEach((c)=>{ const tile=document.createElement('button'); tile.type='button'; tile.className='cardm'; tile.textContent='?'; tile.dataset.k=c.k; tile.dataset.txt=c.txt; grid.appendChild(tile); });
+  container.appendChild(grid);
+  let open=[];
+  grid.addEventListener('click',e=>{
+    const t=e.target.closest('.cardm'); if(!t||t.classList.contains('matched')) return;
+    if(t.classList.contains('open')) return;
+    t.classList.add('open'); t.textContent=t.dataset.txt; open.push(t);
+    if(open.length===2){
+      const [a,b]=open; if(a.dataset.k===b.dataset.k){ a.classList.add('matched'); b.classList.add('matched'); }
+      setTimeout(()=>{ $$('.cardm.open:not(.matched)',grid).forEach(x=>{ x.classList.remove('open'); x.textContent='?'; }); open=[]; }, 700);
+    }
+  });
+  return grid;
+}
+
+function makeFill(container, sentence, blanks, tokens){
+  const p=document.createElement('div'); p.className='lead';
+  blanks.forEach((_,i)=> sentence = sentence.replace(`__${i+1}__`, `<span class="target" data-accept="B${i+1}" style="display:inline-flex;min-width:110px;vertical-align:middle"></span>`));
+  p.innerHTML=sentence; container.appendChild(p);
+  const bank=document.createElement('div'); bank.className='bank';
+  tokens.forEach((t)=>{ const d=document.createElement('div'); d.className='chip'; d.textContent=t.txt; d.dataset.group=t.slot; bank.appendChild(d); });
+  container.appendChild(bank); enableDnD(container);
+}
+
+function makeRanking(container, items){
+  const wrap=document.createElement('div');
+  items.forEach(it=>{
+    const row=document.createElement('div'); row.className='rank-item'; row.dataset.key=it.key;
+    row.innerHTML=`<div class="tag">${it.txt}</div><span style="flex:1"></span>
+      <button class="mv" data-d="-1">▲</button><button class="mv" data-d="1">▼</button>`;
+    wrap.appendChild(row);
+  });
+  container.appendChild(wrap);
+  wrap.addEventListener('click',e=>{
+    const btn=e.target.closest('.mv'); if(!btn) return; const d=parseInt(btn.dataset.d,10);
+    const row=btn.parentElement; if(d<0 && row.previousElementSibling) row.parentElement.insertBefore(row,row.previousElementSibling);
+    if(d>0 && row.nextElementSibling) row.parentElement.insertBefore(row.nextElementSibling,row);
+  });
+  return wrap;
+}
+
+/* ====== DATA: 20 juegos ====== */
+const GAMES=[
+  { id:'g1', tipo:'orden', titulo:'FrontRunner: respuesta ante obstáculo en cruce',
+    instruccion:'Ordena la secuencia correcta.',
+    manual:'Cómo se juega: arrastra los pasos y déjalos en el recuadro destino en el orden correcto. Propósito: entrenar la toma de decisiones segura ante obstáculos en cruce.',
+    data:['Confirmar alerta visual/sonora en consola','Frenado seguro y solicitud de detención','Notificar por radio canal operativo','Registrar evento en bitácora AHS','Liberar la ruta cuando lo autorice el sistema/supervisor'],
+    solucion:['Confirmar alerta visual/sonora en consola','Frenado seguro y solicitud de detención','Notificar por radio canal operativo','Registrar evento en bitácora AHS','Liberar la ruta cuando lo autorice el sistema/supervisor']
+  },
+  { id:'g2', tipo:'memory', titulo:'Memoria: Sistemas y definiciones AHS',
+    instruccion:'Descubre y empareja cada sistema con su definición.',
+    manual:'Cómo se juega: toca las cartas para revelarlas y forma pares sistema–definición. Propósito: reforzar el significado funcional de cada plataforma.',
+    pares:[ ['FrontRunner','Gestión de rutas y misiones'], ['MineStar Command','Control/supervisión remota de CAEX'], ['FMS','Optimización y despacho'], ['V2X','Enlaces y latencia de comunicaciones'] ]
+  },
+  { id:'g3', tipo:'mc', titulo:'Inspección preoperacional: primero lo primero',
+    instruccion:'Selecciona la mejor opción.',
+    manual:'Cómo se juega: elige una alternativa. Propósito: afianzar la secuencia correcta antes de energizar un equipo.',
+    pregunta:'¿Qué verificación debe realizarse ANTES de energizar un equipo autónomo?',
+    opciones:[ ['Revisión de alarmas activas y estado E-Stop','ok'], ['Estado de combustible en camión de apoyo',''], ['Confirmar turno del operador manual',''], ['Descargar reporte de turno anterior',''] ],
+    feedbackOk:'Correcto: alarmas y E-Stop definen la seguridad base.', feedbackBad:'Revisa: alarmas y E-Stop primero.'
+  },
+  { id:'g4', tipo:'match', titulo:'Sistemas y funciones (AHS)',
+    instruccion:'Une cada sistema con su función principal.',
+    manual:'Cómo se juega: selecciona en el desplegable la función correcta para cada sistema. Propósito: diferenciar funciones clave en el ecosistema AHS.',
+    pares:[ ['FrontRunner','Gestión de rutas y asignación de misiones'], ['MineStar Command','Control y supervisión remota de CAEX'], ['FMS (Fleet Management)','Optimización y despacho'], ['V2X / Comunicaciones','Integridad de enlaces y latencia'] ]
+  },
+  { id:'g5', tipo:'vf', titulo:'Normativa y descansos',
+    instruccion:'Marca Verdadero o Falso.',
+    manual:'Cómo se juega: marca V o F en cada afirmación. Propósito: comprender derechos, límites y descansos.',
+    items:[ ['Si trabajas domingo, corresponde descanso compensatorio en la semana siguiente.','V'], ['La jornada efectiva diaria en este curso se considera 6 horas.','V'], ['Se puede operar sin radio si hay LTE estable.','F'] ]
+  },
+  { id:'g6', tipo:'orden', titulo:'Reventón de neumático: actuación resumida',
+    instruccion:'Ordena los pasos clave.',
+    manual:'Cómo se juega: arrastra y suelta en orden. Propósito: reaccionar correctamente ante reventón reduciendo riesgo.',
+    data:['Detener equipo y asegurar zona','Informar por radio y activar protocolo','Establecer perímetro de seguridad','Coordinar retiro seguro del equipo','Registrar y reportar en sistema'],
+    solucion:['Detener equipo y asegurar zona','Informar por radio y activar protocolo','Establecer perímetro de seguridad','Coordinar retiro seguro del equipo','Registrar y reportar en sistema']
+  },
+  { id:'g7', tipo:'fill', titulo:'Completa el mensaje por radio (Estandarizado)',
+    instruccion:'Arrastra los tokens para completar el formato del mensaje.',
+    manual:'Cómo se juega: coloca cada token en el espacio correspondiente. Propósito: estandarizar mensajes para claridad y rapidez.',
+    sentence:'__1__: __2__, __3__, __4__.', blanks:['B1','B2','B3','B4'],
+    tokens:[{txt:'Equipo 307',slot:'B1'},{txt:'Cruce 4',slot:'B2'},{txt:'Obstáculo',slot:'B3'},{txt:'Solicito bloqueo',slot:'B4'}]
+  },
+  { id:'g8', tipo:'mc', titulo:'Comunicaciones: radio operativa',
+    instruccion:'Selecciona la mejor opción.',
+    manual:'Cómo se juega: escoge la alternativa más completa. Propósito: practicar estructura del primer mensaje en emergencia.',
+    pregunta:'En un evento crítico, ¿qué debe incluir el primer mensaje por radio?',
+    opciones:[ ['Identificación, ubicación, tipo de evento y acción solicitada','ok'], ['Saludos, emoción y relato detallado',''], ['Solo el nombre del equipo',''], ['Código interno sin contexto',''] ],
+    feedbackOk:'Estructura estandarizada acelera la respuesta.', feedbackBad:'Usa: ID + ubicación + evento + solicitud.'
+  },
+  { id:'g9', tipo:'match', titulo:'KPI en Power BI (flota)',
+    instruccion:'Une el KPI con su interpretación.',
+    manual:'Cómo se juega: selecciona la interpretación correcta por KPI. Propósito: leer KPIs clave para decisiones operativas.',
+    pares:[ ['Utilización (%)','Proporción de tiempo productivo'], ['MTBF','Tiempo medio entre fallas'], ['Cycle Time','Tiempo por ciclo de acarreo'], ['AHT Speed','Velocidad media en acarreo'] ]
+  },
+  { id:'g10', tipo:'vf', titulo:'Señalética y zonas',
+    instruccion:'Marca V/F según corresponda.',
+    manual:'Cómo se juega: marca V o F. Propósito: reforzar conductas seguras en tránsito interno y exclusiones.',
+    items:[ ['La zona de exclusión es intransitable salvo permiso expreso.','V'], ['Los peatones pueden cruzar libremente pista autónoma.','F'], ['El uso de EPP es opcional en sala de control.','F'] ]
+  },
+  { id:'g11', tipo:'orden', titulo:'Transferencia a control manual segura',
+    instruccion:'Ordena los pasos críticos.',
+    manual:'Cómo se juega: arrastra y suelta en orden. Propósito: ejecutar transferencias seguras sin pérdida de control.',
+    data:['Solicitar autorización al supervisor','Verificar entorno libre y señalización','Ejecutar transferencia en consola','Confirmar control y estado de frenos','Anotar evento en registro'],
+    solucion:['Solicitar autorización al supervisor','Verificar entorno libre y señalización','Ejecutar transferencia en consola','Confirmar control y estado de frenos','Anotar evento en registro']
+  },
+  { id:'g12', tipo:'sopa', titulo:'Sopa de conceptos (AHS) · 120 s',
+    instruccion:'Encuentra palabras en la grilla. Escribe la palabra encontrada y presiona “Marcar”. (No hay lista visible).',
+    manual:'Cómo se juega: busca en la grilla términos técnicos (horizontal o vertical). Escribe el término y pulsa “Marcar”. +10 puntos por palabra. Tiempo total: 120 s. Propósito: reforzar reconocimiento rápido de conceptos del AHS.',
+    tiempo:120,
+    palabras:['FRONTRUNNER','MINESTAR','FLOTAS','CYCLE','MTBF','V2X'],
+    grid:[
+      'F R O N T R U N N E R X',
+      'A B C Y C L E D E F G H',
+      'M I N E S T A R Q W E R',
+      'J K L M M T B F N O P Q',
+      'P Q R S T U V W X Y Z A',
+      'V 2 X A B C D E F G H I',
+      'G H I J K L M N O P Q R',
+      'P Q R S T U V W X Y Z A',
+      'A B C D E F G H I J K L',
+      'Z F L O T A S A H I J K',
+      'Q W E R T Y U I O P L A',
+      'S O P A R M N B V C X Z'
+    ]
+  },
+  { id:'g13', tipo:'mc', titulo:'Plataformas AHS',
+    instruccion:'Selecciona la afirmación correcta.',
+    manual:'Cómo se juega: elige la afirmación verdadera. Propósito: distinguir diferencias generales entre plataformas.',
+    pregunta:'Una diferencia generalizada entre FrontRunner y MineStar Command es:',
+    opciones:[ ['Ambas gestionan CAEX autónomos; difieren en interfaz y ecosistema del fabricante','ok'], ['FrontRunner es solo para palas y perforadoras',''], ['MineStar Command no requiere comunicaciones',''], ['Son juegos de video',''] ],
+    feedbackOk:'Bien: interoperabilidad y UI/UX.', feedbackBad:'Ambas controlan CAEX; difieren en ecosistema.'
+  },
+  { id:'g14', tipo:'match', titulo:'Roles y responsabilidades',
+    instruccion:'Empareja el rol con su acción.',
+    manual:'Cómo se juega: elige la acción propia de cada rol. Propósito: delimitar funciones para coordinar mejor.',
+    pares:[ ['Controlador de Terreno','Monitoreo y coordinación remota'], ['Mantenimiento','Atención de fallas y correctivos'], ['Supervisor','Autorizaciones y priorización'], ['Operador de apoyo','Aseguramiento físico en terreno'] ]
+  },
+  { id:'g15', tipo:'vf', titulo:'Ley 40 Horas (contexto)',
+    instruccion:'Selecciona V/F.',
+    manual:'Cómo se juega: marca V o F. Propósito: comprender los límites de jornada y descansos.',
+    items:[ ['El límite semanal es 42 horas en transición.','V'], ['El descanso compensatorio sustituye el descanso semanal.','F'], ['Nadie puede trabajar 7 días seguidos.','V'] ]
+  },
+  { id:'g16', tipo:'ranking', titulo:'Ranking: prioridad de checklist pre-salida',
+    instruccion:'Sube/Baja para ordenar de mayor a menor prioridad y comprueba.',
+    manual:'Cómo se juega: usa ▲▼ para reorganizar. Propósito: priorizar acciones críticas antes de mover un CAEX.',
+    items:[ {txt:'E-Stop y alarmas OK',key:'A'}, {txt:'Zona libre de obstáculos',key:'B'}, {txt:'Telemetría y latencia nominal',key:'C'}, {txt:'Nivel de fluidos dentro de rango',key:'D'}, {txt:'Confirmación de misión',key:'E'} ],
+    solucion:['A','B','C','D','E']
+  },
+  { id:'g17', tipo:'clasifica', titulo:'Estandariza tus mensajes por radio',
+    instruccion:'Arrastra a la categoría correcta.',
+    manual:'Cómo se juega: arrastra cada frase a la categoría. Propósito: practicar estandarización para reducir ambigüedad.',
+    grupos:['Estandarizado','No estandarizado'],
+    data:[ ['“Equipo 307, cruce 4, obstáculo, solicito bloqueo.”','Estandarizado'], ['“Oye, parece que hay algo por ahí…”','No estandarizado'], ['“Camión 12, ruta B, detención preventiva, confirmo.”','Estandarizado'], ['“Creo que mejor me detengo un rato.”','No estandarizado'] ]
+  },
+  { id:'g18', tipo:'decision', titulo:'Simulador de decisiones con puntos (evento crítico)',
+    instruccion:'Selecciona, lee la retroalimentación y pulsa “Siguiente”.',
+    manual:'Cómo se juega: tienes 60 s totales. En cada situación, selecciona una opción. +10 (excelente), +5 (aceptable), −5 (riesgosa). Luego pulsa “Siguiente” para avanzar. Propósito: entrenar juicio bajo presión, priorizando seguridad y comunicación.',
+    tiempo:60,
+    rondas:[
+      {situacion:'Latencia sube a 350 ms y dos CAEX se aproximan a cruce autónomo.', opciones:[
+        {txt:'Ordenar detención preventiva y notificar por protocolo',pts:10,fb:'Prioriza seguridad y comunicación.'},
+        {txt:'Esperar 2 minutos a ver si baja la latencia',pts:-5,fb:'Demora innecesaria en contexto de riesgo.'},
+        {txt:'Cambiar a enlace terciario y seguir sin avisar',pts:5,fb:'Recupera enlace, pero falta coordinar por radio.'}
+      ]},
+      {situacion:'Se reporta persona en zona de exclusión cerca de rampa.', opciones:[
+        {txt:'Bloquear ruta, alertar por radio y coordinar retiro',pts:10,fb:'Acción integral de seguridad.'},
+        {txt:'Reducir velocidad y continuar',pts:-5,fb:'No controlas el riesgo crítico.'},
+        {txt:'Registrar en bitácora y observar',pts:5,fb:'Registro útil, pero falta control inmediato.'}
+      ]},
+      {situacion:'Alarma de temperatura de frenos en CAEX 21.', opciones:[
+        {txt:'Transferir a manual con autorización y llevar a zona segura',pts:10,fb:'Controlas la falla y el entorno.'},
+        {txt:'Reiniciar la alarma y continuar',pts:-5,fb:'Riesgo elevado de incidente.'},
+        {txt:'Pedir al operador de apoyo revisar al final del turno',pts:5,fb:'Demora el control de riesgo.'}
+      ]}
+    ]
+  },
+  { id:'g19', tipo:'prioriza', titulo:'Gestión de fallas: decide la prioridad',
+    instruccion:'Arrastra a Alto/Medio/Bajo.',
+    manual:'Cómo se juega: arrastra cada ítem a su prioridad. Propósito: distinguir criticidad para despachar recursos.',
+    grupos:['Alto','Medio','Bajo'],
+    data:[ ['Freno de estacionamiento no aplica','Alto'], ['Retraso en subir informe al final del turno','Bajo'], ['Latencia intermitente no crítica','Medio'], ['Temperatura motor fuera de rango','Alto'] ]
+  },
+  { id:'g20', tipo:'match', titulo:'Protocolos y objetivos',
+    instruccion:'Empareja el protocolo con su objetivo principal.',
+    manual:'Cómo se juega: elige el objetivo asociado. Propósito: recordar por qué existe cada protocolo.',
+    pares:[ ['Bloqueo/etiquetado (LOTO)','Evitar energización inesperada'], ['Perímetro de seguridad','Controlar acceso a zonas peligrosas'], ['Bitácora de eventos','Trazabilidad y mejora continua'], ['Reporte de casi incidente','Prevención proactiva'] ]
+  }
+];
+
+/* ====== Render ====== */
+const host=$("#games"); const jump=$("#jumpNav");
+
+function mountGame(sec,g){
+  const c=$('.content',sec); c.innerHTML='';
+  const fb=$('.feedback',sec); fb.textContent=''; fb.className='feedback';
+  // Por tipo:
+  if(g.tipo==='orden'){
+    const bank=document.createElement('div'); bank.className='bank';
+    g.data.forEach(t=>{const d=document.createElement('div'); d.className='chip'; d.textContent=t; bank.appendChild(d);});
+    const target=document.createElement('div'); target.className='target'; target.setAttribute('data-accept','orden');
+    c.appendChild(bank); c.appendChild(target); enableDnD(sec);
+  }
+  if(g.tipo==='clasifica' || g.tipo==='prioriza'){
+    const bank=document.createElement('div'); bank.className='bank';
+    g.data.forEach(([t,grp])=>{const d=document.createElement('div'); d.className='chip'; d.textContent=t; d.dataset.group=grp; bank.appendChild(d);});
+    const row=document.createElement('div'); row.className='row';
+    g.grupos.forEach(name=>{
+      const col=document.createElement('div'); col.className='col';
+      const tag=document.createElement('div'); tag.className='tag'; tag.textContent=name;
+      const dz=document.createElement('div'); dz.className='target'; dz.setAttribute('data-accept',name);
+      col.appendChild(tag); col.appendChild(dz); row.appendChild(col);
+    });
+    c.appendChild(bank); c.appendChild(row); enableDnD(sec);
+  }
+  if(g.tipo==='mc'){
+    const box=document.createElement('div'); box.className='row';
+    const q=document.createElement('div'); q.className='col'; q.innerHTML=`<div class="tag">Pregunta</div><div class="card" style="padding:8px">${g.pregunta}</div>`;
+    const opts=document.createElement('div'); opts.className='col';
+    g.opciones.forEach(([txt,flag],idx)=>{
+      const lab=document.createElement('label'); lab.className='item';
+      lab.innerHTML=`<input type="radio" name="${g.id}" value="${idx}"> ${txt}`;
+      if(flag==='ok') lab.dataset.ok='1'; opts.appendChild(lab);
+    });
+    box.appendChild(q); box.appendChild(opts); c.appendChild(box);
+  }
+  if(g.tipo==='match'){
+    const wrap=document.createElement('div'); wrap.className='row';
+    const left=document.createElement('div'); left.className='col';
+    const right=document.createElement('div'); right.className='col';
+    g.pares.forEach(([a,b])=>{
+      const r=document.createElement('div'); r.className='row';
+      r.innerHTML=`<div class="tag" style="min-width:160px">${a}</div>
+        <div style="flex:1"><select data-a="${a}"><option value="">— Selecciona —</option>${g.pares.map(p=>`<option>${p[1]}</option>`).join('')}</select></div>`;
+      left.appendChild(r);
+    });
+    const det=document.createElement('details'); det.innerHTML=`<summary>Ayuda y propósito</summary><div>${g.manual||'Empareja correctamente cada elemento.'}</div>`;
+    right.appendChild(det);
+    wrap.appendChild(left); wrap.appendChild(right); c.appendChild(wrap);
+  }
+  if(g.tipo==='vf'){ const box=document.createElement('div'); makeVF(box,g.items,g.id); c.appendChild(box); const det=document.createElement('details'); det.innerHTML=`<summary>Ayuda y propósito</summary><div>${g.manual||'Marca V o F según corresponda.'}</div>`; c.appendChild(det); }
+  if(g.tipo==='memory'){ makeMemory(c,g.pares); const det=document.createElement('details'); det.innerHTML=`<summary>Ayuda y propósito</summary><div>${g.manual}</div>`; c.appendChild(det); }
+  if(g.tipo==='fill'){ makeFill(c,g.sentence,g.blanks,g.tokens); const det=document.createElement('details'); det.innerHTML=`<summary>Ayuda y propósito</summary><div>${g.manual}</div>`; c.appendChild(det); }
+  if(g.tipo==='ranking'){ const r=makeRanking(c,g.items); sec._rankWrap=r; const det=document.createElement('details'); det.innerHTML=`<summary>Ayuda y propósito</summary><div>${g.manual}</div>`; c.appendChild(det); }
+  if(g.tipo==='sopa'){
+    const grid=document.createElement('div'); grid.className='sopa-grid';
+    const W = g.grid[0].split(' ').length;
+    grid.style.gridTemplateColumns='repeat('+W+',28px)';
+    g.grid.forEach(row=>row.split(' ').forEach(ch=>{
+      const cell=document.createElement('div'); cell.className='sopa-cell'; cell.textContent=ch; grid.appendChild(cell);
+    }));
+    const side=document.createElement('div'); side.className='col';
+    const input=document.createElement('input'); input.placeholder='Escribe palabra encontrada'; input.style.padding='8px'; input.style.width='100%'; input.style.borderRadius='8px'; input.style.border='1px solid #446'; input.style.background='#1c3250'; input.style.color='#fff';
+    const controls=document.createElement('div'); controls.className='row';
+    const btn=document.createElement('button'); btn.className='btn'; btn.textContent='Marcar';
+    const clock=document.createElement('span'); clock.className='clock'; clock.textContent = g.tiempo+'s';
+    const score=document.createElement('span'); score.className='tag'; score.textContent='Puntos: 0';
+    const wrap=document.createElement('div'); wrap.className='sopa-wrap';
+    wrap.appendChild(grid); wrap.appendChild(side);
+    side.appendChild(input); side.appendChild(controls);
+    controls.appendChild(btn); controls.appendChild(clock); controls.appendChild(score);
+    c.appendChild(wrap);
+    let t=g.tiempo, points=0, found=new Set();
+    let timer=setInterval(()=>{ t--; clock.textContent=t+'s'; if(t<=0){ clearInterval(timer); btn.disabled=true; clock.textContent='Tiempo'; } },1000);
+    btn.addEventListener('click',()=>{
+      const w=input.value.trim().toUpperCase(); input.value='';
+      if(g.palabras.includes(w) && !found.has(w)){
+        found.add(w); points+=10; score.textContent='Puntos: '+points;
+        const cells=[].slice.call(grid.children);
+        const H = g.grid.length; const W2 = g.grid[0].split(' ').length;
+        // horizontal
+        for(let r=0;r<H;r++){
+          const rowCells=cells.slice(r*W2,(r+1)*W2);
+          const txt=rowCells.map(c=>c.textContent).join(''); const idx=txt.indexOf(w);
+          if(idx>=0){ for(let k=0;k<w.length;k++) rowCells[idx+k].classList.add('found'); }
+        }
+        // vertical
+        for(let cidx=0;cidx<W2;cidx++){
+          let colTxt=''; for(let r=0;r<H;r++){ colTxt+=cells[r*W2+cidx].textContent; }
+          const cpos=colTxt.indexOf(w); if(cpos>=0){ for(let k=0;k<w.length;k++) cells[(cpos+k)*W2+cidx].classList.add('found'); }
+        }
+      }
+    });
+    // Guardar para reset
+    sec._sopaReset=()=>{ clearInterval(timer); mountGame(sec,g); };
+    const det=document.createElement('details'); det.innerHTML=`<summary>Ayuda y propósito</summary><div>${g.manual}</div>`; c.appendChild(det);
+    sec._sopa={foundCount:()=>found.size,goal:g.palabras.length,points:()=>points};
+  }
+  if(g.tipo==='decision'){
+    const info=document.createElement('div'); info.className='row';
+    const clock=document.createElement('span'); clock.className='clock'; clock.textContent=g.tiempo+'s';
+    const score=document.createElement('span'); score.className='tag'; score.textContent='Puntos: 0';
+    info.appendChild(clock); info.appendChild(score); c.appendChild(info);
+    let t=g.tiempo, pts=0, idx=0; let finished=false; let selected=false;
+    const box=document.createElement('div'); c.appendChild(box);
+    const nextBtn=document.createElement('button'); nextBtn.className='btn secondary'; nextBtn.textContent='Siguiente'; nextBtn.disabled=true; c.appendChild(nextBtn);
+
+    function renderRound(){
+      box.innerHTML='';
+      const r=g.rondas[idx];
+      const sc=document.createElement('div'); sc.className='dec-card'; sc.innerHTML=`<b>Situación:</b> ${r.situacion}`; box.appendChild(sc);
+      r.opciones.forEach((op)=>{
+        const btn=document.createElement('button'); btn.className='btn'; btn.textContent=op.txt;
+        btn.addEventListener('click',()=>{
+          if(finished || selected) return;
+          selected=true;
+          pts+=op.pts; score.textContent='Puntos: '+pts;
+          const fb=document.createElement('div'); fb.className='feedback '+(op.pts>0?'ok':'bad'); fb.textContent=op.fb+(op.pts>0?` (+${op.pts})`:` (${op.pts})`);
+          box.appendChild(fb);
+          $$('button.btn',box).forEach(b=>b.classList.add('lock'));
+          nextBtn.disabled=false;
+        });
+        box.appendChild(btn);
+      });
+    }
+    renderRound();
+
+    nextBtn.addEventListener('click',()=>{
+      if(finished) return;
+      idx++; selected=false; nextBtn.disabled=true;
+      if(idx<g.rondas.length){ renderRound(); }
+      else { finished=true; const end=document.createElement('div'); end.className='feedback ok'; end.textContent='Simulación finalizada'; box.appendChild(end); }
+    });
+
+    let timer=setInterval(()=>{
+      t--; clock.textContent=t+'s';
+      if(t<=0){
+        clearInterval(timer);
+        finished=true;
+        const end=document.createElement('div'); end.className='feedback bad'; end.textContent='Tiempo agotado'; box.appendChild(end);
+        $$('button.btn',c).forEach(b=>b.classList.add('lock'));
+        nextBtn.disabled=true;
+      }
+    },1000);
+
+    // Guardar función de reset duro
+    sec._decisionReset=()=>{ clearInterval(timer); mountGame(sec,g); };
+
+    const det=document.createElement('details'); det.innerHTML=`<summary>Ayuda y propósito</summary><div>${g.manual}</div>`; c.appendChild(det);
+    sec._decision={score:()=>pts,finished:()=>finished};
+  }
+}
+
+function renderGames(){
+  host.innerHTML=''; jump.innerHTML='';
+  GAMES.forEach((g,i)=>{
+    const sec=document.createElement('section'); sec.className='card'; sec.id=g.id;
+    sec.innerHTML=`<h2>${String(i+1).padStart(2,'0')}. ${g.titulo}</h2>
+      <p class="lead">${g.instruccion}</p>
+      <div class="content"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn check">Comprobar</button>
+        <button class="btn secondary reset">Reiniciar</button>
+        <span class="feedback"></span>
+      </div>`;
+    host.appendChild(sec);
+    const j=document.createElement('a'); j.className='jump'; j.href='#'+g.id; j.textContent=String(i+1).padStart(2,'0'); jump.appendChild(j);
+
+    mountGame(sec,g);
+
+    $('.check',sec).addEventListener('click',()=>checkGame(g,sec));
+    $('.reset',sec).addEventListener('click',()=>resetGame(g,sec));
+  });
+}
+renderGames();
+
+/* ====== Evaluación y reset ====== */
+function checkGame(g,sec){
+  const fb=$('.feedback',sec); let ok=false; let msg='';
+  if(['clasifica','prioriza'].includes(g.tipo)){
+    let total=0,good=0;
+    $$('.chip',sec).forEach(ch=>{
+      total++; const parent=ch.parentElement; const expected=ch.dataset.group;
+      const got=parent.classList.contains('target')? parent.getAttribute('data-accept') : 'bank';
+      if(expected===got){ good++; ch.style.borderColor='rgba(0,200,83,.9)'; }
+      else ch.style.borderColor='rgba(213,0,0,.9)';
+    });
+    ok=(good===total); msg= ok ? '¡Perfecto! Todo clasificado correctamente.' : `Correctos ${good}/${total}. Revisa los rojos.`;
+  }
+  if(g.tipo==='orden'){
+    const dz=$('.target',sec); const items=$$('.chip',dz).map(x=>x.textContent.trim());
+    if(items.length!==g.solucion.length){ ok=false; msg='Faltan pasos en la zona de destino.'; }
+    else{ const correct=items.every((t,i)=>t===g.solucion[i]); ok=correct; msg= ok ? '¡Secuencia correcta!' : 'Hay pasos fuera de orden.';
+      $$('.chip',dz).forEach((ch,i)=> ch.style.borderColor = (g.solucion[i]===ch.textContent.trim()? 'rgba(0,200,83,1)' : 'rgba(213,0,0,1)'));
+    }
+  }
+  if(g.tipo==='mc'){
+    const chosen=$$('input[type="radio"]',sec).find(r=>r.checked);
+    if(!chosen){ ok=false; msg='Selecciona una alternativa.'; }
+    else{ const idx=+chosen.value; const isOk=(g.opciones[idx][1]==='ok'); ok=isOk;
+      msg=isOk?(g.feedbackOk||'¡Correcto!'):(g.feedbackBad||'Revisa la teoría.');
+      $$('label.item',sec).forEach((lab,i)=>{
+        lab.style.borderColor = (g.opciones[i][1]==='ok') ? 'rgba(0,200,83,1)' : '#446';
+        lab.style.background = (i===idx && !isOk) ? 'rgba(213,0,0,.25)' : (g.opciones[i][1]==='ok' ? 'rgba(0,200,83,.15)' : 'rgba(255,255,255,.03)');
+      });
+    }
+  }
+  if(g.tipo==='match'){
+    let total=0,good=0;
+    $$('select',sec).forEach(sel=>{ total++; const a=sel.dataset.a; const correct=g.pares.find(p=>p[0]===a)[1];
+      if(sel.value===correct){ good++; sel.style.borderColor='rgba(0,200,83,1)'; } else sel.style.borderColor='rgba(213,0,0,1)'; });
+    ok=(good===total); msg= ok ? '¡Emparejamientos correctos!' : `Correctos ${good}/${total}.`;
+  }
+  if(g.tipo==='vf'){
+    let total=0,good=0;
+    g.items.forEach((it,idx)=>{
+      total++; const chosen=$$(`input[name="${g.id}-${idx}"]:checked`,sec)[0];
+      if(chosen && chosen.value===it[1]) good++;
+    });
+    ok=(good===total); msg= ok ? '¡Todo correcto!' : `Correctos ${good}/${total}.`;
+  }
+  if(g.tipo==='memory'){
+    const matched=$$('.cardm.matched',sec).length; ok=(matched===g.pares.length*2);
+    msg = ok ? '¡Todos los pares descubiertos!' : `Pares encontrados: ${matched/2}/${g.pares.length}`;
+  }
+  if(g.tipo==='fill'){
+    let total=$$('.target',sec).length,good=0;
+    $$('.target',sec).forEach(targ=>{
+      const ch=targ && $('.chip',targ);
+      if(!ch) return;
+      if(ch && ch.dataset.group===targ.getAttribute('data-accept')){ good++; ch.style.borderColor='rgba(0,200,83,1)'; } else ch.style.borderColor='rgba(213,0,0,1)';
+    });
+    ok=(good===total && total>0); msg= ok ? '¡Mensaje estandarizado completo!' : `Correctos ${good}/${total}.`;
+  }
+  if(g.tipo==='ranking'){
+    const order=$$('.rank-item',sec._rankWrap).map(x=>x.dataset.key);
+    ok = order.every((k,i)=>k===g.solucion[i]); msg = ok ? '¡Orden correcto!' : 'Ajusta el orden con ▲▼.';
+  }
+  if(g.tipo==='sopa'){
+    const prog = sec._sopa;
+    ok = prog.foundCount() >= prog.goal;
+    msg = ok ? `¡Todas las palabras encontradas! Puntos: ${prog.points()}` : `Palabras: ${prog.foundCount()}/${prog.goal} · Puntos: ${prog.points()}`;
+  }
+  if(g.tipo==='decision'){
+    const d=sec._decision; ok = d.finished(); msg = `Puntaje: ${d.score()} ${ok? '· Simulación finalizada o tiempo agotado':'· Aún en curso'}`;
+  }
+  const cls = ok ? 'ok' : 'bad';
+  fb.textContent=msg; fb.className='feedback '+cls;
+  if(ok) state.done.add(g.id); else state.done.delete(g.id); setProgress();
+}
+
+function resetGame(g,sec){
+  // Reseteo completo recreando el juego. Esto reinicia timers y estados.
+  if(sec._sopaReset) sec._sopaReset();
+  else if(sec._decisionReset) sec._decisionReset();
+  else mountGame(sec,g);
+  state.done.delete(g.id); setProgress();
+}
+
+$('#resetAll').addEventListener('click',()=>{ $$('#games .card').forEach((sec,i)=>resetGame(GAMES[i],sec)); });
+
+/* ====== Quiz ====== */
+const QUIZ=[
+  { q:'¿Cuál es el objetivo principal del Controlador de Terreno?', a:['Coordinar, supervisar y garantizar una operación segura y continua','Realizar mantención mayor en taller','Conducir manualmente todos los CAEX','Solo mirar dashboards'], ok:0, exp:'El rol integra monitoreo, coordinación y decisiones oportunas.' },
+  { q:'En reventón de neumático, la primera acción es…', a:['Continuar hasta llegar al taller','Detener y asegurar zona, informar por radio','Bajar presión de todos los neumáticos','Esperar instrucciones sin comunicar'], ok:1, exp:'Seguridad primero: detener, asegurar e informar.' },
+  { q:'En FrontRunner/MineStar, un “E-Stop” válido significa…', a:['Ignorarlo si no hay ruido','Paro de emergencia que bloquea la operación','Modo turbo','Registro opcional'], ok:1, exp:'El E-Stop detiene y protege. Requiere registro y verificación.' },
+  { q:'Si un trabajador opera domingo, corresponde:', a:['Descanso semanal solamente','Descanso compensatorio la semana siguiente + descanso semanal','Nada','Horas extras automáticas'], ok:1, exp:'La normativa exige descanso compensatorio más el descanso semanal.' },
+  { q:'Una comunicación por radio efectiva incluye:', a:['Saludos extensos y detalles emocionales','ID, ubicación, evento y solicitud','Uso de jerga personal','Silencio operativo'], ok:1, exp:'Estructura estándar acelera la coordinación.' },
+  { q:'En Power BI, un aumento de Cycle Time con producción estable sugiere:', a:['Cuellos de botella o esperas','Mejores frenos','Más colores en el dashboard','Menos datos'], ok:0, exp:'Evalúa colas, rutas, y latencia.' },
+  { q:'Antes de energizar un equipo autónomo se verifica:', a:['E-Stop/Alarmas y entorno','Color de la cabina','Playlist musical','Sticker del parabrisas'], ok:0, exp:'Seguridad y entorno seguro son prioridad.' },
+  { q:'Zona de exclusión significa:', a:['Libre tránsito','Acceso controlado/prohibido salvo autorización','Área de descanso','Estacionamiento'], ok:1, exp:'Control de riesgos de proximidad y atropello.' },
+  { q:'La bitácora de eventos sirve para:', a:['Entretenimiento','Trazabilidad y mejora continua','Publicidad','Nada'], ok:1, exp:'Registra hechos y decisiones para auditar y mejorar.' },
+  { q:'LOTO busca:', a:['Acelerar arranques','Evitar energización inesperada','Aumentar velocidad','Eliminar bitácoras'], ok:1, exp:'Bloqueo/etiquetado previene arranques no deseados.' },
+  { q:'En transferencia a manual, lo primero es:', a:['Acelerar y tomar control','Solicitar autorización y verificar entorno','Apagar el sistema','Ignorar protocolos'], ok:1, exp:'Autorización + entorno seguro antes de la acción.' },
+  { q:'Utilización (%) indica:', a:['Tiempo productivo vs total','Color del camión','RPM del motor','Cantidad de emails'], ok:0, exp:'Mide aprovechamiento del tiempo operativo.' },
+  { q:'Comunicaciones V2X clave para:', a:['Decorar la sala','Integridad de enlaces y latencia','Música ambiental','Pintar líneas'], ok:1, exp:'La estabilidad de enlace es crítica en AHS.' },
+  { q:'Inspección “Durante” incluye:', a:['Monitoreo de alertas y telemetría','Pintar señalética','Redes sociales','Nada'], ok:0, exp:'Supervisión continua durante la operación.' },
+  { q:'Si trabajas 6 días seguidos, el día 7 debe ser:', a:['Libre (descanso semanal)','Trabajado por costumbre','Doble turno','Sin registro'], ok:0, exp:'Nadie puede trabajar 7 días seguidos.' },
+  { q:'Reporte de casi incidente sirve para:', a:['Ocultar problemas','Prevención proactiva','Sancionar sin datos','Nada'], ok:1, exp:'Aprender antes del accidente.' },
+  { q:'En evento crítico, la prioridad es:', a:['Continuidad operativa','Seguridad de personas y equipos','Velocidad','Estética del dashboard'], ok:1, exp:'Siempre seguridad primero.' },
+  { q:'El “Cycle Time” es:', a:['Tiempo por ciclo de acarreo','Nivel de combustible','RPM','Temperatura de aceite'], ok:0, exp:'Desde carga hasta descarga y retorno.' },
+  { q:'MineStar/FrontRunner son:', a:['Juegos','Plataformas AHS de fabricantes','Apps de música','Nombres de camiones'], ok:1, exp:'Sistemas de gestión y control autónomo.' },
+  { q:'Un mensaje “no estandarizado” genera:', a:['Mejor coordinación','Ambigüedad y demoras','Más seguridad','Más datos'], ok:1, exp:'La estandarización reduce errores.' }
+];
+function renderQuiz(){
+  const host=$("#quizBody"); host.innerHTML='';
+  QUIZ.forEach((q,i)=>{
+    const box=document.createElement('div'); box.className='quiz-q'; box.id='qq'+i;
+    const opts=q.a.map((txt,idx)=>`<label class="item"><input type="radio" name="q${i}" value="${idx}"> ${txt}</label>`).join('');
+    box.innerHTML=`<div class="q">${String(i+1).padStart(2,'0')}. ${q.q}</div>${opts}<div class="exp" style="display:none"></div>`;
+    host.appendChild(box);
+  });
+}
+renderQuiz();
+$('#gradeQuiz').addEventListener('click',()=>{
+  let good=0;
+  QUIZ.forEach((q,i)=>{
+    const box=$("#qq"+i);
+    const chosen=$$(`input[name="q${i}"]:checked`,box)[0];
+    const exp=$('.exp',box);
+    $$('label.item',box).forEach((lab)=>{ lab.style.background='rgba(255,255,255,.03)'; lab.style.borderColor='#446'; });
+    if(!chosen){ box.classList.remove('correct','incorrect'); exp.style.display='block'; exp.textContent='Sin respuesta.'; return; }
+    const idx=+chosen.value;
+    if(idx===q.ok){
+      good++; box.classList.add('correct'); box.classList.remove('incorrect');
+      $$('label.item',box)[q.ok].style.background='rgba(0,200,83,.25)'; $$('label.item',box)[q.ok].style.borderColor='rgba(0,200,83,1)';
+      exp.style.display='block'; exp.textContent='¡Correcto! '+q.exp;
+    }else{
+      box.classList.add('incorrect'); box.classList.remove('correct');
+      $$('label.item',box)[q.ok].style.background='rgba(0,200,83,.25)'; $$('label.item',box)[q.ok].style.borderColor='rgba(0,200,83,1)';
+      $$('label.item',box)[idx].style.background='rgba(213,0,0,.25)'; $$('label.item',box)[idx].style.borderColor='rgba(213,0,0,1)';
+      exp.style.display='block'; exp.textContent='Incorrecto. '+q.exp;
+    }
+  });
+  $('#quizScore').textContent=`Puntaje: ${good}/${QUIZ.length}`;
+});
+$('#resetQuiz').addEventListener('click',()=>{ renderQuiz(); $('#quizScore').textContent=''; });
+
+setProgress();
+</script>
+</body>
+</html>
