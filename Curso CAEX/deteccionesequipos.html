@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Detenciones de Equipos por Imprevistos Mecánicos (CAEX)</title>
+  <meta name="description" content="Aula web de estudio: protocolos ante imprevistos mecánicos, alarmas críticas, pendientes y señalización. Incluye 10 juegos con retroalimentación y un quiz de 20 preguntas. Sin imágenes, 100% offline."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; --bad:#FF1744; --fondo: #072A3D; --panel: rgba(255,255,255,.06); --borde: rgba(255,255,255,.15);
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, var(--fondo) 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{text-align:justify}
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1080px; margin:0 auto; padding:16px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+    .grid{display:grid; gap:16px}
+    @media(min-width:960px){.grid{grid-template-columns:1.15fr .85fr}}
+    .card{background:var(--panel); border:1px solid var(--borde); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .btn,.btn-ghost,.btn-sec,.btn-mini{cursor:pointer; border:none; border-radius:12px; font-weight:600}
+    .btn{padding:10px 14px; background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{padding:10px 14px; background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{padding:10px 14px; background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+    .btn-mini{padding:4px 8px; border-radius:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); color:#fff}
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+    table{width:100%; border-collapse:collapse; border:1px solid rgba(255,255,255,.18); margin-top:8px}
+    th,td{border:1px solid rgba(255,255,255,.18); padding:8px; text-align:left}
+    thead th{text-align:center}
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+    footer{opacity:.8; font-size:.85rem; padding:24px 0}
+    .chip2{font-size:.72rem; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+    .timer{font-weight:700; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.25)}
+
+    /* ======= Correcciones solicitadas ======= */
+    /* (1) Alinear flechas en Juego 1 y 6 con grilla */
+    .step-list{list-style:none; margin:0; padding:0}
+    .step-row{display:grid; grid-template-columns: 2ch 1fr auto; align-items:center; gap:10px;
+      background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); border-radius:10px; padding:10px; margin:6px 0}
+    .num{font-family:ui-monospace,Menlo,Consolas,monospace; opacity:.9}
+    .ctrls{display:grid; grid-auto-flow:column; gap:6px; align-items:center}
+
+    /* (2) Compactar cabecera de \"Juegos educativos (10)\" */
+    #games{padding:10px 12px}
+    #games p{margin:0; font-size:.9rem; opacity:.9}
+
+    /* (3) Legibilidad de selects y listas (Edge/Windows) */
+    select{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.35); color:#fff; border-radius:10px; padding:8px}
+    /* Forzar estilo del menú desplegable y los options */
+    select option{background:#ffffff; color:#111 !important}
+    select:focus{outline:2px solid var(--amarillo)}
+
+    /* Mejor contraste de contenedores de juego */
+    .card.game{background:rgba(5,25,38,.72); border-color:rgba(255,255,255,.18)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <h1>Anupro360 · Detenciones de Equipos por Imprevistos Mecánicos</h1>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Actuación Segura ante Imprevistos Mecánicos en Interior Mina</h2>
+    <p class="note"><strong>Aprenderás a:</strong> aplicar retardo dinámico y detener con control; asegurar el equipo (parqueo, balizas, verificación de entorno); posicionar ruedas y calces en pendiente u horizontal; señalizar con distancias mínimas; comunicar a <em>supervisor de sector</em>, <em>despacho mecánico</em> y a través del <em>comunicador radial</em>; y mantenerte en cabina hasta retiro.</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" role="main">
+  <!-- CONTENIDO (se mantiene igual que la versión anterior) -->
+  <section class="card">
+    <h3>1) Detección del imprevisto y control del movimiento</h3>
+    <ul>
+      <li>Si el imprevisto <strong>impide llegar</strong> a zona de estacionamiento, <strong>no continúes</strong> circulando.</li>
+      <li><strong>Reduce velocidad</strong> con <b>freno de retardo dinámico</b> (control progresivo que no compromete la estabilidad).</li>
+      <li><strong>Aproxima el equipo</strong> a la <b>berma de seguridad</b> sin invadir bordes o taludes inestables.</li>
+    </ul>
+    <details open>
+      <summary>Ejemplo práctico</summary>
+      <p>Advertencia de presión de aceite + ruido inusual. Acciona retardo dinámico, mantén línea recta, señaliza a compañeros con luz de emergencia si ya estás detenido, y aléjate de áreas con caída de rocas.</p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="b1">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>2) Detención completa y aseguramiento del equipo</h3>
+    <ol>
+      <li><strong>Detén completamente</strong> el camión en la berma.</li>
+      <li><strong>Conecta freno de parqueo</strong> y <strong>enciende luces de emergencia</strong>.</li>
+      <li><strong>Verifica el entorno</strong>: caída de rocas, bordes, tránsito, derrames.</li>
+      <li><strong>Instala un pretil</strong> a <b>≥ 30 m</b> del camión (si corresponde al riesgo presente).</li>
+      <li>Con visibilidad reducida/nocturna, <strong>señaliza</strong> con baliza visible a <b>≥ 100 m</b>.</li>
+    </ol>
+    <details>
+      <summary>Do / Don’t</summary>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+        <div class="q"><b>Hacer:</b> parqueo + balizas, revisar taludes y circulación, mantener comunicación.</div>
+        <div class="q"><b>No hacer:</b> seguir rodando “despacio”, abandonar cabina sin instrucción, intervenir mecánicamente sin personal competente.</div>
+      </div>
+    </details>
+    <div class="flex"><button class="btn" data-complete="b2">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>3) Pendientes y horizontal: ruedas y elementos de retención</h3>
+    <table>
+      <thead><tr><th>Situación</th><th>Medida</th><th>Fundamento</th></tr></thead>
+      <tbody>
+        <tr><td>Rampa <b>ascendente</b></td><td>Parapeto <b>trasero</b> + ruedas delanteras hacia <b>pretil central</b>.</td><td>Evita retroceso y orienta masa al centro del camino.</td></tr>
+        <tr><td>Rampa <b>descendente</b></td><td>Ruedas delanteras hacia la <b>caja del cerro</b>.</td><td>Reduce tendencia a ir hacia el vacío/borde.</td></tr>
+        <tr><td>Terreno <b>horizontal</b></td><td>Instalar <b>cuñas de seguridad</b>.</td><td>Previene desplazamientos inadvertidos.</td></tr>
+      </tbody>
+    </table>
+    <details>
+      <summary>Ejemplos</summary>
+      <ul>
+        <li>Quedas detenido subiendo: calza atrás, delanteras al pretil central, parqueo y balizas.</li>
+        <li>Bajando: delanteras a caja del cerro; evita alinearlas al borde.</li>
+      </ul>
+    </details>
+    <div class="flex"><button class="btn" data-complete="b3">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>4) Alarmas de riesgo catastrófico</h3>
+    <p>Ante una <strong>alarma crítica</strong> capaz de generar daño catastrófico al motor: <b>detente</b>, <b>apaga motor inmediatamente</b> e <b>informa</b> a Supervisor del sector y Despacho Mecánico.</p>
+    <details>
+      <summary>Razonamiento</summary>
+      <p>Seguir circulando puede transformar una falla contenible en una pérdida mayor (incendio, gripado, proyección de piezas). La parada inmediata preserva la integridad del equipo y del personal.</p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="b4">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>5) Comunicaciones y roles</h3>
+    <ul>
+      <li><b>Operador</b>: permanece en cabina hasta ser retirado.</li>
+      <li><b>Supervisor del sector</b>: coordina aseguramiento, señalización y evaluación de riesgos.</li>
+      <li><b>Despacho Mecánico</b>: envía apoyo, define retiro y prioridades.</li>
+      <li><b>Comunicador radial</b>: informa al resto del sector para medidas de precaución.</li>
+    </ul>
+    <details>
+      <summary>Guion radial sugerido (operador)</summary>
+      <p><em>“Supervisor sector, de Camión 321: detenido por imprevisto mecánico en rampa 3, lado este. Equipo asegurado (parqueo y balizas), verificando entorno. Solicito apoyo de despacho mecánico. Cambio.”</em></p>
+    </details>
+    <div class="flex"><button class="btn" data-complete="b5">Marcar leído ✓</button></div>
+  </section>
+
+  <section class="card">
+    <h3>6) Recordatorios rápidos</h3>
+    <details open>
+      <summary>Checklist</summary>
+      <ul>
+        <li>Retardo dinámico → berma → detención total.</li>
+        <li>Parqueo + balizas, verificación de entorno.</li>
+        <li>Pretil ≥ 30 m; baliza ≥ 100 m (si corresponde).</li>
+        <li>Comunicaciones: Supervisor → Despacho Mecánico → Comunicador radial.</li>
+      </ul>
+    </details>
+    <details>
+      <summary>Errores frecuentes</summary>
+      <ul>
+        <li>Intentar “llegar” al estacionamiento con falla seria.</li>
+        <li>Ruedas delanteras orientadas hacia el borde en pendiente.</li>
+        <li>Abandonar cabina sin instrucción.</li>
+      </ul>
+    </details>
+    <div class="flex"><button class="btn" data-complete="b6">Marcar leído ✓</button></div>
+  </section>
+
+  <!-- ==================== JUEGOS (10) ==================== -->
+  <section class="card game" id="games">
+    <h3 style="margin:0">Juegos educativos (10)</h3>
+    <p>Todos con <b>Reiniciar</b> y <b>retroalimentación</b> inmediata (verde/rojo).</p>
+  </section>
+
+  <!-- Juego 1 -->
+  <section class="card game">
+    <h3>Juego 1 · Ordena la secuencia ante imprevisto</h3>
+    <p>Usa ▲▼ para ordenar los pasos. Luego <b>Evaluar</b>.</p>
+    <ol id="j1-list" class="step-list"></ol>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j1-check">Evaluar</button>
+      <button class="btn-ghost" id="j1-reset">Reiniciar</button>
+      <span id="j1-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 2 -->
+  <section class="card game">
+    <h3>Juego 2 · Clasifica: Antes de detener / Después de detener</h3>
+    <p>Haz clic en las tarjetas para seleccionarlas y colócalas en la zona correcta.</p>
+    <div class="zones">
+      <div>
+        <h4>Antes de detener</h4>
+        <div id="j2-antes" class="zone"></div>
+      </div>
+      <div>
+        <h4>Después de detener</h4>
+        <div id="j2-despues" class="zone"></div>
+      </div>
+    </div>
+    <div id="j2-pool" style="margin-top:10px"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+      <button class="btn-sec" id="j2-check">Evaluar</button>
+      <button class="btn-ghost" id="j2-reset">Reiniciar</button>
+      <span id="j2-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 3 -->
+  <section class="card game">
+    <h3>Juego 3 · Verdadero / Falso</h3>
+    <div id="j3-wrap"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j3-check">Evaluar</button>
+      <button class="btn-ghost" id="j3-reset">Reiniciar</button>
+      <span id="j3-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 4 -->
+  <section class="card game">
+    <h3>Juego 4 · Empareja: Situación → Acción correcta</h3>
+    <div id="j4-wrap"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j4-check">Evaluar</button>
+      <button class="btn-ghost" id="j4-reset">Reiniciar</button>
+      <span id="j4-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 5 -->
+  <section class="card game">
+    <h3>Juego 5 · Completa la instrucción</h3>
+    <div id="j5-wrap"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j5-check">Evaluar</button>
+      <button class="btn-ghost" id="j5-reset">Reiniciar</button>
+      <span id="j5-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 6 -->
+  <section class="card game">
+    <h3>Juego 6 · Ordena la secuencia de comunicaciones</h3>
+    <ol id="j6-list" class="step-list"></ol>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j6-check">Evaluar</button>
+      <button class="btn-ghost" id="j6-reset">Reiniciar</button>
+      <span id="j6-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 7 -->
+  <section class="card game">
+    <h3>Juego 7 · Números críticos</h3>
+    <div class="q">Pretil a: <input id="j7-a" type="number" min="0" placeholder="¿m?"> m</div>
+    <div class="q">Baliza visible a: <input id="j7-b" type="number" min="0" placeholder="¿m?"> m</div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j7-check">Evaluar</button>
+      <button class="btn-ghost" id="j7-reset">Reiniciar</button>
+      <span id="j7-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 8 -->
+  <section class="card game">
+    <h3>Juego 8 · Checklist de aseguramiento</h3>
+    <div id="j8-wrap"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j8-check">Evaluar</button>
+      <button class="btn-ghost" id="j8-reset">Reiniciar</button>
+      <span id="j8-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 9 -->
+  <section class="card game">
+    <h3>Juego 9 · Simulador de decisiones (5 escenarios)</h3>
+    <div id="j9-scenario" class="q"></div>
+    <div id="j9-options" style="display:flex; gap:8px; flex-wrap:wrap"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="j9-next">Siguiente</button>
+      <button class="btn-ghost" id="j9-reset">Reiniciar</button>
+      <span class="chip2">Puntaje: <b id="j9-score">0</b>/5</span>
+      <span id="j9-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Juego 10 -->
+  <section class="card game">
+    <h3>Juego 10 · Memoria de pares (concepto ↔ acción)</h3>
+    <div id="j10-grid" style="display:grid; grid-template-columns:repeat(4,minmax(110px,1fr)); gap:10px"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+      <button class="btn-ghost" id="j10-reset">Reiniciar</button>
+      <span id="j10-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- ==================== QUIZ ==================== -->
+  <section class="card game">
+    <h3>Quiz final (20 preguntas)</h3>
+    <div class="progress" style="margin-bottom:8px"><i id="quiz-bar"></i></div>
+    <div id="quiz"></div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap">
+      <button class="btn-sec" id="quiz-send">Enviar respuestas</button>
+      <button class="btn-ghost" id="quiz-reset">Reiniciar quiz</button>
+      <span id="quiz-fb" class="chip2" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <!-- Reflexión -->
+  <section class="card">
+    <h3>Reflexión breve</h3>
+    <textarea id="reflexion" rows="3" placeholder="En 2-3 líneas: ¿cuál fue la decisión más importante en tu último escenario del simulador?"></textarea>
+    <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+      <button class="btn-ghost" id="saveRef">Guardar</button>
+      <button class="btn-ghost" id="copyRef">Copiar</button>
+    </div>
+    <p class="note">Se guarda localmente en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div>© <span id="year"></span> Anupro360</div>
+</footer>
+
+<script>
+  /* ======= Estado y utilidades ======= */
+  const $ = (s,d=document)=>d.querySelector(s);
+  const $$ = (s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+  const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+  const state = read('anupro360_detenciones', {done:{b1:false,b2:false,b3:false,b4:false,b5:false,b6:false}, reflexion:''});
+
+  function calcProgress(){
+    const total = Object.values(state.done).length;
+    const ok = Object.values(state.done).filter(Boolean).length;
+    const pct = Math.round(ok/total*100);
+    $('#bar').style.width = pct+'%';
+    $('#badge').textContent = 'Progreso '+pct+'%';
+  }
+  $$('button[data-complete]').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const key=e.currentTarget.dataset.complete;
+      state.done[key]=true; store('anupro360_detenciones',state); calcProgress();
+      e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost');
+    });
+  });
+
+  /* ======= Juegos ======= */
+  // Juego 1: Orden de pasos (alineado)
+  const j1_correct=[
+    "Reducir velocidad con retardo dinámico",
+    "Aproximarse a la berma de seguridad",
+    "Detener totalmente el equipo",
+    "Conectar freno de parqueo y encender luces de emergencia",
+    "Verificar entorno por riesgos (rocas/bordes)",
+    "Avisar a Supervisor del sector y Despacho Mecánico"
+  ];
+  let j1_items=[];
+  function j1_render(){
+    const ol=$('#j1-list'); ol.innerHTML='';
+    j1_items.forEach((t,i)=>{
+      const li=document.createElement('li'); li.className='step-row';
+      const num=document.createElement('span'); num.className='num'; num.textContent=(i+1)+'.';
+      const txt=document.createElement('span'); txt.textContent=t;
+      const ctrls=document.createElement('span'); ctrls.className='ctrls';
+      const up=document.createElement('button'); up.className='btn-mini'; up.textContent='▲';
+      const down=document.createElement('button'); down.className='btn-mini'; down.textContent='▼';
+      up.addEventListener('click',()=>{ const j=i-1; if(j<0)return; [j1_items[i],j1_items[j]]=[j1_items[j],j1_items[i]]; j1_render(); });
+      down.addEventListener('click',()=>{ const j=i+1; if(j>=j1_items.length)return; [j1_items[i],j1_items[j]]=[j1_items[j],j1_items[i]]; j1_render(); });
+      ctrls.appendChild(up); ctrls.appendChild(down);
+      li.appendChild(num); li.appendChild(txt); li.appendChild(ctrls);
+      ol.appendChild(li);
+    });
+  }
+  function j1_check(){
+    const ok=j1_items.every((t,i)=>t===j1_correct[i]);
+    const fb=$('#j1-fb');
+    if(ok){ fb.textContent='¡Perfecto! Secuencia segura.'; fb.style.color='var(--ok)'; }
+    else{
+      let score=0; j1_items.forEach((t,i)=>{ if(t===j1_correct[i]) score++; });
+      fb.textContent='Aún no: '+score+'/'+j1_items.length+' en orden.'; fb.style.color='var(--bad)';
+    }
+  }
+  function j1_reset(){ j1_items=[...j1_correct].sort(()=>Math.random()-0.5); j1_render(); $('#j1-fb').textContent=''; }
+  $('#j1-check').addEventListener('click', j1_check);
+  $('#j1-reset').addEventListener('click', j1_reset);
+  j1_reset();
+
+  // Juego 2: Clasificación
+  const j2_all=[
+    "Reducir velocidad con retardo dinámico",
+    "Aproximarse a la berma de seguridad",
+    "Detener totalmente el equipo",
+    "Conectar freno de parqueo",
+    "Encender luces de emergencia",
+    "Verificar entorno por riesgos",
+    "Avisar a Supervisor y Despacho",
+    "Colocar pretil ≥ 30 m",
+    "Señalizar con baliza visible ≥ 100 m",
+    "Operador permanece en cabina"
+  ];
+  const j2_map={
+    antes:["Reducir velocidad con retardo dinámico","Aproximarse a la berma de seguridad"],
+    despues:["Detener totalmente el equipo","Conectar freno de parqueo","Encender luces de emergencia","Verificar entorno por riesgos","Avisar a Supervisor y Despacho","Colocar pretil ≥ 30 m","Señalizar con baliza visible ≥ 100 m","Operador permanece en cabina"]
+  };
+  function j2_render(){
+    $('#j2-antes').innerHTML=''; $('#j2-despues').innerHTML=''; $('#j2-pool').innerHTML='';
+    [...j2_all].sort(()=>Math.random()-0.5).forEach(txt=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=txt; tag.addEventListener('click',()=> tag.classList.toggle('dragging'));
+      $('#j2-pool').appendChild(tag);
+    });
+    ['j2-antes','j2-despues'].forEach(id=>{
+      const z=document.getElementById(id);
+      z.addEventListener('click',()=>{
+        const sel=$$('#j2-pool .dragging'); sel.forEach(n=>{ n.classList.remove('dragging'); z.appendChild(n); });
+      });
+    });
+    $('#j2-fb').textContent='';
+  }
+  function j2_check(){
+    const antes=$$('#j2-antes .tag').map(n=>n.textContent.trim());
+    const despues=$$('#j2-despues .tag').map(n=>n.textContent.trim());
+    const ok = j2_map.antes.every(x=>antes.includes(x)) && j2_map.despues.every(x=>despues.includes(x)) && (antes.length===j2_map.antes.length) && (despues.length===j2_map.despues.length);
+    const fb=$('#j2-fb'); fb.textContent = ok ? '¡Correcto! Clasificación exacta.' : 'Revisa: hay elementos en grupo equivocado o faltantes.';
+    fb.style.color = ok ? 'var(--ok)' : 'var(--bad)';
+  }
+  $('#j2-check').addEventListener('click', j2_check);
+  $('#j2-reset').addEventListener('click', j2_render);
+  j2_render();
+
+  // Juego 3: V/F
+  const j3_data=[
+    ["Ante alarma catastrófica del motor debo intentar llegar a estacionamiento.", false],
+    ["El pretil debe ubicarse al menos a 30 m del camión detenido.", true],
+    ["En rampa ascendente las ruedas delanteras se giran al pretil central.", true],
+    ["En horizontal se instalan cuñas de seguridad.", true],
+    ["La señalización nocturna debe ser visible a más de 50 m.", false],
+    ["Primero reduzco con retardo dinámico y me acerco a la berma.", true],
+    ["El operador debe bajar de la cabina apenas detiene.", false],
+    ["Se debe informar a Supervisor y Despacho Mecánico.", true]
+  ];
+  function j3_render(){
+    const wrap=$('#j3-wrap'); wrap.innerHTML='';
+    [...j3_data].sort(()=>Math.random()-0.5).forEach(([txt,ans],i)=>{
+      const div=document.createElement('div'); div.className='q'; div.dataset.ans=ans?'true':'false';
+      div.innerHTML=`<div>${txt}</div>
+        <label class="opt"><input type="radio" name="j3-${i}" value="true"> Verdadero</label>
+        <label class="opt"><input type="radio" name="j3-${i}" value="false"> Falso</label>`;
+      wrap.appendChild(div);
+    });
+    $('#j3-fb').textContent='';
+  }
+  function j3_check(){
+    let ok=0,total=$$('#j3-wrap .q').length;
+    $$('#j3-wrap .q').forEach(q=>{
+      const ans=q.dataset.ans;
+      const chosen=(q.querySelector('input:checked')||{}).value;
+      if(chosen===ans){ q.classList.add('correct'); ok++; } else { q.classList.add('wrong'); }
+    });
+    const fb=$('#j3-fb'); fb.textContent='Aciertos: '+ok+'/'+total; fb.style.color= ok===total ? 'var(--ok)':'var(--bad)';
+  }
+  $('#j3-check').addEventListener('click', j3_check);
+  $('#j3-reset').addEventListener('click', j3_render);
+  j3_render();
+
+  // Juego 4: Matching (select legible)
+  const j4_pairs=[
+    ["Rampa ascendente","Parapeto trasero + delanteras al pretil central"],
+    ["Rampa descendente","Delanteras hacia la caja del cerro"],
+    ["Horizontal","Instalar cuñas de seguridad"],
+    ["Baja visibilidad/noche","Señalización con baliza ≥ 100 m"],
+    ["Imprevisto mecánico","Detener, parqueo, balizas, verificar entorno"],
+    ["Alarma catastrófica motor","Detener y apagar motor inmediatamente"],
+    ["Tránsito ve pretil","Disminuir velocidad y pasar con precaución"]
+  ];
+  function j4_render(){
+    const wrap=$('#j4-wrap'); wrap.innerHTML='';
+    const left=j4_pairs.map(p=>p[0]);
+    const right=[...j4_pairs.map(p=>p[1])].sort(()=>Math.random()-0.5);
+    left.forEach((L,i)=>{
+      const row=document.createElement('div'); row.className='q'; row.dataset.ans=j4_pairs.find(p=>p[0]===L)[1];
+      const sel=document.createElement('select'); sel.innerHTML='<option value="">— elegir acción —</option>'+right.map(r=>`<option>${r}</option>`).join('');
+      const title=document.createElement('div'); title.style.fontWeight='700'; title.textContent=L;
+      row.appendChild(title); row.appendChild(sel); wrap.appendChild(row);
+    });
+    $('#j4-fb').textContent='';
+  }
+  function j4_check(){
+    let ok=0,total=$$('#j4-wrap .q').length;
+    $$('#j4-wrap .q').forEach(q=>{
+      const sel=q.querySelector('select'); const ans=q.dataset.ans;
+      if(sel.value===ans){ ok++; sel.style.outline='2px solid var(--ok)'; } else { sel.style.outline='2px solid var(--bad)'; }
+    });
+    const fb=$('#j4-fb'); fb.textContent='Aciertos: '+ok+'/'+total; fb.style.color= ok===total ? 'var(--ok)':'var(--bad)';
+  }
+  $('#j4-check').addEventListener('click', j4_check);
+  $('#j4-reset').addEventListener('click', j4_render);
+  j4_render();
+
+  // Juego 5: Completar (select legible)
+  const j5_sentences=[
+    {parts:["Ante imprevisto mecánico reduzco con ","","."], opts:["retardo dinámico","alta","neutro"], ans:"retardo dinámico"},
+    {parts:["Me aproximo a la ",""," para detener con resguardo."], opts:["berma","zona de carga","cuneta"], ans:"berma"},
+    {parts:["Detengo y conecto el ","","."], opts:["freno de parqueo","pito","limpiaparabrisas"], ans:"freno de parqueo"},
+    {parts:["Enciendo ",""," para alertar."], opts:["luces de emergencia","luces altas","nada"], ans:"luces de emergencia"},
+    {parts:["Coloco un pretil a ",""," del camión."], opts:["30 m","10 m","5 m"], ans:"30 m"},
+    {parts:["Señalizo con baliza visible a ","","."], opts:["100 m","20 m","60 m"], ans:"100 m"},
+    {parts:["En rampa ascendente giro delanteras hacia el ","","."], opts:["pretil central","valle","berma externa"], ans:"pretil central"},
+    {parts:["En rampa descendente giro delanteras hacia la ","","."], opts:["caja del cerro","cuneta","pretil central"], ans:"caja del cerro"},
+    {parts:["En horizontal instalo ","","."], opts:["cuñas de seguridad","nada","parapeto delantero"], ans:"cuñas de seguridad"},
+    {parts:["Aviso a ",""," de la situación."], opts:["Supervisor y Despacho Mecánico","un amigo","nadie"], ans:"Supervisor y Despacho Mecánico"}
+  ];
+  function j5_render(){
+    const w=$('#j5-wrap'); w.innerHTML='';
+    j5_sentences.forEach(s=>{
+      const div=document.createElement('div'); div.className='q';
+      const sel=document.createElement('select'); sel.dataset.ans=s.ans;
+      sel.innerHTML='<option value="">— elegir —</option>'+s.opts.map(o=>`<option>${o}</option>`).join('');
+      div.appendChild(document.createTextNode(s.parts[0])); div.appendChild(sel); div.appendChild(document.createTextNode(s.parts[1]||''));
+      w.appendChild(div);
+    });
+    $('#j5-fb').textContent='';
+  }
+  function j5_check(){
+    const selects=$$('#j5-wrap select'); let ok=0;
+    selects.forEach(s=>{ const good=s.value.trim().toLowerCase()===s.dataset.ans.trim().toLowerCase(); if(good){ok++; s.style.outline='2px solid var(--ok)';} else {s.style.outline='2px solid var(--bad)';}});
+    const fb=$('#j5-fb'); fb.textContent='Aciertos: '+ok+'/'+selects.length; fb.style.color= ok===selects.length ? 'var(--ok)':'var(--bad)';
+  }
+  $('#j5-check').addEventListener('click', j5_check);
+  $('#j5-reset').addEventListener('click', j5_render);
+  j5_render();
+
+  // Juego 6: Orden comunicaciones (alineado)
+  const j6_correct=[
+    "Detener y asegurar el equipo",
+    "Informar al Supervisor del sector",
+    "Informar a Despacho Mecánico",
+    "Comunicador radial avisa al resto del sector"
+  ];
+  let j6_items=[];
+  function j6_render(){
+    const ol=$('#j6-list'); ol.innerHTML='';
+    j6_items.forEach((t,i)=>{
+      const li=document.createElement('li'); li.className='step-row';
+      const num=document.createElement('span'); num.className='num'; num.textContent=(i+1)+'.';
+      const txt=document.createElement('span'); txt.textContent=t;
+      const ctrls=document.createElement('span'); ctrls.className='ctrls';
+      const up=document.createElement('button'); up.className='btn-mini'; up.textContent='▲';
+      const down=document.createElement('button'); down.className='btn-mini'; down.textContent='▼';
+      up.addEventListener('click',()=>{ const j=i-1; if(j<0)return; [j6_items[i],j6_items[j]]=[j6_items[j],j6_items[i]]; j6_render(); });
+      down.addEventListener('click',()=>{ const j=i+1; if(j>=j6_items.length)return; [j6_items[i],j6_items[j]]=[j6_items[j],j6_items[i]]; j6_render(); });
+      ctrls.appendChild(up); ctrls.appendChild(down);
+      li.appendChild(num); li.appendChild(txt); li.appendChild(ctrls);
+      ol.appendChild(li);
+    });
+    $('#j6-fb').textContent='';
+  }
+  function j6_check(){
+    const ok=j6_items.every((t,i)=>t===j6_correct[i]);
+    const fb=$('#j6-fb'); fb.textContent = ok? '¡Orden correcto!' : 'Revisa la secuencia.'; fb.style.color= ok? 'var(--ok)':'var(--bad)';
+  }
+  function j6_reset(){ j6_items=[...j6_correct].sort(()=>Math.random()-0.5); j6_render(); }
+  $('#j6-check').addEventListener('click', j6_check);
+  $('#j6-reset').addEventListener('click', j6_reset);
+  j6_reset();
+
+  // Juego 7: Números
+  function j7_check(){
+    const a=+$('#j7-a').value, b=+$('#j7-b').value;
+    const okA=a===30, okB=b===100;
+    $('#j7-a').style.outline= okA?'2px solid var(--ok)':'2px solid var(--bad)';
+    $('#j7-b').style.outline= okB?'2px solid var(--ok)':'2px solid var(--bad)';
+    const fb=$('#j7-fb'); fb.textContent= (okA&&okB)? '¡Correcto! 30 m y 100 m.' : 'Recuerda: pretil 30 m, baliza 100 m.'; fb.style.color=(okA&&okB)?'var(--ok)':'var(--bad)';
+  }
+  function j7_reset(){ $('#j7-a').value=''; $('#j7-b').value=''; $('#j7-a').style.outline=''; $('#j7-b').style.outline=''; $('#j7-fb').textContent=''; }
+  $('#j7-check').addEventListener('click', j7_check);
+  $('#j7-reset').addEventListener('click', j7_reset);
+
+  // Juego 8: Checklist
+  const j8_items=[
+    ["Freno de parqueo",true],
+    ["Luces de emergencia",true],
+    ["Acelerar para llegar al taller",false],
+    ["Verificar entorno por riesgos",true],
+    ["Apagar radio",false],
+    ["Colocar pretil ≥ 30 m",true],
+    ["Señalizar con baliza ≥ 100 m si aplica",true]
+  ];
+  function j8_render(){
+    const w=$('#j8-wrap'); w.innerHTML='';
+    [...j8_items].sort(()=>Math.random()-0.5).forEach(([txt,ok])=>{
+      const id = 'j8_'+Math.random().toString(36).slice(2,7);
+      const label=document.createElement('label'); label.className='tag'; label.setAttribute('for',id);
+      label.innerHTML = `<input id="${id}" type="checkbox" data-ans="${ok?1:0}"> ${txt}`;
+      w.appendChild(label);
+    });
+    $('#j8-fb').textContent='';
+  }
+  function j8_check(){
+    const checks=$$('#j8-wrap input[type=checkbox]'); let okAll=true;
+    checks.forEach(c=>{
+      const should=c.dataset.ans==='1'; const good=(!!c.checked)===should;
+      c.parentElement.style.outline=good?'2px solid var(--ok)':'2px solid var(--bad)';
+      if(!good) okAll=false;
+    });
+    const fb=$('#j8-fb'); fb.textContent= okAll? '¡Checklist correcto!' : 'Hay selecciones incorrectas.'; fb.style.color= okAll? 'var(--ok)':'var(--bad)';
+  }
+  $('#j8-check').addEventListener('click', j8_check);
+  $('#j8-reset').addEventListener('click', j8_render);
+  j8_render();
+
+  // Juego 9: Simulador
+  const j9_bank=[
+    {s:"Detuviste por imprevisto y hay borde inestable cercano.", opts:[["Mover el camión de inmediato",false],["Parqueo, balizas, verificar entorno y esperar instrucción",true],["Bajar a revisar",false]]},
+    {s:"Se activa alarma que indica posible daño catastrófico de motor.", opts:[["Seguir hasta estacionamiento",false],["Detener, apagar motor y avisar",true],["Reiniciar el camión",false]]},
+    {s:"Es de noche y la visibilidad es baja.", opts:[["Señalizar con baliza visible ≥100 m",true],["Confiar solo en luces del camión",false],["Nada adicional",false]]},
+    {s:"Quedaste detenido en rampa ascendente.", opts:[["Parapeto trasero + delanteras al pretil central",true],["Delanteras hacia la caja del cerro",false],["Cuñas de seguridad",false]]},
+    {s:"Quedaste detenido en rampa descendente.", opts:[["Delanteras hacia la caja del cerro",true],["Parapeto trasero + delanteras al pretil central",false],["Cuñas de seguridad",false]]},
+    {s:"Estás detenido en horizontal.", opts:[["Instalar cuñas de seguridad",true],["Parapeto delantero",false],["Sin medidas",false]]},
+    {s:"Ves un pretil instalado por otro equipo.", opts:[["Aumentar velocidad para pasar rápido",false],["Disminuir velocidad y pasar con precaución",true],["Quitar el pretil",false]]},
+    {s:"Luego de asegurar el equipo.", opts:[["Informar a Supervisor y a Despacho Mecánico",true],["No informar para evitar demoras",false],["Solo informar al compañero",false]]}
+  ];
+  let j9_rounds=[], j9_index=0, j9_score=0;
+  function j9_render(){
+    const cur=j9_rounds[j9_index]; $('#j9-scenario').innerHTML='<b>Escenario:</b> '+cur.s;
+    const cont=$('#j9-options'); cont.innerHTML='';
+    [...cur.opts].sort(()=>Math.random()-0.5).forEach(([txt,ok])=>{
+      const b=document.createElement('button'); b.className='btn-ghost'; b.textContent=txt;
+      b.addEventListener('click', (e)=>{ e.preventDefault(); if(ok){ j9_score++; b.className='btn-sec'; $('#j9-fb').textContent='¡Bien!'; $('#j9-fb').style.color='var(--ok)'; }else{ b.className='btn'; $('#j9-fb').textContent='No es la mejor decisión.'; $('#j9-fb').style.color='var(--bad)'; } $$('#j9-options button').forEach(x=>x.disabled=true); $('#j9-score').textContent=j9_score; });
+      cont.appendChild(b);
+    });
+  }
+  function j9_next(){
+    if(j9_index<j9_rounds.length-1){ j9_index++; j9_render(); } else { $('#j9-fb').textContent='Fin del simulador.'; $('#j9-fb').style.color='var(--ok)'; }
+  }
+  function j9_reset(){ j9_rounds=[...j9_bank].sort(()=>Math.random()-0.5).slice(0,5); j9_index=0; j9_score=0; $('#j9-score').textContent='0'; $('#j9-fb').textContent=''; j9_render(); }
+  $('#j9-next').addEventListener('click', j9_next);
+  $('#j9-reset').addEventListener('click', j9_reset);
+  j9_reset();
+
+  // Juego 10: Memoria
+  let j10_cards=[], j10_open=[], j10_solved=0;
+  const j10_pairs=[
+    ["Pretil","≥ 30 m del camión"],
+    ["Baliza","Visible ≥ 100 m"],
+    ["Ascendente","Parapeto trasero + delanteras al pretil central"],
+    ["Descendente","Delanteras hacia la caja del cerro"],
+    ["Horizontal","Cuñas de seguridad"],
+    ["Comunicar","Supervisor y Despacho Mecánico"]
+  ];
+  function j10_build(){
+    j10_cards = j10_pairs.flatMap(([a,b])=>[{t:a,k:a},{t:b,k:a}]).sort(()=>Math.random()-0.5);
+    const grid=$('#j10-grid'); grid.innerHTML='';
+    j10_cards.forEach((c,i)=>{
+      const div=document.createElement('div'); div.className='q'; div.style.textAlign='center'; div.textContent=c.t;
+      div.addEventListener('click', ()=> j10_flip(i,div));
+      grid.appendChild(div);
+    });
+    j10_open=[]; j10_solved=0; $('#j10-fb').textContent='';
+  }
+  function j10_flip(i,node){
+    if(node.dataset.state==='solved' || node.dataset.state==='open') return;
+    node.dataset.state='open'; node.style.outline='2px solid var(--amarillo)';
+    j10_open.push(i);
+    if(j10_open.length===2){
+      const [a,b]=j10_open; const ca=j10_cards[a], cb=j10_cards[b];
+      const na=$('#j10-grid').children[a], nb=$('#j10-grid').children[b];
+      setTimeout(()=>{
+        if(ca.k===cb.k){
+          na.dataset.state='solved'; nb.dataset.state='solved'; na.style.outline='2px solid var(--ok)'; nb.style.outline='2px solid var(--ok)'; j10_solved++;
+          if(j10_solved===j10_pairs.length){ $('#j10-fb').textContent='¡Completado!'; $('#j10-fb').style.color='var(--ok)'; }
+        }else{
+          na.dataset.state=''; nb.dataset.state=''; na.style.outline=''; nb.style.outline='';
+        }
+        j10_open=[];
+      },420);
+    }
+  }
+  function j10_reset(){ j10_build(); }
+  $('#j10-reset').addEventListener('click', j10_reset);
+  j10_build();
+
+  /* ======= Quiz 20 ======= */
+  const QUIZ=[
+    {q:"¿Cuál es el primer control al detectar un imprevisto mecánico en interior mina?", a:["Aplicar freno de retardo dinámico","Encender balizas","Apagar el motor","Llamar por radio de inmediato"], c:0, f:"Primero se reduce velocidad con el retardo dinámico."},
+    {q:"Si no puedes llegar a estacionamiento, ¿dónde te posicionas?", a:["En el centro de la vía","Aproximarse a la berma de seguridad","Zona de carga","Donde sea"], c:1, f:"La berma ofrece margen de seguridad."},
+    {q:"Tras detener, ¿qué activas?", a:["Solo luces altas","Freno de parqueo y luces de emergencia","Solo freno de servicio","Nada"], c:1, f:"Parqueo + emergencias son obligatorios."},
+    {q:"¿A quién informas?", a:["Solo al compañero","Supervisor y Despacho Mecánico","Guardia","Nadie"], c:1, f:"Ambos deben coordinar la respuesta."},
+    {q:"Distancia mínima para el pretil:", a:["10 m","20 m","30 m","50 m"], c:2, f:"Pretil ≥ 30 m."},
+    {q:"Tránsito al ver un pretil:", a:["Acelera para pasar rápido","Disminuye velocidad y precaución","Toca bocina","Quita el pretil"], c:1, f:"El pretil indica zona de riesgo."},
+    {q:"Alarma catastrófica de motor:", a:["Seguir marcha","Detener y apagar motor de inmediato","Esperar 5 min","Reiniciar equipo"], c:1, f:"Evita daños mayores."},
+    {q:"Rampa ascendente: orientación de delanteras", a:["Caja del cerro","Pretil central","Berma externa","Indistinto"], c:1, f:"Delanteras hacia el pretil central."},
+    {q:"Rampa ascendente: parapeto", a:["Delantero","Trasero","No aplica","Lateral"], c:1, f:"Parapeto (calzo) trasero."},
+    {q:"Rampa descendente: delanteras hacia", a:["Caja del cerro","Pretil central","Berma externa","Valle"], c:0, f:"Delanteras hacia la caja del cerro."},
+    {q:"En horizontal, ¿qué instalas?", a:["Nada","Parapeto delantero","Cuñas de seguridad","Baliza"], c:2, f:"Cuñas evitan movimiento."},
+    {q:"Señalización en noche: baliza visible a", a:["≥ 50 m","≥ 80 m","≥ 100 m","≥ 150 m"], c:2, f:"Visibilidad mínima 100 m."},
+    {q:"El comunicador radial debe", a:["Guardar silencio","Informar al sector","Llamar a familia","Apagar radio"], c:1, f:"Comunica medidas de precaución."},
+    {q:"El operador debe permanecer", a:["En la cabina","Fuera del equipo","En la tolva","En la berma"], c:0, f:"Permanece en cabina hasta retiro."},
+    {q:"Tras detener, también debes", a:["Verificar entorno por riesgos","Reanudar marcha","Acelerar","Apagar luces"], c:0, f:"Verifica rocas, bordes, etc."},
+    {q:"Si la visibilidad es baja", a:["No haces nada","Usas baliza visible ≥ 100 m","Solo luces altas","Tiras conos"], c:1, f:"Señalización adicional."},
+    {q:"Secuencia correcta de comunicaciones", a:["Despacho→Comunicador→Supervisor","Supervisor→Despacho→Comunicador","Comunicador→Supervisor→Despacho","Despacho→Supervisor→Comunicador"], c:1, f:"Supervisor, luego Despacho, comunicador difunde."},
+    {q:"‘Berma de seguridad’ se usa para", a:["Estacionar permanentemente","Crear sombra","Apartarse temporalmente ante imprevisto","Nada"], c:2, f:"Zona de resguardo temporal."},
+    {q:"‘Pretil’ significa", a:["Dique de contención distante","Señal reflectante","Barrera/terraplén de contención","Cartel informativo"], c:2, f:"Barrera de material que delimita/contiene."},
+    {q:"¿Qué acción es incorrecta tras el imprevisto?", a:["Conectar parqueo","Encender emergencias","Informar a supervisor","Seguir rodando lentamente"], c:3, f:"No se debe seguir rodando."}
+  ];
+  function renderQuiz(){
+    const wrap=$('#quiz'); wrap.innerHTML='';
+    QUIZ.forEach((o,idx)=>{
+      const div=document.createElement('div'); div.className='q'; div.dataset.ok=o.c;
+      const opts=o.a.map((txt,i)=>`<label class="opt"><input type="radio" name="q${idx}" value="${i}"> <span>${txt}</span></label>`).join('');
+      div.innerHTML=`<div style="font-weight:700">${idx+1}. ${o.q}</div>${opts}<div class="note" id="fb-${idx}"></div>`;
+      wrap.appendChild(div);
+    });
+    $('#quiz-fb').textContent='';
+    $('#quiz-bar').style.width='0%';
+  }
+  function checkQuiz(){
+    let correct=0;
+    QUIZ.forEach((o,idx)=>{
+      const div=$$('#quiz .q')[idx];
+      const sel=div.querySelector('input:checked');
+      div.querySelectorAll('input').forEach(i=>i.disabled=true);
+      const ok=o.c;
+      const correctLabel=div.querySelector(`input[value="${ok}"]`)?.closest('label');
+      correctLabel?.classList.add('correct');
+      const fb=$('#fb-'+idx);
+      if(!sel){ div.classList.add('wrong'); fb.textContent='Sin respuesta.'; return; }
+      if(+sel.value===ok){ div.classList.add('correct'); fb.textContent='Correcto.'; correct++; }
+      else{ div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); fb.textContent='Incorrecto: '+o.f; }
+    });
+    const pct=Math.round(correct/QUIZ.length*100);
+    $('#quiz-bar').style.width=pct+'%';
+    const fb=$('#quiz-fb'); fb.textContent=`Resultado: ${correct}/${QUIZ.length} (${pct}%).`; fb.style.color= correct===QUIZ.length ? 'var(--ok)':'var(--bad)';
+  }
+  function resetQuiz(){
+    $$('#quiz .q').forEach(div=>{ div.classList.remove('correct','wrong'); div.querySelectorAll('label').forEach(l=>l.classList.remove('correct','wrong')); div.querySelectorAll('input').forEach(i=>{ i.disabled=false; i.checked=false; }); const idx=[...div.parentNode.children].indexOf(div); const f=$('#fb-'+idx); if(f) f.textContent=''; });
+    $('#quiz-fb').textContent=''; $('#quiz-bar').style.width='0%';
+  }
+  $('#quiz-send').addEventListener('click', checkQuiz);
+  $('#quiz-reset').addEventListener('click', resetQuiz);
+  renderQuiz();
+
+  /* Reflexión */
+  const ref=$('#reflexion'); ref.value=state.reflexion||'';
+  $('#saveRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_detenciones',state); alert('Reflexión guardada.'); });
+  $('#copyRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Copiado.'); }catch(e){ alert('No se pudo copiar automáticamente.'); } });
+
+  // Init
+  calcProgress();
+  $('#year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
