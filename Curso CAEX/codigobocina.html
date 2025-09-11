@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Anupro360 · Código de Bocinas · Operador de Camión de Extracción</title>
+  <meta name="description" content="Aplicación web didáctica 100% texto: Código de bocinas para equipos mineros. Contenido ampliado paso a paso con ejemplos, 5 juegos con retroalimentación y un quiz de 15 preguntas. Sin imágenes."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF;
+      --ok:#00C853; --bad:#FF1744;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif; background:linear-gradient(180deg,var(--azul) 0%, #072A3D 100%); color:var(--blanco); -webkit-font-smoothing:antialiased}
+    p, li{ text-align: justify; }
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(140%) blur(8px); background:rgba(0,59,92,.85); border-bottom:1px solid rgba(255,255,255,.12)}
+    .wrap{max-width:1120px; margin:0 auto; padding:16px}
+    .brand{display:flex; align-items:center; gap:10px}
+    h1{font-size:1.02rem; margin:0}
+    .chip{font-size:.75rem; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); padding:4px 8px; border-radius:999px}
+    .hero{border-bottom:1px solid rgba(255,255,255,.08); background: radial-gradient(900px 220px at 50% -40%, rgba(255,184,28,.25), transparent), radial-gradient(800px 280px at 100% 0%, rgba(255,92,0,.15), transparent)}
+    .hero h2{margin:.25rem 0 .5rem; font-size:1.25rem}
+    .note{font-size:.92rem; opacity:.95}
+    .progress{height:10px; width:100%; border-radius:999px; background:rgba(255,255,255,.15); overflow:hidden}
+    .progress>i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--amarillo),var(--naranja)); transition:width .4s ease}
+    .grid{display:grid; gap:16px}
+    @media(min-width:980px){.grid{grid-template-columns:1.15fr .85fr}}
+    .card{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:16px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    .card h3{margin-top:0}
+    .btn,.btn-ghost,.btn-sec{cursor:pointer; border:none; border-radius:12px; padding:10px 14px; font-weight:600}
+    .btn{background:linear-gradient(180deg,var(--amarillo),#EAA20F); color:#0b1116; box-shadow:0 6px 16px rgba(255,184,28,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn-ghost{background:transparent; color:var(--blanco); border:1px solid rgba(255,255,255,.25); text-decoration:none; display:inline-block}
+    .btn-sec{background:linear-gradient(180deg,var(--verde),#375636); color:#fff}
+
+    details{background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:10px 12px}
+    details>summary{cursor:pointer; font-weight:700}
+
+    .q{padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.045); margin-bottom:10px}
+    .q.correct{border-color: var(--ok); background: rgba(0,200,83,.12)}
+    .q.wrong{border-color: var(--bad); background: rgba(255,23,68,.12)}
+    .opt{display:flex; gap:8px; align-items:flex-start; margin:6px 0}
+    .opt.correct{outline:2px solid var(--ok); border-radius:8px; padding:4px}
+    .opt.wrong{outline:2px solid var(--bad); border-radius:8px; padding:4px}
+
+    .sortable{list-style:none; padding:0; margin:0}
+    .sortable li{background:rgba(255,255,255,.06); border:1px dashed rgba(255,255,255,.3); padding:10px; border-radius:10px; margin:6px 0; cursor:grab}
+    .sortable li.dragging{opacity:.6}
+
+    .zones{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    .zone{border:2px dashed rgba(255,255,255,.35); border-radius:12px; padding:8px; min-height:120px}
+    .tag{display:inline-block; margin:6px; padding:8px 10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25); border-radius:10px; cursor:grab}
+    .dragging{opacity:.6}
+
+    .chip2{font-size:.78rem; padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.08)}
+    .timer{font-weight:700; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.25)}
+    textarea{width:100%; padding:10px; border-radius:12px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.06); color:var(--blanco)}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+    <div class="brand"><h1>Anupro360 · Código de Bocinas</h1></div>
+    <div class="chip" id="badge">Progreso 0%</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h2>Señales acústicas obligatorias antes de arrancar y moverse (1–2–3)</h2>
+    <p class="note"><strong>Aprenderás a:</strong> aplicar el <em>código de bocinas</em> (1–2–3), respetar los <em>intervalos</em> de seguridad, coordinar con <em>selector de marcha/frenos</em> y dar <em>tiempo de reacción</em> a quienes estén cerca. Con ejemplos, pasos y práctica (5 juegos + quiz de 15).</p>
+    <div class="progress" aria-label="Progreso del módulo"><i id="bar"></i></div>
+  </div>
+</section>
+
+<main class="wrap grid">
+  <!-- TEORÍA (marcar leído solo 1-4) -->
+  <section class="card">
+    <h3>1) Código 1–2–3 (norma base)</h3>
+    <ul>
+      <li><strong>1 bocinazo:</strong> <em>antes de encender el motor</em>.</li>
+      <li><strong>2 bocinazos:</strong> <em>antes de desplazarte hacia adelante</em>.</li>
+      <li><strong>3 bocinazos:</strong> <em>antes de desplazarte hacia atrás</em>.</li>
+    </ul>
+    <details><summary>Texto original (contextualizado)</summary>
+      <p>Las señales deben realizarse <strong>antes</strong> de conectar el selector de marcha desde <em>parqueo</em> y de soltar frenos. La norma crea un intervalo de segundos para que el personal cercano <strong>reaccione</strong>.</p>
+    </details>
+    <button class="btn" data-complete="sec1">Marcar leído ✓</button>
+  </section>
+
+  <section class="card">
+    <h3>2) Paso a paso con control de tiempos</h3>
+    <ol>
+      <li><strong>Chequeo externo:</strong> entorno despejado, espejos/cámaras OK, radio operativo.</li>
+      <li><strong>1 bocinazo</strong> → espera 2–3 s → <em>enciende motor</em>.</li>
+      <li><strong>Verifica tableros</strong> y <em>comunica intención</em> si corresponde (radio).</li>
+      <li><strong>2 bocinazos</strong> → espera 2–3 s → <em>selector D / soltar frenos</em> → avanza.</li>
+      <li><strong>3 bocinazos</strong> → espera 2–3 s → <em>selector R / soltar frenos</em> → retrocede.</li>
+    </ol>
+    <details><summary>Ejemplo aplicado</summary>
+      <p>En rampa con mantenimiento cerca: tras el segundo bocinazo, <em>espera confirmación radial</em> del vigía antes de mover.</p>
+    </details>
+    <button class="btn" data-complete="sec2">Marcar leído ✓</button>
+  </section>
+
+  <section class="card">
+    <h3>3) Consideraciones especiales</h3>
+    <ul>
+      <li><strong>Ambiente ruidoso:</strong> duplica el intervalo (4–5 s) y confirma por radio.</li>
+      <li><strong>Visibilidad limitada:</strong> solicita apoyo de vigía; repite señal si es necesario.</li>
+      <li><strong>Horas de descanso:</strong> respeta política de ruido: bocinazos mínimos efectivos.</li>
+      <li><strong>Falla de bocina:</strong> <em>no muevas el equipo</em>; reporta y usa señalización alternativa con apoyo.</li>
+    </ul>
+    <button class="btn" data-complete="sec3">Marcar leído ✓</button>
+  </section>
+
+  <aside class="card">
+    <h3>4) Errores comunes y cómo evitarlos</h3>
+    <ul>
+      <li>Emitir señal <em>después</em> de soltar frenos → <strong>incorrecto</strong>. Se hace <em>antes</em>.</li>
+      <li>Omitir pausa entre señal y movimiento → cero tiempo de reacción.</li>
+      <li>Usar código equivocado (p.ej., 3 para avanzar) → confunde a todos.</li>
+      <li>No avisar por radio cuando el entorno lo exige.</li>
+    </ul>
+    <button class="btn" data-complete="sec4">Marcar leído ✓</button>
+  </aside>
+
+  <!-- ===== JUEGOS (5) ===== -->
+  <section class="card" id="j1">
+    <h3>5) Juego 1 · Ordena la secuencia completa</h3>
+    <p>Arrastra para ordenar: señal → pausa → acción.</p>
+    <ul class="sortable" id="ordSec"></ul>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sec" id="checkOrd">Evaluar</button>
+      <button class="btn-ghost" id="mixOrd">Reiniciar</button>
+      <span id="fbOrd" class="chip2"></span>
+    </div>
+  </section>
+
+  <section class="card" id="j2">
+    <h3>6) Juego 2 · Relaciona bocinas con la acción</h3>
+    <div class="zones" style="grid-template-columns:1fr 1fr 1fr">
+      <div><h4>1 bocinazo</h4><div id="z1" class="zone"></div></div>
+      <div><h4>2 bocinazos</h4><div id="z2" class="zone"></div></div>
+      <div><h4>3 bocinazos</h4><div id="z3" class="zone"></div></div>
+    </div>
+    <div id="pool2" style="margin-top:10px"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sec" id="check2">Evaluar</button>
+      <button class="btn-ghost" id="reset2">Reiniciar</button>
+      <span id="fb2" class="chip2"></span>
+    </div>
+  </section>
+
+  <section class="card" id="j3">
+    <h3>7) Juego 3 · ¿Correcto o Prohibido?</h3>
+    <div class="zones">
+      <div><h4>Correcto</h4><div id="ok3" class="zone"></div></div>
+      <div><h4>Prohibido</h4><div id="bad3" class="zone"></div></div>
+    </div>
+    <div id="pool3" style="margin-top:10px"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sec" id="check3">Evaluar</button>
+      <button class="btn-ghost" id="reset3">Reiniciar</button>
+      <span id="fb3" class="chip2"></span>
+    </div>
+  </section>
+
+  <section class="card" id="j4">
+    <h3>8) Juego 4 · Completa la frase</h3>
+    <p id="fillText" style="line-height:1.9"></p>
+    <div id="pool4"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sec" id="check4">Evaluar</button>
+      <button class="btn-ghost" id="reset4">Reiniciar</button>
+      <span id="fb4" class="chip2"></span>
+    </div>
+  </section>
+
+  <section class="card" id="j5">
+    <h3>9) Juego 5 · Decisiones en 10 segundos</h3>
+    <div class="timer" id="timer">Tiempo: 10</div>
+    <div id="timedQ"></div>
+    <div id="timedOpts"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sec" id="nextTimed">Siguiente</button>
+      <button class="btn-ghost" id="resetTimed">Reiniciar</button>
+      <span id="fb5" class="chip2"></span>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section class="card">
+    <h3>10) Quiz final (15 preguntas)</h3>
+    <div id="quiz"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn-sec" id="enviar">Enviar respuestas</button>
+      <button class="btn-ghost" id="resetQuiz">Reiniciar quiz</button>
+    </div>
+    <div id="quizFeedback" class="note" aria-live="polite" style="margin-top:8px"></div>
+  </section>
+
+  <!-- REFLEXIÓN -->
+  <section class="card">
+    <h3>11) Reflexión final</h3>
+    <textarea id="reflexion" rows="3" placeholder="¿Cómo aplicarás el intervalo seguro con bocinas en tu turno?"></textarea>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px">
+      <button class="btn-ghost" id="guardarRef">Guardar</button>
+      <button class="btn-ghost" id="copiarRef">Copiar para Classroom</button>
+    </div>
+    <p class="note">Se guarda en este dispositivo.</p>
+  </section>
+</main>
+
+<footer class="wrap"><div>© <span id="year"></span> Anupro360</div></footer>
+
+<script>
+  const $=(s,d=document)=>d.querySelector(s);
+  const $$=(s,d=document)=>Array.from(d.querySelectorAll(s));
+  const store=(k,v)=>localStorage.setItem(k, JSON.stringify(v));
+  const read=(k,def=null)=>{ try{return JSON.parse(localStorage.getItem(k)) ?? def}catch(e){return def} };
+
+  const state = read('anupro360_bocinas', {done:{sec1:false,sec2:false,sec3:false,sec4:false}, reflexion:''});
+  function calcProgress(){const total=Object.values(state.done).length, ok=Object.values(state.done).filter(Boolean).length, pct=Math.round(ok/total*100); $('#bar').style.width=pct+'%'; $('#badge').textContent=`Progreso ${pct}%`; }
+  $$('button[data-complete]').forEach(b=>b.addEventListener('click',e=>{const k=e.currentTarget.dataset.complete; state.done[k]=true; store('anupro360_bocinas',state); calcProgress(); e.currentTarget.textContent='Completado ✓'; e.currentTarget.disabled=true; e.currentTarget.classList.add('btn-ghost'); }));
+
+  /* Utilidades drag&drop */
+  function getAfterEl(container, y){
+    const els=[...container.querySelectorAll('li:not(.dragging)')];
+    let closest={offset:Number.NEGATIVE_INFINITY, element:null};
+    els.forEach(ch=>{ const box=ch.getBoundingClientRect(); const off=y-(box.top+box.height/2); if(off<0 && off>closest.offset){ closest={offset:off, element:ch}; }});
+    return closest.element;
+  }
+  function renderOrder(ulSel, items, fbSel){
+    const ul=$(ulSel); ul.innerHTML='';
+    items.slice().sort(()=>Math.random()-0.5).forEach(txt=>{
+      const li=document.createElement('li'); li.draggable=true; li.textContent=txt;
+      li.addEventListener('dragstart', ()=> li.classList.add('dragging'));
+      li.addEventListener('dragend', ()=> li.classList.remove('dragging'));
+      ul.appendChild(li);
+    });
+    ul.addEventListener('dragover', e=>{ e.preventDefault(); const dragging=ul.querySelector('.dragging'); if(!dragging) return; const after=getAfterEl(ul,e.clientY); if(after==null) ul.appendChild(dragging); else ul.insertBefore(dragging, after); });
+    if(fbSel) $(fbSel).textContent='';
+  }
+  function checkOrder(ulSel, correct, fbSel){
+    $$(ulSel+' li').forEach(li=> li.style.outline='');
+    const curr=$$(ulSel+' li').map(li=>li.textContent.trim());
+    let good=0, bad=0; curr.forEach((t,i)=>{ const el=$$(ulSel+' li')[i]; if(t===correct[i]){ good++; el.style.outline='2px solid var(--ok)'; el.style.borderRadius='8px'; } else { bad++; el.style.outline='2px solid var(--bad)'; el.style.borderRadius='8px'; }});
+    const pct=Math.round(good/correct.length*100);
+    const fb=$(fbSel); fb.textContent=(good===correct.length)?'¡Correcto!':`Aciertos: ${good} · Errores: ${bad} (${pct}%).`; fb.style.color=(good===correct.length)?'var(--ok)':'var(--bad)';
+  }
+  function renderClassify(poolSel, zonesSel, data, fbSel){
+    const pool=$(poolSel); pool.innerHTML=''; Object.keys(zonesSel).forEach(k=>$(zonesSel[k]).innerHTML='');
+    data.slice().sort(()=>Math.random()-0.5).forEach(it=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.dataset.target=it.target; tag.draggable=true;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    [pool, ...Object.values(zonesSel).map(id=>$(id))].forEach(z=>{
+      z.addEventListener('dragover', e=> e.preventDefault());
+      z.addEventListener('drop', e=>{ e.preventDefault(); const d=document.querySelector('.dragging'); if(d){ z.appendChild(d); d.classList.remove('dragging'); } });
+    });
+    if(fbSel) $(fbSel).textContent='';
+  }
+  function checkClassify(zonesSel, fbSel){
+    let ok=0,total=0;
+    Object.entries(zonesSel).forEach(([key,id])=>{
+      const zone=$(id);
+      [...zone.querySelectorAll('.tag')].forEach(tag=>{
+        total++; if(tag.dataset.target===key){ ok++; tag.style.outline='2px solid var(--ok)'; } else { tag.style.outline='2px solid var(--bad)'; }
+      });
+    });
+    const fb=$(fbSel); const pct= total? Math.round(ok/total*100):0; fb.textContent=`Resultado: ${ok}/${total} (${pct}%).`; fb.style.color=ok===total?'var(--ok)':'var(--bad)';
+  }
+  function renderOKBAD(poolSel, okSel, badSel, data, fbSel){
+    const pool=$(poolSel), ok=$(okSel), bad=$(badSel); pool.innerHTML=''; ok.innerHTML=''; bad.innerHTML='';
+    data.slice().sort(()=>Math.random()-0.5).forEach(it=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=it.txt; tag.dataset.tipo=it.tipo; tag.draggable=true;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    [pool,ok,bad].forEach(z=>{ z.addEventListener('dragover', e=> e.preventDefault()); z.addEventListener('drop', e=>{ e.preventDefault(); const d=document.querySelector('.dragging'); if(d){ z.appendChild(d); d.classList.remove('dragging'); } }); });
+    if(fbSel) $(fbSel).textContent='';
+  }
+  function checkOKBAD(okSel, badSel, data, fbSel){
+    let ok=0, total=data.length;
+    [...$(okSel).querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='OK'){ ok++; t.style.outline='2px solid var(--ok)'; } else { t.style.outline='2px solid var(--bad)'; }});
+    [...$(badSel).querySelectorAll('.tag')].forEach(t=>{ if(t.dataset.tipo==='BAD'){ ok++; t.style.outline='2px solid var(--ok)'; } else { t.style.outline='2px solid var(--bad)'; }});
+    const fb=$(fbSel); const pct=Math.round(ok/total*100); fb.textContent=`Resultado: ${ok}/${total} (${pct}%).`; fb.style.color=ok===total?'var(--ok)':'var(--bad)';
+  }
+  function renderFill(textSel,poolSel,targets,fbSel,template){
+    $(textSel).innerHTML=template; const pool=$(poolSel); pool.innerHTML='';
+    targets.slice().sort(()=>Math.random()-0.5).forEach(({word})=>{
+      const tag=document.createElement('span'); tag.className='tag'; tag.textContent=word; tag.draggable=true;
+      tag.addEventListener('dragstart', ()=> tag.classList.add('dragging'));
+      tag.addEventListener('dragend', ()=> tag.classList.remove('dragging'));
+      pool.appendChild(tag);
+    });
+    $$('.dropSlot').forEach(slot=>{
+      slot.addEventListener('dragover', e=> e.preventDefault());
+      slot.addEventListener('drop', e=>{ e.preventDefault(); const d=document.querySelector('.dragging'); if(!d) return; slot.textContent=d.textContent; slot.dataset.filled=d.textContent; d.remove(); });
+    });
+    if(fbSel) $(fbSel).textContent='';
+  }
+  function checkFill(targets,fbSel){
+    let ok=0;
+    $$('.dropSlot').forEach(slot=>{
+      const key=slot.getAttribute('data-slot'); const target=targets.find(t=>t.slot===key)?.word;
+      if((slot.dataset.filled||'').trim().toLowerCase()===target.toLowerCase()){ ok++; slot.style.outline='2px solid var(--ok)'; } else { slot.style.outline='2px solid var(--bad)'; }
+    });
+    const fb=$(fbSel); fb.textContent = ok===targets.length ? '¡Perfecto!' : `Correctas: ${ok}/${targets.length}.`; fb.style.color = ok===targets.length ? 'var(--ok)' : 'var(--bad)';
+  }
+
+  /* Datos juegos */
+  const ordenCompleto=['1 bocinazo','Pausa 2–3 s','Encender motor','2 bocinazos (antes de avanzar)','Pausa 2–3 s','Selector D y soltar frenos','3 bocinazos (antes de retroceder)','Pausa 2–3 s','Selector R y soltar frenos'];
+  renderOrder('#ordSec', ordenCompleto, '#fbOrd');
+  $('#checkOrd').addEventListener('click', ()=>checkOrder('#ordSec', ordenCompleto, '#fbOrd'));
+  $('#mixOrd').addEventListener('click', ()=>renderOrder('#ordSec', ordenCompleto, '#fbOrd'));
+
+  const tarjetas2=[
+    {txt:'Antes de encender motor', target:'z1'},
+    {txt:'Antes de desplazarse hacia adelante', target:'z2'},
+    {txt:'Antes de desplazarse hacia atrás', target:'z3'},
+    {txt:'Esperar 2–3 s tras la señal', target:'z2'},
+    {txt:'Esperar 2–3 s tras la señal', target:'z3'}
+  ];
+  renderClassify('#pool2', {z1:'#z1', z2:'#z2', z3:'#z3'}, tarjetas2, '#fb2');
+  $('#check2').addEventListener('click', ()=>checkClassify({z1:'#z1', z2:'#z2', z3:'#z3'}, '#fb2'));
+  $('#reset2').addEventListener('click', ()=>renderClassify('#pool2', {z1:'#z1', z2:'#z2', z3:'#z3'}, tarjetas2, '#fb2'));
+
+  const tarjetasOKBAD=[
+    {txt:'Dar 2 bocinazos y esperar antes de avanzar', tipo:'OK'},
+    {txt:'Soltar frenos y luego bocinar', tipo:'BAD'},
+    {txt:'Dar 3 bocinazos para retroceder', tipo:'OK'},
+    {txt:'Omitir pausa por apuro', tipo:'BAD'},
+    {txt:'Confirmar por radio si hay personal cerca', tipo:'OK'},
+    {txt:'Usar 1 bocinazo para retroceder', tipo:'BAD'}
+  ];
+  renderOKBAD('#pool3','#ok3','#bad3',tarjetasOKBAD,'#fb3');
+  $('#check3').addEventListener('click', ()=>checkOKBAD('#ok3','#bad3',tarjetasOKBAD,'#fb3'));
+  $('#reset3').addEventListener('click', ()=>renderOKBAD('#pool3','#ok3','#bad3',tarjetasOKBAD,'#fb3'));
+
+  const fillTargets=[
+    {slot:'[1]', word:'antes de encender el motor'},
+    {slot:'[2]', word:'antes de avanzar'},
+    {slot:'[3]', word:'antes de retroceder'},
+    {slot:'[4]', word:'selector de marcha en parqueo'},
+    {slot:'[5]', word:'soltar frenos'}
+  ];
+  const fillTemplate='El código es 1–2–3: un bocinazo <u class="dropSlot" data-slot="[1]">[1]</u>, dos bocinazos <u class="dropSlot" data-slot="[2]">[2]</u> y tres bocinazos <u class="dropSlot" data-slot="[3]">[3]</u>. Las señales se aplican con el <u class="dropSlot" data-slot="[4]">[4]</u> y <u class="dropSlot" data-slot="[5]">[5]</u> solo <em>después</em> de la pausa de seguridad.';
+  renderFill('#fillText','#pool4',fillTargets,'#fb4',fillTemplate);
+  $('#check4').addEventListener('click', ()=>checkFill(fillTargets,'#fb4'));
+  $('#reset4').addEventListener('click', ()=>renderFill('#fillText','#pool4',fillTargets,'#fb4',fillTemplate));
+
+  // Juego 5: temporizado
+  const timed=[
+    {q:'Equipo detenido con personas cerca y mucho ruido', opts:['Dar señal y moverse de inmediato','Duplicar intervalo y confirmar por radio','No usar bocina'], ok:1},
+    {q:'Vas a avanzar desde parqueo', opts:['2 bocinazos y pausa','3 bocinazos y pausa','No bocinar'], ok:0},
+    {q:'Falla la bocina', opts:['Moverse con luces','No moverse y reportar','Seguir si nadie ve'], ok:1},
+    {q:'Retroceder en zona ciega con vigía', opts:['3 bocinazos + espera + confirmación','Un bocinazo y moverse','Solo radio sin bocinas'], ok:0},
+    {q:'Apuro por cambio de turno', opts:['Omitir pausa','Pausa igual, seguridad primero','Un bocinazo sirve para todo'], ok:1}
+  ];
+  let tIndex=0,tScore=0,remaining=10,tId=null;
+  function startTimer(){ remaining=10; $('#timer').textContent='Tiempo: '+remaining; clearInterval(tId); tId=setInterval(()=>{ remaining--; $('#timer').textContent='Tiempo: '+remaining; if(remaining<=0){ clearInterval(tId); lockTimed(false); } },1000); }
+  function renderTimed(){ const t=timed[tIndex]; $('#timedQ').innerHTML='<strong>Escenario '+(tIndex+1)+'</strong>: '+t.q; const w=$('#timedOpts'); w.innerHTML=''; t.opts.forEach((txt,i)=>{ const b=document.createElement('button'); b.className='btn-ghost'; b.textContent=txt; b.addEventListener('click', ()=>lockTimed(i===t.ok)); w.appendChild(b); }); $('#fb5').textContent=''; startTimer(); }
+  function lockTimed(correct){ clearInterval(tId); const t=timed[tIndex]; $$('#timedOpts button').forEach((b,i)=>{ b.disabled=true; if(i===t.ok) b.classList.add('btn-sec'); if(correct && i===t.ok) b.style.outline='2px solid var(--ok)'; }); if(correct){ tScore++; $('#fb5').textContent='¡Correcto!'; $('#fb5').style.color='var(--ok)'; } else { $('#fb5').textContent='Incorrecto o fuera de tiempo.'; $('#fb5').style.color='var(--bad)'; } }
+  function resetTimed(){ clearInterval(tId); tIndex=0; tScore=0; renderTimed(); }
+  $('#nextTimed').addEventListener('click', ()=>{ if(tIndex<timed.length-1){ tIndex++; renderTimed(); } else { $('#fb5').textContent=`Puntaje final: ${tScore}/${timed.length}.`; $('#fb5').style.color=tScore===timed.length?'var(--ok)':'var(--bad)'; }});
+  $('#resetTimed').addEventListener('click', resetTimed);
+  renderTimed();
+
+  // Quiz
+  const preguntas=[
+    {q:'Un bocinazo se da…', opts:['Antes de encender el motor','Antes de avanzar','Antes de retroceder'], ok:0},
+    {q:'Dos bocinazos se dan…', opts:['Antes de encender','Antes de avanzar','Antes de retroceder'], ok:1},
+    {q:'Tres bocinazos se dan…', opts:['Antes de retroceder','Antes de avanzar','Para detener motor'], ok:0},
+    {q:'Las señales se realizan…', opts:['Después de soltar frenos','Antes de conectar selector y soltar frenos','Solo si hay gente'], ok:1},
+    {q:'El intervalo recomendado entre señal y movimiento es…', opts:['0 s','2–3 s','10 s'], ok:1},
+    {q:'Si el entorno es ruidoso…', opts:['Omites señal','Duplicas intervalo y confirmas por radio','Te mueves rápido'], ok:1},
+    {q:'Código incorrecto es…', opts:['3 para retroceder','2 para avanzar','1 para encender','2 para retroceder'], ok:3},
+    {q:'Si la bocina falla…', opts:['Se usa luces y se avanza','No se mueve el equipo y se reporta','Se toca la radio como bocina'], ok:1},
+    {q:'Objetivo de la norma…', opts:['Acelerar la producción','Dar tiempo de reacción al entorno','Evitar uso de radio'], ok:1},
+    {q:'En parqueo para avanzar, la secuencia correcta es…', opts:['2 bocinazos → pausa → selector D → soltar frenos','Selector D → bocinar → soltar frenos','Soltar frenos y luego 2 bocinazos'], ok:0},
+    {q:'Con vigía al retroceder…', opts:['3 bocinazos y moverse sin pausa','3 bocinazos, pausa y confirmación','1 bocinazo basta'], ok:1},
+    {q:'Si no ves a un peatón que estaba cerca…', opts:['Te mueves igual tras señal','Esperas confirmación del entorno','Aceleras para salir rápido'], ok:1},
+    {q:'Usar el código equivocado…', opts:['No afecta','Puede confundir y causar accidente','Es aceptable de noche'], ok:1},
+    {q:'La pausa de seguridad…', opts:['Es parte esencial del código','Se usa solo con lluvia','Es opcional'], ok:0},
+    {q:'Al encender motor con personas en plataforma…', opts:['1 bocinazo y enciendes sin mirar','No enciendes hasta despejar/confirmar','Encender y luego avisar'], ok:1}
+  ];
+  function renderQuiz(){ const wrap=$('#quiz'); wrap.innerHTML=''; preguntas.forEach((p,i)=>{ const div=document.createElement('div'); div.className='q'; div.dataset.ok=p.ok; div.innerHTML=`<div style="font-weight:700">${i+1}. ${p.q}</div>` + p.opts.map((txt,j)=>`<label class="opt"><input type="radio" name="q${i}" value="${j}"> <span>${txt}</span></label>`).join(''); wrap.appendChild(div); }); }
+  function lockQuiz(){ const blocks=$$('#quiz .q'); let okC=0, wrongC=0, noAns=0; blocks.forEach(div=>{ const ok=Number(div.dataset.ok); const sel=div.querySelector('input[type="radio"]:checked'); div.querySelectorAll('input').forEach(inp=> inp.disabled=true); const corr=div.querySelector(`input[value="${ok}"]`)?.closest('label'); corr?.classList.add('correct'); if(!sel){ div.classList.add('wrong'); noAns++; wrongC++; return; } const chosen=Number(sel.value); if(chosen===ok){ div.classList.add('correct'); okC++; } else { div.classList.add('wrong'); sel.closest('label')?.classList.add('wrong'); wrongC++; } }); const pct=Math.round(okC/preguntas.length*100); $('#quizFeedback').textContent=`Resultado: ${okC}/${preguntas.length} (${pct}%). ${noAns?noAns+' sin responder.':''}`; $('#quizFeedback').style.color=okC===preguntas.length?'var(--ok)':'var(--bad)'; }
+  function resetQuiz(){ $$('#quiz .q').forEach(div=>{ div.classList.remove('correct','wrong'); div.querySelectorAll('label').forEach(l=> l.classList.remove('correct','wrong')); div.querySelectorAll('input').forEach(inp=>{ inp.disabled=false; inp.checked=false; }); }); $('#quizFeedback').textContent=''; }
+  renderQuiz();
+  $('#enviar').addEventListener('click', lockQuiz);
+  $('#resetQuiz').addEventListener('click', resetQuiz);
+
+  // Reflexión
+  const ref=$('#reflexion'); ref.value=state.reflexion||'';
+  $('#guardarRef').addEventListener('click', ()=>{ state.reflexion=(ref.value||'').trim(); store('anupro360_bocinas',state); alert('Reflexión guardada.'); });
+  $('#copiarRef').addEventListener('click', async()=>{ try{ await navigator.clipboard.writeText((ref.value||'').trim()); alert('Texto copiado.'); }catch(e){ alert('Copia manual necesaria.'); } });
+
+  // Init UI
+  calcProgress(); $('#year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
