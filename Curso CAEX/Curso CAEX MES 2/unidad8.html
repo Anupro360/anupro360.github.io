@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Anupro360 · Unidad 8 · Cómo funcionan los sistemas del equipo</title>
+<meta name="description" content="Unidad 8: Cómo funcionan los sistemas del equipo (Komatsu 980E-4). Aplicación HTML5 con bloques de teoría + 10 juegos y quiz de 20 preguntas. Texto-resumen alineado al manual en Word, sin imágenes.">
+<style>
+:root{
+  --amarillo:#FFB81C; --naranja:#FF5C00; --gris:#5C6B6B; --verde:#4B6F44; --azul:#003B5C; --blanco:#FFFFFF; --negro:#121212;
+  --ok:#20a36a; --bad:#c62828; --card:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#0f1418;color:#e9eef2;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Helvetica Neue',Arial,'Noto Sans',sans-serif;line-height:1.45}
+a{color:var(--amarillo);text-decoration:none}
+a:hover{text-decoration:underline}
+header{position:sticky;top:0;z-index:50;background:linear-gradient(90deg,var(--azul),#07243a);border-bottom:2px solid #0b2c47}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px}
+.logo{width:42px;height:42px;border-radius:10px;border:1px solid #07334f;box-shadow:0 0 0 3px rgba(255,255,255,0.04) inset;object-fit:contain;background:#00192a;padding:4px}
+h1{font-size:1.2rem;margin:0;color:#eaf5ff}
+.header-title{display:flex;flex-direction:column}
+.header-sub{font-size:.8rem;color:#b9d7f1}
+.progressbar{height:10px;background:#0b2638;border-radius:999px;overflow:hidden;border:1px solid #123d5e;margin-left:auto;width:260px}
+.progressbar>div{height:100%;background:linear-gradient(90deg,var(--amarillo),var(--naranja));width:0%}
+.container{max-width:1100px;margin:18px auto;padding:0 16px}
+.hero{display:grid;grid-template-columns:1fr;gap:18px;align-items:center}
+.card{background:var(--card);border:1px solid #dbe5ea;border-radius:14px;padding:16px;box-shadow:0 6px 18px rgba(0,0,0,.06);color:#0f2d44}
+.card h2,.card h3{margin:.2rem 0 .6rem;color:#0f2d44}
+.card p,.card li,.card .controls,.card .stage,.card .feedback,.card .tip,.theory{color:#0f2d44}
+.badge{display:inline-block;background:var(--amarillo);color:#001624;border-radius:999px;padding:4px 10px;font-weight:700;font-size:.75rem;margin-right:6px}
+.btn{appearance:none;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+.btn-primary{background:linear-gradient(90deg,var(--amarillo),var(--naranja));color:#001624;border:1px solid #8d5200;box-shadow:0 6px 16px rgba(255,92,0,.25)}
+.btn-ghost{background:transparent;color:#e9eef2;border:1px solid #244d6b}
+.btn-light{background:#edf4f8;color:#062033;border:1px solid #cfe1ea}
+.grid{display:grid;gap:16px}
+.grid-2{grid-template-columns:1fr 1fr}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.footer{opacity:.8;text-align:center;padding:24px;font-size:.9rem}
+.section{margin:22px 0}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}
+.kpi div{background:#0c2233;border:1px solid #123a55;color:#cfe8ff;border-radius:10px;padding:6px 10px}
+/* Theory blocks */
+.theory{background:#f4f8fb;border:1px solid #d9e6ee;border-radius:12px;padding:12px;margin:10px 0}
+.theory .cta{font-size:.95rem;opacity:.95;margin-top:6px}
+/* Game widgets */
+.stage{background:#fff;border:1px solid #d7e3ea;border-radius:14px;padding:14px;min-height:120px}
+.stage.dark{background:#0e1b26;border-color:#244d38;color:#cae6ff}
+.draggable{user-select:none;padding:10px 12px;border:1px dashed #a4b8c6;border-radius:12px;background:#f5fbff;margin:8px 0;cursor:grab;color:#0f2d44}
+.draggable.dragging{opacity:.6;transform:scale(.98)}
+.dropzone{background:#f0f6fa;border:2px dashed #b9d2df;border-radius:12px;padding:10px;min-height:44px}
+.pair{display:flex;gap:10px;align-items:stretch}
+.pair .left,.pair .right{flex:1}
+.choice{background:#f8fcff;border:1px solid #d6e6ef;border-radius:12px;padding:10px;cursor:pointer;color:#0f2d44}
+.choice.correct{border-color:var(--ok);background:#e8f6f0}
+.choice.incorrect{border-color:var(--bad);background:#fde8e8}
+.feedback{border-radius:12px;padding:10px;margin-top:8px;display:none}
+.feedback.ok{background:#e9fbf3;border:1px solid var(--ok);color:#084c37;display:block}
+.feedback.bad{background:#feecec;border:1px solid var(--bad);color:#5d0c0c;display:block}
+.tip{background:#fff7e6;border:1px solid #ffd699;color:#6a3b00;border-radius:12px;padding:10px;margin-top:10px}
+.timer{font-variant-numeric:tabular-nums;font-weight:700}
+.hidden{display:none}
+hr.sep{border:none;border-top:1px dashed #c6d9e4;margin:14px 0}
+/* Quiz */
+.quiz-item{margin:10px 0;padding:12px;border:1px solid #d9e6ee;border-radius:12px;background:#f9fbfd;color:#0f2d44}
+.quiz-item h4{margin:.2rem 0 .6rem}
+.quiz-answer{padding:8px;border:1px solid #c9dbe6;border-radius:10px;margin:6px 0;cursor:pointer;background:#fff;color:#0f2d44}
+.quiz-answer.correct{background:#e9fbf3;border-color:var(--ok)}
+.quiz-answer.incorrect{background:#feecec;border-color:var(--bad)}
+.quiz-controls{display:flex;gap:8px;margin-top:10px}
+.summary{background:#0b2638;border:1px solid #174561;color:#cde8ff;border-radius:12px;padding:12px}
+/* Accessibility focus */
+:focus-visible{outline:3px solid #7ec1ff;outline-offset:2px;border-radius:10px}
+/* Responsive */
+@media (max-width:900px){.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr 1fr}.grid-4{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <img class="logo" src="imagotipoblanco.webp" alt="Logo Anupro360" onerror="this.style.opacity=0" />
+    <div class="header-title">
+      <h1>Unidad 8 · Cómo funcionan los sistemas del equipo</h1>
+      <div class="header-sub">Komatsu 980E-4 · Manual interactivo con teoría + juegos + quiz · Certificación CCM</div>
+    </div>
+    <div class="progressbar" aria-label="Progreso total"><div id="globalProgress"></div></div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div class="card">
+      <span class="badge">Objetivo</span>
+      <h2>Comprender y aplicar el funcionamiento de los sistemas del 980E-4</h2>
+      <p>Esta aplicación combina <strong>bloques de teoría</strong> (resumen del documento Word de la Unidad 8) con <strong>10 juegos</strong> y un <strong>quiz de 20 preguntas</strong>. <strong>Complementa SIEMPRE</strong> lo estudiado con el <strong>PDF oficial en Classroom</strong>, que contiene el desarrollo completo, diagramas y procedimientos detallados.</p>
+      <ul>
+        <li><strong>Sistemas cubiertos:</strong> motriz-diésel y admisión/escape; lubricación; enfriamiento principal y LTA; combustible QSK y control ECM; sistema eléctrico 24VDC y conversión; indicadores/luces de estado; interruptores de seguridad; hidráulico (dirección/frenos y elevación de tolva).</li>
+        <li><strong>Enfoque:</strong> seguridad operacional, reconocimiento de estados y diagnóstico básico.</li>
+      </ul>
+      <div class="kpi">
+        <div><strong>Tiempo sugerido:</strong> 55–75 min</div>
+        <div><strong>Juegos:</strong> 10</div>
+        <div><strong>Quiz:</strong> 20 ítems</div>
+      </div>
+      <div class="controls" style="margin-top:10px">
+        <button class="btn btn-primary" id="btnStart">Empezar</button>
+        <button class="btn btn-ghost" id="btnContinue">Continuar</button>
+        <button class="btn btn-light" id="btnResetAll">Reiniciar progreso</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= JUEGOS + TEORÍA ======= -->
+  <section class="section">
+    <h2>Bloques de teoría + juegos (10)</h2>
+    <div class="grid grid-2">
+
+      <!-- Juego 1 -->
+      <div class="card" id="game1">
+        <h3>1) Motor QSK78 · Ciclo de 4 tiempos</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> El QSK78 es un diésel de 18 cilindros y 4 tiempos. El aire se comprime hasta elevar su temperatura; el combustible finamente atomizado se autoenciende y la expansión entrega trabajo. El correcto orden de <em>Admisión → Compresión → Combustión (Expansión) → Escape</em> asegura rendimiento y emisiones dentro de rango.
+          <div class="cta">Complementa con el <strong>PDF oficial en Classroom</strong>: sección Motor – Ciclo y parámetros de operación.</div>
+        </div>
+        <p><em>Arrastra para ordenar correctamente las 4 carreras:</em></p>
+        <div class="stage" data-game="sort" data-key="g1">
+          <div class="draggable" draggable="true">Admisión</div>
+          <div class="draggable" draggable="true">Compresión</div>
+          <div class="draggable" draggable="true">Combustión (Expansión)</div>
+          <div class="draggable" draggable="true">Escape</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkSort('g1',['Admisión','Compresión','Combustión (Expansión)','Escape'])">Validar</button>
+          <button class="btn btn-light" onclick="resetSort('g1')">Reiniciar</button>
+          <span class="timer" id="timer-g1"></span>
+        </div>
+        <div class="feedback" id="fb-g1"></div>
+      </div>
+
+      <!-- Juego 2 -->
+      <div class="card" id="game2">
+        <h3>2) Admisión y sobrealimentación · Dos etapas + enfriamiento</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> Doce turbocompresores (6 baja + 6 alta) elevan la masa de aire. El enfriamiento inter/aftercooler aumenta la densidad para una mezcla más eficiente y estable. Un aire más frío permite mejor combustión y protege componentes calientes.
+          <div class="cta">Complementa con el <strong>PDF en Classroom</strong>: Admisión/escape – Intercooler/Aftercooler.</div>
+        </div>
+        <p>Selecciona la(s) afirmación(es) verdadera(s):</p>
+        <div class="stage">
+          <div class="choice" data-group="g2" onclick="mc(this,true)">Los 12 turbos aumentan la masa de aire; los intercoolers/aftercoolers enfrían para mejorar densidad y combustión.</div>
+          <div class="choice" data-group="g2" onclick="mc(this,false)">Los turbos solo enfrían el aire y no afectan el flujo ni la presión.</div>
+          <div class="choice" data-group="g2" onclick="mc(this,false)">El aftercooler aumenta la temperatura del aire para reducir su densidad.</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-light" onclick="resetMC('g2')">Reiniciar</button>
+          <span class="timer" id="timer-g2"></span>
+        </div>
+        <div class="feedback" id="fb-g2"></div>
+      </div>
+
+      <!-- Juego 3 -->
+      <div class="card" id="game3">
+        <h3>3) Lubricación · Rutas y prioridades</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> La bomba impulsa aceite desde cárter a filtros (con <em>bypass</em> para mantener caudal si hay obstrucción). Los rifles principales distribuyen presión a cojinetes; toberas enfrían pistones; turbos reciben lubricación dedicada. La caída de presión se gestiona priorizando zonas críticas.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Lubricación – Enfriamiento de pistones y turbos.</div>
+        </div>
+        <div class="grid grid-2">
+          <div class="stage">
+            <div class="draggable" draggable="true" data-id="bomba">Bomba de aceite</div>
+            <div class="draggable" draggable="true" data-id="filtro">Filtros/BYPASS</div>
+            <div class="draggable" draggable="true" data-id="rifles">Rifles principales</div>
+            <div class="draggable" draggable="true" data-id="toberas">Toberas de pistón</div>
+            <div class="draggable" draggable="true" data-id="turbo">Lubricación de turbos</div>
+          </div>
+          <div class="stage">
+            <div class="dropzone" data-accept="bomba">Impulsa aceite desde cárter al circuito</div>
+            <div class="dropzone" data-accept="filtro">Retiene impurezas (bypass asegura flujo si hay obstrucción)</div>
+            <div class="dropzone" data-accept="rifles">Distribuyen presión a cojinetes y ejes</div>
+            <div class="dropzone" data-accept="toberas">Enfrían la cabeza del pistón con chorros dirigidos</div>
+            <div class="dropzone" data-accept="turbo">Alimenta cojinetes de alta velocidad y retorna por gravedad</div>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkPairs('g3')">Validar</button>
+          <button class="btn btn-light" onclick="resetPairs('g3')">Reiniciar</button>
+          <span class="timer" id="timer-g3"></span>
+        </div>
+        <div class="feedback" id="fb-g3"></div>
+      </div>
+
+      <!-- Juego 4 -->
+      <div class="card" id="game4">
+        <h3>4) Enfriamiento · Circuito principal y LTA</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> La bomba principal impulsa refrigerante por block/culatas. Termostatos regulan by‑pass y apertura hacia radiadores. El circuito LTA (Low Temperature Aftercooling) enfría el aire comprimido para controlar la temperatura de admisión.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Diagramas de enfriamiento – Circuito principal y LTA.</div>
+        </div>
+        <div class="grid grid-2">
+          <div class="stage">
+            <div class="draggable" draggable="true" data-id="bombaP">Bomba principal</div>
+            <div class="draggable" draggable="true" data-id="radiador">Radiador diésel</div>
+            <div class="draggable" draggable="true" data-id="lta">Radiador LTA</div>
+            <div class="draggable" draggable="true" data-id="termo">Termostatos/By-pass</div>
+          </div>
+          <div class="stage">
+            <div class="dropzone" data-accept="bombaP">Impulsa refrigerante hacia block y culatas</div>
+            <div class="dropzone" data-accept="radiador">Disipa calor de combustión</div>
+            <div class="dropzone" data-accept="lta">Enfría aire de admisión comprimido</div>
+            <div class="dropzone" data-accept="termo">Controla recirculación/apertura a régimen</div>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkPairs('g4')">Validar</button>
+          <button class="btn btn-light" onclick="resetPairs('g4')">Reiniciar</button>
+          <span class="timer" id="timer-g4"></span>
+        </div>
+        <div class="feedback" id="fb-g4"></div>
+      </div>
+
+      <!-- Juego 5 -->
+      <div class="card" id="game5">
+        <h3>5) Combustible QSK · Control electrónico</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> El ECM controla presión/caudal del riel mediante actuadores y sensores (presión/temperatura). La válvula de corte gestiona seguridad de suministro. En este sistema, el riel de tiempo y el de carga <em>no</em> se cruzan.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Sistema de combustible QSK – sensores y actuadores.</div>
+        </div>
+        <div class="stage">
+          <div class="choice" data-group="g5" onclick="mc(this,true)">La presión y el flujo de riel son gestionados por ECM con actuadores dedicados.</div>
+          <div class="choice" data-group="g5" onclick="mc(this,false)">El riel de tiempo y el riel de carga se cruzan para balancear presiones.</div>
+          <div class="choice" data-group="g5" onclick="mc(this,true)">Sensores de riel y temperatura de combustible retroalimentan el control.</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-light" onclick="resetMC('g5')">Reiniciar</button>
+          <span class="timer" id="timer-g5"></span>
+        </div>
+        <div class="feedback" id="fb-g5"></div>
+      </div>
+
+      <!-- Juego 6 -->
+      <div class="card" id="game6">
+        <h3>6) Eléctrico 24 VDC · Alimentación y conversión</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> Un banco de <em>4×8D</em> entrega 24 VDC para partida y servicios. El alternador mantiene carga (≈250 A). La tracción requiere conversión CC→CA con inversores VVVF, que modulan frecuencia/voltaje para los motores de propulsión.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Sistema de 24 VDC – alternador y VVVF.</div>
+        </div>
+        <p>Orden correcto (1→4):</p>
+        <div class="stage" data-game="sort" data-key="g6">
+          <div class="draggable" draggable="true">Baterías 24VDC (4x 8D)</div>
+          <div class="draggable" draggable="true">Alternador 24V/250A</div>
+          <div class="draggable" draggable="true">Rectificación CC y conversión a CA (inversores VVVF)</div>
+          <div class="draggable" draggable="true">Alimentación a sistemas y propulsión</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkSort('g6',['Baterías 24VDC (4x 8D)','Alternador 24V/250A','Rectificación CC y conversión a CA (inversores VVVF)','Alimentación a sistemas y propulsión'])">Validar</button>
+          <button class="btn btn-light" onclick="resetSort('g6')">Reiniciar</button>
+          <span class="timer" id="timer-g6"></span>
+        </div>
+        <div class="feedback" id="fb-g6"></div>
+      </div>
+
+      <!-- Juego 7 -->
+      <div class="card" id="game7">
+        <h3>7) Panel de luces · Estados y respuesta</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> Indicadores como <em>Tolva arriba</em>, <em>Propulsión no lista</em>, <em>Sin propulsión</em> y <em>Retardo dinámico</em> guían la operación segura. Cada luz exige una conducta definida para evitar incidentes y proteger el equipo.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Tabla de indicadores y acciones.</div>
+        </div>
+        <p>Aparece un caso. Elige la respuesta correcta:</p>
+        <div class="stage" id="g7-case"></div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="nextCaseG7()">Nuevo caso</button>
+          <button class="btn btn-light" onclick="resetG7()">Reiniciar</button>
+          <span class="timer" id="timer-g7"></span>
+        </div>
+        <div class="feedback" id="fb-g7"></div>
+      </div>
+
+      <!-- Juego 8 -->
+      <div class="card" id="game8">
+        <h3>8) Interruptores de seguridad · Interlocks</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> Interlocks como <em>Tolva arriba</em>, <em>Límite de levante</em> y <em>Parada a nivel de piso</em> previenen maniobras peligrosas. Un ajuste incorrecto puede generar falsas señales; por eso es clave inspección y calibración.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Ubicación, pruebas y ajuste de interruptores.</div>
+        </div>
+        <div class="stage">
+          <div class="choice" data-group="g8" onclick="mc(this,true)">Tolva arriba inhibe reversa y limita avance salvo anulación con botón sostenido.</div>
+          <div class="choice" data-group="g8" onclick="mc(this,false)">El límite de levante permite que los cilindros lleguen al tope físico.</div>
+          <div class="choice" data-group="g8" onclick="mc(this,true)">Parada a nivel de piso corta energía del solenoide para detener motor.</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-light" onclick="resetMC('g8')">Reiniciar</button>
+          <span class="timer" id="timer-g8"></span>
+        </div>
+        <div class="feedback" id="fb-g8"></div>
+      </div>
+
+      <!-- Juego 9 -->
+      <div class="card" id="game9">
+        <h3>9) Dirección y frenos · Diagnóstico básico</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> La dirección asistida y los frenos dependen de presión hidráulica estable y acumuladores en buen estado. Los síntomas (pesadez intermitente, pérdida momentánea, doble pisotón) orientan la revisión: acumuladores, purga y filtros.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Esquemas y procedimiento de purga.</div>
+        </div>
+        <div class="stage" id="g9-case"></div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="nextCaseG9()">Nuevo caso</button>
+          <button class="btn btn-light" onclick="resetG9()">Reiniciar</button>
+          <span class="timer" id="timer-g9"></span>
+        </div>
+        <div class="feedback" id="fb-g9"></div>
+      </div>
+
+      <!-- Juego 10 -->
+      <div class="card" id="game10">
+        <h3>10) Elevación de tolva · Flujo y límites</h3>
+        <div class="theory">
+          <strong>Teoría (resumen):</strong> La secuencia típica es estanque → bomba → filtros HP → válvula de elevación → cilindros → retorno/enfriador de frenos. El límite de alivio (~2750 psi) protege el sistema. En modo <em>float</em>, el retorno ayuda al enfriamiento de frenos.
+          <div class="cta">Complementa con el <strong>PDF</strong>: Circuito de elevación – límites y modo “float”.</div>
+        </div>
+        <p>Orden correcto (1→6):</p>
+        <div class="stage" data-game="sort" data-key="g10">
+          <div class="draggable" draggable="true">Estanque hidráulico</div>
+          <div class="draggable" draggable="true">Bomba de elevación</div>
+          <div class="draggable" draggable="true">Filtros alta presión</div>
+          <div class="draggable" draggable="true">Válvula de elevación</div>
+          <div class="draggable" draggable="true">Cilindros de elevación</div>
+          <div class="draggable" draggable="true">Retorno/Enfriador frenos</div>
+        </div>
+        <div class="controls">
+          <button class="btn btn-primary" onclick="checkSort('g10',['Estanque hidráulico','Bomba de elevación','Filtros alta presión','Válvula de elevación','Cilindros de elevación','Retorno/Enfriador frenos'])">Validar</button>
+          <button class="btn btn-light" onclick="resetSort('g10')">Reiniciar</button>
+          <span class="timer" id="timer-g10"></span>
+        </div>
+        <div class="feedback" id="fb-g10"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="sep"/>
+
+  <!-- ======= QUIZ 20 PREGUNTAS ======= -->
+  <section class="section card" id="quiz">
+    <h2>Quiz final · 20 preguntas</h2>
+    <p class="theory"><strong>Importante:</strong> Antes de rendir, revisa los <strong>bloques de teoría</strong> y <strong>complementa con el PDF oficial en Classroom</strong>. El quiz evalúa comprensión aplicada.</p>
+    <div id="quizList"></div>
+    <div class="quiz-controls">
+      <button class="btn btn-primary" id="btnCheckQuiz">Calificar</button>
+      <button class="btn btn-light" id="btnResetQuiz">Reiniciar quiz</button>
+    </div>
+    <div class="summary" id="quizSummary" style="display:none;margin-top:12px"></div>
+  </section>
+
+  <div class="footer">© Anupro360 · Unidad 8<strong>PDF oficial en Classroom</strong>. Este módulo guarda su avance.</div>
+</main>
+
+<script>
+/* =================== UTILIDADES =================== */
+const $ = s => document.querySelector(s);
+const $all = s => Array.from(document.querySelectorAll(s));
+
+const STORE_KEY = 'unidad8_progress_v3_theory';
+const QUIZ_KEY  = 'unidad8_quiz_v3_theory';
+
+/* Progreso global: 10 juegos */
+const progress = JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+function setDone(key){progress[key]=true;localStorage.setItem(STORE_KEY,JSON.stringify(progress));updateGlobalProgress()}
+function resetAll(){localStorage.removeItem(STORE_KEY);localStorage.removeItem(QUIZ_KEY);location.reload()}
+function updateGlobalProgress(){
+  const done = Object.values(progress).filter(Boolean).length;
+  const pct = Math.min(100, Math.round((done/10)*100));
+  $('#globalProgress').style.width = pct + '%';
+}
+updateGlobalProgress();
+
+$('#btnResetAll').addEventListener('click', resetAll);
+$('#btnStart').addEventListener('click', ()=>window.scrollTo({top:document.getElementById('game1').offsetTop-10,behavior:'smooth'}));
+$('#btnContinue').addEventListener('click', ()=>{
+  const ids=['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10'];
+  const idx = ids.findIndex(k=>!progress[k]);
+  const target = (idx===-1)?'quiz':'game'+(idx+1);
+  window.scrollTo({top:document.getElementById(target).offsetTop-10,behavior:'smooth'});
+});
+
+/* ====== Timers (90s por juego) ====== */
+const timers={};
+function startTimer(id,secs=90){
+  stopTimer(id);
+  const el = document.getElementById('timer-'+id);
+  let t=secs; el.textContent='⏱ '+t+'s';
+  timers[id]=setInterval(()=>{t--; el.textContent='⏱ '+t+'s'; if(t<=0){clearInterval(timers[id]); el.textContent='Tiempo agotado';}},1000);
+}
+function stopTimer(id){if(timers[id]){clearInterval(timers[id]); delete timers[id];}}
+['g1','g2','g3','g4','g5','g6','g7','g8','g9','g10'].forEach(startTimer);
+
+/* ====== Drag & Drop (mouse + touch) ====== */
+let dragSrc=null;
+function handleDragStart(e){this.classList.add('dragging');dragSrc=this;e.dataTransfer?.setData('text/plain',this.textContent)}
+function handleDragEnd(){this.classList.remove('dragging')}
+function handleDragOver(e){e.preventDefault();}
+function handleDrop(e){
+  e.preventDefault();
+  if(this.classList.contains('dropzone') && dragSrc.dataset.id){
+    this.innerHTML = '<span>'+this.textContent+'</span>';
+    const tag = document.createElement('div');
+    tag.className='draggable'; tag.textContent = dragSrc.textContent; tag.setAttribute('data-id', dragSrc.dataset.id);
+    this.appendChild(tag);
+  }else if(this.classList.contains('draggable') && this.parentElement?.dataset?.game==='sort' && dragSrc!==this){
+    const list = this.parentElement;
+    const srcIndex = Array.from(list.children).indexOf(dragSrc);
+    const dstIndex = Array.from(list.children).indexOf(this);
+    if(srcIndex>-1 && dstIndex>-1){
+      if(srcIndex<dstIndex) list.insertBefore(dragSrc, this.nextSibling); else list.insertBefore(dragSrc, this);
+    }
+  }
+}
+function bindDrags(scope=document){
+  scope.querySelectorAll('.draggable').forEach(el=>{
+    el.setAttribute('draggable','true');
+    el.addEventListener('dragstart',handleDragStart);
+    el.addEventListener('dragend',handleDragEnd);
+    el.addEventListener('touchstart',touchStart,{passive:true});
+    // If this draggable is part of a sortable stage, allow it to act as a drop target
+    if(el.parentElement && el.parentElement.dataset && el.parentElement.dataset.game==='sort'){
+      el.addEventListener('dragover',handleDragOver);
+      el.addEventListener('drop',handleDrop);
+    }
+  });
+  scope.querySelectorAll('.dropzone').forEach(el=>{
+    el.addEventListener('dragover',handleDragOver);
+    el.addEventListener('drop',handleDrop);
+  });
+}
+function touchStart(e){
+  const el = e.currentTarget; el.classList.add('dragging'); dragSrc=el;
+  const move = (ev)=>{
+    const t = ev.touches[0];
+    const over = document.elementFromPoint(t.clientX,t.clientY);
+    if(over && over.classList.contains('draggable') && over.parentElement?.dataset?.game==='sort' && el.parentElement===over.parentElement){
+      const list=over.parentElement; const srcIndex=[...list.children].indexOf(el); const dstIndex=[...list.children].indexOf(over);
+      if(srcIndex<dstIndex) list.insertBefore(el, over.nextSibling); else list.insertBefore(el, over);
+    }
+  };
+  const end = ()=>{el.classList.remove('dragging'); document.removeEventListener('touchmove',move); document.removeEventListener('touchend',end);};
+  document.addEventListener('touchmove',move,{passive:true});
+  document.addEventListener('touchend',end);
+}
+bindDrags();
+
+/* ====== Sort check/reset ====== */
+function getOrder(stage){return Array.from(stage.querySelectorAll('.draggable')).map(x=>x.textContent.trim())}
+function checkSort(key,answer){
+  const stage = document.querySelector('.stage[data-key="'+key+'"]');
+  const fb = document.getElementById('fb-'+key);
+  const order = getOrder(stage);
+  if(JSON.stringify(order)===JSON.stringify(answer)){ fb.className='feedback ok'; fb.textContent='¡Correcto!'; setDone(key); }
+  else{ fb.className='feedback bad'; fb.textContent='Revisa el orden. Pista: piensa en el recorrido termodinámico.'; }
+}
+function resetSort(key){
+  const stage = document.querySelector('.stage[data-key="'+key+'"]');
+  const items = getOrder(stage).map(t=>t);
+  stage.innerHTML=''; items.forEach(txt=>{const d=document.createElement('div'); d.className='draggable'; d.textContent=txt; d.setAttribute('draggable','true'); stage.appendChild(d)}); bindDrags(stage);
+  const fb = document.getElementById('fb-'+key); fb.className='feedback'; fb.textContent='';
+  startTimer(key);
+}
+
+/* ====== Matching check/reset ====== */
+function checkPairs(key){
+  const card = document.getElementById('game'+key.replace('g',''));
+  const drops = card.querySelectorAll('.dropzone');
+  let ok=true;
+  drops.forEach(dz=>{
+    const placed = dz.querySelector('.draggable');
+    if(!placed || placed.dataset.id!==dz.dataset.accept){ok=false}
+  });
+  const fb = document.getElementById('fb-'+key);
+  if(ok){ fb.className='feedback ok'; fb.textContent='¡Muy bien! Todas las parejas coinciden.'; setDone(key); }
+  else{ fb.className='feedback bad'; fb.textContent='Algunas conexiones no corresponden. Revisa la función de cada componente.';}
+}
+function resetPairs(key){
+  const card = document.getElementById('game'+key.replace('g',''));
+  const stages = card.querySelectorAll('.stage');
+  const left = stages[0]; const right = stages[1];
+  right.querySelectorAll('.draggable').forEach(x=>x.remove());
+  left.querySelectorAll('.draggable').forEach(x=>x.remove());
+  const defs={
+    g3:[['Bomba de aceite','bomba'],['Filtros/BYPASS','filtro'],['Rifles principales','rifles'],['Toberas de pistón','toberas'],['Lubricación de turbos','turbo']],
+    g4:[['Bomba principal','bombaP'],['Radiador diésel','radiador'],['Radiador LTA','lta'],['Termostatos/By-pass','termo']]
+  };
+  defs[key].forEach(([label,id])=>{
+    const d=document.createElement('div'); d.className='draggable'; d.textContent=label; d.setAttribute('draggable','true'); d.dataset.id=id; left.appendChild(d);
+  });
+  bindDrags(card);
+  const fb = document.getElementById('fb-'+key); fb.className='feedback'; fb.textContent='';
+  startTimer(key);
+}
+
+/* ====== Multiple choice (MC) ====== */
+function mc(el,isCorrect){
+  const group = el.dataset.group;
+  if(isCorrect){ el.classList.toggle('correct'); el.classList.remove('incorrect'); }
+  else{ el.classList.toggle('incorrect'); el.classList.remove('correct'); }
+  const fb = document.getElementById('fb-'+group);
+  const container = el.closest('.stage');
+  const truths = Array.from(container.querySelectorAll('.choice')).filter(x=>x.getAttribute('onclick').includes('true'));
+  const ok = truths.every(t=>t.classList.contains('correct')) && Array.from(container.querySelectorAll('.choice.incorrect')).length===0;
+  if(ok){ fb.className='feedback ok'; fb.textContent='¡Correcto!'; setDone(group); }
+  else{ fb.className='feedback bad'; fb.textContent='Aún no es correcto. Marca solo las afirmaciones verdaderas.'; }
+}
+function resetMC(group){
+  document.querySelectorAll('.choice[data-group="'+group+'"]').forEach(c=>{c.classList.remove('correct','incorrect')});
+  const fb = document.getElementById('fb-'+group); fb.className='feedback'; fb.textContent='';
+  startTimer(group);
+}
+
+/* ====== Juego 7 (casos) ====== */
+const casesG7=[
+  {q:'Luz “Tolva arriba” encendida.', opts:[['Conducir igual para ahorrar tiempo',false],['Bajar tolva antes de mover el camión',true],['Ignorar si voy en vacío',false]], tip:'No se debe conducir con tolva elevada.'},
+  {q:'Luz “Propulsión no lista” durante arranque.', opts:[['Acelerar para forzar arranque',false],['Esperar fin del autodiagnóstico',true],['Desconectar baterías',false]], tip:'Secuencia automática de chequeo.'},
+  {q:'Luz “Sin propulsión” ON en marcha.', opts:[['Detenerse seguro, estacionar y reportar',true],['Seguir hasta completar ciclo',false],['Apagar motor de inmediato en bajada',false]], tip:'Prioriza detención segura y notificación.'},
+  {q:'Luz “Retardo dinámico” activada.', opts:[['Indica uso de frenado eléctrico',true],['Falla de freno servicio',false],['No requiere atención',false]], tip:'Reduce desgaste de frenos.'}
+];
+let idxG7=-1;
+function renderCaseG7(){
+  const s = $('#g7-case'); s.innerHTML='';
+  const c = casesG7[idxG7];
+  const h = document.createElement('div');
+  h.innerHTML = '<p><strong>Caso:</strong> '+c.q+'</p>';
+  c.opts.forEach(([text,ok],i)=>{
+    const btn = document.createElement('div');
+    btn.className='choice'; btn.textContent=text; btn.onclick=()=>{
+      const fb=$('#fb-g7');
+      if(ok){ btn.classList.add('correct'); fb.className='feedback ok'; fb.textContent='¡Correcto! '+c.tip; setDone('g7'); }
+      else{ btn.classList.add('incorrect'); fb.className='feedback bad'; fb.textContent='Respuesta no segura. '+c.tip; }
+    };
+    h.appendChild(btn);
+  });
+  s.appendChild(h);
+}
+function nextCaseG7(){ idxG7=(idxG7+1)%casesG7.length; renderCaseG7() }
+function resetG7(){ idxG7=-1; $('#g7-case').innerHTML=''; const fb=$('#fb-g7'); fb.className='feedback'; fb.textContent=''; startTimer('g7') }
+nextCaseG7();
+
+/* ====== Juego 9 (diagnóstico) ====== */
+const casesG9=[
+  {q:'Dirección pesada intermitente tras frenadas largas.', opts:[['Fallo del intercooler',false],['Baja presión en acumuladores / filtro alta presión sucio',true],['Ajuste de válvula de elevación',false]], tip:'Revisar acumuladores y filtros de dirección/frenos.'},
+  {q:'Sin respuesta de freno servicio en primer pisotón, vuelve en el segundo.', opts:[['Aire en circuito hidráulico',true],['Fallo alternador 24V',false],['Tolva desalineada',false]], tip:'Purgar y revisar estanque/filtros.'},
+  {q:'Pérdida de dirección al cortar alternador brevemente.', opts:[['Acumuladores descargados',true],['Termostato trabado',false],['Bajo nivel de combustible',false]], tip:'Acumuladores deben mantener presión temporal.'}
+];
+let idxG9=-1;
+function renderCaseG9(){
+  const s = $('#g9-case'); s.innerHTML='';
+  const c = casesG9[idxG9];
+  const h = document.createElement('div');
+  h.innerHTML = '<p><strong>Síntoma:</strong> '+c.q+'</p>';
+  c.opts.forEach(([text,ok],i)=>{
+    const btn = document.createElement('div');
+    btn.className='choice'; btn.textContent=text; btn.onclick=()=>{
+      const fb=$('#fb-g9');
+      if(ok){ btn.classList.add('correct'); fb.className='feedback ok'; fb.textContent='¡Bien! '+c.tip; setDone('g9'); }
+      else{ btn.classList.add('incorrect'); fb.className='feedback bad'; fb.textContent='No corresponde. '+c.tip; }
+    };
+    h.appendChild(btn);
+  });
+  s.appendChild(h);
+}
+function nextCaseG9(){ idxG9=(idxG9+1)%casesG9.length; renderCaseG9() }
+function resetG9(){ idxG9=-1; $('#g9-case').innerHTML=''; const fb=$('#fb-g9'); fb.className='feedback'; fb.textContent=''; startTimer('g9') }
+nextCaseG9();
+
+/* =================== QUIZ (20) =================== */
+const quizData=[
+ {t:'Ordena el ciclo correcto del 4T.', type:'mc', opts:['Admisión → Compresión → Combustión (Expansión) → Escape','Compresión → Escape → Admisión → Combustión','Escape → Admisión → Combustión → Compresión'], ok:[0], why:'Secuencia termodinámica estándar.'},
+ {t:'Una mayor relación de compresión incrementa temperatura y presión del aire comprimido.', type:'tf', opts:['Verdadero','Falso'], ok:[0], why:'Aproximadamente 538°C al final de compresión en este motor.'},
+ {t:'Función de intercooler/aftercooler en 980E-4.', type:'mc', opts:['Enfriar aire comprimido para aumentar densidad','Calentar aire para mejorar atomización','Reducir presión para cuidar turbos'], ok:[0], why:'Aumenta densidad, mejora combustión.'},
+ {t:'Restricción máxima de filtros de aire (aprox.).', type:'mc', opts:['13 pulgadas de agua','3 bar','100 psi'], ok:[0], why:'Indicador en cabina alerta restricción.'},
+ {t:'Rifles principales de aceite distribuyen presión a cojinetes y ejes.', type:'tf', opts:['Verdadero','Falso'], ok:[0], why:'Son la columna vertebral de lubricación.'},
+ {t:'Los filtros de aceite tienen válvula bypass para asegurar flujo si se tapan.', type:'tf', opts:['Verdadero','Falso'], ok:[0], why:'Protege el motor ante caída de presión por obstrucción.'},
+ {t:'En frío, los termostatos…', type:'mc', opts:['Mantienen recirculación por by-pass','Abren completamente el flujo a radiador','Cierran la bomba principal'], ok:[0], why:'Se evita sobreenfriamiento antes de régimen térmico.'},
+ {t:'El circuito LTA sirve para…', type:'mc', opts:['Enfriar aire de admisión','Refrigerar combustible','Lubricar turbos'], ok:[0], why:'Low Temperature Aftercooling del aire comprimido.'},
+ {t:'El riel de combustible se cruza con el riel de tiempo para balancear presiones.', type:'tf', opts:['Verdadero','Falso'], ok:[1], why:'En QSK no se cruzan.'},
+ {t:'El ECM gobierna actuadores de riel y válvula de corte.', type:'tf', opts:['Verdadero','Falso'], ok:[0], why:'Cierre electrónico y control de presión.'},
+ {t:'Cantidad/tipo de baterías de partida.', type:'mc', opts:['4x 8D 12V (en serie-paralelo)','2x 8D 24V','6x 8D 6V'], ok:[0], why:'Suministran 24VDC.'},
+ {t:'Rango de regulación típico del alternador de 24V.', type:'mc', opts:['~26.8–29.2 V','~220–240 V','~12–14 V'], ok:[0], why:'Regulador de voltaje 24V.'},
+ {t:'Los inversores VVVF convierten CC a CA variable de frecuencia y voltaje.', type:'tf', opts:['Verdadero','Falso'], ok:[0], why:'Para la propulsión eléctrica.'},
+ {t:'Luz “Propulsión no lista” durante arranque implica…', type:'mc', opts:['Autodiagnóstico en curso','Freno de servicio fallando','Retardo dinámico activo'], ok:[0], why:'Computadora inicializando.'},
+ {t:'Ante “Sin propulsión” en marcha, la conducta segura es…', type:'mc', opts:['Detenerse seguro, estacionar y reportar','Seguir operando hasta el fin de turno','Apagar el motor en bajada'], ok:[0], why:'Prioriza seguridad y notificación.'},
+ {t:'El interruptor “Tolva arriba” inhibe reversa con caja elevada.', type:'tf', opts:['Verdadero','Falso'], ok:[0], why:'Previene daño/accidente con tolva elevada.'},
+ {t:'El límite de levante evita que los cilindros lleguen al tope físico.', type:'tf', opts:['Verdadero','Falso'], ok:[0], why:'Protección de cilindros/tolva.'},
+ {t:'Acumuladores en dirección sirven para…', type:'mc', opts:['Mantener presión ante pérdida momentánea de bomba','Filtrar aceite de retorno','Elevar presión del riel de combustible'], ok:[0], why:'Permiten maniobrabilidad temporal.'},
+ {t:'Presión máx. sistema de elevación.', type:'mc', opts:['~2750 psi','~500 psi','~10,000 psi'], ok:[0], why:'Límite de alivio establecido.'},
+ {t:'En modo “float” de elevación…', type:'mc', opts:['Aceite retorna al estanque y se apoya el enfriado de frenos','Se bloquea el retorno','Se incrementa presión a tope'], ok:[0], why:'Ayuda a disipar calor de frenos por el circuito de retorno.'}
+];
+
+function renderQuiz(){
+  const list = $('#quizList'); list.innerHTML='';
+  const saved = JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}');
+  quizData.forEach((q,i)=>{
+    const box = document.createElement('div'); box.className='quiz-item'; box.id='q'+i;
+    box.innerHTML = '<h4>'+(i+1)+') '+q.t+'</h4>';
+    q.opts.forEach((opt,j)=>{
+      const ans = document.createElement('div'); ans.className='quiz-answer'; ans.textContent=opt; ans.tabIndex=0;
+      ans.onclick=()=>select(i,j,ans);
+      ans.onkeypress=(ev)=>{if(ev.key==='Enter' || ev.key===' '){select(i,j,ans)}};
+      if(saved[i] && saved[i].includes(j)) ans.classList.add('selected');
+      box.appendChild(ans);
+    });
+    list.appendChild(box);
+  });
+}
+function select(i,j,el){
+  $('#q'+i).querySelectorAll('.quiz-answer').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected'); persistQuiz();
+}
+function persistQuiz(){
+  const state={};
+  quizData.forEach((q,i)=>{
+    const sel = Array.from($('#q'+i).querySelectorAll('.quiz-answer')).findIndex(a=>a.classList.contains('selected'));
+    if(sel>-1) state[i]=[sel];
+  });
+  localStorage.setItem(QUIZ_KEY, JSON.stringify(state));
+}
+function gradeQuiz(){
+  const state = JSON.parse(localStorage.getItem(QUIZ_KEY)||'{}');
+  let ok=0;
+  quizData.forEach((q,i)=>{
+    const box=$('#q'+i);
+    const answers = box.querySelectorAll('.quiz-answer');
+    box.querySelectorAll('.quiz-answer').forEach(a=>a.classList.remove('correct','incorrect'));
+    const oldWhy = box.querySelector('.why'); if(oldWhy) oldWhy.remove();
+    answers.forEach((a,ix)=>{
+      if(state[i] && state[i].includes(ix)){
+        if(q.ok.includes(ix)){ a.classList.add('correct'); ok++; }
+        else{ a.classList.add('incorrect'); }
+      }
+    });
+    if(!state[i]){ q.ok.forEach(ix=>answers[ix].classList.add('correct')) }
+    const why = document.createElement('div'); why.className='why'; why.style.fontSize='.9rem'; why.style.marginTop='6px'; why.style.opacity='.9';
+    why.textContent='Explicación: '+q.why; box.appendChild(why);
+  });
+  const summary=$('#quizSummary'); summary.style.display='block';
+  summary.textContent='Resultado: '+ok+' / '+quizData.length+' correctas.';
+}
+$('#btnCheckQuiz').addEventListener('click', gradeQuiz);
+$('#btnResetQuiz').addEventListener('click', ()=>{localStorage.removeItem(QUIZ_KEY); renderQuiz(); $('#quizSummary').style.display='none'});
+renderQuiz();
+</script>
+</body>
+</html>
