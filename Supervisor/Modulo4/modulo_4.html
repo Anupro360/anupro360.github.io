@@ -1,0 +1,2348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunicación Efectiva para Supervisores Mineros - Parte 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .header p {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #ecf0f1;
+            border-radius: 10px;
+            padding: 5px;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            border-radius: 8px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+            display: block;
+        }
+
+        /* Navigation */
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .unit-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .unit-card.completed {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+        }
+
+        .unit-card.current {
+            border-color: #3498db;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+        }
+
+        .unit-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            text-align: center;
+        }
+
+        .unit-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .unit-description {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .unit-progress {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .unit-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-in-progress {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-locked {
+            background: #95a5a6;
+            color: white;
+        }
+
+        /* Content Area */
+        .content-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+            display: none;
+        }
+
+        .content-area.active {
+            display: block;
+        }
+
+        /* Lesson Content Styles */
+        .lesson-header {
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .lesson-title {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .lesson-meta {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .content-section {
+            margin-bottom: 30px;
+        }
+
+        .content-section h3 {
+            color: #2c3e50;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+
+        .content-section h4 {
+            color: #34495e;
+            font-size: 1.3rem;
+            margin: 20px 0 10px 0;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .highlight-box h4 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .example-box {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .success-box {
+            background: #d1e7dd;
+            border-left: 4px solid #198754;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .info-box {
+            background: #cce7f0;
+            border-left: 4px solid #0ea5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Game Area */
+        .game-area {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .game-phase {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .game-content {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .scenario-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffffff;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+        }
+
+        .option-card.selected {
+            background: #27ae60;
+            color: white;
+        }
+
+        .option-card.correct {
+            background: #27ae60;
+            color: white;
+            border: 3px solid #ffffff;
+        }
+
+        .option-card.incorrect {
+            background: #e74c3c;
+            color: white;
+            border: 3px solid #ffffff;
+        }
+
+        /* Quiz Styles */
+        .quiz-area {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .question-card {
+            background: #ffffff;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .answer-option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:hover {
+            background: #e9ecef;
+            border-color: #3498db;
+        }
+
+        .answer-option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .answer-option.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #229954;
+        }
+
+        .answer-option.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(44, 62, 80, 0.95);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .unit-card {
+                padding: 20px;
+            }
+            
+            .lesson-title {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* Achievement Animation */
+        .achievement {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .achievement-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header slide-in">
+            <h1>🎯 Comunicación Efectiva para Supervisores Mineros</h1>
+            <p><strong>Módulo Especializado para Líderes de Primera Línea - Parte 2</strong></p>
+            <p>Unidades 4-6: Comunicación en Equipos, Crisis y Desarrollo Continuo</p>
+            
+            <!-- Progress Bar -->
+            <div class="progress-container">
+                <div class="progress-bar" id="mainProgress">0% Completado</div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="pointsDisplay">0</span>
+                    <span>Puntos</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="streakDisplay">0</span>
+                    <span>Días de Estudio</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="completedDisplay">0/3</span>
+                    <span>Unidades</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="badgesDisplay">0</span>
+                    <span>Logros</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <div id="mainNav" class="nav-container slide-in">
+            <!-- Unit 4 Card -->
+            <div class="unit-card current" data-unit="4">
+                <span class="unit-icon">👥</span>
+                <h3 class="unit-title">Unidad 4: Comunicación en Equipos de Trabajo</h3>
+                <p class="unit-description">Dinámicas grupales, reuniones efectivas, coordinación operacional y construcción de cohesión en equipos mineros</p>
+                <div class="unit-progress">
+                    <span>⏱️ 25 min</span>
+                    <span class="unit-status status-in-progress">En Progreso</span>
+                </div>
+            </div>
+
+            <!-- Unit 5 Card -->
+            <div class="unit-card" data-unit="5">
+                <span class="unit-icon">🚨</span>
+                <h3 class="unit-title">Unidad 5: Comunicación en Situaciones de Crisis</h3>
+                <p class="unit-description">Protocolos de emergencia, comunicación bajo presión, coordinación en crisis y liderazgo en situaciones críticas</p>
+                <div class="unit-progress">
+                    <span>⏱️ 30 min</span>
+                    <span class="unit-status status-locked">Bloqueado</span>
+                </div>
+            </div>
+
+            <!-- Unit 6 Card -->
+            <div class="unit-card" data-unit="6">
+                <span class="unit-icon">📈</span>
+                <h3 class="unit-title">Unidad 6: Desarrollo Continuo de Competencias</h3>
+                <p class="unit-description">Autoevaluación, plan de mejora personal, mentoring y construcción de cultura comunicacional</p>
+                <div class="unit-progress">
+                    <span>⏱️ 20 min</span>
+                    <span class="unit-status status-locked">Bloqueado</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Areas -->
+        <div id="content-4" class="content-area">
+            <div class="lesson-header">
+                <h2 class="lesson-title">👥 Unidad 4: Comunicación en Equipos de Trabajo</h2>
+                <div class="lesson-meta">⏱️ Tiempo estimado: 25 minutos | 👥 Nivel: Intermedio-Avanzado</div>
+            </div>
+            
+            <div class="content-section">
+                <h3>🎯 Objetivos de Aprendizaje</h3>
+                <ul>
+                    <li>Dominar técnicas avanzadas de comunicación grupal en contextos operacionales</li>
+                    <li>Facilitar reuniones efectivas que generen resultados concretos</li>
+                    <li>Coordinar eficientemente equipos multi-funcionales en operaciones mineras</li>
+                    <li>Construir cohesión y sinergia en equipos de alto rendimiento</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h3>🌐 Fundamentos de Comunicación Grupal en Minería</h3>
+                
+                <p>La comunicación en equipos mineros presenta desafíos únicos que van más allá de la comunicación interpersonal. Los supervisores deben <strong>orquestar múltiples personalidades, niveles de experiencia y especialidades técnicas</strong> para lograr objetivos operacionales comunes bajo condiciones de alta presión y riesgo.</p>
+
+                <div class="highlight-box">
+                    <h4>🎯 Características Distintivas de Equipos Mineros de Alto Rendimiento:</h4>
+                    <ul>
+                        <li><strong>Comunicación anticipatoria:</strong> Prevén y comunican riesgos antes de que se materialicen</li>
+                        <li><strong>Coordinación sin supervisión directa:</strong> Operan efectivamente en zonas remotas</li>
+                        <li><strong>Adaptabilidad comunicacional:</strong> Ajustan estilos según situaciones operacionales</li>
+                        <li><strong>Responsabilidad colectiva:</strong> Cada miembro asume ownership de la comunicación del equipo</li>
+                        <li><strong>Feedback bidireccional:</strong> Información fluye tanto vertical como horizontalmente</li>
+                    </ul>
+                </div>
+
+                <h3>🔄 Dinámicas Grupales en Contexto Minero</h3>
+
+                <h4>📊 Identificación de Roles Comunicacionales en el Equipo</h4>
+                
+                <p>Cada equipo minero desarrolla naturalmente roles comunicacionales específicos. El supervisor efectivo identifica y potencia estos roles:</p>
+
+                <h4>🔍 Rol del Informador Técnico</h4>
+                <ul>
+                    <li><strong>Características:</strong> Dominio técnico profundo, precisión en datos</li>
+                    <li><strong>Contribución:</strong> Proporciona información técnica fidedigna para toma de decisiones</li>
+                    <li><strong>Potenciación:</strong> Asignar responsabilidad de briefings técnicos y validación de procedimientos</li>
+                </ul>
+
+                <h4>🌉 Rol del Conector Social</h4>
+                <ul>
+                    <li><strong>Características:</strong> Habilidad natural para construir puentes entre personalidades diversas</li>
+                    <li><strong>Contribución:</strong> Facilita cohesión grupal y resolución informal de tensiones</li>
+                    <li><strong>Potenciación:</strong> Incluir en procesos de integración de nuevos miembros</li>
+                </ul>
+
+                <h4>⚡ Rol del Detector de Problemas</h4>
+                <ul>
+                    <li><strong>Características:</strong> Sensibilidad alta para identificar problemas emergentes</li>
+                    <li><strong>Contribución:</strong> Alerta temprana sobre riesgos operacionales o interpersonales</li>
+                    <li><strong>Potenciación:</strong> Canal privilegiado para feedback ascendente</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>🔧 Caso Práctico: Optimización de Roles en Equipo de Perforación</h4>
+                    <p><strong>Situación:</strong> Equipo de 6 operarios con alta rotación y problemas de coordinación</p>
+                    <p><strong>Intervención del supervisor:</strong></p>
+                    <p><strong>1. Identificación:</strong> Carlos (15 años exp.) = Informador Técnico | María (natural mediadora) = Conectora Social | Luis (siempre detecta fallas) = Detector</p>
+                    <p><strong>2. Potenciación:</strong> Carlos lidera briefings técnicos, María facilita integración de nuevos, Luis reporta directamente anomalías</p>
+                    <p><strong>3. Resultado:</strong> 40% reducción en tiempo de coordinación, 60% menos incidentes menores</p>
+                </div>
+
+                <h3>📝 Reuniones Operacionales de Alto Impacto</h3>
+
+                <p>Las reuniones en minería deben ser <strong>eficientes, específicas y orientadas a la acción</strong>. Cada minuto en reunión es un minuto fuera de operación productiva.</p>
+
+                <h4>🎯 Metodología START para Reuniones Mineras</h4>
+                
+                <p><strong>S</strong>ituación - <strong>T</strong>areas - <strong>A</strong>signaciones - <strong>R</strong>iesgos - <strong>T</strong>iempo</p>
+
+                <div class="info-box">
+                    <h4>Estructura START - 15 minutos máximo:</h4>
+                    <p><strong>S - Situación actual (3 min):</strong> Estado operacional, métricas clave, cambios desde último turno</p>
+                    <p><strong>T - Tareas prioritarias (4 min):</strong> Objetivos específicos del turno, deadlines críticos</p>
+                    <p><strong>A - Asignaciones claras (3 min):</strong> Quién hace qué, con qué recursos, cuándo</p>
+                    <p><strong>R - Riesgos identificados (3 min):</strong> Peligros potenciales, medidas preventivas, planes de contingencia</p>
+                    <p><strong>T - Tiempo y seguimiento (2 min):</strong> Checkpoints intermedios, próxima reunión, canales de comunicación</p>
+                </div>
+
+                <h4>🗣️ Técnicas de Facilitación para Supervisores</h4>
+
+                <h4>1. Gestión de Participación Balanceada</h4>
+                <ul>
+                    <li><strong>Técnica del Round Robin:</strong> "Vamos a escuchar 30 segundos de cada uno sobre los riesgos que ven"</li>
+                    <li><strong>Pregunta directa estratégica:</strong> "Juan, desde tu experiencia en mantenimiento, ¿qué opinas de esta propuesta?"</li>
+                    <li><strong>Validación de silenciosos:</strong> "María, veo que estás reflexionando, ¿qué perspectiva agregarías?"</li>
+                </ul>
+
+                <h4>2. Control de Tiempo Efectivo</h4>
+                <ul>
+                    <li><strong>Time-boxing visible:</strong> Temporizador a la vista de todos</li>
+                    <li><strong>Parking lot:</strong> "Tema importante que retomaremos después del turno"</li>
+                    <li><strong>Síntesis activa:</strong> "En resumen, tenemos 3 puntos concretos..."</li>
+                </ul>
+
+                <h4>3. Orientación a Resultados</h4>
+                <ul>
+                    <li><strong>Cierre con compromisos específicos:</strong> "Carlos se compromete a revisar el equipo antes de las 14:00"</li>
+                    <li><strong>Confirmación de entendimiento:</strong> "¿Alguien tiene dudas sobre su responsabilidad específica?"</li>
+                    <li><strong>Canal de seguimiento:</strong> "Updates por radio cada 2 horas en canal 3"</li>
+                </ul>
+
+                <div class="warning-box">
+                    <h4>🚫 Errores Comunes en Reuniones Mineras:</h4>
+                    <ul>
+                        <li><strong>Reuniones tipo "descarga de información"</strong> sin participación del equipo</li>
+                        <li><strong>Ausencia de agenda específica</strong> llevando a divagaciones costosas</li>
+                        <li><strong>No documentar acuerdos</strong> generando confusión posterior</li>
+                        <li><strong>Permitir monopolización</strong> por parte de personalidades dominantes</li>
+                        <li><strong>Reuniones preventivas sin propósito claro</strong> generando desmotivación</li>
+                    </ul>
+                </div>
+
+                <h3>⚙️ Coordinación Multi-Funcional en Operaciones Complejas</h3>
+
+                <p>Las operaciones mineras requieren <strong>coordinación simultánea entre múltiples especialidades</strong>: operación, mantenimiento, seguridad, calidad, medio ambiente. El supervisor actúa como director de orquesta.</p>
+
+                <h4>🔗 Protocolo de Coordinación Interfuncional</h4>
+
+                <div class="success-box">
+                    <h4>Ejemplo: Coordinación para Mantención Mayor de Equipo Crítico</h4>
+                    <p><strong>Participantes:</strong> Operación, Mantenimiento Mecánico, Mantenimiento Eléctrico, Seguridad, Planificación</p>
+                    
+                    <p><strong>Fase 1 - Pre-coordinación (1 día antes):</strong></p>
+                    <ul>
+                        <li>WhatsApp grupo: Confirmación de disponibilidad y recursos</li>
+                        <li>Checklist compartido: Cada área valida sus pre-requisitos</li>
+                    </ul>
+                    
+                    <p><strong>Fase 2 - Coordinación activa (durante mantención):</strong></p>
+                    <ul>
+                        <li>Radio coordinador: Canal dedicado para la actividad</li>
+                        <li>Check-ins programados cada 30 minutos</li>
+                        <li>Escalamiento inmediato de cualquier desviación</li>
+                    </ul>
+                    
+                    <p><strong>Fase 3 - Post-coordinación:</strong></p>
+                    <ul>
+                        <li>Debrief grupal de 10 minutos</li>
+                        <li>Lecciones aprendidas documentadas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="startGames(4)">🎮 Iniciar Juegos Educativos</button>
+                <button class="btn btn-primary" onclick="startQuiz(4)">📝 Evaluación Unidad 4</button>
+                <button class="btn btn-secondary" onclick="showMainNav()">↩️ Volver al Menú Principal</button>
+            </div>
+        </div>
+
+        <div id="content-5" class="content-area">
+            <div class="lesson-header">
+                <h2 class="lesson-title">🚨 Unidad 5: Comunicación en Situaciones de Crisis</h2>
+                <div class="lesson-meta">⏱️ Tiempo estimado: 30 minutos | 👥 Nivel: Avanzado</div>
+            </div>
+
+            <div class="content-section">
+                <h3>🎯 Objetivos de Aprendizaje</h3>
+                <ul>
+                    <li>Implementar protocolos de comunicación efectiva durante emergencias operacionales</li>
+                    <li>Mantener liderazgo comunicacional bajo presión extrema y estrés agudo</li>
+                    <li>Coordinar equipos multi-nivel en situaciones críticas con información limitada</li>
+                    <li>Aplicar técnicas de comunicación que salvan vidas en contextos de alto riesgo</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h3>⚡ Definición y Características de Crisis en Minería</h3>
+                
+                <p>Una situación de crisis en minería se caracteriza por <strong>riesgo inmediato para la seguridad, urgencia temporal extrema, información limitada o contradictoria, y necesidad de decisiones rápidas con consecuencias potencialmente irreversibles</strong>.</p>
+
+                <div class="highlight-box">
+                    <h4>🚨 Tipología de Crisis Comunicacionales en Minería:</h4>
+                    <ul>
+                        <li><strong>Crisis de Seguridad Inmediata:</strong> Accidentes, derrumbes, incendios, explosiones</li>
+                        <li><strong>Crisis Operacional:</strong> Falla de equipos críticos, interrupciones de suministro</li>
+                        <li><strong>Crisis Ambiental:</strong> Derrames, contaminación, impacto en comunidades</li>
+                        <li><strong>Crisis de Personal:</strong> Emergencias médicas, conflictos laborales agudos</li>
+                        <li><strong>Crisis Externa:</strong> Condiciones climáticas extremas, presión regulatoria</li>
+                    </ul>
+                </div>
+
+                <h3>📡 Protocolo RAPID para Comunicación de Crisis</h3>
+
+                <p><strong>R</strong>econocer - <strong>A</strong>lertar - <strong>P</strong>riorizar - <strong>I</strong>nformar - <strong>D</strong>irigir</p>
+
+                <h4>🔍 Fase R: Reconocer (0-30 segundos)</h4>
+                <div class="info-box">
+                    <h4>Reconocimiento Sistemático de Crisis:</h4>
+                    <ul>
+                        <li><strong>Evaluación de severidad:</strong> ¿Hay riesgo inmediato de vida?</li>
+                        <li><strong>Alcance del impacto:</strong> ¿Cuántas personas están en riesgo?</li>
+                        <li><strong>Recursos necesarios:</strong> ¿Qué capacidades de respuesta se requieren?</li>
+                        <li><strong>Tiempo crítico:</strong> ¿Cuánto tiempo tenemos para actuar?</li>
+                    </ul>
+                </div>
+
+                <h4>📢 Fase A: Alertar (30 segundos - 2 minutos)</h4>
+                <div class="warning-box">
+                    <h4>Comunicación de Alerta Efectiva:</h4>
+                    <p><strong>Estructura de mensaje de alerta:</strong></p>
+                    <ul>
+                        <li><strong>QUÉ:</strong> Naturaleza específica de la crisis</li>
+                        <li><strong>DÓNDE:</strong> Ubicación precisa del incidente</li>
+                        <li><strong>CUÁNDO:</strong> Momento de ocurrencia</li>
+                        <li><strong>QUIÉN:</strong> Personas involucradas/afectadas</li>
+                        <li><strong>ACCIÓN:</strong> Respuesta inmediata requerida</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h4>🔧 Ejemplo - Alerta de Incidente Crítico:</h4>
+                    <p><strong>Mensaje de alerta efectiva:</strong></p>
+                    <p>"<strong>ALERTA ROJA - CÓDIGO ROJO</strong></p>
+                    <p><strong>QUÉ:</strong> Derrumbe parcial en túnel de extracción</p>
+                    <p><strong>DÓNDE:</strong> Nivel 480, sector B-7, túnel principal</p>
+                    <p><strong>CUÁNDO:</strong> 14:23 hrs</p>
+                    <p><strong>QUIÉN:</strong> 3 operarios posiblemente atrapados - Juan Pérez, Carlos Silva, María González</p>
+                    <p><strong>ACCIÓN:</strong> Evacuación inmediata nivel 480. Brigada de rescate al sector. Suspensión total operaciones zona B."</p>
+                </div>
+
+                <h4>🎯 Fase P: Priorizar (2-5 minutos)</h4>
+                
+                <p>Establecer <strong>jerarquía de acciones</strong> basada en criticidad y recursos disponibles:</p>
+                
+                <ol>
+                    <li><strong>Preservación de vida humana</strong> (prioridad absoluta)</li>
+                    <li><strong>Contención del riesgo</strong> (evitar escalamiento)</li>
+                    <li><strong>Preservación de activos críticos</strong> (equipos, infraestructura)</li>
+                    <li><strong>Continuidad operacional</strong> (áreas no afectadas)</li>
+                    <li><strong>Comunicación externa</strong> (autoridades, familias, medios)</li>
+                </ol>
+
+                <h4>📊 Fase I: Informar (continuo)</h4>
+
+                <p>Mantener <strong>flujo informativo</strong> estructurado hacia todas las partes relevantes:</p>
+
+                <ul>
+                    <li><strong>Upward:</strong> Informes regulares a gerencia con datos objetivos</li>
+                    <li><strong>Downward:</strong> Instrucciones claras y actualizaciones al equipo operativo</li>
+                    <li><strong>Lateral:</strong> Coordinación con otras áreas y servicios de emergencia</li>
+                    <li><strong>External:</strong> Comunicación controlada con stakeholders externos</li>
+                </ul>
+
+                <h4>⚙️ Fase D: Dirigir (durante toda la crisis)</h4>
+
+                <div class="success-box">
+                    <h4>Principios de Liderazgo Comunicacional en Crisis:</h4>
+                    <ul>
+                        <li><strong>Mantener calma emocional visible:</strong> Tu estado emocional se contagia al equipo</li>
+                        <li><strong>Comunicación directa y específica:</strong> Sin ambigüedades ni suposiciones</li>
+                        <li><strong>Confirmación activa:</strong> Asegurar que cada instrucción fue comprendida y se está ejecutando</li>
+                        <li><strong>Flexibilidad decisional:</strong> Ajustar estrategia según nueva información</li>
+                        <li><strong>Reconocimiento de limitaciones:</strong> "No tengo esa información aún, la obtendremos en 10 minutos"</li>
+                    </ul>
+                </div>
+
+                <h3>🧠 Manejo del Estrés Comunicacional en Crisis</h3>
+
+                <p>Durante crisis, el estrés agudo puede <strong>deteriorar significativamente las capacidades comunicacionales</strong>. Los supervisores deben desarrollar resiliencia comunicacional.</p>
+
+                <h4>⚡ Técnicas de Autoregulación en Situaciones Críticas</h4>
+
+                <h4>1. Respiración Táctica (Técnica 4-4-4-4)</h4>
+                <ul>
+                    <li>Inhalar por 4 segundos</li>
+                    <li>Retener por 4 segundos</li>
+                    <li>Exhalar por 4 segundos</li>
+                    <li>Pausa por 4 segundos</li>
+                    <li><strong>Aplicar entre comunicaciones críticas para mantener claridad mental</strong></li>
+                </ul>
+
+                <h4>2. Técnica del "Paso Back Mental"</h4>
+                <ul>
+                    <li><strong>Pregunta interna:</strong> "¿Qué información NECESITO comunicar vs. qué QUIERO comunicar?"</li>
+                    <li><strong>Filtro de relevancia:</strong> "¿Esta información ayuda a resolver la crisis AHORA?"</li>
+                    <li><strong>Check emocional:</strong> "¿Mi tono y mensaje transmiten liderazgo o pánico?"</li>
+                </ul>
+
+                <h3>🎭 Adaptación Comunicacional Según Audiencias en Crisis</h3>
+
+                <div class="info-box">
+                    <h4>Matriz de Comunicación por Stakeholder:</h4>
+                    
+                    <p><strong>Equipo Operativo Directo:</strong></p>
+                    <ul>
+                        <li>Instrucciones específicas y ejecutables</li>
+                        <li>Información de seguridad prioritaria</li>
+                        <li>Canal: Radio, instrucción cara a cara</li>
+                    </ul>
+
+                    <p><strong>Gerencia/Jefatura:</strong></p>
+                    <ul>
+                        <li>Datos objetivos, impacto, recursos necesarios</li>
+                        <li>Opciones de escalamiento y recomendaciones</li>
+                        <li>Canal: Llamada telefónica, reporte escrito follow-up</li>
+                    </ul>
+
+                    <p><strong>Servicios de Emergencia:</strong></p>
+                    <ul>
+                        <li>Información técnica específica</li>
+                        <li>Coordinación logística para respuesta</li>
+                        <li>Canal: Radio emergencias, contacto directo</li>
+                    </ul>
+
+                    <p><strong>Familias (cuando aplicable):</strong></p>
+                    <ul>
+                        <li>Información factual sin especulaciones</li>
+                        <li>Acciones que se están tomando</li>
+                        <li>Canal: Llamada personal, comunicación oficial empresa</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h4>🚫 Errores Fatales en Comunicación de Crisis:</h4>
+                    <ul>
+                        <li><strong>Retrasar comunicación esperando "información completa"</strong> - En crisis, comunicar lo que sabes CUANDO lo sabes</li>
+                        <li><strong>Subestimar la gravedad</strong> en comunicaciones iniciales</li>
+                        <li><strong>Comunicar especulaciones como hechos</strong> - Generar falsas expectativas</li>
+                        <li><strong>Saturar canales con información no crítica</strong> - Dificultar comunicaciones esenciales</li>
+                        <li><strong>Comunicar emociones personales</strong> en lugar de liderazgo objetivo</li>
+                        <li><strong>No confirmar recepción/comprensión</strong> de instrucciones críticas</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="startGames(5)">🎮 Iniciar Juegos Educativos</button>
+                <button class="btn btn-primary" onclick="startQuiz(5)">📝 Evaluación Unidad 5</button>
+                <button class="btn btn-secondary" onclick="showMainNav()">↩️ Volver al Menú Principal</button>
+            </div>
+        </div>
+
+        <div id="content-6" class="content-area">
+            <div class="lesson-header">
+                <h2 class="lesson-title">📈 Unidad 6: Desarrollo Continuo de Competencias Comunicacionales</h2>
+                <div class="lesson-meta">⏱️ Tiempo estimado: 20 minutos | 👥 Nivel: Síntesis y Aplicación</div>
+            </div>
+
+            <div class="content-section">
+                <h3>🎯 Objetivos de Aprendizaje</h3>
+                <ul>
+                    <li>Desarrollar capacidades de autoevaluación de competencias comunicacionales</li>
+                    <li>Diseñar un plan personal de mejora continua en comunicación efectiva</li>
+                    <li>Implementar estrategias de mentoring comunicacional para el equipo</li>
+                    <li>Construir una cultura organizacional de comunicación de excelencia</li>
+                </ul>
+            </div>
+
+            <div class="content-section">
+                <h3>🔍 Autoevaluación de Competencias Comunicacionales</h3>
+                
+                <p>El desarrollo continuo requiere <strong>autoconciencia precisa sobre fortalezas y áreas de mejora</strong> en nuestras competencias comunicacionales. La autoevaluación debe ser sistemática, objetiva y orientada a la acción.</p>
+
+                <div class="highlight-box">
+                    <h4>📊 Marco de Autoevaluación - Modelo de los 5 Pilares:</h4>
+                    
+                    <p><strong>Pilar 1: Claridad y Precisión</strong></p>
+                    <ul>
+                        <li>¿Mis mensajes son específicos y libres de ambigüedades?</li>
+                        <li>¿El equipo comprende mis instrucciones sin necesidad de múltiples clarificaciones?</li>
+                        <li>¿Adapto mi lenguaje técnico según la audiencia?</li>
+                    </ul>
+
+                    <p><strong>Pilar 2: Escucha Activa y Comprensión</strong></p>
+                    <ul>
+                        <li>¿Realmente escucho para comprender, no para responder?</li>
+                        <li>¿Hago preguntas que profundizan el entendimiento?</li>
+                        <li>¿Valido las perspectivas de mi equipo antes de tomar decisiones?</li>
+                    </ul>
+
+                    <p><strong>Pilar 3: Inteligencia Emocional</strong></p>
+                    <ul>
+                        <li>¿Reconozco y manejo efectivamente mis emociones bajo presión?</li>
+                        <li>¿Identifico y respondo apropiadamente a las emociones de mi equipo?</li>
+                        <li>¿Mantengo compostura en situaciones desafiantes?</li>
+                    </ul>
+
+                    <p><strong>Pilar 4: Influencia y Persuasión Ética</strong></p>
+                    <ul>
+                        <li>¿Logro motivar al equipo hacia objetivos comunes sin coerción?</li>
+                        <li>¿Mi comunicación genera compromiso genuino, no solo cumplimiento?</li>
+                        <li>¿Construyo credibilidad a través de consistencia entre palabras y acciones?</li>
+                    </ul>
+
+                    <p><strong>Pilar 5: Adaptabilidad Comunicacional</strong></p>
+                    <ul>
+                        <li>¿Ajusto mi estilo según situaciones operacionales diversas?</li>
+                        <li>¿Me comunico efectivamente con diferentes niveles jerárquicos?</li>
+                        <li>¿Selecciono canales apropiados según urgencia y complejidad?</li>
+                    </ul>
+                </div>
+
+                <h4>📝 Herramienta de Autoevaluación Práctica</h4>
+
+                <div class="example-box">
+                    <h4>🔧 Ejercicio de Reflexión Semanal - "Mi Comunicación Esta Semana"</h4>
+                    
+                    <p><strong>Conversación más exitosa:</strong></p>
+                    <ul>
+                        <li>¿Qué hice específicamente que contribuyó al éxito?</li>
+                        <li>¿Qué técnicas aplicé de manera efectiva?</li>
+                        <li>¿Cómo puedo replicar esto en otras situaciones?</li>
+                    </ul>
+
+                    <p><strong>Conversación más desafiante:</strong></p>
+                    <ul>
+                        <li>¿Qué aspectos no funcionaron como esperaba?</li>
+                        <li>¿Qué habría hecho diferente con el conocimiento actual?</li>
+                        <li>¿Qué competencia específica necesito desarrollar?</li>
+                    </ul>
+
+                    <p><strong>Feedback recibido del equipo:</strong></p>
+                    <ul>
+                        <li>¿Qué me comunicaron directa o indirectamente sobre mi comunicación?</li>
+                        <li>¿Qué patrones observo en el feedback que recibo?</li>
+                        <li>¿Cómo puedo transformar este feedback en acción concreta?</li>
+                    </ul>
+                </div>
+
+                <h3>🎯 Plan Personal de Mejora Continua</h3>
+
+                <p>Un plan de desarrollo comunicacional efectivo debe ser <strong>específico, medible, alcanzable, relevante y con tiempo definido</strong> (SMART), pero adaptado al contexto operacional minero.</p>
+
+                <h4>🔄 Metodología GROW para Desarrollo Comunicacional</h4>
+                
+                <p><strong>G</strong>oal (Meta) - <strong>R</strong>eality (Realidad) - <strong>O</strong>ptions (Opciones) - <strong>W</strong>ill (Voluntad/Acción)</p>
+
+                <div class="success-box">
+                    <h4>Plantilla de Plan Personal de Desarrollo:</h4>
+                    
+                    <p><strong>GOAL - Mi Meta Comunicacional (próximos 3 meses):</strong></p>
+                    <ul>
+                        <li>Competencia específica a desarrollar:</li>
+                        <li>Resultado observable esperado:</li>
+                        <li>Impacto esperado en el equipo/operación:</li>
+                    </ul>
+
+                    <p><strong>REALITY - Mi Situación Actual:</strong></p>
+                    <ul>
+                        <li>Fortalezas comunicacionales actuales:</li>
+                        <li>Áreas de mejora identificadas:</li>
+                        <li>Feedback recibido del equipo/superiores:</li>
+                        <li>Situaciones donde más necesito mejorar:</li>
+                    </ul>
+
+                    <p><strong>OPTIONS - Mis Opciones de Desarrollo:</strong></p>
+                    <ul>
+                        <li>Práctica deliberada diaria:</li>
+                        <li>Mentoring/coaching disponible:</li>
+                        <li>Recursos de aprendizaje (cursos, libros, videos):</li>
+                        <li>Oportunidades de práctica en trabajo:</li>
+                    </ul>
+
+                    <p><strong>WILL - Mis Compromisos de Acción:</strong></p>
+                    <ul>
+                        <li>Acciones específicas semanales:</li>
+                        <li>Métricas de seguimiento:</li>
+                        <li>Fechas de revisión y ajuste:</li>
+                        <li>Accountability partner:</li>
+                    </ul>
+                </div>
+
+                <h3>👥 Mentoring Comunicacional para el Equipo</h3>
+
+                <p>Como supervisor, tienes la responsabilidad de <strong>desarrollar las competencias comunicacionales de tu equipo</strong>, creando un efecto multiplicador que fortalece toda la operación.</p>
+
+                <h4>🌱 Estrategias de Mentoring Comunicacional</h4>
+
+                <h4>1. Modelado Consciente</h4>
+                <ul>
+                    <li><strong>Verbalizar procesos de pensamiento:</strong> "Estoy pensando cómo comunicar esto de manera que todos comprendan..."</li>
+                    <li><strong>Demostrar técnicas específicas:</strong> "Fíjense cómo voy a parafrasear lo que Juan dijo..."</li>
+                    <li><strong>Explicar decisiones comunicacionales:</strong> "Elegí usar el radio en lugar de WhatsApp porque..."</li>
+                </ul>
+
+                <h4>2. Feedback Desarrollador</h4>
+                <div class="info-box">
+                    <h4>Estructura para Feedback de Desarrollo Comunicacional:</h4>
+                    <p><strong>Observación específica:</strong> "En la reunión de esta mañana, cuando explicaste el nuevo procedimiento..."</p>
+                    <p><strong>Impacto observado:</strong> "...noté que algunos compañeros se miraban con confusión..."</p>
+                    <p><strong>Sugerencia específica:</strong> "...¿qué te parece si la próxima vez incluyes un ejemplo práctico después de cada paso?"</p>
+                    <p><strong>Ofrecimiento de apoyo:</strong> "¿Te gustaría que practiquemos esa explicación juntos antes de la próxima capacitación?"</p>
+                </div>
+
+                <h4>3. Creación de Oportunidades de Práctica</h4>
+                <ul>
+                    <li><strong>Rotación en liderazgo de briefings:</strong> Diferentes miembros conducen reuniones cortas</li>
+                    <li><strong>Asignación de roles de comunicación:</strong> "María, ¿puedes ser la encargada de comunicar updates a turno siguiente?"</li>
+                    <li><strong>Simulacros comunicacionales:</strong> Práctica de protocolos de emergencia con foco en comunicación</li>
+                </ul>
+
+                <h3>🏛️ Construcción de Cultura Comunicacional de Excelencia</h3>
+
+                <p>La cultura comunicacional trasciende las competencias individuales para convertirse en <strong>"la forma como hacemos las cosas aquí"</strong> en relación a la comunicación.</p>
+
+                <h4>🎯 Elementos de una Cultura Comunicacional de Excelencia</h4>
+
+                <div class="highlight-box">
+                    <h4>🏆 Características de Equipos con Cultura Comunicacional Superior:</h4>
+                    <ul>
+                        <li><strong>Seguridad psicológica:</strong> Todos se sienten seguros para expresar ideas, preocupaciones y errores</li>
+                        <li><strong>Comunicación anticipatoria:</strong> Se comunican problemas potenciales antes de que se materialicen</li>
+                        <li><strong>Feedback normalizado:</strong> Dar y recibir feedback es parte natural del trabajo diario</li>
+                        <li><strong>Clarificación activa:</strong> Es normal y valorado hacer preguntas cuando algo no está claro</li>
+                        <li><strong>Responsabilidad comunicacional compartida:</strong> Todos asumen ownership de la calidad comunicacional del equipo</li>
+                    </ul>
+                </div>
+
+                <h4>🔧 Estrategias para Institucionalizar Excelencia Comunicacional</h4>
+
+                <h4>1. Rituales de Comunicación</h4>
+                <ul>
+                    <li><strong>Check-in comunicacional:</strong> "¿Hay algo que no esté claro antes de comenzar?"</li>
+                    <li><strong>Momento de feedback:</strong> 2 minutos al final de cada turno para feedback constructivo</li>
+                    <li><strong>Reconocimiento comunicacional:</strong> Celebrar ejemplos de comunicación excepcional</li>
+                </ul>
+
+                <h4>2. Herramientas de Soporte</h4>
+                <ul>
+                    <li><strong>Checklist de comunicación crítica:</strong> Para situaciones de alta importancia</li>
+                    <li><strong>Templates de comunicación:</strong> Estructuras estándar para reportes, handovers</li>
+                    <li><strong>Escalamiento claro:</strong> Criterios específicos para cuándo escalar comunicación</li>
+                </ul>
+
+                <h4>3. Medición y Mejora Continua</h4>
+                <ul>
+                    <li><strong>Indicadores de calidad comunicacional:</strong> Reducción de errores por malentendidos</li>
+                    <li><strong>Encuestas de clima comunicacional:</strong> Feedback regular del equipo sobre calidad comunicacional</li>
+                    <li><strong>Análisis de incidentes comunicacionales:</strong> Aprender de situaciones donde la comunicación falló</li>
+                </ul>
+
+                <div class="success-box">
+                    <h4>🎭 Mi Compromiso Personal como Líder Comunicacional</h4>
+                    <p><strong>Como supervisor de primera línea en minería, me comprometo a:</strong></p>
+                    <ul>
+                        <li><strong>Modelar consistentemente</strong> los más altos estándares de comunicación efectiva</li>
+                        <li><strong>Desarrollar continuamente</strong> mis competencias comunicacionales mediante práctica deliberada y reflexión sistemática</li>
+                        <li><strong>Invertir en el crecimiento</strong> comunicacional de cada miembro de mi equipo</li>
+                        <li><strong>Contribuir positivamente</strong> a la cultura organizacional mediante comunicación que inspire, motive y construya confianza</li>
+                        <li><strong>Recordar siempre</strong> que en minería, la comunicación efectiva no es solo una habilidad profesional - puede salvar vidas</li>
+                    </ul>
+                </div>
+
+                <h4>📅 Plan de Acción Personal - Próximos 90 Días:</h4>
+
+                <h4>🎯 Mes 1: Consolidación de Fundamentos</h4>
+                <ul>
+                    <li><strong>Semana 1-2:</strong> Implementación consciente de técnicas de las 6 unidades en interacciones diarias</li>
+                    <li><strong>Semana 3-4:</strong> Autoevaluación semanal sistemática usando el marco de 5 pilares</li>
+                    <li><strong>Evaluación:</strong> Reflexión personal + feedback directo de 3 miembros clave del equipo</li>
+                </ul>
+
+                <h4>🎯 Mes 2: Aplicación Avanzada</h4>
+                <ul>
+                    <li><strong>Semana 5-6:</strong> Mentoring activo de 2 miembros del equipo en competencias comunicacionales específicas</li>
+                    <li><strong>Semana 7-8:</strong> Implementación de al menos 3 rituales de comunicación en el equipo</li>
+                    <li><strong>Evaluación:</strong> Revisión de progreso con supervisor + encuesta de clima comunicacional al equipo</li>
+                </ul>
+
+                <h4>🎯 Mes 3: Liderazgo Transformacional</h4>
+                <ul>
+                    <li><strong>Semana 9-10:</strong> Diseño e implementación de mejora en cultura comunicacional del área</li>
+                    <li><strong>Semana 11-12:</strong> Documentación de lecciones aprendidas y diseño de plan para próximos 90 días</li>
+                    <li><strong>Evaluación:</strong> Medición de indicadores de impacto + celebración de logros alcanzados</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="startGames(6)">🎮 Iniciar Juegos Educativos</button>
+                <button class="btn btn-primary" onclick="startQuiz(6)">📝 Evaluación Final Unidad 6</button>
+                <button class="btn btn-secondary" onclick="showMainNav()">↩️ Volver al Menú Principal</button>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div id="gameArea" class="game-area" style="display: none;">
+            <div class="game-header">
+                <h2 class="game-title" id="gameTitle">Juego Educativo</h2>
+                <div class="game-phase" id="gamePhase">Fase 1 de 10</div>
+                <div style="text-align: center; margin: 10px 0;">
+                    <span style="background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 20px;">
+                        🎯 Puntos: <span id="gamePoints">0</span>
+                    </span>
+                </div>
+            </div>
+            <div class="game-content" id="gameContent">
+                <!-- Dynamic game content will be inserted here -->
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="gameNext" onclick="nextGamePhase()" style="display:none;">Siguiente Fase ➡️</button>
+                <button class="btn btn-success" id="gameComplete" onclick="completeGame()" style="display:none;">✅ Completar Juego</button>
+                <button class="btn btn-secondary" onclick="exitGame()">↩️ Salir del Juego</button>
+            </div>
+        </div>
+
+        <!-- Quiz Area -->
+        <div id="quizArea" class="quiz-area" style="display: none;">
+            <div class="quiz-header">
+                <h2 id="quizTitle">Evaluación</h2>
+                <p>Demuestra tu comprensión de los conceptos aprendidos</p>
+            </div>
+            
+            <div class="quiz-progress">
+                <div>
+                    <strong>Pregunta <span id="currentQ">1</span> de <span id="totalQ">10</span></strong>
+                </div>
+                <div>
+                    <span>⏱️ Sin límite de tiempo</span>
+                </div>
+                <div>
+                    <strong>Puntuación: <span id="quizScore">0</span> puntos</strong>
+                </div>
+            </div>
+
+            <div class="question-card" id="questionCard">
+                <div class="question-text" id="questionText">
+                    Pregunta aparecerá aquí...
+                </div>
+                <div class="answers-grid" id="answersGrid">
+                    <!-- Dynamic answers will be inserted here -->
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="submitAnswer" onclick="submitAnswer()" disabled>📝 Responder</button>
+                <button class="btn btn-success" id="nextQuestion" onclick="nextQuestion()" style="display:none;">Siguiente Pregunta ➡️</button>
+                <button class="btn btn-warning" id="finishQuiz" onclick="finishQuiz()" style="display:none;">🏁 Finalizar Evaluación</button>
+                <button class="btn btn-secondary" onclick="exitQuiz()">↩️ Salir de la Evaluación</button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <h3>🏆 Plataforma de Capacitación Minera</h3>
+            <p>&copy; 2024 - Módulo de Comunicación Efectiva para Supervisores de Primera Línea</p>
+            <p>Todos los derechos reservados.</p>
+            <p><strong>¡Felicitaciones por completar las 6 unidades del Módulo de Comunicación Efectiva!</strong></p>
+            <p>Has desarrollado competencias críticas que pueden salvar vidas y optimizar operaciones en la industria minera.</p>
+        </div>
+    </div>
+
+    <!-- Achievement Modal -->
+    <div id="achievementModal" class="achievement" style="display: none;">
+        <div class="achievement-icon">🏆</div>
+        <h3>¡Felicitaciones!</h3>
+        <p id="achievementText">Has desbloqueado un nuevo logro</p>
+    </div>
+
+    <script>
+        // Estado global de la aplicación
+        let appState = {
+            currentUnit: 4, // Comenzamos en unidad 4
+            currentSection: 'content',
+            currentGameType: 0,
+            currentGamePhase: 0,
+            currentQuizQuestion: 0,
+            completedUnits: JSON.parse(localStorage.getItem('completedUnitsApp2') || '[]'),
+            points: parseInt(localStorage.getItem('pointsApp2') || '0'),
+            streak: parseInt(localStorage.getItem('streakApp2') || '0'),
+            badges: JSON.parse(localStorage.getItem('badgesApp2') || '[]'),
+            gameScores: JSON.parse(localStorage.getItem('gameScoresApp2') || '{}'),
+            quizScores: JSON.parse(localStorage.getItem('quizScoresApp2') || '{}'),
+            lastStudyDate: localStorage.getItem('lastStudyDateApp2') || null,
+            currentQuizAnswers: [],
+            selectedAnswer: null
+        };
+
+        // Base de datos de juegos educativos
+        const gamesDatabase = {
+            4: [ // Unidad 4 - 5 tipos de juegos
+                {
+                    type: "Dinámicas de Equipo",
+                    phases: [
+                        {
+                            title: "Identifica el Rol Comunicacional",
+                            scenario: "En tu equipo de 6 personas, observas que Carlos siempre proporciona datos técnicos precisos, María naturalmente media cuando hay tensiones, y Luis constantemente identifica problemas antes de que se agraven.",
+                            question: "¿Cuáles son los roles comunicacionales que identificas?",
+                            options: ["Todos son líderes naturales", "Carlos=Informador Técnico, María=Conectora Social, Luis=Detector de Problemas", "Necesitan más entrenamiento técnico", "Carlos es el más experimentado"],
+                            correct: 1,
+                            explanation: "Identificar roles comunicacionales naturales permite potenciar las fortalezas del equipo y optimizar la dinámicas grupales."
+                        }
+                    ]
+                },
+                {
+                    type: "Reuniones Efectivas - Metodología START",
+                    phases: [
+                        {
+                            title: "Estructura una Reunión con START",
+                            scenario: "Debes liderar una reunión de 15 minutos al inicio del turno. Hay cambios en el plan de producción, nuevos riesgos identificados, y necesitas asignar tareas específicas.",
+                            question: "¿Cuál es la mejor estructura usando START?",
+                            options: [
+                                "Hablar 15 minutos sobre los cambios",
+                                "Situación(3min): cambios del turno anterior. Tareas(4min): objetivos del turno. Asignaciones(3min): quién hace qué. Riesgos(3min): peligros y medidas. Tiempo(2min): checkpoints",
+                                "Dar toda la información y preguntar si hay dudas",
+                                "Leer el reporte y distribuir tareas"
+                            ],
+                            correct: 1,
+                            explanation: "START estructura reuniones mineras en 15 minutos máximo, asegurando cobertura completa de aspectos críticos con tiempo definido para cada sección."
+                        }
+                    ]
+                },
+                {
+                    type: "Coordinación Multi-Funcional",
+                    phases: [
+                        {
+                            title: "Coordina Mantenimiento Complejo",
+                            scenario: "Debes coordinar una mantención mayor que involucra Operación, Mantenimiento Mecánico, Eléctrico, Seguridad y Planificación. La ventana de tiempo es crítica.",
+                            question: "¿Cuál es la mejor estrategia de coordinación?",
+                            options: [
+                                "Hablar con cada área por separado",
+                                "Implementar protocolo de 3 fases: Pre-coordinación (1 día antes), Coordinación activa (durante), Post-coordinación (debrief grupal)",
+                                "Hacer una reunión general larga",
+                                "Dejar que cada área se coordine sola"
+                            ],
+                            correct: 1,
+                            explanation: "La coordinación multi-funcional efectiva requiere estructura temporal clara con fases específicas que aseguren alineamiento antes, durante y después de actividades críticas."
+                        }
+                    ]
+                },
+                {
+                    type: "Facilitación de Grupos",
+                    phases: [
+                        {
+                            title: "Maneja Participación Desbalanceada",
+                            scenario: "En tu reunión, Juan domina la conversación mientras María y Carlos permanecen callados. Necesitas input de todos para la decisión operacional.",
+                            question: "¿Cuál es la mejor técnica de facilitación?",
+                            options: [
+                                "Pedirle a Juan que se calle",
+                                "Aplicar técnica Round Robin: 'Vamos a escuchar 30 segundos de cada uno' y hacer preguntas directas específicas a María y Carlos",
+                                "Continuar con la reunión normal",
+                                "Hablar con María y Carlos después"
+                            ],
+                            correct: 1,
+                            explanation: "La facilitación efectiva requiere técnicas específicas para equilibrar participación, asegurando que todas las perspectivas valiosas sean incluidas."
+                        }
+                    ]
+                },
+                {
+                    type: "Construcción de Cohesión",
+                    phases: [
+                        {
+                            title: "Fortalece la Cohesión del Equipo",
+                            scenario: "Tu equipo tiene buena performance técnica pero falta cohesión interpersonal. Trabajadores veteranos y nuevos no se integran bien, afectando la comunicación operacional.",
+                            question: "¿Qué estrategia implementarías para construir cohesión?",
+                            options: [
+                                "Organizar una reunión para hablar del problema",
+                                "Implementar sistema de 'buddies', rotar responsabilidades de comunicación, y reconocer publicly ejemplos de colaboración efectiva",
+                                "Separar veteranos de nuevos",
+                                "Enviar comunicado sobre trabajo en equipo"
+                            ],
+                            correct: 1,
+                            explanation: "La cohesión se construye a través de sistemas estructurados que fomentan interacción positiva, responsabilidades compartidas y reconocimiento de colaboración."
+                        }
+                    ]
+                }
+            ],
+            5: [ // Unidad 5 - 5 tipos de juegos
+                {
+                    type: "Protocolo RAPID en Crisis",
+                    phases: [
+                        {
+                            title: "Aplica RAPID en Emergencia",
+                            scenario: "Suena la alarma: posible derrumbe en túnel nivel 480, 3 operarios no responden radio, equipo de rescate necesita acceso inmediato. Tienes 30 segundos para respuesta inicial.",
+                            question: "¿Cuál es tu primera acción usando RAPID?",
+                            options: [
+                                "Llamar al gerente inmediatamente",
+                                "Reconocer: evaluar severidad y recursos necesarios, luego Alertar inmediatamente con estructura QUÉ-DÓNDE-CUÁNDO-QUIÉN-ACCIÓN",
+                                "Ir personalmente a verificar",
+                                "Esperar más información"
+                            ],
+                            correct: 1,
+                            explanation: "RAPID exige reconocimiento rápido seguido de alerta estructurada inmediata. En crisis, los primeros minutos son críticos para movilizar respuesta efectiva."
+                        }
+                    ]
+                },
+                {
+                    type: "Comunicación Bajo Presión Extrema",
+                    phases: [
+                        {
+                            title: "Mantén Liderazgo Bajo Estrés",
+                            scenario: "Durante emergencia real, tu equipo está visiblemente alterado, algunos muestran pánico. Necesitas coordinar evacuación mientras mantienes calma y liderazgo comunicacional.",
+                            question: "¿Cómo mantienes liderazgo comunicacional efectivo?",
+                            options: [
+                                "Gritar las órdenes para que te escuchen",
+                                "Aplicar respiración táctica 4-4-4-4, comunicar con voz firme pero calmada, instrucciones específicas, y confirmar comprensión de cada instrucción crítica",
+                                "Dejar que cada uno haga lo que cree mejor",
+                                "Seguir los procedimientos estándar sin adaptación"
+                            ],
+                            correct: 1,
+                            explanation: "El liderazgo en crisis requiere autoregulación emocional visible, comunicación específica y confirmación activa para prevenir errores fatales."
+                        }
+                    ]
+                },
+                {
+                    type: "Adaptación por Audiencias en Crisis",
+                    phases: [
+                        {
+                            title: "Comunica Según Stakeholder",
+                            scenario: "Incidente con impacto potencial grave. Debes comunicar a: tu equipo directo, gerencia, servicios de emergencia, y posiblemente familias. Cada audiencia necesita información diferente.",
+                            question: "¿Cómo adaptas tu comunicación?",
+                            options: [
+                                "El mismo mensaje para todos",
+                                "Equipo: instrucciones específicas. Gerencia: datos objetivos y opciones. Emergencias: información técnica. Familias: hechos sin especulaciones",
+                                "Solo comunicar a la gerencia",
+                                "Esperar hasta tener información completa"
+                            ],
+                            correct: 1,
+                            explanation: "Cada stakeholder en crisis necesita información específica para su rol. Adaptar el mensaje maximiza efectividad y evita malentendidos críticos."
+                        }
+                    ]
+                },
+                {
+                    type: "Manejo de Información Limitada",
+                    phases: [
+                        {
+                            title: "Comunica con Información Parcial",
+                            scenario: "Tienes información incompleta sobre un incidente. Hay presión para comunicar, pero no tienes todos los datos. Retrasar puede ser peligroso, pero comunicar información incorrecta también.",
+                            question: "¿Cuál es la mejor estrategia?",
+                            options: [
+                                "Esperar hasta tener información 100% completa",
+                                "Comunicar lo que sabes CUANDO lo sabes, siendo explícito sobre qué información tienes vs. qué no tienes, y comprometiendo timeline para updates",
+                                "Especular para llenar los vacíos",
+                                "Delegar la comunicación a alguien más"
+                            ],
+                            correct: 1,
+                            explanation: "En crisis, comunicar información parcial pero clara es mejor que retrasar. La clave es ser explícito sobre certeza e incertidumbre."
+                        }
+                    ]
+                },
+                {
+                    type: "Escalamiento y Desescalamiento",
+                    phases: [
+                        {
+                            title: "Gestiona la Escalada Comunicacional",
+                            scenario: "Un incidente menor está generando pánico desproporcionado en el equipo debido a rumores y especulaciones. Necesitas desescalar sin minimizar riesgos reales.",
+                            question: "¿Cómo manejas la desescalada?",
+                            options: [
+                                "Decir que no pasa nada importante",
+                                "Proporcionar información factual específica, reconocer preocupaciones legítimas, explicar acciones concretas que se están tomando, y establecer canal para updates regulares",
+                                "Ignorar los rumores",
+                                "Castigar a quien está generando pánico"
+                            ],
+                            correct: 1,
+                            explanation: "La desescalada efectiva requiere transparencia factual, validación de preocupaciones y comunicación proactiva para prevenir especulaciones."
+                        }
+                    ]
+                }
+            ],
+            6: [ // Unidad 6 - 5 tipos de juegos
+                {
+                    type: "Autoevaluación de Competencias",
+                    phases: [
+                        {
+                            title: "Evalúa tu Escucha Activa",
+                            scenario: "Esta semana tuviste 3 conversaciones importantes. En una, el operario te dijo algo crítico que no captaste completamente. En otra, interrumpiste porque creías saber qué iba a decir. En la tercera, hiciste excelentes preguntas de profundización.",
+                            question: "¿Cómo autoevalúas tu competencia de escucha activa?",
+                            options: [
+                                "Estoy bien, son solo errores menores",
+                                "Identifico patrón: necesito mejorar atención plena y reducir interrupciones. Mi fortaleza son las preguntas de profundización. Plan: práctica deliberada de parafraseo esta semana",
+                                "Necesito escuchar más",
+                                "El problema son los otros que no se explican bien"
+                            ],
+                            correct: 1,
+                            explanation: "La autoevaluación efectiva identifica patrones específicos, reconoce fortalezas y debilidades, y genera plan de acción concreto."
+                        }
+                    ]
+                },
+                {
+                    type: "Plan de Desarrollo Personal",
+                    phases: [
+                        {
+                            title: "Diseña tu Plan GROW",
+                            scenario: "Identificaste que necesitas mejorar tu comunicación en situaciones de conflicto. Te pones nervioso, evitas el tema, o reaccionas defensivamente. Quieres convertirte en alguien que maneja conflictos constructivamente.",
+                            question: "¿Cómo estructura tu plan usando GROW?",
+                            options: [
+                                "Simplemente voy a tratar de ser mejor en conflictos",
+                                "Goal: manejar 3 conflictos menores próximos 30 días constructivamente. Reality: me pongo nervioso y evito. Options: técnica CALM, respiración, práctica con casos. Will: aplicar CALM en próximo conflicto y pedir feedback",
+                                "Voy a leer un libro sobre conflictos",
+                                "Le voy a pedir a mi jefe que me ayude"
+                            ],
+                            correct: 1,
+                            explanation: "GROW estructura el desarrollo con meta específica, análisis honesto de situación actual, múltiples opciones y compromisos de acción concretos."
+                        }
+                    ]
+                },
+                {
+                    type: "Mentoring del Equipo",
+                    phases: [
+                        {
+                            title: "Desarrolla a tu Equipo",
+                            scenario: "Carlos tiene excelente conocimiento técnico pero sus explicaciones son confusas y desmotiva sin quererlo. María es muy clara pero le falta asertividad para manejar resistencia. Luis es buen comunicador pero monopoliza las conversaciones.",
+                            question: "¿Cómo diseñas mentoring específico para cada uno?",
+                            options: [
+                                "Les digo a todos que mejoren su comunicación",
+                                "Carlos: enseñar técnicas de simplificación y ejemplos. María: práctica de técnica DESC y asertividad. Luis: técnicas de facilitación e inclusión de otros. Cada uno practica con feedback específico",
+                                "Los envío a un curso de comunicación",
+                                "Espero que mejoren con el tiempo"
+                            ],
+                            correct: 1,
+                            explanation: "Mentoring efectivo identifica necesidades específicas de cada persona y diseña intervenciones personalizadas con práctica y feedback."
+                        }
+                    ]
+                },
+                {
+                    type: "Construcción de Cultura",
+                    phases: [
+                        {
+                            title: "Implementa Rituales Comunicacionales",
+                            scenario: "Quieres mejorar la cultura comunicacional de tu área. Actualmente hay poca retroalimentación, las dudas no se expresan abiertamente, y los errores se ocultan por temor.",
+                            question: "¿Qué rituales implementas para cambiar la cultura?",
+                            options: [
+                                "Dar un discurso sobre la importancia de comunicarse",
+                                "Implementar: 'Check comunicacional' al inicio de actividades, '2 minutos feedback' al final de turnos, reconocimiento público de buena comunicación, y pregunta rutinaria '¿qué no está claro?'",
+                                "Hacer reuniones más largas para que hablen más",
+                                "Implementar sistema de sugerencias anónimas"
+                            ],
+                            correct: 1,
+                            explanation: "Los rituales cambian cultura al institucionalizar comportamientos específicos y repetitivos que eventualmente se vuelven 'la forma como hacemos las cosas aquí'."
+                        }
+                    ]
+                },
+                {
+                    type: "Medición y Mejora Continua",
+                    phases: [
+                        {
+                            title: "Mide el Impacto de tu Desarrollo",
+                            scenario: "Llevas 60 días trabajando en mejorar tu comunicación y la de tu equipo. Implementaste varias técnicas y rituales. Necesitas evaluar si está funcionando y qué ajustar.",
+                            question: "¿Cómo mides efectividad de tu desarrollo comunicacional?",
+                            options: [
+                                "Pregunto si creen que he mejorado",
+                                "Métricas: reducción de errores por malentendidos, encuesta clima comunicacional, feedback 360 específico, observación de comportamientos (más preguntas, menos interrupciones), y autoevaluación mensual estructurada",
+                                "Reviso si cumplí mi plan",
+                                "Comparo con otros supervisores"
+                            ],
+                            correct: 1,
+                            explanation: "La medición efectiva combina métricas objetivas (errores, comportamientos) con feedback estructurado y autoreflexión para generar mejora continua."
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Base de datos de evaluaciones
+        const quizDatabase = {
+            4: [ // Unidad 4 - 10 preguntas funcionales
+                {
+                    question: "¿Cuál es la principal diferencia entre comunicación interpersonal y comunicación grupal en minería?",
+                    options: [
+                        "No hay diferencias significativas",
+                        "La comunicación grupal requiere orquestar múltiples personalidades, niveles de experiencia y especialidades bajo condiciones de alta presión",
+                        "La comunicación grupal es más fácil",
+                        "Solo cambia el número de personas"
+                    ],
+                    correct: 1,
+                    explanation: "La comunicación grupal en minería implica coordinar diversidades técnicas y personales para objetivos comunes bajo presión operacional."
+                },
+                {
+                    question: "En la metodología START para reuniones mineras, ¿qué significa la 'A'?",
+                    options: [
+                        "Autoridad",
+                        "Asignaciones claras",
+                        "Análisis",
+                        "Acuerdos"
+                    ],
+                    correct: 1,
+                    explanation: "La 'A' en START significa Asignaciones claras: quién hace qué, con qué recursos, cuándo."
+                },
+                {
+                    question: "¿Cuál es el tiempo máximo recomendado para una reunión operacional usando START?",
+                    options: [
+                        "30 minutos",
+                        "15 minutos",
+                        "45 minutos",
+                        "Sin límite definido"
+                    ],
+                    correct: 1,
+                    explanation: "START está diseñada para reuniones de máximo 15 minutos, optimizando eficiencia operacional."
+                },
+                {
+                    question: "El rol del 'Conector Social' en un equipo minero se caracteriza por:",
+                    options: [
+                        "Tener más experiencia técnica",
+                        "Habilidad natural para construir puentes entre personalidades diversas",
+                        "Ser el más joven del equipo",
+                        "Conocer todos los procedimientos"
+                    ],
+                    correct: 1,
+                    explanation: "El Conector Social facilita cohesión grupal y resolución informal de tensiones entre diferentes personalidades."
+                },
+                {
+                    question: "¿Cuál es la mejor técnica para manejar participación desbalanceada en reuniones?",
+                    options: [
+                        "Dejar que la dominante persona continúe hablando",
+                        "Técnica Round Robin: tiempo específico para cada participante",
+                        "Terminar la reunión rápidamente",
+                        "Hablar solo con las personas calladas después"
+                    ],
+                    correct: 1,
+                    explanation: "Round Robin asegura participación equitativa dando tiempo específico estructurado a cada participante."
+                },
+                {
+                    question: "La coordinación multi-funcional efectiva en operaciones complejas requiere:",
+                    options: [
+                        "Una sola reunión larga con todos",
+                        "Protocolo de 3 fases: pre-coordinación, coordinación activa, post-coordinación",
+                        "Que cada área trabaje independientemente",
+                        "Solo comunicación escrita"
+                    ],
+                    correct: 1,
+                    explanation: "La coordinación multi-funcional requiere estructura temporal con fases específicas antes, durante y después de actividades críticas."
+                },
+                {
+                    question: "¿Cuál es un error común en reuniones mineras?",
+                    options: [
+                        "Usar temporizador visible",
+                        "Reuniones tipo 'descarga de información' sin participación del equipo",
+                        "Hacer síntesis activa",
+                        "Documentar acuerdos"
+                    ],
+                    correct: 1,
+                    explanation: "Las reuniones unidireccionales sin participación reducen engagement y efectividad operacional."
+                },
+                {
+                    question: "Para construir cohesión en equipos con veteranos y nuevos trabajadores, es más efectivo:",
+                    options: [
+                        "Separar ambos grupos",
+                        "Implementar sistema de 'buddies' y rotar responsabilidades de comunicación",
+                        "Dar una charla sobre trabajo en equipo",
+                        "Dejar que se adapten naturalmente"
+                    ],
+                    correct: 1,
+                    explanation: "Los sistemas estructurados como 'buddies' y responsabilidades rotativas fomentan interacción positiva sistemática."
+                },
+                {
+                    question: "El 'Detector de Problemas' en un equipo debe ser potenciado como:",
+                    options: [
+                        "Líder técnico principal",
+                        "Canal privilegiado para feedback ascendente y alerta temprana",
+                        "Responsable de todas las decisiones",
+                        "Encargado de capacitación"
+                    ],
+                    correct: 1,
+                    explanation: "Los Detectores naturales deben ser canalizados para alerta temprana de riesgos operacionales e interpersonales."
+                },
+                {
+                    question: "¿Qué caracteriza a equipos mineros de alto rendimiento comunicacional?",
+                    options: [
+                        "Hablan mucho durante el trabajo",
+                        "Comunicación anticipatoria que prevé riesgos antes de que se materialicen",
+                        "Siempre están de acuerdo en todo",
+                        "Solo se comunican cuando hay problemas"
+                    ],
+                    correct: 1,
+                    explanation: "La comunicación anticipatoria es distintiva de equipos superiores, previniendo problemas antes de que ocurran."
+                }
+            ],
+            5: [ // Unidad 5 - 10 preguntas funcionales
+                {
+                    question: "En el protocolo RAPID para crisis, ¿qué significa la 'R' inicial?",
+                    options: [
+                        "Responder",
+                        "Reconocer",
+                        "Reportar",
+                        "Rescatar"
+                    ],
+                    correct: 1,
+                    explanation: "Reconocer implica evaluación rápida de severidad, alcance, recursos necesarios y tiempo crítico disponible."
+                },
+                {
+                    question: "¿Cuál debe ser la estructura de un mensaje de alerta efectiva en crisis?",
+                    options: [
+                        "Solo comunicar que hay un problema",
+                        "QUÉ-DÓNDE-CUÁNDO-QUIÉN-ACCIÓN",
+                        "Dar todos los detalles disponibles",
+                        "Esperar tener información completa"
+                    ],
+                    correct: 1,
+                    explanation: "Esta estructura asegura que toda información crítica se comunique de manera ordenada y completa para respuesta efectiva."
+                },
+                {
+                    question: "Durante una crisis, ¿cuál es la prioridad absoluta en comunicación?",
+                    options: [
+                        "Informar a la gerencia primero",
+                        "Preservación de vida humana",
+                        "Proteger los equipos",
+                        "Mantener la producción"
+                    ],
+                    correct: 1,
+                    explanation: "La preservación de vida humana es prioridad absoluta, todas las demás consideraciones son secundarias."
+                },
+                {
+                    question: "La técnica de respiración táctica 4-4-4-4 se usa para:",
+                    options: [
+                        "Mejorar la condición física",
+                        "Mantener claridad mental y control emocional bajo presión extrema",
+                        "Relajarse después del trabajo",
+                        "Mejorar la concentración en general"
+                    ],
+                    correct: 1,
+                    explanation: "Esta técnica ayuda a mantener autocontrol y claridad mental en situaciones de estrés agudo durante crisis."
+                },
+                {
+                    question: "¿Cómo debe comunicar un supervisor cuando tiene información limitada durante una crisis?",
+                    options: [
+                        "Esperar hasta tener información 100% completa",
+                        "Comunicar lo que sabe CUANDO lo sabe, siendo explícito sobre certeza e incertidumbre",
+                        "Especular para llenar vacíos de información",
+                        "Delegar la comunicación a otra persona"
+                    ],
+                    correct: 1,
+                    explanation: "En crisis, comunicar información parcial pero clara es mejor que retrasar. La transparencia sobre certeza/incertidumbre es crítica."
+                },
+                {
+                    question: "¿Cuál es la diferencia clave en comunicar a diferentes audiencias durante crisis?",
+                    options: [
+                        "Usar el mismo mensaje para mantener consistencia",
+                        "Adaptar información según rol: equipo (instrucciones), gerencia (datos), emergencias (técnico), familias (hechos sin especulación)",
+                        "Solo comunicar a los superiores",
+                        "Comunicar toda la información a todos"
+                    ],
+                    correct: 1,
+                    explanation: "Cada stakeholder necesita información específica para su rol. La adaptación maximiza efectividad y previene malentendidos."
+                },
+                {
+                    question: "Un error fatal en comunicación de crisis es:",
+                    options: [
+                        "Usar múltiples canales de comunicación",
+                        "Comunicar emociones personales en lugar de liderazgo objetivo",
+                        "Confirmar recepción de instrucciones críticas",
+                        "Comunicar hechos conocidos rápidamente"
+                    ],
+                    correct: 1,
+                    explanation: "Los líderes deben comunicar objetividad y control, no sus emociones personales que pueden generar pánico adicional."
+                },
+                {
+                    question: "Para desescalar una situación de pánico por rumores, es más efectivo:",
+                    options: [
+                        "Decir que no pasa nada importante",
+                        "Proporcionar información factual específica, reconocer preocupaciones y explicar acciones concretas",
+                        "Ignorar los rumores completamente",
+                        "Castigar a quien genera pánico"
+                    ],
+                    correct: 1,
+                    explanation: "La desescalada efectiva requiere transparencia factual y comunicación proactiva para prevenir especulaciones."
+                },
+                {
+                    question: "¿Qué caracteriza una situación de crisis comunicacional en minería?",
+                    options: [
+                        "Solo problemas de equipos",
+                        "Riesgo inmediato, urgencia temporal extrema, información limitada y decisiones con consecuencias irreversibles",
+                        "Cualquier problema operacional",
+                        "Solo accidentes graves"
+                    ],
+                    correct: 1,
+                    explanation: "Las crisis se definen por la combinación de riesgo inmediato, presión temporal, información limitada y alta consecuencia de decisiones."
+                },
+                {
+                    question: "El liderazgo comunicacional efectivo en crisis requiere principalmente:",
+                    options: [
+                        "Hablar fuerte para ser escuchado",
+                        "Calma emocional visible, comunicación específica y confirmación activa de comprensión",
+                        "Dar muchas órdenes rápidamente",
+                        "Delegar todas las decisiones"
+                    ],
+                    correct: 1,
+                    explanation: "El liderazgo en crisis requiere proyectar control emocional, ser específico en instrucciones y asegurar comprensión para evitar errores fatales."
+                }
+            ],
+            6: [ // Unidad 6 - 10 preguntas funcionales
+                {
+                    question: "En el marco de autoevaluación de 5 pilares, ¿cuál NO es uno de los pilares?",
+                    options: [
+                        "Claridad y Precisión",
+                        "Conocimiento Técnico Avanzado",
+                        "Inteligencia Emocional",
+                        "Adaptabilidad Comunicacional"
+                    ],
+                    correct: 1,
+                    explanation: "Los 5 pilares son: Claridad, Escucha Activa, Inteligencia Emocional, Influencia Ética y Adaptabilidad. Conocimiento técnico no es un pilar comunicacional específico."
+                },
+                {
+                    question: "La metodología GROW para desarrollo personal significa:",
+                    options: [
+                        "Goal-Reality-Options-Will",
+                        "Growth-Results-Objectives-Work",
+                        "Goals-Resources-Organization-Wins",
+                        "Generate-Review-Organize-Win"
+                    ],
+                    correct: 0,
+                    explanation: "GROW estructura el desarrollo personal: Goal (meta), Reality (realidad actual), Options (opciones de desarrollo), Will (voluntad/acción)."
+                },
+                {
+                    question: "¿Cuál es la característica principal de feedback desarrollador efectivo?",
+                    options: [
+                        "Solo mencionar los errores",
+                        "Estructura: Observación específica + Impacto observado + Sugerencia específica + Ofrecimiento de apoyo",
+                        "Ser lo más general posible",
+                        "Enfocarse solo en aspectos positivos"
+                    ],
+                    correct: 1,
+                    explanation: "El feedback desarrollador efectivo sigue estructura específica que conecta observación con impacto y ofrece apoyo concreto para mejora."
+                },
+                {
+                    question: "Para construir cultura comunicacional de excelencia, es fundamental implementar:",
+                    options: [
+                        "Más reuniones largas",
+                        "Rituales de comunicación específicos y repetitivos",
+                        "Políticas escritas estrictas",
+                        "Cursos de comunicación obligatorios"
+                    ],
+                    correct: 1,
+                    explanation: "Los rituales específicos y repetitivos institucionalizan comportamientos que eventualmente se vuelven 'la forma como hacemos las cosas aquí'."
+                },
+                {
+                    question: "¿Qué caracteriza a equipos con cultura comunicacional superior?",
+                    options: [
+                        "Nunca tienen conflictos",
+                        "Seguridad psicológica para expresar ideas, preocupaciones y errores",
+                        "Solo hablan de trabajo",
+                        "El supervisor toma todas las decisiones comunicacionales"
+                    ],
+                    correct: 1,
+                    explanation: "La seguridad psicológica permite comunicación abierta y honesta, fundamental para equipos de alto rendimiento."
+                },
+                {
+                    question: "El mentoring comunicacional efectivo requiere:",
+                    options: [
+                        "Tratar a todos los miembros del equipo igual",
+                        "Identificar necesidades específicas y diseñar intervenciones personalizadas",
+                        "Solo dar consejos generales",
+                        "Esperar que mejoren solos con el tiempo"
+                    ],
+                    correct: 1,
+                    explanation: "Mentoring efectivo reconoce que cada persona tiene fortalezas y necesidades diferentes, requiriendo enfoques personalizados."
+                },
+                {
+                    question: "Para medir efectividad del desarrollo comunicacional, es mejor usar:",
+                    options: [
+                        "Solo autoevaluación personal",
+                        "Combinación de métricas objetivas, feedback estructurado y autoreflexión",
+                        "Solo comparación con otros supervisores",
+                        "Solo feedback de la gerencia"
+                    ],
+                    correct: 1,
+                    explanation: "La medición efectiva combina múltiples fuentes: datos objetivos, feedback 360 y autoreflexión para evaluación integral."
+                },
+                {
+                    question: "¿Cuál es el propósito principal de la autoevaluación sistemática?",
+                    options: [
+                        "Cumplir con requisitos de la empresa",
+                        "Desarrollar autoconciencia precisa sobre fortalezas y áreas de mejora para acción específica",
+                        "Prepararse para evaluaciones anuales",
+                        "Compararse con otros supervisores"
+                    ],
+                    correct: 1,
+                    explanation: "La autoevaluación busca autoconciencia precisa que permita desarrollo dirigido y mejora continua específica."
+                },
+                {
+                    question: "¿Qué debe incluir un plan de desarrollo comunicacional de 90 días?",
+                    options: [
+                        "Solo objetivos generales de mejora",
+                        "Fases específicas: consolidación de fundamentos, aplicación avanzada y liderazgo transformacional",
+                        "Una lista de cursos por tomar",
+                        "Solo práctica de técnicas específicas"
+                    ],
+                    correct: 1,
+                    explanation: "Un plan efectivo estructura el desarrollo en fases progresivas con objetivos específicos y evaluaciones regulares."
+                },
+                {
+                    question: "El compromiso personal del líder comunicacional incluye principalmente:",
+                    options: [
+                        "Solo mejorar sus propias competencias",
+                        "Modelar estándares, desarrollarse continuamente, invertir en el equipo y construir cultura positiva",
+                        "Enfocarse solo en resultados operacionales",
+                        "Aplicar técnicas cuando sea conveniente"
+                    ],
+                    correct: 1,
+                    explanation: "El liderazgo comunicacional integral abarca desarrollo personal, mentoring del equipo y construcción de cultura organizacional."
+                }
+            ]
+        };
+
+        // Funciones de inicialización
+        function initializeApp() {
+            updateStats();
+            updateProgress();
+            checkStreakContinuity();
+            showMainNav();
+            
+            // Event listeners para navegación
+            document.querySelectorAll('.unit-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const unit = parseInt(this.dataset.unit);
+                    if (canAccessUnit(unit)) {
+                        showContent(unit);
+                    } else {
+                        showAchievement("⚠️", "Debes completar la unidad anterior primero");
+                    }
+                });
+            });
+        }
+
+        function canAccessUnit(unit) {
+            if (unit === 4) return true; // Primera unidad de esta app
+            return appState.completedUnits.includes(unit - 1);
+        }
+
+        function updateStats() {
+            document.getElementById('pointsDisplay').textContent = appState.points;
+            document.getElementById('streakDisplay').textContent = appState.streak;
+            document.getElementById('completedDisplay').textContent = `${appState.completedUnits.length}/3`;
+            document.getElementById('badgesDisplay').textContent = appState.badges.length;
+        }
+
+        function updateProgress() {
+            const progress = (appState.completedUnits.length / 3) * 100;
+            const progressBar = document.getElementById('mainProgress');
+            progressBar.style.width = `${progress}%`;
+            progressBar.textContent = `${Math.round(progress)}% Completado`;
+            
+            // Actualizar estado visual de las unidades
+            document.querySelectorAll('.unit-card').forEach((card, index) => {
+                const unit = index + 4; // Unidades 4, 5, 6
+                card.classList.remove('completed', 'current');
+                
+                if (appState.completedUnits.includes(unit)) {
+                    card.classList.add('completed');
+                    card.querySelector('.unit-status').className = 'unit-status status-completed';
+                    card.querySelector('.unit-status').textContent = 'Completada';
+                } else if (canAccessUnit(unit)) {
+                    card.classList.add('current');
+                    card.querySelector('.unit-status').className = 'unit-status status-in-progress';
+                    card.querySelector('.unit-status').textContent = 'Disponible';
+                } else {
+                    card.querySelector('.unit-status').className = 'unit-status status-locked';
+                    card.querySelector('.unit-status').textContent = 'Bloqueado';
+                }
+            });
+        }
+
+        function checkStreakContinuity() {
+            const today = new Date().toDateString();
+            const lastDate = appState.lastStudyDate;
+            
+            if (lastDate !== today) {
+                if (lastDate) {
+                    const last = new Date(lastDate);
+                    const current = new Date(today);
+                    const diffDays = Math.floor((current - last) / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 1) {
+                        appState.streak++;
+                        showAchievement("🔥", `¡Racha de ${appState.streak} días!`);
+                    } else if (diffDays > 1) {
+                        appState.streak = 1;
+                        showAchievement("🆕", "Nueva racha iniciada");
+                    }
+                } else {
+                    appState.streak = 1;
+                }
+                
+                appState.lastStudyDate = today;
+                saveState();
+            }
+        }
+
+        // Funciones de navegación
+        function showMainNav() {
+            document.getElementById('mainNav').style.display = 'grid';
+            document.querySelectorAll('.content-area').forEach(area => {
+                area.style.display = 'none';
+            });
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('quizArea').style.display = 'none';
+            appState.currentSection = 'nav';
+        }
+
+        function showContent(unit) {
+            appState.currentUnit = unit;
+            appState.currentSection = 'content';
+            
+            document.getElementById('mainNav').style.display = 'none';
+            document.querySelectorAll('.content-area').forEach(area => {
+                area.style.display = 'none';
+            });
+            document.getElementById(`content-${unit}`).style.display = 'block';
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('quizArea').style.display = 'none';
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Funciones de juegos
+        function startGames(unit) {
+            appState.currentUnit = unit;
+            appState.currentGameType = 0;
+            appState.currentGamePhase = 0;
+            appState.currentSection = 'game';
+            
+            document.getElementById('mainNav').style.display = 'none';
+            document.querySelectorAll('.content-area').forEach(area => {
+                area.style.display = 'none';
+            });
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('quizArea').style.display = 'none';
+
+            loadGamePhase();
+            window.scrollTo(0, 0);
+        }
+
+        function loadGamePhase() {
+            const games = gamesDatabase[appState.currentUnit];
+            if (!games || appState.currentGameType >= games.length) {
+                completeAllGames();
+                return;
+            }
+
+            const currentGame = games[appState.currentGameType];
+            if (!currentGame.phases || appState.currentGamePhase >= currentGame.phases.length) {
+                nextGameType();
+                return;
+            }
+
+            const phase = currentGame.phases[appState.currentGamePhase];
+            
+            document.getElementById('gameTitle').textContent = currentGame.type;
+            document.getElementById('gamePhase').textContent = `Fase ${appState.currentGamePhase + 1} de ${currentGame.phases.length}`;
+            
+            const gameContent = document.getElementById('gameContent');
+            gameContent.innerHTML = `
+                <h3>${phase.title}</h3>
+                <div class="scenario-box">
+                    <h4>📋 Situación:</h4>
+                    <p>${phase.scenario}</p>
+                </div>
+                <h4>${phase.question}</h4>
+                <div class="options-grid">
+                    ${phase.options.map((option, index) => `
+                        <div class="option-card" onclick="selectGameOption(${index})" data-option="${index}">
+                            ${option}
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="gameExplanation" style="display: none; margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                    <h4>💡 Explicación:</h4>
+                    <p id="explanationText"></p>
+                </div>
+            `;
+
+            document.getElementById('gameNext').style.display = 'none';
+            document.getElementById('gameComplete').style.display = 'none';
+        }
+
+        function selectGameOption(selectedIndex) {
+            const games = gamesDatabase[appState.currentUnit];
+            const currentGame = games[appState.currentGameType];
+            const phase = currentGame.phases[appState.currentGamePhase];
+            
+            // Remover selección previa
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            // Marcar respuestas
+            document.querySelectorAll('.option-card').forEach((card, index) => {
+                if (index === phase.correct) {
+                    card.classList.add('correct');
+                } else if (index === selectedIndex && index !== phase.correct) {
+                    card.classList.add('incorrect');
+                }
+            });
+
+            // Mostrar explicación
+            document.getElementById('explanationText').textContent = phase.explanation;
+            document.getElementById('gameExplanation').style.display = 'block';
+
+            // Otorgar puntos
+            if (selectedIndex === phase.correct) {
+                appState.points += 10;
+                updateGamePoints();
+            }
+
+            // Mostrar botón siguiente
+            if (appState.currentGamePhase < currentGame.phases.length - 1) {
+                document.getElementById('gameNext').style.display = 'inline-block';
+            } else if (appState.currentGameType < gamesDatabase[appState.currentUnit].length - 1) {
+                document.getElementById('gameNext').style.display = 'inline-block';
+            } else {
+                document.getElementById('gameComplete').style.display = 'inline-block';
+            }
+        }
+
+        function nextGamePhase() {
+            appState.currentGamePhase++;
+            loadGamePhase();
+        }
+
+        function nextGameType() {
+            appState.currentGameType++;
+            appState.currentGamePhase = 0;
+            loadGamePhase();
+        }
+
+        function completeGame() {
+            appState.points += 50; // Bonus por completar juegos
+            showAchievement("🎮", `¡Juegos completados! +50 puntos bonus`);
+            saveState();
+            updateStats();
+            
+            setTimeout(() => {
+                showContent(appState.currentUnit);
+            }, 2000);
+        }
+
+        function completeAllGames() {
+            completeGame();
+        }
+
+        function exitGame() {
+            showContent(appState.currentUnit);
+        }
+
+        function updateGamePoints() {
+            document.getElementById('gamePoints').textContent = appState.points;
+        }
+
+        // Funciones de quiz
+        function startQuiz(unit) {
+            appState.currentUnit = unit;
+            appState.currentQuizQuestion = 0;
+            appState.currentQuizAnswers = [];
+            appState.selectedAnswer = null;
+            appState.currentSection = 'quiz';
+
+            document.getElementById('mainNav').style.display = 'none';
+            document.querySelectorAll('.content-area').forEach(area => {
+                area.style.display = 'none';
+            });
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('quizArea').style.display = 'block';
+
+            document.getElementById('quizTitle').textContent = `Evaluación - Unidad ${unit}`;
+            
+            // Establecer el número total de preguntas basado en lo que realmente está disponible
+            const questions = quizDatabase[unit];
+            const totalQuestions = questions ? questions.length : 0;
+            document.getElementById('totalQ').textContent = totalQuestions.toString();
+            document.getElementById('quizScore').textContent = '0';
+
+            loadQuestion();
+            window.scrollTo(0, 0);
+        }
+
+        function loadQuestion() {
+            const questions = quizDatabase[appState.currentUnit];
+            const totalQuestions = questions ? questions.length : 0;
+            
+            if (!questions || appState.currentQuizQuestion >= totalQuestions) {
+                finishQuiz();
+                return;
+            }
+
+            const question = questions[appState.currentQuizQuestion];
+            appState.selectedAnswer = null;
+
+            document.getElementById('currentQ').textContent = appState.currentQuizQuestion + 1;
+            document.getElementById('totalQ').textContent = totalQuestions.toString();
+            document.getElementById('questionText').textContent = question.question;
+
+            const answersGrid = document.getElementById('answersGrid');
+            answersGrid.innerHTML = question.options.map((option, index) => `
+                <div class="answer-option" onclick="selectAnswer(${index})" data-answer="${index}">
+                    ${String.fromCharCode(65 + index)}. ${option}
+                </div>
+            `).join('');
+
+            document.getElementById('submitAnswer').disabled = true;
+            document.getElementById('submitAnswer').style.display = 'inline-block';
+            document.getElementById('nextQuestion').style.display = 'none';
+            document.getElementById('finishQuiz').style.display = 'none';
+        }
+
+        function selectAnswer(index) {
+            appState.selectedAnswer = index;
+            
+            document.querySelectorAll('.answer-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-answer="${index}"]`).classList.add('selected');
+            
+            document.getElementById('submitAnswer').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (appState.selectedAnswer === null) return;
+
+            const questions = quizDatabase[appState.currentUnit];
+            const question = questions[appState.currentQuizQuestion];
+            const isCorrect = appState.selectedAnswer === question.correct;
+            const totalQuestions = questions.length;
+
+            // Guardar respuesta
+            appState.currentQuizAnswers.push({
+                question: appState.currentQuizQuestion,
+                selected: appState.selectedAnswer,
+                correct: question.correct,
+                isCorrect: isCorrect
+            });
+
+            // Mostrar respuesta correcta
+            document.querySelectorAll('.answer-option').forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === appState.selectedAnswer && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            // Actualizar puntuación
+            if (isCorrect) {
+                appState.points += 5;
+                document.getElementById('quizScore').textContent = 
+                    parseInt(document.getElementById('quizScore').textContent) + 5;
+            }
+
+            document.getElementById('submitAnswer').style.display = 'none';
+            
+            if (appState.currentQuizQuestion < totalQuestions - 1) {
+                document.getElementById('nextQuestion').style.display = 'inline-block';
+            } else {
+                document.getElementById('finishQuiz').style.display = 'inline-block';
+            }
+        }
+
+        function nextQuestion() {
+            appState.currentQuizQuestion++;
+            loadQuestion();
+        }
+
+        function finishQuiz() {
+            const correctAnswers = appState.currentQuizAnswers.filter(a => a.isCorrect).length;
+            const totalQuestions = appState.currentQuizAnswers.length;
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            
+            // Bonus por completar quiz
+            appState.points += 25;
+            
+            // Marcar unidad como completada si obtiene >= 70%
+            if (percentage >= 70 && !appState.completedUnits.includes(appState.currentUnit)) {
+                appState.completedUnits.push(appState.currentUnit);
+                appState.points += 100; // Bonus por completar unidad
+                
+                // Mensaje especial para unidad 6 (final)
+                if (appState.currentUnit === 6) {
+                    showAchievement("🎓", `¡MÓDULO COMPLETO! Has dominado las 6 unidades de Comunicación Efectiva. Puntuación: ${percentage}%`);
+                } else {
+                    showAchievement("🎓", `¡Unidad ${appState.currentUnit} completada! Puntuación: ${percentage}%`);
+                }
+            } else if (percentage >= 70) {
+                showAchievement("✅", `¡Evaluación aprobada! Puntuación: ${percentage}%`);
+            } else {
+                showAchievement("📚", `Puntuación: ${percentage}%. Te recomendamos revisar el contenido.`);
+            }
+
+            saveState();
+            updateStats();
+            updateProgress();
+            
+            setTimeout(() => {
+                showMainNav();
+            }, 3000);
+        }
+
+        function exitQuiz() {
+            showContent(appState.currentUnit);
+        }
+
+        // Funciones de utilidad
+        function showAchievement(icon, message) {
+            const modal = document.getElementById('achievementModal');
+            const iconElement = modal.querySelector('.achievement-icon');
+            const textElement = document.getElementById('achievementText');
+            
+            iconElement.textContent = icon;
+            textElement.textContent = message;
+            
+            modal.style.display = 'block';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 3000);
+        }
+
+        function saveState() {
+            localStorage.setItem('completedUnitsApp2', JSON.stringify(appState.completedUnits));
+            localStorage.setItem('pointsApp2', appState.points.toString());
+            localStorage.setItem('streakApp2', appState.streak.toString());
+            localStorage.setItem('badgesApp2', JSON.stringify(appState.badges));
+            localStorage.setItem('gameScoresApp2', JSON.stringify(appState.gameScores));
+            localStorage.setItem('quizScoresApp2', JSON.stringify(appState.quizScores));
+            localStorage.setItem('lastStudyDateApp2', appState.lastStudyDate);
+        }
+
+        // Inicializar aplicación
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
+                {
