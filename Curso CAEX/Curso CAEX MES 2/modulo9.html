@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAEX Diagnostic Hub - Sistema Completo de Auto-Aprendizaje</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; color: black; }
+            * { box-shadow: none !important; }
+        }
+        @keyframes slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide-in { animation: slide-in 0.3s ease-out; }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    
+    <!-- Notificaciones Toast -->
+    <div id="notifications" class="fixed top-20 right-4 z-50 space-y-2 no-print"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-gray-800/90 backdrop-blur-lg border-b border-gray-700 shadow-lg no-print">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button id="menuBtn" class="lg:hidden p-2 rounded-lg hover:bg-gray-700">
+                        <span id="menuIcon">☰</span>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
+                            <span class="text-xl font-bold">🔧</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                                CAEX DIAGNOSTIC HUB
+                            </h1>
+                            <p class="text-xs text-gray-400">Sistema Completo de Auto-Aprendizaje</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="exportToPDF()" class="p-2 rounded-lg bg-gray-700 hover:bg-gray-600" title="Exportar a PDF">
+                        🖨️
+                    </button>
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-gray-700 hover:bg-gray-600">
+                        <span id="themeIcon">☀️</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navegación -->
+            <div class="mt-4 flex gap-2 overflow-x-auto">
+                <button onclick="changeView('dashboard')" class="nav-btn" data-view="dashboard">
+                    📊 Dashboard
+                </button>
+                <button onclick="changeView('catalog')" class="nav-btn" data-view="catalog">
+                    📚 Catálogo
+                </button>
+                <button onclick="changeView('training')" class="nav-btn" data-view="training">
+                    ⚡ Entrenamiento
+                </button>
+                <button onclick="changeView('cases')" class="nav-btn" data-view="cases">
+                    🧠 Casos
+                </button>
+                <button onclick="changeView('goals')" class="nav-btn" data-view="goals">
+                    🎯 Objetivos
+                </button>
+                <button onclick="changeView('journey')" class="nav-btn" data-view="journey">
+                    ✏️ Mi Diario
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        
+        <!-- Vista Dashboard -->
+        <div id="dashboardView" class="view-content">
+            <div class="space-y-6">
+                <!-- Bienvenida -->
+                <div class="p-6 rounded-lg bg-gradient-to-r from-cyan-900 to-blue-900">
+                    <h2 class="text-2xl font-bold mb-2">¡Bienvenido, Operador! 👋</h2>
+                    <p class="text-lg mb-4" id="userLevelTitle">🔰 NOVATO</p>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="p-4 rounded-lg bg-gray-800">
+                            <p class="text-sm text-gray-400">XP Total</p>
+                            <p class="text-2xl font-bold" id="totalXP">0</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-gray-800">
+                            <p class="text-sm text-gray-400">Progreso</p>
+                            <p class="text-2xl font-bold" id="progressPercent">0%</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-gray-800">
+                            <p class="text-sm text-gray-400">Logros</p>
+                            <p class="text-2xl font-bold" id="achievementCount">0/8</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-gray-800">
+                            <p class="text-sm text-gray-400">Revisados</p>
+                            <p class="text-2xl font-bold" id="checkedCount">0/24</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acciones rápidas -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="changeView('catalog')" class="p-6 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-left">
+                        <div class="text-3xl mb-2">📚</div>
+                        <h3 class="font-bold text-lg">Catálogo de Fallas</h3>
+                        <p class="text-sm opacity-80">Explora todos los problemas</p>
+                    </button>
+                    <button onclick="changeView('training')" class="p-6 rounded-lg bg-gradient-to-br from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-left">
+                        <div class="text-3xl mb-2">⚡</div>
+                        <h3 class="font-bold text-lg">Modo Entrenamiento</h3>
+                        <p class="text-sm opacity-80">Práctica con presión de tiempo</p>
+                    </button>
+                    <button onclick="changeView('cases')" class="p-6 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-left">
+                        <div class="text-3xl mb-2">🧠</div>
+                        <h3 class="font-bold text-lg">Casos Reales</h3>
+                        <p class="text-sm opacity-80">Aprende de situaciones reales</p>
+                    </button>
+                </div>
+
+                <!-- Barra de progreso -->
+                <div class="p-6 rounded-lg bg-gray-800">
+                    <h3 class="font-bold text-lg mb-4">PROGRESO GENERAL</h3>
+                    <div class="w-full bg-gray-700 rounded-full h-4">
+                        <div id="progressBar" class="progress-bar bg-gradient-to-r from-cyan-500 to-blue-500 h-4 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista Catálogo -->
+        <div id="catalogView" class="view-content hidden">
+            <h2 class="text-2xl font-bold mb-4">📚 Catálogo de Fallas</h2>
+            
+            <!-- Búsqueda -->
+            <div class="mb-4">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar problema, síntoma o causa..." 
+                    class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 focus:ring-2 focus:ring-cyan-500"
+                    oninput="filterProblems()">
+            </div>
+
+            <!-- Filtros -->
+            <div class="mb-4 flex gap-2 flex-wrap">
+                <button onclick="filterSeverity('all')" class="filter-btn" data-severity="all">🔍 Todos</button>
+                <button onclick="filterSeverity('critical')" class="filter-btn" data-severity="critical">🔴 Crítico</button>
+                <button onclick="filterSeverity('warning')" class="filter-btn" data-severity="warning">🟡 Precaución</button>
+            </div>
+
+            <!-- Lista de problemas -->
+            <div id="problemsList" class="space-y-4"></div>
+        </div>
+
+        <!-- Vista Entrenamiento -->
+        <div id="trainingView" class="view-content hidden">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold">⚡ Modo Entrenamiento</h2>
+                <button id="startTrainingBtn" onclick="startTraining()" class="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg font-bold hover:from-orange-600 hover:to-red-600">
+                    🚀 INICIAR SESIÓN
+                </button>
+            </div>
+            
+            <!-- Pantalla de bienvenida -->
+            <div id="trainingWelcome" class="p-6 rounded-lg bg-gray-800 text-center">
+                <div class="text-6xl mb-4">⚡</div>
+                <h3 class="text-2xl font-bold mb-2">Modo Entrenamiento</h3>
+                <p class="text-gray-400 mb-6">Practica identificación rápida de problemas con presión de tiempo</p>
+                <div class="bg-blue-900/30 border border-blue-500 rounded-lg p-4 mb-6 text-left">
+                    <h4 class="font-bold mb-2">📋 CÓMO FUNCIONA:</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><strong>1.</strong> Haz clic en "INICIAR SESIÓN"</li>
+                        <li><strong>2.</strong> Aparecerá un problema aleatorio del catálogo</li>
+                        <li><strong>3.</strong> Tienes 3 minutos para estudiarlo</li>
+                        <li><strong>4.</strong> Lee las causas y acciones recomendadas</li>
+                        <li><strong>5.</strong> Haz clic en "SIGUIENTE" para otro problema</li>
+                        <li><strong>6.</strong> Ganas +25 XP por cada problema revisado</li>
+                    </ul>
+                </div>
+                <ul class="text-left max-w-md mx-auto space-y-2 mb-6">
+                    <li>⚡ 3 minutos por problema</li>
+                    <li>🎯 Problemas aleatorios</li>
+                    <li>🏆 +25 XP por problema completado</li>
+                    <li>🔥 Simula presión de situaciones reales</li>
+                </ul>
+            </div>
+
+            <!-- Pantalla de entrenamiento activo -->
+            <div id="trainingActive" class="hidden">
+                <!-- Timer y controles -->
+                <div class="p-6 rounded-lg bg-gray-800 mb-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="text-4xl">⏱️</div>
+                            <div>
+                                <p class="text-sm text-gray-400">TIEMPO RESTANTE</p>
+                                <p id="timerDisplay" class="text-3xl font-bold text-cyan-400">3:00</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-400">PROBLEMAS COMPLETADOS</p>
+                            <p id="trainingCount" class="text-3xl font-bold text-green-400">0</p>
+                        </div>
+                        <button onclick="stopTraining()" class="px-6 py-3 bg-red-500 rounded-lg hover:bg-red-600 font-bold">
+                            ⏹️ DETENER
+                        </button>
+                    </div>
+                    <div class="mt-4 w-full bg-gray-700 rounded-full h-2">
+                        <div id="timerBar" class="bg-gradient-to-r from-green-500 to-red-500 h-2 rounded-full transition-all" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <!-- Problema actual -->
+                <div id="trainingProblem" class="p-6 rounded-lg bg-gray-800">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+
+                <!-- Botón siguiente -->
+                <div class="mt-4 text-center">
+                    <button onclick="nextTrainingProblem()" class="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg hover:from-cyan-600 hover:to-blue-600 font-bold text-lg">
+                        ➡️ SIGUIENTE PROBLEMA (+25 XP)
+                    </button>
+                    <p class="text-sm text-gray-400 mt-2">Estudia el problema y avanza cuando estés listo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista Casos -->
+        <div id="casesView" class="view-content hidden">
+            <h2 class="text-2xl font-bold mb-6">🧠 CASOS REALES DE OPERACIÓN</h2>
+            <div id="casesList" class="space-y-6"></div>
+        </div>
+
+        <!-- Vista Objetivos -->
+        <div id="goalsView" class="view-content hidden">
+            <div class="p-6 rounded-lg bg-gray-800">
+                <h2 class="text-2xl font-bold mb-4">🎯 Mis Objetivos de Aprendizaje</h2>
+                <p class="text-gray-400 mb-6">Establece metas personales para tu desarrollo como operador</p>
+                
+                <!-- Guía de cómo establecer objetivos -->
+                <div class="bg-blue-900/30 border border-blue-500 rounded-lg p-4 mb-6">
+                    <h3 class="font-bold mb-2">💡 GUÍA PARA ESTABLECER OBJETIVOS EFECTIVOS:</h3>
+                    <div class="text-sm space-y-2">
+                        <p><strong>Buenos ejemplos:</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-2">
+                            <li>"Dominar todos los problemas críticos del motor esta semana"</li>
+                            <li>"Completar los 3 casos narrativos antes del viernes"</li>
+                            <li>"Revisar 5 problemas de frenos por día"</li>
+                            <li>"Alcanzar nivel Aprendiz (300 XP) este mes"</li>
+                        </ul>
+                        <p class="mt-2"><strong>Características de un buen objetivo:</strong></p>
+                        <ul class="list-disc list-inside space-y-1 ml-2">
+                            <li>✅ Específico (qué sistema o tema)</li>
+                            <li>✅ Medible (cantidad de problemas)</li>
+                            <li>✅ Con plazo (esta semana, hoy, este mes)</li>
+                            <li>✅ Alcanzable (realista según tu tiempo)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Formulario para nuevo objetivo -->
+                <div id="goalForm" class="hidden mb-6 p-4 rounded-lg bg-gray-700 border-2 border-cyan-500">
+                    <h3 class="font-bold mb-3">📝 Crear Nuevo Objetivo</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-sm mb-1">¿Qué quieres aprender?</label>
+                            <input type="text" id="goalTitle" placeholder="Ej: Dominar problemas de frenos críticos" 
+                                class="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600">
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-1">Sistema relacionado:</label>
+                            <select id="goalSystem" class="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600">
+                                <option value="todos">Todos los sistemas</option>
+                                <option value="motor">⚙️ Motor</option>
+                                <option value="frenos">🛑 Frenos</option>
+                                <option value="direccion">🎯 Dirección</option>
+                                <option value="hidraulico">💧 Sistema Hidráulico</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm mb-1">Meta de problemas a revisar:</label>
+                            <input type="number" id="goalTarget" placeholder="5" value="5" min="1" max="50"
+                                class="w-full px-3 py-2 rounded bg-gray-800 border border-gray-600">
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="saveGoal()" class="flex-1 px-4 py-2 bg-cyan-500 rounded hover:bg-cyan-600">
+                                💾 Guardar Objetivo
+                            </button>
+                            <button onclick="cancelGoal()" class="px-4 py-2 bg-gray-600 rounded hover:bg-gray-500">
+                                ❌ Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón agregar -->
+                <button onclick="showGoalForm()" id="addGoalBtn" class="w-full p-4 bg-cyan-500 rounded-lg hover:bg-cyan-600 text-left font-bold mb-6">
+                    + Agregar Nuevo Objetivo
+                </button>
+
+                <!-- Lista de objetivos -->
+                <div id="goalsList" class="space-y-4">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+
+                <!-- Mensaje cuando no hay objetivos -->
+                <div id="noGoalsMsg" class="text-center py-12 text-gray-400">
+                    <div class="text-6xl mb-4">🎯</div>
+                    <p class="text-lg mb-2">No tienes objetivos todavía</p>
+                    <p class="text-sm">Haz clic en "Agregar Nuevo Objetivo" para comenzar</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista Diario -->
+        <div id="journeyView" class="view-content hidden">
+            <div class="p-6 rounded-lg bg-gray-800">
+                <h2 class="text-2xl font-bold mb-4">✏️ Mi Diario de Aprendizaje</h2>
+                <p class="text-gray-400 mb-6">Reflexiona sobre lo que has aprendido</p>
+                <textarea id="journalText" class="w-full p-4 rounded-lg bg-gray-700 min-h-[200px]" 
+                    placeholder="¿Qué aprendiste hoy? ¿Cómo lo aplicarías en terreno? ¿Qué dudas te quedan?"></textarea>
+                <button onclick="saveJournal()" class="mt-4 px-6 py-3 bg-cyan-500 rounded-lg hover:bg-cyan-600">
+                    💾 Guardar Entrada
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Base de datos de fallas
+        const faultDatabase = {
+            motor: {
+                title: "MOTOR",
+                icon: "⚙️",
+                problems: [
+                    {
+                        id: "M1",
+                        observation: "Falla del arranque del motor",
+                        severity: "critical",
+                        causes: ["Combustible de baja calidad", "Escapes de aire en las líneas de succión", "Líneas de combustible tapados", "Desperfecto de la bomba o inyectores"],
+                        actions: ["Asegúrese que el camión esté estacionado correctamente", "Apague el motor", "Revise el nivel de aceite del motor", "Notifique a su supervisor"],
+                        estimatedTime: "5-10 min"
+                    },
+                    {
+                        id: "M2",
+                        observation: "Humo negro excesivo en marcha lenta",
+                        severity: "warning",
+                        causes: ["Líneas de combustible tapadas", "Desperfecto de inyectores", "Anillos del pistón dañados"],
+                        actions: ["Estacionar correctamente", "Apagar el motor", "Revisar filtro de aire", "Notificar supervisor"],
+                        estimatedTime: "3-5 min"
+                    },
+                    {
+                        id: "M3",
+                        observation: "Humo blanco excesivo persistente",
+                        severity: "warning",
+                        causes: ["Combustible de baja calidad", "Inyectores defectuosos", "Temperatura del refrigerante baja"],
+                        actions: ["Estacionar", "Apagar motor", "Revisar aceite", "Notificar"],
+                        estimatedTime: "3-5 min"
+                    },
+                    {
+                        id: "M4",
+                        observation: "Pérdida de potencia",
+                        severity: "critical",
+                        causes: ["Combustible de baja calidad", "Entrada de aire tapada", "Sobrecarga del motor"],
+                        actions: ["Estacionar", "Apagar", "Revisar aceite", "Notificar"],
+                        estimatedTime: "5-10 min"
+                    }
+                ]
+            },
+            frenos: {
+                title: "FRENOS",
+                icon: "🛑",
+                problems: [
+                    {
+                        id: "F1",
+                        observation: "Frenos trabados",
+                        severity: "critical",
+                        causes: ["Solenoide sin energía", "Conexiones invertidas", "Línea tapada"],
+                        actions: ["NO MANEJE", "Bloquee ruedas", "Apague motor", "Notifique"],
+                        estimatedTime: "Inmediato"
+                    },
+                    {
+                        id: "F2",
+                        observation: "Baja presión de frenos",
+                        severity: "critical",
+                        causes: ["Circuito no funciona", "Acumuladores", "Fuga"],
+                        actions: ["DETENGA INMEDIATAMENTE", "NO continúe", "Notifique"],
+                        estimatedTime: "Inmediato"
+                    }
+                ]
+            },
+            direccion: {
+                title: "DIRECCIÓN",
+                icon: "🎯",
+                problems: [
+                    {
+                        id: "D1",
+                        observation: "Dirección lenta o dura",
+                        severity: "critical",
+                        causes: ["Eje sobrecargado", "Amplificador mal", "Bomba defectuosa"],
+                        actions: ["Salir del camino", "Bloquear", "Apagar", "Notificar"],
+                        estimatedTime: "5-10 min"
+                    }
+                ]
+            }
+        };
+
+        // Casos narrativos
+        const narrativeCases = [
+            {
+                id: "CASE1",
+                title: "El Turno de Juan - Humo Blanco",
+                story: "6:00 AM. Juan detecta humo blanco persistente. Temperatura normal pero humo continúa. Supervisor a 15 min.",
+                question: "¿Qué debe hacer Juan?",
+                options: [
+                    { text: "Continuar operando", correct: false, feedback: "❌ Riesgoso - puede causar daño severo" },
+                    { text: "Apagar y llamar supervisor", correct: true, feedback: "✅ Correcto - seguridad primero" },
+                    { text: "Acelerar para quemar humo", correct: false, feedback: "❌ Peligroso - empeora situación" }
+                ],
+                xpReward: 50
+            },
+            {
+                id: "CASE2",
+                title: "Crisis en Rampa - Frenos",
+                story: "María en rampa 8%, pedal esponjoso, luz de advertencia. 18 km/h, cruce a 200m.",
+                question: "¿Secuencia correcta?",
+                options: [
+                    { text: "Freno estacionamiento", correct: false, feedback: "❌ Fatal - puede volcar" },
+                    { text: "Retardo + Radio + Escape", correct: true, feedback: "✅ Correcto - controlar y comunicar" },
+                    { text: "Acelerar para salir", correct: false, feedback: "❌ Suicida - pérdida de control" }
+                ],
+                xpReward: 100
+            }
+        ];
+
+        // Estado de la aplicación
+        let appState = {
+            currentView: 'dashboard',
+            xp: 0,
+            level: 1,
+            checkedItems: [],
+            achievements: [],
+            favorites: [],
+            darkMode: true,
+            currentSeverityFilter: 'all',
+            trainingActive: false,
+            trainingTimer: 180,
+            trainingInterval: null,
+            trainingCount: 0,
+            currentTrainingProblem: null,
+            goals: []
+        };
+
+        // Inicializar aplicación
+        function initApp() {
+            loadState();
+            updateUI();
+            renderProblems();
+            renderCases();
+            renderGoals();
+            updateNavButtons();
+        }
+
+        // Cambiar vista
+        function changeView(view) {
+            appState.currentView = view;
+            document.querySelectorAll('.view-content').forEach(function(v) {
+                v.classList.add('hidden');
+            });
+            document.getElementById(view + 'View').classList.remove('hidden');
+            updateNavButtons();
+            
+            // Actualizar contenido según vista
+            if (view === 'goals') {
+                renderGoals();
+            }
+            
+            saveState();
+        }
+
+        // Actualizar botones de navegación
+        function updateNavButtons() {
+            document.querySelectorAll('.nav-btn').forEach(function(btn) {
+                if (btn.dataset.view === appState.currentView) {
+                    btn.classList.add('bg-cyan-500', 'text-white');
+                    btn.classList.remove('bg-gray-700');
+                } else {
+                    btn.classList.remove('bg-cyan-500', 'text-white');
+                    btn.classList.add('bg-gray-700', 'hover:bg-gray-600');
+                }
+            });
+        }
+
+        // Renderizar problemas
+        function renderProblems() {
+            const container = document.getElementById('problemsList');
+            container.innerHTML = '';
+            
+            Object.entries(faultDatabase).forEach(function([systemId, system]) {
+                system.problems.forEach(function(problem) {
+                    const severityClass = problem.severity === 'critical' ? 'border-red-500' : 'border-yellow-500';
+                    const severityIcon = problem.severity === 'critical' ? '🔴' : '🟡';
+                    const isChecked = appState.checkedItems.includes(problem.id);
+                    
+                    const card = document.createElement('div');
+                    card.className = `p-5 rounded-lg bg-gray-800 border-l-4 ${severityClass}`;
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="text-xs px-2 py-1 rounded bg-${problem.severity === 'critical' ? 'red' : 'yellow'}-500">${severityIcon} ${problem.severity === 'critical' ? 'CRÍTICO' : 'PRECAUCIÓN'}</span>
+                                <span class="text-xs text-gray-400 ml-2">${system.title}</span>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">${problem.observation}</h3>
+                        <p class="text-sm text-gray-400 mb-3">⏱️ ${problem.estimatedTime}</p>
+                        <div class="mb-3">
+                            <h4 class="font-semibold text-sm mb-1">⚠️ CAUSAS:</h4>
+                            <ul class="text-sm space-y-1">
+                                ${problem.causes.map(function(c) { return `<li>• ${c}</li>`; }).join('')}
+                            </ul>
+                        </div>
+                        <div class="p-3 rounded-lg bg-gray-700 mb-3">
+                            <h4 class="font-semibold text-sm mb-1">✅ ACCIONES:</h4>
+                            <ol class="text-sm space-y-1">
+                                ${problem.actions.map(function(a, i) { return `<li>${i+1}. ${a}</li>`; }).join('')}
+                            </ol>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="checkProblem('${problem.id}')" class="px-4 py-2 rounded-lg ${isChecked ? 'bg-green-500' : 'bg-gray-600'} hover:bg-green-600">
+                                ${isChecked ? '✓' : '☐'} Revisado
+                            </button>
+                            <button onclick="speakText(\`${problem.observation}\`)" class="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600">
+                                🔊 Leer
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        // Renderizar casos
+        function renderCases() {
+            const container = document.getElementById('casesList');
+            container.innerHTML = '';
+            
+            narrativeCases.forEach(function(case_) {
+                const card = document.createElement('div');
+                card.className = 'p-6 rounded-lg bg-gray-800';
+                card.innerHTML = `
+                    <h3 class="text-xl font-bold mb-2">${case_.title}</h3>
+                    <span class="text-xs px-2 py-1 rounded bg-purple-500">+${case_.xpReward} XP</span>
+                    <div class="p-4 rounded-lg bg-gray-700 my-4">
+                        <p class="text-sm">${case_.story}</p>
+                    </div>
+                    <p class="font-bold mb-3">${case_.question}</p>
+                    <div class="space-y-2">
+                        ${case_.options.map(function(opt, idx) {
+                            return `
+                                <button onclick="answerCase('${case_.id}', ${idx})" class="w-full text-left p-4 rounded-lg bg-gray-700 hover:bg-gray-600">
+                                    ${opt.text}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Marcar problema como revisado
+        function checkProblem(id) {
+            if (!appState.checkedItems.includes(id)) {
+                appState.checkedItems.push(id);
+                addXP(10);
+                showNotification('✓ Problema marcado - +10 XP', 'success');
+            }
+            saveState();
+            updateUI();
+            renderProblems();
+        }
+
+        // Responder caso
+        function answerCase(caseId, optionIdx) {
+            const case_ = narrativeCases.find(function(c) { return c.id === caseId; });
+            const option = case_.options[optionIdx];
+            
+            if (option.correct) {
+                addXP(case_.xpReward);
+                showNotification(option.feedback + ` +${case_.xpReward} XP`, 'success');
+            } else {
+                showNotification(option.feedback, 'warning');
+            }
+        }
+
+        // Sistema de XP
+        function addXP(amount) {
+            appState.xp += amount;
+            const newLevel = calculateLevel(appState.xp);
+            if (newLevel > appState.level) {
+                appState.level = newLevel;
+                showNotification(`🎉 ¡NIVEL ${newLevel}! ${getLevelTitle(newLevel)}`, 'success');
+            }
+            saveState();
+            updateUI();
+        }
+
+        function calculateLevel(xp) {
+            if (xp < 100) return 1;
+            if (xp < 300) return 2;
+            if (xp < 600) return 3;
+            if (xp < 1000) return 4;
+            return 5;
+        }
+
+        function getLevelTitle(level) {
+            const titles = {1: '🔰 NOVATO', 2: '⚙️ APRENDIZ', 3: '🔧 COMPETENTE', 4: '⭐ EXPERTO', 5: '🏆 MAESTRO'};
+            return titles[level] || '🔰 NOVATO';
+        }
+
+        // Actualizar UI
+        function updateUI() {
+            document.getElementById('totalXP').textContent = appState.xp;
+            document.getElementById('userLevelTitle').textContent = getLevelTitle(appState.level);
+            
+            const totalProblems = Object.values(faultDatabase).reduce((sum, sys) => sum + sys.problems.length, 0);
+            const progress = (appState.checkedItems.length / totalProblems) * 100;
+            
+            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('checkedCount').textContent = `${appState.checkedItems.length}/${totalProblems}`;
+            document.getElementById('achievementCount').textContent = `${appState.achievements.length}/8`;
+        }
+
+        // Notificaciones
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notifications');
+            const notif = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'warning' ? 'bg-yellow-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            
+            notif.className = `p-4 rounded-lg shadow-lg animate-slide-in ${bgColor} text-white`;
+            notif.textContent = message;
+            container.appendChild(notif);
+            
+            setTimeout(() => notif.remove(), 3000);
+        }
+
+        // Narración de audio
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-CL';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+                showNotification('🔊 Leyendo...', 'info');
+            } else {
+                showNotification('Audio no disponible en este navegador', 'error');
+            }
+        }
+
+        // Entrenamiento
+        function startTraining() {
+            appState.trainingActive = true;
+            appState.trainingTimer = 180;
+            appState.trainingCount = 0;
+            
+            // Ocultar bienvenida, mostrar entrenamiento
+            document.getElementById('trainingWelcome').classList.add('hidden');
+            document.getElementById('trainingActive').classList.remove('hidden');
+            document.getElementById('startTrainingBtn').classList.add('hidden');
+            
+            // Cargar primer problema
+            loadRandomProblem();
+            
+            // Iniciar timer
+            startTimer();
+            
+            showNotification('🎯 Entrenamiento iniciado - ¡Concéntrate!', 'info');
+        }
+
+        function stopTraining() {
+            appState.trainingActive = false;
+            clearInterval(appState.trainingInterval);
+            
+            // Mostrar bienvenida, ocultar entrenamiento
+            document.getElementById('trainingWelcome').classList.remove('hidden');
+            document.getElementById('trainingActive').classList.add('hidden');
+            document.getElementById('startTrainingBtn').classList.remove('hidden');
+            
+            showNotification(`📊 Sesión terminada. Completaste ${appState.trainingCount} problemas`, 'success');
+        }
+
+        function loadRandomProblem() {
+            const allProblems = [];
+            Object.entries(faultDatabase).forEach(function([systemId, system]) {
+                system.problems.forEach(function(problem) {
+                    allProblems.push({...problem, systemId: systemId, systemTitle: system.title});
+                });
+            });
+            
+            const randomIndex = Math.floor(Math.random() * allProblems.length);
+            appState.currentTrainingProblem = allProblems[randomIndex];
+            
+            displayTrainingProblem();
+        }
+
+        function displayTrainingProblem() {
+            const problem = appState.currentTrainingProblem;
+            const severityClass = problem.severity === 'critical' ? 'bg-red-500' : 'bg-yellow-500';
+            const severityIcon = problem.severity === 'critical' ? '🔴' : '🟡';
+            const severityLabel = problem.severity === 'critical' ? 'CRÍTICO' : 'PRECAUCIÓN';
+            
+            const container = document.getElementById('trainingProblem');
+            container.innerHTML = `
+                <div class="mb-4">
+                    <span class="px-3 py-1 rounded text-xs font-bold ${severityClass} text-white">
+                        ${severityIcon} ${severityLabel}
+                    </span>
+                    <span class="ml-2 text-sm text-gray-400">${problem.systemTitle} • ${problem.estimatedTime}</span>
+                </div>
+                
+                <h3 class="text-2xl font-bold mb-4">📋 ${problem.observation}</h3>
+                
+                <div class="bg-yellow-900/30 border border-yellow-500 rounded-lg p-4 mb-4">
+                    <h4 class="font-semibold mb-2 flex items-center gap-2">
+                        ⚠️ POSIBLES CAUSAS:
+                    </h4>
+                    <ul class="space-y-1">
+                        ${problem.causes.map(function(cause) {
+                            return `<li class="text-sm pl-4">• ${cause}</li>`;
+                        }).join('')}
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-900/30 border border-blue-500 rounded-lg p-4">
+                    <h4 class="font-semibold mb-2 flex items-center gap-2">
+                        ✅ ACCIONES RECOMENDADAS:
+                    </h4>
+                    <ol class="space-y-1">
+                        ${problem.actions.map(function(action, idx) {
+                            return `<li class="text-sm pl-4"><strong>${idx + 1}.</strong> ${action}</li>`;
+                        }).join('')}
+                    </ol>
+                </div>
+                
+                <div class="mt-4 p-3 bg-gray-700 rounded-lg">
+                    <p class="text-sm text-gray-300">
+                        <strong>💡 CONSEJO:</strong> En una situación real, ${problem.severity === 'critical' ? 'este problema requiere acción inmediata. NO continúes operando.' : 'monitorea la situación y reporta al supervisor.'}
+                    </p>
+                </div>
+            `;
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            
+            appState.trainingInterval = setInterval(function() {
+                appState.trainingTimer--;
+                updateTimerDisplay();
+                
+                if (appState.trainingTimer <= 0) {
+                    showNotification('⏰ ¡Tiempo agotado! Avanza al siguiente', 'warning');
+                    appState.trainingTimer = 180; // Reiniciar para siguiente problema
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(appState.trainingTimer / 60);
+            const seconds = appState.trainingTimer % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const percent = (appState.trainingTimer / 180) * 100;
+            document.getElementById('timerBar').style.width = percent + '%';
+            
+            document.getElementById('trainingCount').textContent = appState.trainingCount;
+        }
+
+        function nextTrainingProblem() {
+            appState.trainingCount++;
+            appState.trainingTimer = 180; // Reiniciar timer
+            addXP(25);
+            showNotification('✅ +25 XP ganados • Siguiente problema cargado', 'success');
+            loadRandomProblem();
+        }
+
+        // Guardar diario
+        function saveJournal() {
+            const text = document.getElementById('journalText').value;
+            if (text.trim()) {
+                showNotification('💾 Entrada guardada', 'success');
+                addXP(10);
+                document.getElementById('journalText').value = '';
+            }
+        }
+
+        // Sistema de Objetivos
+        function showGoalForm() {
+            document.getElementById('goalForm').classList.remove('hidden');
+            document.getElementById('addGoalBtn').classList.add('hidden');
+        }
+
+        function cancelGoal() {
+            document.getElementById('goalForm').classList.add('hidden');
+            document.getElementById('addGoalBtn').classList.remove('hidden');
+            // Limpiar campos
+            document.getElementById('goalTitle').value = '';
+            document.getElementById('goalTarget').value = '5';
+        }
+
+        function saveGoal() {
+            const title = document.getElementById('goalTitle').value.trim();
+            const system = document.getElementById('goalSystem').value;
+            const target = parseInt(document.getElementById('goalTarget').value);
+            
+            if (!title) {
+                showNotification('❌ Debes escribir un objetivo', 'error');
+                return;
+            }
+            
+            const newGoal = {
+                id: Date.now(),
+                title: title,
+                system: system,
+                target: target,
+                progress: 0,
+                created: new Date().toLocaleDateString('es-CL')
+            };
+            
+            appState.goals.push(newGoal);
+            saveState();
+            
+            addXP(30);
+            showNotification('✅ Objetivo creado - +30 XP', 'success');
+            
+            cancelGoal();
+            renderGoals();
+        }
+
+        function renderGoals() {
+            const container = document.getElementById('goalsList');
+            const noGoalsMsg = document.getElementById('noGoalsMsg');
+            
+            if (appState.goals.length === 0) {
+                noGoalsMsg.classList.remove('hidden');
+                return;
+            }
+            
+            noGoalsMsg.classList.add('hidden');
+            container.innerHTML = '';
+            
+            appState.goals.forEach(function(goal) {
+                const progressPercent = Math.min((goal.progress / goal.target) * 100, 100);
+                const isComplete = goal.progress >= goal.target;
+                
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-lg ${isComplete ? 'bg-green-900/30 border-2 border-green-500' : 'bg-gray-700'}`;
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg ${isComplete ? 'line-through text-green-400' : ''}">${goal.title}</h3>
+                            <p class="text-sm text-gray-400">Sistema: ${goal.system} • Creado: ${goal.created}</p>
+                        </div>
+                        ${isComplete ? '<div class="text-3xl">✅</div>' : ''}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>Progreso</span>
+                            <span class="font-bold">${goal.progress} / ${goal.target} problemas</span>
+                        </div>
+                        <div class="w-full bg-gray-600 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all" 
+                                style="width: ${progressPercent}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        ${!isComplete ? `
+                            <button onclick="incrementGoalProgress('${goal.id}')" 
+                                class="flex-1 px-4 py-2 bg-cyan-500 rounded hover:bg-cyan-600">
+                                ➕ Marcar 1 problema
+                            </button>
+                        ` : `
+                            <div class="flex-1 text-center py-2 text-green-400 font-bold">
+                                🎉 ¡OBJETIVO COMPLETADO! +50 XP
+                            </div>
+                        `}
+                        <button onclick="deleteGoal('${goal.id}')" 
+                            class="px-4 py-2 bg-red-500 rounded hover:bg-red-600">
+                            🗑️
+                        </button>
+                    </div>
+                    
+                    ${!isComplete ? `
+                        <div class="mt-3 p-2 bg-blue-900/30 rounded text-xs">
+                            <strong>💡 TIP:</strong> Ve al Catálogo y revisa ${goal.target - goal.progress} problemas más para completar este objetivo
+                        </div>
+                    ` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function incrementGoalProgress(goalId) {
+            const goal = appState.goals.find(function(g) { return g.id == goalId; });
+            if (!goal) return;
+            
+            goal.progress++;
+            
+            if (goal.progress >= goal.target) {
+                // Objetivo completado
+                addXP(50);
+                showNotification('🎉 ¡OBJETIVO COMPLETADO! +50 XP', 'success');
+            } else {
+                addXP(5);
+                showNotification(`✅ Progreso actualizado - +5 XP (${goal.target - goal.progress} restantes)`, 'success');
+            }
+            
+            saveState();
+            renderGoals();
+            updateUI();
+        }
+
+        function deleteGoal(goalId) {
+            if (confirm('¿Eliminar este objetivo?')) {
+                appState.goals = appState.goals.filter(function(g) { return g.id != goalId; });
+                saveState();
+                renderGoals();
+                showNotification('🗑️ Objetivo eliminado', 'info');
+            }
+        }
+
+        // Filtros
+        function filterSeverity(severity) {
+            appState.currentSeverityFilter = severity;
+            renderProblems();
+            
+            document.querySelectorAll('.filter-btn').forEach(function(btn) {
+                if (btn.dataset.severity === severity) {
+                    btn.classList.add('bg-cyan-500', 'text-white');
+                } else {
+                    btn.classList.remove('bg-cyan-500', 'text-white');
+                    btn.classList.add('bg-gray-700');
+                }
+            });
+        }
+
+        function filterProblems() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            // Implementar búsqueda aquí
+            renderProblems();
+        }
+
+        // Exportar PDF
+        function exportToPDF() {
+            window.print();
+            showNotification('📄 Generando PDF...', 'info');
+        }
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            appState.darkMode = !appState.darkMode;
+            document.body.classList.toggle('bg-gray-900');
+            document.body.classList.toggle('bg-gray-50');
+            document.getElementById('themeIcon').textContent = appState.darkMode ? '☀️' : '🌙';
+            saveState();
+        }
+
+        // Persistencia
+        function saveState() {
+            localStorage.setItem('caexState', JSON.stringify(appState));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('caexState');
+            if (saved) {
+                appState = {...appState, ...JSON.parse(saved)};
+            }
+        }
+
+        // Estilos adicionales para botones
+        document.addEventListener('DOMContentLoaded', () => {
+            const style = document.createElement('style');
+            style.textContent = `
+                .nav-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; transition: all 0.3s; white-space: nowrap; }
+                .filter-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; background: #374151; transition: all 0.3s; }
+            `;
+            document.head.appendChild(style);
+            
+            initApp();
+        });
+    </script>
+</body>
+</html>
