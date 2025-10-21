@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 5: Gestión de Incidentes y Emergencias | Controlador de Terreno</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #FF6B35; --secondary: #004E89; --accent: #F7B801;
+            --dark-bg: #0A0E27; --card-bg: #1A1F3A; --sidebar-bg: #141829;
+            --text-primary: #EAEAEA; --text-secondary: #B0B3C1;
+            --success: #00D9A5; --warning: #FFC107; --danger: #FF5252; --info: #42A5F5;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1123 100%);
+            color: var(--text-primary); overflow-x: hidden; line-height: 1.6;
+        }
+        
+        .header {
+            position: fixed; top: 0; left: 0; right: 0; height: 80px;
+            background: rgba(20, 24, 41, 0.95); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 107, 53, 0.2);
+            display: flex; align-items: center; padding: 0 40px; z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header-logo { height: 50px; margin-right: 30px; }
+        .header-title { flex: 1; }
+        .header-title h1 { font-family: 'Exo 2', sans-serif; font-size: 24px; font-weight: 700; color: var(--primary); margin: 0; letter-spacing: -0.5px; }
+        .header-title p { font-size: 13px; color: var(--text-secondary); margin: 2px 0 0 0; }
+        .header-progress { display: flex; align-items: center; gap: 15px; }
+        
+        .progress-circle { position: relative; width: 50px; height: 50px; }
+        .progress-circle svg { transform: rotate(-90deg); }
+        .progress-circle circle { fill: none; stroke-width: 4; }
+        .progress-circle .bg-circle { stroke: rgba(255, 107, 53, 0.2); }
+        .progress-circle .progress-ring { stroke: var(--primary); stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+        .progress-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px; font-weight: 700; color: var(--primary); }
+        
+        .container { display: flex; margin-top: 80px; height: calc(100vh - 80px); }
+        
+        .sidebar {
+            width: 280px; background: var(--sidebar-bg);
+            border-right: 1px solid rgba(255, 107, 53, 0.15);
+            overflow-y: auto; position: fixed; left: 0; top: 80px; bottom: 0; padding: 30px 0;
+        }
+        
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+        
+        .nav-item {
+            padding: 16px 30px; display: flex; align-items: center; gap: 15px;
+            cursor: pointer; transition: all 0.3s ease; border-left: 3px solid transparent; position: relative;
+        }
+        
+        .nav-item:hover { background: rgba(255, 107, 53, 0.1); border-left-color: var(--primary); }
+        .nav-item.active { background: rgba(255, 107, 53, 0.15); border-left-color: var(--primary); }
+        .nav-item.active::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+            background: var(--primary); box-shadow: 0 0 20px var(--primary);
+        }
+        
+        .nav-icon { font-size: 24px; width: 24px; text-align: center; }
+        .nav-text { flex: 1; }
+        .nav-text h3 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+        .nav-text p { font-size: 11px; color: var(--text-secondary); }
+        
+        .nav-check {
+            width: 20px; height: 20px; border: 2px solid var(--text-secondary);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 12px; transition: all 0.3s ease;
+        }
+        
+        .nav-item.completed .nav-check { background: var(--success); border-color: var(--success); }
+        
+        .main-content {
+            margin-left: 280px; flex: 1; padding: 40px 60px 100px;
+            overflow-y: auto; scroll-behavior: smooth;
+        }
+        
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-track { background: transparent; }
+        .main-content::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        
+        .content-section { display: none; animation: fadeIn 0.5s ease; }
+        .content-section.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background: var(--card-bg); border-radius: 16px; padding: 30px; margin-bottom: 30px;
+            border: 1px solid rgba(255, 107, 53, 0.1); transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 8px 40px rgba(255, 107, 53, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .card h2 { font-family: 'Exo 2', sans-serif; font-size: 28px; color: var(--primary); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .card h3 { font-family: 'Exo 2', sans-serif; font-size: 22px; color: var(--accent); margin: 30px 0 15px; }
+        .card h4 { font-size: 18px; color: var(--info); margin: 20px 0 12px; }
+        .card p { margin-bottom: 15px; color: var(--text-secondary); line-height: 1.8; }
+        .card strong { color: var(--text-primary); }
+        
+        .alert {
+            padding: 20px 25px; border-radius: 12px; margin: 20px 0;
+            border-left: 4px solid; display: flex; align-items: flex-start; gap: 15px;
+        }
+        
+        .alert-icon { font-size: 24px; flex-shrink: 0; }
+        .alert-critical { background: rgba(255, 82, 82, 0.1); border-color: var(--danger); }
+        .alert-warning { background: rgba(255, 193, 7, 0.1); border-color: var(--warning); }
+        .alert-info { background: rgba(66, 165, 245, 0.1); border-color: var(--info); }
+        .alert-success { background: rgba(0, 217, 165, 0.1); border-color: var(--success); }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px; padding: 20px; margin: 20px 0;
+            font-family: 'JetBrains Mono', monospace; font-size: 13px;
+            line-height: 1.8; overflow-x: auto; color: #A8E6CF;
+        }
+        
+        .accordion { margin: 20px 0; }
+        .accordion-item {
+            background: rgba(26, 31, 58, 0.6); border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px; margin-bottom: 15px; overflow: hidden; transition: all 0.3s ease;
+        }
+        
+        .accordion-header {
+            padding: 20px 25px; cursor: pointer; display: flex;
+            align-items: center; justify-content: space-between; user-select: none; transition: all 0.3s ease;
+        }
+        
+        .accordion-header:hover { background: rgba(255, 107, 53, 0.1); }
+        .accordion-title { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 600; }
+        .accordion-icon { font-size: 20px; transition: transform 0.3s ease; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+        
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+        .accordion-item.active .accordion-content { max-height: 5000px; }
+        .accordion-body { padding: 0 25px 25px; }
+        
+        ul, ol { margin: 15px 0 15px 25px; color: var(--text-secondary); }
+        li { margin: 8px 0; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid rgba(255, 107, 53, 0.1); }
+        th { background: rgba(255, 107, 53, 0.1); color: var(--primary); font-weight: 600; }
+        
+        .badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; margin: 0 5px;
+        }
+        
+        .badge-critical { background: var(--danger); color: white; }
+        .badge-high { background: var(--warning); color: #000; }
+        .badge-medium { background: var(--info); color: white; }
+        .badge-low { background: var(--success); color: white; }
+        
+        .eval-timer {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(0, 0, 0, 0.3); padding: 10px 20px;
+            border-radius: 12px; font-size: 24px; font-weight: 700;
+        }
+        
+        .eval-progress-bar {
+            width: 100%; height: 8px; background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px; overflow: hidden; margin-top: 10px;
+        }
+        
+        .eval-progress-fill { height: 100%; background: var(--success); transition: width 0.3s ease; }
+        
+        .question-card {
+            background: var(--card-bg); border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 16px; padding: 30px; margin-bottom: 20px;
+        }
+        
+        .option-btn {
+            width: 100%; text-align: left; padding: 16px 20px; margin: 10px 0;
+            background: var(--sidebar-bg); border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px; color: var(--text-primary); cursor: pointer;
+            transition: all 0.3s ease; font-size: 16px; font-family: 'Inter', sans-serif;
+        }
+        
+        .option-btn:hover { border-color: var(--primary); background: rgba(255, 107, 53, 0.1); }
+        .option-btn.selected { border-color: var(--primary); background: rgba(255, 107, 53, 0.2); }
+        
+        textarea {
+            width: 100%; min-height: 150px; padding: 15px;
+            background: var(--sidebar-bg); border: 2px solid rgba(255, 107, 53, 0.2);
+            border-radius: 12px; color: var(--text-primary);
+            font-family: 'Inter', sans-serif; font-size: 14px; resize: vertical;
+        }
+        
+        textarea:focus { outline: none; border-color: var(--primary); }
+        
+        .btn-primary {
+            padding: 16px 32px; background: linear-gradient(135deg, var(--primary), #c94d29);
+            color: white; border: none; border-radius: 12px; font-size: 16px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4); }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        
+        .btn-secondary {
+            padding: 16px 32px; background: var(--secondary); color: white;
+            border: none; border-radius: 12px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover { background: #003a6f; }
+        
+        .score-display { font-size: 80px; font-weight: 800; color: var(--primary); margin: 20px 0; }
+        
+        .pdf-download {
+            position: fixed; bottom: 40px; right: 40px;
+            background: linear-gradient(135deg, var(--primary), #ff8c5a);
+            color: white; border: none; border-radius: 50px; padding: 18px 35px;
+            font-size: 16px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+            display: flex; align-items: center; gap: 12px;
+            transition: all 0.3s ease; z-index: 999; font-family: 'Inter', sans-serif;
+        }
+        
+        .pdf-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.6);
+        }
+        
+        .pdf-download.generating { background: var(--success); pointer-events: none; }
+        
+        .char-counter {
+            text-align: right; font-size: 12px;
+            color: var(--text-secondary); margin-top: 5px;
+        }
+        
+        @media (max-width: 1024px) {
+            .sidebar { width: 240px; }
+            .main-content { margin-left: 240px; padding: 30px 40px 100px; }
+        }
+        
+        @media (max-width: 768px) {
+            .header { padding: 0 20px; }
+            .header-title h1 { font-size: 18px; }
+            .header-title p { display: none; }
+            .sidebar { width: 100%; position: relative; top: 0; height: auto; border-right: none; border-bottom: 1px solid rgba(255, 107, 53, 0.15); }
+            .main-content { margin-left: 0; padding: 20px; }
+            .pdf-download { bottom: 20px; right: 20px; padding: 15px 25px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo" style="width: 50px; height: 50px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800;">M5</div>
+        <div class="header-title">
+            <h1>Módulo 5: Gestión de Incidentes y Emergencias</h1>
+            <p>Sistema de Camiones Autónomos Mineros - Controlador de Terreno</p>
+        </div>
+        <div class="header-progress">
+            <div class="progress-circle">
+                <svg width="50" height="50">
+                    <circle class="bg-circle" cx="25" cy="25" r="20"></circle>
+                    <circle class="progress-ring" cx="25" cy="25" r="20" stroke-dasharray="125.6" stroke-dashoffset="125.6"></circle>
+                </svg>
+                <div class="progress-text">0%</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <nav>
+                <div class="nav-item active" data-section="intro">
+                    <span class="nav-icon">📚</span>
+                    <div class="nav-text">
+                        <h3>Introducción</h3>
+                        <p>Bienvenida al módulo</p>
+                    </div>
+                    <div class="nav-check"></div>
+                </div>
+                
+                <div class="nav-item" data-section="fundamentals">
+                    <span class="nav-icon">🧠</span>
+                    <div class="nav-text">
+                        <h3>Fundamentos</h3>
+                        <p>¿Por qué fallan?</p>
+                    </div>
+                    <div class="nav-check"></div>
+                </div>
+                
+                <div class="nav-item" data-section="fallas">
+                    <span class="nav-icon">⚠️</span>
+                    <div class="nav-text">
+                        <h3>Fallas Críticas</h3>
+                        <p>8 tipos principales</p>
+                    </div>
+                    <div class="nav-check"></div>
+                </div>
+                
+                <div class="nav-item" data-section="protocolos">
+                    <span class="nav-icon">🎯</span>
+                    <div class="nav-text">
+                        <h3>Protocolos</h3>
+                        <p>Toma de decisiones</p>
+                    </div>
+                    <div class="nav-check"></div>
+                </div>
+                
+                <div class="nav-item" data-section="comunicacion">
+                    <span class="nav-icon">📞</span>
+                    <div class="nav-text">
+                        <h3>Comunicación</h3>
+                        <p>Gestión en crisis</p>
+                    </div>
+                    <div class="nav-check"></div>
+                </div>
+                
+                <div class="nav-item" data-section="documentacion">
+                    <span class="nav-icon">📝</span>
+                    <div class="nav-text">
+                        <h3>Documentación</h3>
+                        <p>Registro forense</p>
+                    </div>
+                    <div class="nav-check"></div>
+                </div>
+                
+                <div class="nav-item" data-section="evaluacion">
+                    <span class="nav-icon">🏆</span>
+                    <div class="nav-text">
+                        <h3>Evaluación</h3>
+                        <p>Prueba final</p>
+                    </div>
+                    <div class="nav-check"></div>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="main-content" id="mainContent">
+            <!-- SECTION 1: INTRODUCCIÓN -->
+            <section class="content-section active" id="intro">
+                <div class="card">
+                    <h2>🎯 Bienvenida al Módulo 5</h2>
+                    <p><strong>Hola, futuro Controlador de Terreno:</strong></p>
+                    <p>Este módulo es el <strong>corazón operacional</strong> de tu formación. Aquí es donde tu entrenamiento se convierte en acción real.</p>
+                    <p>En una mina autónoma, <strong>tú eres la última línea de defensa</strong> cuando algo no sale según lo planeado. No importa qué tan avanzada sea la tecnología: siempre habrá momentos donde el sistema autónomo necesita de tu criterio, tu rapidez mental y tu capacidad de resolver problemas bajo presión.</p>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">ℹ️</span>
+                        <div>
+                            <strong>Dato clave:</strong> Los sistemas autónomos como Komatsu FrontRunner han transportado más de 7.5 mil millones de toneladas métricas de material con cero incidentes de seguridad atribuibles a la autonomía, pero esto se logra gracias a controladores competentes que saben anticipar, identificar y resolver situaciones críticas.
+                        </div>
+                    </div>
+                    
+                    <h3>¿Qué aprenderás en este módulo?</h3>
+                    <ul>
+                        <li>✅ Identificar y clasificar incidentes en tiempo real</li>
+                        <li>✅ Ejecutar protocolos de emergencia de manera precisa</li>
+                        <li>✅ Tomar decisiones correctas bajo presión extrema</li>
+                        <li>✅ Comunicarte efectivamente durante crisis operacionales</li>
+                        <li>✅ Analizar casos reales de fallas y aprender de ellos</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <h2>📋 Objetivos de Aprendizaje</h2>
+                    <p>Al finalizar este módulo, serás capaz de:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Objetivo</th>
+                                <th>Nivel de Dominio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1. Reconocer los 8 tipos de fallas críticas en sistemas autónomos</td>
+                                <td><span class="badge badge-critical">Identificación inmediata</span></td>
+                            </tr>
+                            <tr>
+                                <td>2. Ejecutar el protocolo DETENTE-EVALÚA-ACTÚA en menos de 30 segundos</td>
+                                <td><span class="badge badge-critical">Respuesta automática</span></td>
+                            </tr>
+                            <tr>
+                                <td>3. Diagnosticar la causa raíz usando árbol de decisiones</td>
+                                <td><span class="badge badge-high">Análisis técnico</span></td>
+                            </tr>
+                            <tr>
+                                <td>4. Comunicar incidentes usando fraseología estandarizada</td>
+                                <td><span class="badge badge-medium">Claridad operacional</span></td>
+                            </tr>
+                            <tr>
+                                <td>5. Escalar problemas según matriz de escalamiento</td>
+                                <td><span class="badge badge-medium">Juicio profesional</span></td>
+                            </tr>
+                            <tr>
+                                <td>6. Documentar incidentes con precisión forense</td>
+                                <td><span class="badge badge-low">Registro completo</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SECTION 2: FUNDAMENTOS -->
+            <section class="content-section" id="fundamentals">
+                <div class="card">
+                    <h2>🧠 Fundamentos - ¿Por qué fallan los sistemas autónomos?</h2>
+                    
+                    <h3>1.1 La Realidad de la Autonomía</h3>
+                    <p>Contrario a lo que muchos creen, <strong>un camión autónomo NO es infalible</strong>. Es una máquina extraordinariamente capaz, pero opera en uno de los entornos más hostiles del planeta: una mina a cielo abierto.</p>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">🔍</span>
+                        <div>
+                            <strong>Piénsalo así:</strong> Un camión Komatsu 930E autónomo tiene GPS de doble frecuencia, LiDAR que escanea 360° cada 0.1 segundos, conexión WiFi/LTE constante, sistema inercial de respaldo y 8-12 cámaras de visión. Sin embargo, polvo, clima extremo e interferencias ambientales en los sensores son factores comunes en incidentes.
+                        </div>
+                    </div>
+                    
+                    <h3>1.2 Los 3 Dominios de Falla</h3>
+                    <p>Todo incidente en sistemas autónomos cae en una de estas 3 categorías:</p>
+                    
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <div class="accordion-title">
+                                    <span>🔴</span>
+                                    <strong>DOMINIO 1: FALLAS DE PERCEPCIÓN</strong>
+                                </div>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p><strong>El camión "ve" mal o no ve nada.</strong></p>
+                                    <p><strong>Ejemplos:</strong></p>
+                                    <ul>
+                                        <li>Sensor LiDAR cubierto de barro → el camión detecta obstáculos fantasma</li>
+                                        <li>Pérdida de señal GPS en pozos profundos → el camión no sabe dónde está</li>
+                                        <li>Polvo en suspensión denso → las cámaras no distinguen obstáculos reales</li>
+                                        <li>Neblina o lluvia intensa que afecta visión de sensores ópticos</li>
+                                    </ul>
+                                    <p><strong>🎯 Tu rol:</strong> Identificar si el problema es de percepción y activar modo degradado</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <div class="accordion-title">
+                                    <span>🟡</span>
+                                    <strong>DOMINIO 2: FALLAS DE COMUNICACIÓN</strong>
+                                </div>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p><strong>El camión no puede "hablar" con el sistema de control.</strong></p>
+                                    <p><strong>Ejemplos:</strong></p>
+                                    <ul>
+                                        <li>Corte temporal de WiFi/LTE por interferencia electromagnética</li>
+                                        <li>Pérdida de comunicación que llevó a un camión Caterpillar autónomo a retroceder hacia una excavadora en una mina BHP en Queensland (2023)</li>
+                                        <li>Interferencia por explosivos o tormentas eléctricas</li>
+                                        <li>Falla en antenas de comunicación</li>
+                                    </ul>
+                                    <p><strong>🎯 Tu rol:</strong> Aplicar protocolo de pérdida de comunicación y prevenir colisiones</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item">
+                            <div class="accordion-header">
+                                <div class="accordion-title">
+                                    <span>🟠</span>
+                                    <strong>DOMINIO 3: FALLAS MECÁNICAS/ELÉCTRICAS</strong>
+                                </div>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-body">
+                                    <p><strong>El camión tiene un problema físico.</strong></p>
+                                    <p><strong>Ejemplos:</strong></p>
+                                    <ul>
+                                        <li>Pérdida de tracción por sobre-riego de camino</li>
+                                        <li>Neumático pinchado detectado por TPMS (Tire Pressure Monitoring System)</li>
+                                        <li>Falla hidráulica en sistema de levante</li>
+                                        <li>Sistema de frenos comprometido</li>
+                                        <li>Sobrecalentamiento de motor o sistemas críticos</li>
+                                    </ul>
+                                    <p><strong>🎯 Tu rol:</strong> Detener unidad, aislar área y coordinar con mantenimiento</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>1.3 Modelo Mental del Controlador</h3>
+                    <p>Como controlador, debes desarrollar un <strong>modelo mental de 360°</strong>:</p>
+                    <ul>
+                        <li><strong>Visión sistémica:</strong> Ver más allá del incidente individual</li>
+                        <li><strong>Anticipación:</strong> Predecir cascadas de fallas</li>
+                        <li><strong>Priorización:</strong> Seguridad > Activos > Producción</li>
+                        <li><strong>Comunicación clara:</strong> Transmitir información crítica sin ambigüedad</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SECTION 3: FALLAS CRÍTICAS (COMPLETAS) -->
+            <section class="content-section" id="fallas">
+                <div class="card">
+                    <h2>⚠️ Taxonomía de las 8 Fallas Críticas</h2>
+                    <p>Ahora profundizaremos en las <strong>8 fallas críticas</strong> que TODO controlador debe dominar.</p>
+                    
+                    <h3>FALLA TIPO 1: Pérdida de Posicionamiento GPS/GNSS 🛰️❌</h3>
+                    
+                    <h4>¿Qué sucede?</h4>
+                    <p>La pérdida completa de ubicación GPS resulta en que los camiones automáticamente se detengan hasta que la posición pueda ser restablecida.</p>
+                    
+                    <h4>Causas comunes:</h4>
+                    <ul>
+                        <li><strong>Geográficas:</strong> Pozos profundos que bloquean señal satelital</li>
+                        <li><strong>Atmosféricas:</strong> Tormentas eléctricas, ionización atmosférica</li>
+                        <li><strong>Técnicas:</strong> Antena GPS dañada, conectores corroídos</li>
+                        <li><strong>Interferencia:</strong> Detonaciones cercanas (explosivos)</li>
+                    </ul>
+                    
+                    <h4>Síntomas en la consola:</h4>
+                    <div class="code-block">⚠️ ALERTA GNSS
+━━━━━━━━━━━━━━━━━━━━━━━
+Truck ID: 207
+Status: GPS DEGRADED
+Satellites: 3/12
+Accuracy: >15m
+Position: LAST KNOWN
+Action: AUTO-STOP INITIATED
+━━━━━━━━━━━━━━━━━━━━━━━</div>
+                    
+                    <div class="alert alert-critical">
+                        <span class="alert-icon">🎯</span>
+                        <div>
+                            <strong>PROTOCOLO DE RESPUESTA:</strong>
+                            <p><strong>PASO 1 - Verificación (0-30 seg)</strong></p>
+                            <ul>
+                                <li>□ Verificar si es unidad individual o múltiples unidades</li>
+                                <li>□ Consultar telemetría: ¿cuántos satélites detecta?</li>
+                                <li>□ Revisar historial: ¿pérdida abrupta o gradual?</li>
+                                <li>□ Check weather: ¿tormenta eléctrica en zona?</li>
+                            </ul>
+                            <p><strong>PASO 2 - Decisión (30-60 seg)</strong></p>
+                            <ul>
+                                <li>□ Si afecta múltiples unidades → DETENER FLOTA</li>
+                                <li>□ Si es unidad única → Aislar camión en mapa</li>
+                                <li>□ Activar luces de emergencia del vehículo</li>
+                            </ul>
+                            <p><strong>PASO 3 - Comunicación (60-90 seg)</strong></p>
+                            <ul>
+                                <li>□ Reportar a supervisor: "GPS LOSS - Truck 207"</li>
+                                <li>□ Alertar a equipos manuales cercanos</li>
+                                <li>□ Coordinar con IT/Soporte técnico</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>FALLA TIPO 2: Falla de Comunicación (COMM LOSS) 📡❌</h3>
+                    <p>Esta es <strong>LA falla más peligrosa</strong> porque el camión queda "sordo y mudo".</p>
+                    
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            <strong>Incidente Real - BHP Goonyella (Australia, 2023):</strong>
+                            <p>Una pérdida de comunicación llevó a que un camión Caterpillar operando en modo autónomo comenzara a retroceder hacia una excavadora después de que la comunicación se restauró, resultando en una colisión menor. Afortunadamente no hubo heridos, pero se perdieron 2 días de producción.</p>
+                            <p><strong>Lección crítica:</strong> Al restaurar comunicación, el camión debe entrar en HOLD automático y esperar autorización del controlador.</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Protocolo COMM LOSS:</h4>
+                    <ol>
+                        <li><strong>0-15 seg:</strong> Verificar si es pérdida total o intermitente</li>
+                        <li><strong>15-30 seg:</strong> Marcar zona roja en mapa, alertar equipos cercanos</li>
+                        <li><strong>30-60 seg:</strong> Si no recupera, enviar vehículo de inspección</li>
+                        <li><strong>60-120 seg:</strong> Preparar plan de recuperación manual</li>
+                    </ol>
+                    
+                    <div class="code-block">🔴 COMM LOSS PROTOCOL
+━━━━━━━━━━━━━━━━━━━━━━━
+1. STOP all vehicles within 200m
+2. MARK red zone on digital map
+3. ALERT manual operators via radio
+4. DISPATCH inspection vehicle
+5. HOLD operations until comm restored
+6. VERIFY safe state before resume
+━━━━━━━━━━━━━━━━━━━━━━━</div>
+                </div>
+                
+                <div class="card">
+                    <h3>FALLA TIPO 3: Falla del Sistema de Detección de Obstáculos 👁️❌</h3>
+                    
+                    <p>El camión pierde su capacidad de "ver" obstáculos en su trayectoria.</p>
+                    
+                    <h4>Causas:</h4>
+                    <ul>
+                        <li>Sensores LiDAR/radar cubiertos por polvo, barro o hielo</li>
+                        <li>Falla en procesamiento de datos de sensores</li>
+                        <li>Cámaras desalineadas por vibraciones</li>
+                    </ul>
+                    
+                    <h4>Tu respuesta:</h4>
+                    <div class="alert alert-critical">
+                        <span class="alert-icon">🚨</span>
+                        <div>
+                            <strong>ACCIÓN INMEDIATA:</strong>
+                            <ul>
+                                <li>DETENER vehículo inmediatamente</li>
+                                <li>NO permitir reinicio hasta inspección física</li>
+                                <li>Clasificar como PRIORIDAD CRÍTICA</li>
+                                <li>Aislar zona de 50 metros alrededor</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>FALLA TIPO 4: Falla del Sistema de Frenos 🛑❌</h3>
+                    
+                    <p>Comprometimiento del sistema de frenado - <strong>EMERGENCIA ABSOLUTA</strong>.</p>
+                    
+                    <h4>Indicadores:</h4>
+                    <ul>
+                        <li>Presión hidráulica bajo 50% del nominal</li>
+                        <li>Códigos de error E-BRAKE-01 a E-BRAKE-04</li>
+                        <li>Temperatura excesiva en sistema de frenos</li>
+                    </ul>
+                    
+                    <div class="code-block">🚨 BRAKE FAILURE - CRITICAL
+━━━━━━━━━━━━━━━━━━━━━━━
+IMMEDIATE ACTIONS:
+1. ACTIVATE parking brake
+2. If on slope: direct to flat area
+3. EVACUATE 100m radius
+4. STOP all traffic in sector
+5. NOTIFY maintenance URGENT
+6. PREPARE towing equipment
+━━━━━━━━━━━━━━━━━━━━━━━</div>
+                    
+                    <div class="alert alert-critical">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            <strong>Nunca permitas que un camión con falla de frenos:</strong>
+                            <ul>
+                                <li>Circule en pendientes mayores a 3%</li>
+                                <li>Opere cerca de bordes o botaderos</li>
+                                <li>Transporte carga hasta reparación completa</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>FALLA TIPO 5: Sobrecalentamiento del Motor/Sistemas 🌡️🔥</h3>
+                    
+                    <h4>Zonas críticas de temperatura:</h4>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sistema</th>
+                                <th>Temp. Normal</th>
+                                <th>Temp. Crítica</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Motor</td>
+                                <td>85-95°C</td>
+                                <td>&gt;105°C</td>
+                                <td>DETENER INMEDIATO</td>
+                            </tr>
+                            <tr>
+                                <td>Sistema hidráulico</td>
+                                <td>60-75°C</td>
+                                <td>&gt;90°C</td>
+                                <td>DETENER EN 2 MIN</td>
+                            </tr>
+                            <tr>
+                                <td>Transmisión</td>
+                                <td>75-85°C</td>
+                                <td>&gt;100°C</td>
+                                <td>REDUCIR CARGA</td>
+                            </tr>
+                            <tr>
+                                <td>Frenos</td>
+                                <td>150-200°C</td>
+                                <td>&gt;280°C</td>
+                                <td>EMERGENCIA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p><strong>Protocolo de sobrecalentamiento:</strong></p>
+                    <ol>
+                        <li>Evaluar severidad según tabla</li>
+                        <li>Si crítico: detención inmediata, activar supresión de fuego</li>
+                        <li>Si elevado: dirigir a zona plana, apagar motor, enfriar</li>
+                        <li>Monitorear temperatura cada 5 minutos</li>
+                        <li>NO reiniciar hasta temperatura normal</li>
+                    </ol>
+                </div>
+                
+                <div class="card">
+                    <h3>FALLA TIPO 6: Pérdida de Presión en Neumáticos 🛞💨</h3>
+                    
+                    <h4>Sistema TPMS (Tire Pressure Monitoring System):</h4>
+                    <p>Los camiones autónomos monitorean presión de cada neumático en tiempo real.</p>
+                    
+                    <h4>Niveles de alerta:</h4>
+                    <ul>
+                        <li><span class="badge badge-low">ADVISORY</span> -10% presión nominal</li>
+                        <li><span class="badge badge-medium">WARNING</span> -20% presión nominal</li>
+                        <li><span class="badge badge-high">CRITICAL</span> -30% presión nominal</li>
+                        <li><span class="badge badge-critical">EMERGENCY</span> Pérdida rápida de presión</li>
+                    </ul>
+                    
+                    <div class="alert alert-critical">
+                        <span class="alert-icon">🚨</span>
+                        <div>
+                            <strong>PROTOCOLO NEUMÁTICO CRÍTICO:</strong>
+                            <p>Un neumático con pérdida crítica en un camión de 385 toneladas puede causar <strong>volcamiento</strong>. Tu respuesta debe ser:</p>
+                            <ol>
+                                <li>DETENER vehículo INMEDIATAMENTE (no importa la ubicación)</li>
+                                <li>Activar freno de estacionamiento</li>
+                                <li>Evacuar área 50m (riesgo de explosión de neumático)</li>
+                                <li>Solicitar soporte de mantenimiento con equipo especializado</li>
+                                <li>Documentar condiciones: carga, ubicación, estado del camino</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>FALLA TIPO 7: Falla en Sistema de Iluminación Nocturna 💡❌</h3>
+                    
+                    <p>En operaciones 24/7, la iluminación es un sistema crítico de seguridad.</p>
+                    
+                    <h4>Componentes del sistema:</h4>
+                    <ul>
+                        <li>Luces principales (frontales y traseras)</li>
+                        <li>Luces de trabajo (360° de iluminación)</li>
+                        <li>Luces de advertencia (strobe lights)</li>
+                        <li>Iluminación de zona de carga</li>
+                    </ul>
+                    
+                    <h4>Tu decisión:</h4>
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            <p><strong>Regla absoluta:</strong> NO se permite operación nocturna sin sistema de iluminación completo.</p>
+                            <p><strong>Acción:</strong></p>
+                            <ul>
+                                <li>Si falla parcial (1-2 luces): Reducir velocidad 30%, completar ciclo, reparar</li>
+                                <li>Si falla crítica (&gt;50% luces): DETENER, no operar hasta reparación</li>
+                                <li>Si falla total: EMERGENCIA - escort manual al taller</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>FALLA TIPO 8: Error en Planificación de Ruta (Path Planning) 🗺️❌</h3>
+                    
+                    <p>El sistema no puede calcular una ruta segura hacia el destino.</p>
+                    
+                    <h4>Causas:</h4>
+                    <ul>
+                        <li>Cambios no actualizados en el mapa digital (nuevo botadero, nueva rampa)</li>
+                        <li>Obstáculos no registrados bloqueando rutas</li>
+                        <li>Conflicto entre múltiples camiones en intersección</li>
+                        <li>Zona declarada como no-transitable por otro incidente</li>
+                    </ul>
+                    
+                    <h4>Síntomas:</h4>
+                    <div class="code-block">⚠️ PATH PLANNING ERROR
+━━━━━━━━━━━━━━━━━━━━━━━
+Truck ID: 189
+Current: Km 5.2 Norte
+Destination: Chancadora
+Error: NO VALID PATH FOUND
+Retry attempts: 7/10
+Status: HOLDING POSITION
+━━━━━━━━━━━━━━━━━━━━━━━</div>
+                    
+                    <h4>Tu respuesta:</h4>
+                    <ol>
+                        <li><strong>Diagnóstico rápido:</strong> ¿El mapa está actualizado?</li>
+                        <li><strong>Verificación visual:</strong> Revisar cámaras de la zona</li>
+                        <li><strong>Opciones:</strong>
+                            <ul>
+                                <li>Actualizar mapa si hay cambios recientes</li>
+                                <li>Asignar ruta alternativa manualmente</li>
+                                <li>Si no hay solución: control manual remoto</li>
+                            </ul>
+                        </li>
+                        <li><strong>Prevención:</strong> Reportar a equipo de mapeo para actualización</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- SECTION 4: PROTOCOLOS -->
+            <section class="content-section" id="protocolos">
+                <div class="card">
+                    <h2>🎯 Protocolos de Toma de Decisiones</h2>
+                    
+                    <h3>El Marco Mental: DETENTE-EVALÚA-ACTÚA</h3>
+                    <p>Este es <strong>TU MANTRA</strong> en cada incidente. Debe volverse un reflejo automático.</p>
+                    
+                    <div class="code-block">┌─────────────────────────────────────────────┐
+│  D  │ DETENTE (3 segundos)                   │
+│     │ • Respira profundo                     │
+│     │ • No reacciones por impulso            │
+│     │ • Lee la situación completa            │
+├─────────────────────────────────────────────┤
+│  E  │ EVALÚA (15-30 segundos)                │
+│     │ • ¿Hay riesgo inmediato de vida?       │
+│     │ • ¿Qué sistemas están afectados?       │
+│     │ • ¿Cuál es el peor escenario posible?  │
+│     │ • ¿Qué recursos necesito?              │
+├─────────────────────────────────────────────┤
+│  A  │ ACTÚA (con decisión)                   │
+│     │ • Ejecuta protocolo específico         │
+│     │ • Comunica claramente                  │
+│     │ • Documenta cada paso                  │
+│     │ • Monitorea resultado                  │
+└─────────────────────────────────────────────┘</div>
+                    
+                    <h3>Matriz de Severidad y Escalamiento</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nivel</th>
+                                <th>Criterio</th>
+                                <th>Tiempo Resp.</th>
+                                <th>Escalamiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-low">BAJO</span></td>
+                                <td>Sensor individual, sin impacto operacional</td>
+                                <td>15-30 min</td>
+                                <td>Mantenimiento rutinario</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-medium">MEDIO</span></td>
+                                <td>Falla de comunicación temporal, recuperable</td>
+                                <td>5-10 min</td>
+                                <td>Supervisor de turno</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-high">ALTO</span></td>
+                                <td>Pérdida GPS múltiple, falla mecánica mayor</td>
+                                <td>1-3 min</td>
+                                <td>Gerente operaciones</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-critical">CRÍTICO</span></td>
+                                <td>Personal en riesgo, falla de frenos, fuego</td>
+                                <td>&lt; 30 seg</td>
+                                <td>Gerente + Seguridad + Emergencias</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>Árbol de Decisiones - Incidente Detectado</h3>
+                    <div class="code-block">┌─ INCIDENTE DETECTADO ─┐
+│                        │
+└────────┬───────────────┘
+         │
+         ▼
+    ¿HAY RIESGO
+    DE VIDA?
+         │
+    ┌────┴────┐
+   SÍ         NO
+    │          │
+    ▼          ▼
+ DETENER    ¿SISTEMA
+  TODO      CRÍTICO?
+    │          │
+    │     ┌────┴────┐
+    │    SÍ         NO
+    │     │          │
+    │     ▼          ▼
+    │  DETENER   ¿PUEDE
+    │  UNIDAD    EMPEORAR?
+    │     │          │
+    │     │     ┌────┴────┐
+    │     │    SÍ         NO
+    │     │     │          │
+    │     ▼     ▼          ▼
+    └──► PROTOCOLO    MONITOREAR
+         EMERGENCIA   Y PLANIFICAR</div>
+                    
+                    <h3>Los 4 Principios No Negociables</h3>
+                    
+                    <div class="alert alert-success">
+                        <span class="alert-icon">🧠</span>
+                        <div>
+                            <strong>1. PIENSA antes de actuar</strong>
+                            <p>Tres segundos de análisis pueden prevenir horas de consecuencias. Evalúa impacto, riesgos y alternativas.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">📞</span>
+                        <div>
+                            <strong>2. COMUNICA claramente</strong>
+                            <p>Usa fraseología estandarizada. Confirma que tu mensaje fue entendido. No asumas nada.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">📝</span>
+                        <div>
+                            <strong>3. DOCUMENTA TODO</strong>
+                            <p>Si no está documentado, no sucedió. Cada acción, cada decisión, cada comunicación.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-critical">
+                        <span class="alert-icon">🎯</span>
+                        <div>
+                            <strong>4. PRIORIZA la vida sobre la producción</strong>
+                            <p>SIEMPRE. Sin excepciones. Un camión detenido es un problema temporal. Una vida perdida es irreversible.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: COMUNICACIÓN -->
+            <section class="content-section" id="comunicacion">
+                <div class="card">
+                    <h2>📞 Comunicación en Crisis</h2>
+                    
+                    <h3>Fraseología Estandarizada</h3>
+                    <p>En una mina, <strong>la claridad salva vidas</strong>. Usa estas estructuras SIEMPRE.</p>
+                    
+                    <h4>Estructura de reporte de incidente:</h4>
+                    <div class="code-block">"[TU POSICIÓN] a [DESTINATARIO],
+reporto [TIPO DE FALLA] en [UNIDAD],
+ubicación [POSICIÓN EXACTA],
+estado [CONDICIÓN ACTUAL],
+acción [QUÉ HICISTE],
+requiero [QUÉ NECESITAS],
+over."</div>
+                    
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✅</span>
+                        <div>
+                            <strong>Ejemplo práctico correcto:</strong>
+                            <p>"Control a Supervisor, reporto COMM LOSS en Truck 215, ubicación Km 7.3 Sector Norte, estado DESCONOCIDO última comunicación hace 3 minutos, acción ZONA AISLADA en mapa digital alertado equipos manuales en área, requiero autorización para envío de vehículo de inspección, over."</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-critical">
+                        <span class="alert-icon">❌</span>
+                        <div>
+                            <strong>Ejemplo INCORRECTO (ambiguo, peligroso):</strong>
+                            <p>"Oye, el 215 se quedó sin señal por el norte, no sé qué hacer, ¿lo vemos?"</p>
+                            <p><strong>Problemas:</strong> No especifica ubicación exacta, no comunica acciones tomadas, no usa terminología estándar, no es profesional.</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Escalamiento de Comunicación</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Severidad</th>
+                                <th>Contactar A</th>
+                                <th>Método</th>
+                                <th>Tiempo Max</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-low">BAJO</span></td>
+                                <td>Técnico de turno</td>
+                                <td>Radio / Sistema</td>
+                                <td>30 min</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-medium">MEDIO</span></td>
+                                <td>Supervisor operaciones</td>
+                                <td>Radio + Llamada</td>
+                                <td>10 min</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-high">ALTO</span></td>
+                                <td>Gerente + Mantenimiento</td>
+                                <td>Llamada directa</td>
+                                <td>3 min</td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-critical">CRÍTICO</span></td>
+                                <td>TODOS + Emergencias</td>
+                                <td>Alerta general</td>
+                                <td>30 seg</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>Comunicación Bajo Estrés</h3>
+                    <p>Durante una crisis, tu voz y tu mensaje pueden calmar o escalar la situación.</p>
+                    
+                    <h4>Técnicas de comunicación efectiva:</h4>
+                    <ul>
+                        <li><strong>Volumen controlado:</strong> Habla claro pero no grites</li>
+                        <li><strong>Ritmo pausado:</strong> Articula cada palabra</li>
+                        <li><strong>Confirmación activa:</strong> "¿Confirma recepción?" / "Roger that"</li>
+                        <li><strong>Repetición crítica:</strong> Repite información vital dos veces</li>
+                        <li><strong>Sin ambigüedades:</strong> Usa números, ubicaciones específicas</li>
+                    </ul>
+                    
+                    <h3>Códigos de Estado</h3>
+                    <div class="code-block">STATUS CODES (usar en reportes):
+━━━━━━━━━━━━━━━━━━━━━━━
+CODE GREEN  - Operación normal
+CODE YELLOW - Alerta / Precaución
+CODE ORANGE - Incidente confirmado
+CODE RED    - Emergencia crítica
+CODE BLACK  - Evacuación general
+━━━━━━━━━━━━━━━━━━━━━━━</div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: DOCUMENTACIÓN -->
+            <section class="content-section" id="documentacion">
+                <div class="card">
+                    <h2>📝 Documentación Forense de Incidentes</h2>
+                    
+                    <p>Cada incidente debe ser documentado <strong>COMO SI FUERAS A TESTIFICAR EN JUICIO</strong>.</p>
+                    <p>Porque en casos graves, <strong>es exactamente lo que harás</strong>.</p>
+                    
+                    <h3>La Bitácora Digital del Controlador</h3>
+                    <p>Tu registro debe incluir 7 elementos críticos:</p>
+                    
+                    <div class="code-block">┌───────────────────────────────────────────────┐
+│ 1. TIMESTAMP (fecha/hora precisa)            │
+│    2024-10-14T03:47:23Z                       │
+├───────────────────────────────────────────────┤
+│ 2. IDENTIFICACIÓN                             │
+│    Truck ID: 207                              │
+│    Operator: Sistema Autónomo                 │
+│    Controller: [Tu ID]                        │
+├───────────────────────────────────────────────┤
+│ 3. TIPO DE FALLA                              │
+│    Clasificación: COMM LOSS                   │
+│    Severidad: ALTO                            │
+├───────────────────────────────────────────────┤
+│ 4. UBICACIÓN EXACTA                           │
+│    GPS: -23.4567, -68.1234                    │
+│    Descripción: Km 7.3 Rampa Norte            │
+├───────────────────────────────────────────────┤
+│ 5. ESTADO OPERACIONAL                         │
+│    Carga: 385 ton (100%)                      │
+│    Velocidad: 22 km/h                         │
+│    Pendiente: -8%                             │
+│    Destino: Chancadora Primaria               │
+├───────────────────────────────────────────────┤
+│ 6. SECUENCIA DE ACCIONES                      │
+│    03:47:23 - Pérdida de comunicación         │
+│    03:47:35 - Zona aislada en mapa            │
+│    03:47:48 - Alerta a equipos manuales       │
+│    03:48:10 - Coordinación con supervisor     │
+│    03:49:15 - Vehículo inspección enviado     │
+│    03:52:40 - Comunicación restablecida       │
+│    03:53:15 - Camión en HOLD confirmado       │
+├───────────────────────────────────────────────┤
+│ 7. RESULTADO FINAL                            │
+│    Resolución: EXITOSA                        │
+│    Tiempo down: 6min 17seg                    │
+│    Causa raíz: Interferencia temporal WiFi    │
+│    Seguimiento: Reporte a IT para análisis    │
+└───────────────────────────────────────────────┘</div>
+                    
+                    <h3>Reglas de Oro de la Documentación</h3>
+                    
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            <strong>Regla #1: Si no está documentado, NO SUCEDIÓ</strong>
+                            <p>En investigaciones de incidentes, tu palabra contra el registro digital. El registro siempre gana.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">📋</span>
+                        <div>
+                            <strong>Regla #2: Documenta DURANTE, no después</strong>
+                            <p>La memoria falla bajo estrés. Registra mientras sucede, no 2 horas después del turno.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✍️</span>
+                        <div>
+                            <strong>Regla #3: Hechos, no opiniones</strong>
+                            <p><strong>✅ Correcto:</strong> "Temperatura motor: 112°C (límite: 105°C)"</p>
+                            <p><strong>❌ Incorrecto:</strong> "El motor estaba súper caliente"</p>
+                        </div>
+                    </div>
+                    
+                    <h3>Plantilla de Reporte Post-Incidente</h3>
+                    <div class="code-block">REPORTE FORMAL DE INCIDENTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SECCIÓN A: INFORMACIÓN BÁSICA
+- Fecha/Hora inicio: 
+- Fecha/Hora resolución:
+- Duración total:
+- Turno:
+- Controlador responsable:
+
+SECCIÓN B: DESCRIPCIÓN DEL INCIDENTE
+- Tipo de falla:
+- Unidad(es) afectada(s):
+- Ubicación(es):
+- Condiciones ambientales:
+- Condiciones operacionales:
+
+SECCIÓN C: CRONOLOGÍA DETALLADA
+[Timestamp] - [Evento]
+[Timestamp] - [Acción tomada]
+[Timestamp] - [Resultado]
+
+SECCIÓN D: ANÁLISIS DE CAUSA RAÍZ
+- Causa inmediata:
+- Causas contribuyentes:
+- Factores ambientales:
+
+SECCIÓN E: ACCIONES CORRECTIVAS
+- Inmediatas:
+- Corto plazo (1 semana):
+- Largo plazo (1 mes):
+
+SECCIÓN F: LECCIONES APRENDIDAS
+- ¿Qué funcionó bien?
+- ¿Qué mejorar?
+- ¿Protocolo actualizado necesario?
+
+SECCIÓN G: SEGUIMIENTO
+- Responsable:
+- Fecha revisión:
+- Verificación implementación:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Firma Digital: ________________
+ID Controlador: ________________
+Fecha: ________________</div>
+                </div>
+            </section>
+
+            <!-- SECTION 7: EVALUACIÓN -->
+            <section class="content-section" id="evaluacion">
+                <div id="evaluacionContainer"></div>
+            </section>
+        </main>
+    </div>
+
+    <button class="pdf-download" id="pdfBtn">
+        <span>📥</span>
+        <span>Descargar PDF</span>
+    </button>
+
+    <script>
+        const evalData = {
+            stage: 'inicio',
+            attempt: parseInt(localStorage.getItem('evalAttempt') || '1'),
+            timeLeft: 5400,
+            timer: null,
+            answers: {},
+            caseAnswers: {},
+            simAnswers: {},
+            currentQ: 0
+        };
+        
+        const preguntas = [
+            {id:1,p:"¿Cuál es la PRIMERA acción que debe realizar un controlador al detectar un incidente crítico?",o:["Documentar el incidente en el sistema","Detener inmediatamente el vehículo autónomo","Comunicar al supervisor de turno","Evaluar si hay riesgo de vida"],c:3},
+            {id:2,p:"En el protocolo de seguridad, ¿qué significa 'PRIORIZA la vida sobre la producción'?",o:["Continuar operación con precaución","Detener operaciones si existe riesgo humano","Evaluar impacto económico primero","Consultar al gerente de operaciones"],c:1},
+            {id:3,p:"¿Qué tipo de falla requiere la intervención INMEDIATA del controlador?",o:["Pérdida menor de señal GPS","Falla en sistema de frenado de emergencia","Desgaste normal de neumáticos","Lectura errática de temperatura del motor"],c:1},
+            {id:4,p:"Durante una pérdida total de comunicación, el camión autónomo debe:",o:["Continuar hacia el destino programado","Activar protocolo de detención segura inmediata","Reducir velocidad y esperar reconexión","Regresar al punto de origen"],c:1},
+            {id:5,p:"¿Cuál es el tiempo máximo para reportar un incidente crítico?",o:["30 segundos","2 minutos","5 minutos","10 minutos"],c:0},
+            {id:6,p:"En caso de detectar humo en el compartimiento del motor, la acción correcta es:",o:["Monitorear y continuar operación","Detención inmediata y activar supresión de fuego","Reducir carga del motor gradualmente","Enviar unidad al taller al final del turno"],c:1},
+            {id:7,p:"El código de falla 'E-BRAKE-01' indica:",o:["Falla menor en sensor de freno","Sistema de frenado comprometido - DETENER","Necesita mantenimiento preventivo","Calibración de frenos requerida"],c:1},
+            {id:8,p:"¿Qué información es CRÍTICA documentar durante un incidente?",o:["Solo la hora del evento","Hora, ubicación GPS, testigos y acciones tomadas","Nombre del supervisor únicamente","Condiciones climáticas del día"],c:1},
+            {id:9,p:"Un camión reporta 'Obstacle Detection Alert'. ¿Qué debe hacer el controlador?",o:["Ignorar si el camión continúa moviéndose","Verificar cámaras, evaluar obstáculo y decidir acción","Reiniciar sistema de detección","Cambiar ruta automáticamente"],c:1},
+            {id:10,p:"La telemetría muestra presión de neumático 30% bajo lo normal. Acción correcta:",o:["Completar el ciclo actual de acarreo","Detener unidad y solicitar inspección inmediata","Reducir velocidad máxima en 10%","Programar revisión para próximo turno"],c:1},
+            {id:11,p:"¿Cuándo se debe activar el protocolo de evacuación del área?",o:["Solo si hay heridos confirmados","Ante riesgo inminente de explosión, incendio o derrumbe","Cuando el supervisor lo autorice","Después de documentar el incidente"],c:1},
+            {id:12,p:"El sistema muestra 'Loss of Autonomy - Manual Override Required'. Esto significa:",o:["El camión cambió a modo semi-autónomo","Control remoto manual es necesario AHORA","Sistema se reiniciará automáticamente","Falla menor corregible en ruta"],c:1},
+            {id:13,p:"Durante condiciones de baja visibilidad (neblina densa), el controlador debe:",o:["Aumentar separación entre vehículos y reducir velocidad","Continuar operación normal","Solo usar cámaras térmicas","Detener solo camiones cargados"],c:0},
+            {id:14,p:"¿Qué indica una alerta de 'Collision Avoidance System Fault'?",o:["Sistema preventivo deshabilitado - ALTO RIESGO","Recalibración menor requerida","Modo de respaldo activado","Actualización de software pendiente"],c:0},
+            {id:15,p:"En el protocolo 'COMUNICA claramente', la regla es:",o:["Usar jerga técnica para precisión","Lenguaje claro, conciso y confirmar entendimiento","Solo reportar a supervisor directo","Enviar email detallado después"],c:1},
+            {id:16,p:"Un trabajador está en zona de riesgo no autorizada. El controlador debe:",o:["Tocar bocina del camión autónomo","DETENER todos los vehículos en área, alertar seguridad","Reducir velocidad de camiones cercanos","Notificar por radio al trabajador"],c:1},
+            {id:17,p:"La temperatura del sistema hidráulico supera 95°C (límite: 85°C). Acción:",o:["Monitorear próximos 10 minutos","Detener unidad inmediatamente - riesgo de falla catastrófica","Activar enfriamiento adicional","Reducir carga de trabajo del sistema"],c:1},
+            {id:18,p:"¿Qué significa 'documentar TODO' en gestión de incidentes?",o:["Solo llenar formulario oficial","Registrar causas, acciones, testigos, evidencia y seguimiento","Tomar fotografías del área","Anotar en bitácora personal"],c:1},
+            {id:19,p:"Durante un sismo, el protocolo de camiones autónomos es:",o:["Continuar hacia zona segura más cercana","Detención automática, luces de emergencia, esperar inspección","Aumentar velocidad para salir del área","Estacionar en berma inmediatamente"],c:1},
+            {id:20,p:"El 'log' de eventos del sistema muestra 47 reconexiones en 10 minutos. Esto indica:",o:["Operación normal en zona de cobertura débil","Falla crítica en sistema de comunicaciones - investigar","Interferencia electromagnética menor","Actualización de red en proceso"],c:1},
+            {id:21,p:"¿Cuál es la distancia mínima de seguridad entre un camión autónomo y vehículos tripulados?",o:["10 metros","25 metros","50 metros","100 metros"],c:2},
+            {id:22,p:"Un camión muestra 'Battery Low - 15% Remaining'. El controlador debe:",o:["Completar viaje actual","Enviar a estación de carga inmediatamente","Reducir consumo energético","Cambiar a modo eco"],c:1},
+            {id:23,p:"El principio 'PIENSA antes de actuar' se refiere a:",o:["Consultar el manual antes de cada acción","Evaluar consecuencias, riesgos y alternativas antes de decidir","Pedir autorización al supervisor","Documentar el plan de acción"],c:1},
+            {id:24,p:"¿Qué acción NO es apropiada durante un incidente crítico?",o:["Activar protocolo de emergencia","Intentar reparar el equipo remotamente durante la crisis","Comunicar a todas las partes relevantes","Asegurar el área de riesgo"],c:1},
+            {id:25,p:"La alerta 'Tire Pressure Critical - Front Left' requiere:",o:["Monitoreo cada 5 minutos","Detención inmediata - riesgo de volcamiento","Reducir velocidad a 15 km/h","Completar descarga y luego revisar"],c:1},
+            {id:26,p:"¿Cuántos controladores deben estar certificados por turno para operar la flota?",o:["Mínimo 1 controlador principal","Mínimo 2 controladores certificados","Depende del número de camiones","Solo se requiere un supervisor"],c:1},
+            {id:27,p:"El sistema de gestión muestra 'Path Planning Error'. Esto significa:",o:["Ruta alternativa calculándose","Sistema no puede calcular ruta segura - requiere intervención","Actualización de mapas necesaria","GPS en recalibración"],c:1},
+            {id:28,p:"En una falla de sistema de iluminación nocturna, el controlador debe:",o:["Activar luces auxiliares","DETENER operación - visibilidad comprometida = PELIGRO","Reducir velocidad 50%","Operar solo en áreas bien iluminadas"],c:1},
+            {id:29,p:"¿Qué información NO es necesaria en el reporte inicial de incidente?",o:["Análisis detallado de causas raíz","Hora y ubicación exacta","Acciones inmediatas tomadas","Recursos de emergencia activados"],c:0},
+            {id:30,p:"La frase 'Eres el último eslabón de seguridad' significa:",o:["Tienes responsabilidad legal única","Tu decisión puede salvar vidas - confía en tu criterio","Debes seguir solo procedimientos escritos","Eres responsable de todas las fallas"],c:1}
+        ];
+        
+        const casos = [
+            {id:1,t:"Caso 1: Pérdida de Comunicación en Zona Crítica",d:"Un camión CAT 794 AC cargado (385 toneladas) pierde comunicación total mientras desciende por rampa con 12% de pendiente. El sistema muestra última posición a 450m de una intersección de alto tráfico. Cámaras muestran velocidad: 28 km/h. Han pasado 45 segundos sin señal.",p:"Describe paso a paso las acciones que tomarías en los próximos 60 segundos. Justifica cada decisión (mínimo 150 caracteres)",min:150},
+            {id:2,t:"Caso 2: Detección de Humo en Compartimiento Motor",d:"A las 02:35 AM, sensor de humo del camión AU-47 se activa. Cámara térmica muestra temperatura anormal (178°C) en zona del motor. El camión está vacío, a 2.3 km del taller, en zona remota sin personal cercano. Viento: 35 km/h hacia zona de almacenamiento de combustible (850m de distancia).",p:"¿Cuál es tu secuencia de acciones? ¿Qué factores consideras críticos? ¿A quién alertas y en qué orden? (mínimo 150 caracteres)",min:150},
+            {id:3,t:"Caso 3: Trabajador en Zona No Autorizada",d:"Sistema de detección alerta sobre persona a pie dentro del área operacional de camiones autónomos. Cámaras confirman: trabajador con chaleco, aparentemente desorientado, está a 85 metros de la trayectoria del camión AU-23 (cargado, velocidad 22 km/h, 12 segundos para punto más cercano). Otro camión (AU-31) se aproxima desde dirección opuesta a 180 metros.",p:"Gestiona esta emergencia. Explica cada comando que darías y el razonamiento temporal (mínimo 150 caracteres)",min:150},
+            {id:4,t:"Caso 4: Falla Múltiple de Sistemas",d:"Camión AU-12 reporta simultáneamente: 1) Falla en sistema de frenos (presión hidráulica 40%), 2) Sensor de proximidad frontal inoperativo, 3) Cámara principal con interferencia. El camión está CARGADO en zona de alta pendiente. Velocidad actual: 18 km/h. Distancia a zona plana: 380 metros. Tiempo estimado: 75 segundos.",p:"Describe tu análisis de riesgos y las acciones que tomarías. ¿Usarías control manual remoto? ¿Por qué sí o no? (mínimo 150 caracteres)",min:150},
+            {id:5,t:"Caso 5: Decisión Bajo Presión de Producción",d:"Es el último día del mes. La meta de producción requiere 8 viajes más. Quedan 3 horas de turno. El camión AU-09 muestra una alerta: 'CHECK ENGINE - Code P2563'. El sistema permite continuar operación con monitoreo. El gerente de operaciones te llama: 'Necesitamos esos 8 viajes'. Tu supervisor técnico dice: 'Es tu decisión'. El manual indica: 'Evaluar criticidad del código'.",p:"¿Cuál es tu decisión y cómo la justificas? ¿Qué principio del protocolo de seguridad aplica aquí? (mínimo 150 caracteres)",min:150}
+        ];
+        
+        const sims = [
+            {id:1,t:"Simulación 1: Respuesta Rápida a Colisión Inminente",e:"⚠️ ALERTA CRÍTICA: Camión AU-15 detecta vehículo liviano NO AUTORIZADO cruzando su trayectoria. Distancia: 45 metros. Velocidad camión: 25 km/h. Tiempo estimado de impacto: 6 segundos. Sistema requiere decisión inmediata.",o:["A) Activar frenado de emergencia automático + bocina","B) Intentar maniobra evasiva controlada remotamente","C) Confiar en que el vehículo liviano acelerará y saldrá","D) Reducir velocidad gradualmente"],c:0},
+            {id:2,t:"Simulación 2: Gestión de Falla en Cadena",e:"🔴 CRISIS ESCALANDO: 1) Camión AU-22 pierde GPS (00:00). 2) Sistema de visión reporta falla (00:23). 3) Comunicación intermitente cada 8 segundos (00:45). 4) Camión está a 150m de bifurcación crítica (01:00). ¿Qué haces AHORA?",o:["A) Activar protocolo DETENCIÓN SEGURA INMEDIATA","B) Intentar guiar por última posición conocida","C) Esperar a que el camión se detenga solo en zona segura","D) Enviar técnico al terreno para control manual"],c:0},
+            {id:3,t:"Simulación 3: Toma de Decisión Ética",e:"⏱️ DILEMA: Detectas que camión AU-31 tiene micro-fisura en estructura (reportada por IA predictivo). Riesgo: 2% de falla catastrófica. Inspección visual requiere 4 horas. Producción: 12 viajes pendientes críticos. Presión: ALTA. Tu decisión afecta: seguridad vs. cumplimiento de meta.",o:["A) DETENER unidad para inspección - seguridad primero","B) Completar turno y revisar en mantención programada","C) Reducir carga 20% y monitorear constantemente","D) Consultar con 2 supervisores antes de decidir"],c:0}
+        ];
+        
+        function fmtTime(s){const m=Math.floor(s/60);return `${m}:${(s%60).toString().padStart(2,'0')}`;}
+        
+        function startTimer(){
+            if(evalData.timer) clearInterval(evalData.timer);
+            evalData.timer=setInterval(()=>{
+                evalData.timeLeft--;
+                const t=document.getElementById('evalTimer');
+                if(t) t.textContent=fmtTime(evalData.timeLeft);
+                if(evalData.timeLeft<=0){clearInterval(evalData.timer);finalizarEval();}
+            },1000);
+        }
+        
+        function loadEval(){
+            const c=document.getElementById('evaluacionContainer');
+            if(evalData.stage==='inicio'){
+                c.innerHTML=`
+                    <div class="card">
+                        <div style="background: linear-gradient(135deg, #FF6B35, #c94d29); padding: 40px; border-radius: 16px; margin-bottom: 30px; text-align: center;">
+                            <h1 style="color: white; font-size: 36px; margin: 0;">🎯 Evaluación Final Módulo 5</h1>
+                            <p style="color: rgba(255,255,255,0.9); font-size: 18px; margin: 10px 0 0 0;">Gestión de Incidentes y Emergencias</p>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <span class="alert-icon">📋</span>
+                            <div>
+                                <strong>Estructura Completa:</strong>
+                                <ul style="margin: 10px 0 0 0;">
+                                    <li><strong>Parte 1 (70%):</strong> 30 preguntas teóricas + 5 casos de estudio</li>
+                                    <li><strong>Parte 2 (30%):</strong> 3 simulaciones prácticas</li>
+                                    <li><strong>Duración:</strong> 90 minutos</li>
+                                    <li><strong>Aprobación mínima:</strong> 80%</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">⚠️</span>
+                            <div>
+                                <strong>Información Importante:</strong>
+                                <ul style="margin: 10px 0 0 0;">
+                                    <li>Intento <strong>${evalData.attempt} de 2</strong></li>
+                                    <li>No se puede pausar la evaluación</li>
+                                    <li>Guarda automáticamente al finalizar tiempo</li>
+                                    <li>Casos requieren mínimo 150 caracteres cada uno</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-success">
+                            <span class="alert-icon">💡</span>
+                            <div>
+                                <strong>Recuerda el Protocolo:</strong>
+                                <p style="margin: 5px 0 0 0; font-size: 16px;">🧠 <strong>PIENSA</strong> • 📞 <strong>COMUNICA</strong> • 📝 <strong>DOCUMENTA</strong> • 🎯 <strong>PRIORIZA</strong> la vida</p>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" style="width: 100%; padding: 20px; font-size: 18px;" onclick="iniciarEval()" ${evalData.attempt>2?'disabled':''}>
+                            ${evalData.attempt>2?'❌ No hay más intentos disponibles':'🚀 INICIAR EVALUACIÓN FINAL'}
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        function iniciarEval(){
+            evalData.stage='teorico';
+            evalData.currentQ=0;
+            evalData.answers={};
+            evalData.caseAnswers={};
+            evalData.simAnswers={};
+            evalData.timeLeft=5400;
+            startTimer();
+            mostrarPregunta();
+        }
+        
+        function mostrarPregunta(){
+            const c=document.getElementById('evaluacionContainer');
+            const q=preguntas[evalData.currentQ];
+            const prog=((evalData.currentQ+1)/preguntas.length)*100;
+            
+            c.innerHTML=`
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px; background: rgba(26,31,58,0.6); border-radius: 12px;">
+                        <div style="flex: 1;">
+                            <p style="color: var(--text-secondary); margin: 0;">Pregunta ${evalData.currentQ+1} de ${preguntas.length}</p>
+                            <div class="eval-progress-bar"><div class="eval-progress-fill" style="width: ${prog}%"></div></div>
+                        </div>
+                        <div class="eval-timer" style="margin-left: 20px;"><span>⏱️</span><span id="evalTimer">${fmtTime(evalData.timeLeft)}</span></div>
+                    </div>
+                    
+                    <div class="question-card">
+                        <h2 style="color: var(--primary); margin-bottom: 30px;">${q.p}</h2>
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
+                            ${q.o.map((op,i)=>`
+                                <button class="option-btn ${evalData.answers[q.id]===i?'selected':''}" onclick="selResp(${q.id},${i})">
+                                    <span style="color: var(--primary); font-weight: bold; margin-right: 10px;">${String.fromCharCode(65+i)})</span>
+                                    ${op}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 30px;">
+                        ${evalData.currentQ>0?`<button class="btn-secondary" onclick="anteriorPreg()">← Anterior</button>`:''}
+                        ${evalData.currentQ<preguntas.length-1?`
+                            <button class="btn-primary" style="flex: 1;" onclick="siguientePreg()" ${evalData.answers[q.id]===undefined?'disabled':''}>
+                                Siguiente →
+                            </button>
+                        `:`
+                            <button class="btn-primary" style="flex: 1; background: linear-gradient(135deg, #00D9A5, #00a077);" onclick="mostrarCasos()" ${Object.keys(evalData.answers).length!==preguntas.length?'disabled':''}>
+                                Continuar a Casos de Estudio →
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function selResp(qid,idx){evalData.answers[qid]=idx;mostrarPregunta();}
+        function anteriorPreg(){evalData.currentQ--;mostrarPregunta();}
+        function siguientePreg(){evalData.currentQ++;mostrarPregunta();}
+        
+        function validarCasos(){
+            let todosValidos = true;
+            casos.forEach(caso => {
+                const respuesta = evalData.caseAnswers[caso.id] || '';
+                if(respuesta.trim().length < caso.min) todosValidos = false;
+            });
+            return todosValidos;
+        }
+        
+        function mostrarCasos(){
+            const c=document.getElementById('evaluacionContainer');
+            c.innerHTML=`
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px; background: rgba(26,31,58,0.6); border-radius: 12px;">
+                        <h2 style="margin: 0;">📋 Casos de Estudio</h2>
+                        <div class="eval-timer"><span>⏱️</span><span id="evalTimer">${fmtTime(evalData.timeLeft)}</span></div>
+                    </div>
+                    
+                    ${casos.map(caso=>{
+                        const chars = (evalData.caseAnswers[caso.id] || '').length;
+                        const isValid = chars >= caso.min;
+                        return `
+                        <div class="question-card" style="margin-bottom: 30px;">
+                            <h3 style="color: var(--primary);">${caso.t}</h3>
+                            <div class="alert alert-critical"><span class="alert-icon">🔴</span><div><strong>Escenario:</strong> ${caso.d}</div></div>
+                            <p style="color: var(--accent); font-weight: bold; margin-bottom: 15px;">📝 ${caso.p}</p>
+                            <textarea 
+                                id="caso${caso.id}"
+                                placeholder="Escribe tu respuesta detallada aquí (mínimo ${caso.min} caracteres)..." 
+                                oninput="guardarCaso(${caso.id}, this.value)"
+                                style="min-height: 200px; ${!isValid && chars > 0 ? 'border-color: var(--danger);' : ''}">${evalData.caseAnswers[caso.id] || ''}</textarea>
+                            <div class="char-counter">
+                                <span style="color: ${isValid ? 'var(--success)' : 'var(--danger)'}">${chars}/${caso.min} caracteres</span>
+                                ${isValid ? ' ✓' : ' (faltan ' + (caso.min - chars) + ')'}
+                            </div>
+                        </div>
+                    `}).join('')}
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">💡</span>
+                        <div>
+                            <strong>Tip:</strong> Describe paso a paso tus acciones, justifica cada decisión y menciona factores de seguridad.
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" style="width: 100%; padding: 20px; font-size: 18px; background: linear-gradient(135deg, #8A2BE2, #6a1bb2);" 
+                            onclick="mostrarSims()" id="btnContinuarSims"
+                            ${!validarCasos() ? 'disabled' : ''}>
+                        Continuar a Simulaciones →
+                    </button>
+                </div>
+            `;
+        }
+        
+        function guardarCaso(id, val){
+            evalData.caseAnswers[id] = val;
+            const btn = document.getElementById('btnContinuarSims');
+            if(btn) btn.disabled = !validarCasos();
+            const caso = casos.find(c => c.id === id);
+            if(caso){
+                const counter = document.querySelector(`#caso${id} + .char-counter`);
+                if(counter){
+                    const chars = val.length;
+                    const isValid = chars >= caso.min;
+                    counter.innerHTML = `
+                        <span style="color: ${isValid ? 'var(--success)' : 'var(--danger)'}">${chars}/${caso.min} caracteres</span>
+                        ${isValid ? ' ✓' : ' (faltan ' + (caso.min - chars) + ')'}
+                    `;
+                }
+            }
+        }
+        
+        function mostrarSims(){
+            const c=document.getElementById('evaluacionContainer');
+            c.innerHTML=`
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 20px; background: rgba(138,43,226,0.2); border-radius: 12px;">
+                        <h2 style="margin: 0; display: flex; align-items: center; gap: 10px;"><span>🎮</span><span>Simulaciones Prácticas</span></h2>
+                        <div class="eval-timer"><span>⏱️</span><span id="evalTimer">${fmtTime(evalData.timeLeft)}</span></div>
+                    </div>
+                    
+                    ${sims.map(sim=>`
+                        <div class="question-card" style="border: 2px solid var(--danger); margin-bottom: 30px;">
+                            <h3 style="color: #8A2BE2;">${sim.t}</h3>
+                            <div style="background: rgba(255,82,82,0.2); border: 2px solid var(--danger); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                                <p style="color: white; font-weight: 600; margin: 0;">${sim.e}</p>
+                            </div>
+                            <p style="color: var(--warning); font-weight: bold; margin-bottom: 20px;">⏱️ Decisión bajo presión: elige la mejor opción</p>
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                ${sim.o.map((op,i)=>`
+                                    <button class="option-btn ${evalData.simAnswers[sim.id]===i?'selected':''}" onclick="selSim(${sim.id},${i})">${op}</button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                    
+                    <button class="btn-primary" style="width: 100%; padding: 20px; font-size: 18px; background: linear-gradient(135deg, #00D9A5, #00a077);" 
+                            onclick="finalizarEval()"
+                            ${Object.keys(evalData.simAnswers).length!==sims.length?'disabled':''}>
+                        🏁 FINALIZAR EVALUACIÓN
+                    </button>
+                </div>
+            `;
+        }
+        
+        function selSim(id,idx){evalData.simAnswers[id]=idx;mostrarSims();}
+        
+        function calcScore(){
+            let corr=0;
+            preguntas.forEach(q=>{if(evalData.answers[q.id]===q.c)corr++;});
+            const tScore=(corr/preguntas.length)*100;
+            const cScore=(Object.keys(evalData.caseAnswers).length/casos.length)*100;
+            const p1=(tScore*0.7+cScore*0.3);
+            let simCorr=0;
+            sims.forEach(s=>{if(evalData.simAnswers[s.id]===s.c)simCorr++;});
+            const p2=(simCorr/sims.length)*100;
+            const final=(p1*0.7+p2*0.3);
+            return {final,p1,p2,tScore,cScore,corr,total:preguntas.length,simCorr,simTotal:sims.length};
+        }
+        
+        function finalizarEval(){
+            clearInterval(evalData.timer);
+            const sc=calcScore();
+            const apr=sc.final>=80;
+            
+            const c=document.getElementById('evaluacionContainer');
+            c.innerHTML=`
+                <div class="card">
+                    <div style="background: ${apr?'linear-gradient(135deg, #00D9A5, #00a077)':'linear-gradient(135deg, #FF5252, #c94029)'}; padding: 40px; border-radius: 16px; text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 80px; margin-bottom: 20px;">${apr?'✅':'❌'}</div>
+                        <h1 style="color: white; font-size: 48px; margin: 0;">${apr?'¡APROBADO!':'NO APROBADO'}</h1>
+                        <p style="color: rgba(255,255,255,0.9); font-size: 20px; margin: 10px 0 0 0;">
+                            ${apr?'Felicitaciones, eres un controlador certificado':'Necesitas mejorar en algunas áreas'}
+                        </p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px;">
+                        <div style="background: rgba(255, 107, 53, 0.1); padding: 30px; border-radius: 16px; text-align: center;">
+                            <p style="color: var(--text-secondary); margin-bottom: 10px;">Nota Final</p>
+                            <div class="score-display">${sc.final.toFixed(1)}%</div>
+                        </div>
+                        <div style="background: rgba(66, 165, 245, 0.1); padding: 30px; border-radius: 16px; text-align: center;">
+                            <p style="color: var(--text-secondary); margin-bottom: 10px;">Requerido</p>
+                            <div class="score-display" style="color: var(--info);">80%</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <div style="background: rgba(26,31,58,0.6); padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <span>Parte 1: Teórico (70%)</span>
+                                <span style="font-weight: bold; color: var(--info);">${sc.p1.toFixed(1)}%</span>
+                            </div>
+                            <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden;">
+                                <div style="height: 100%; background: linear-gradient(90deg, #42A5F5, #1976D2); width: ${sc.p1}%; transition: width 1s ease;"></div>
+                            </div>
+                            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 14px;">
+                                Preguntas correctas: ${sc.corr}/${sc.total} | Casos completados: ${Object.keys(evalData.caseAnswers).length}/${casos.length}
+                            </p>
+                        </div>
+                        
+                        <div style="background: rgba(26,31,58,0.6); padding: 25px; border-radius: 12px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                <span>Parte 2: Simulaciones (30%)</span>
+                                <span style="font-weight: bold; color: #8A2BE2;">${sc.p2.toFixed(1)}%</span>
+                            </div>
+                            <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden;">
+                                <div style="height: 100%; background: linear-gradient(90deg, #8A2BE2, #6a1bb2); width: ${sc.p2}%; transition: width 1s ease;"></div>
+                            </div>
+                            <p style="margin-top: 15px; color: var(--text-secondary); font-size: 14px;">
+                                Simulaciones correctas: ${sc.simCorr}/${sc.simTotal}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    ${apr?`
+                        <div class="alert alert-success">
+                            <span class="alert-icon">🎉</span>
+                            <div>
+                                <strong>¡Excelente trabajo!</strong>
+                                <p style="margin: 10px 0;">Has completado exitosamente el módulo más exigente del curso.</p>
+                                <div style="background: rgba(26,31,58,0.6); padding: 20px; border-radius: 12px; margin-top: 15px;">
+                                    <p style="font-weight: bold; color: var(--primary); margin-bottom: 10px;">Recuerda siempre:</p>
+                                    <p style="margin: 5px 0;">🧠 <strong>PIENSA</strong> antes de actuar</p>
+                                    <p style="margin: 5px 0;">📞 <strong>COMUNICA</strong> claramente</p>
+                                    <p style="margin: 5px 0;">📝 <strong>DOCUMENTA</strong> todo</p>
+                                    <p style="margin: 5px 0;">🎯 <strong>PRIORIZA</strong> la vida sobre la producción</p>
+                                    <p style="margin-top: 15px; text-align: center; font-size: 18px; font-weight: bold; color: var(--primary);">
+                                        Eres el último eslabón de seguridad. La mina confía en ti.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `:`
+                        <div class="alert alert-warning">
+                            <span class="alert-icon">📚</span>
+                            <div>
+                                <strong>Áreas de Mejora:</strong>
+                                <ul style="margin: 10px 0 0 0;">
+                                    ${sc.tScore<80?'<li>Revisar protocolos de gestión de incidentes</li>':''}
+                                    ${sc.cScore<80?'<li>Practicar análisis de casos críticos con más detalle</li>':''}
+                                    ${sc.p2<80?'<li>Mejorar toma de decisiones bajo presión</li>':''}
+                                </ul>
+                            </div>
+                        </div>
+                    `}
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 30px;">
+                        ${!apr&&evalData.attempt<2?`
+                            <button class="btn-primary" style="flex: 1;" onclick="reintentar()">
+                                🔄 REINTENTAR (Intento ${evalData.attempt+1} de 2)
+                            </button>
+                        `:''}
+                        ${apr?`
+                            <button class="btn-primary" style="flex: 1; background: linear-gradient(135deg, var(--secondary), #003a6f);" onclick="descargarCert()">
+                                📄 DESCARGAR CERTIFICADO
+                            </button>
+                        `:''}
+                    </div>
+                </div>
+            `;
+            
+            localStorage.setItem('evalScore',JSON.stringify(sc));
+            localStorage.setItem('evalAprobado',apr);
+        }
+        
+        function reintentar(){
+            evalData.attempt++;
+            localStorage.setItem('evalAttempt',evalData.attempt);
+            evalData.stage='inicio';
+            loadEval();
+        }
+        
+        function descargarCert(){
+            const sc=JSON.parse(localStorage.getItem('evalScore'));
+            const fecha = new Date().toLocaleDateString('es-ES', {year: 'numeric', month: 'long', day: 'numeric'});
+            const cert=`
+═══════════════════════════════════════════════════════
+            CERTIFICADO DE APROBACIÓN
+═══════════════════════════════════════════════════════
+
+                  MÓDULO 5
+    Gestión de Incidentes y Emergencias
+  Sistema de Camiones Autónomos Mineros
+
+───────────────────────────────────────────────────────
+
+Se certifica que el participante ha completado
+exitosamente el Módulo 5 del programa de formación
+de Controlador de Terreno.
+
+Nota Final: ${sc.final.toFixed(1)}%
+Fecha de Certificación: ${fecha}
+
+───────────────────────────────────────────────────────
+
+Competencias Certificadas:
+✓ Gestión de incidentes críticos en sistemas autónomos
+✓ Toma de decisiones bajo presión extrema
+✓ Comunicación efectiva en situaciones de crisis
+✓ Documentación forense de incidentes
+✓ Aplicación de protocolos de seguridad
+
+───────────────────────────────────────────────────────
+
+         "Eres el último eslabón de seguridad.
+                La mina confía en ti."
+
+═══════════════════════════════════════════════════════
+            `;
+            
+            const blob=new Blob([cert],{type:'text/plain;charset=utf-8'});
+            const url=URL.createObjectURL(blob);
+            const a=document.createElement('a');
+            a.href=url;
+            a.download='Certificado_Modulo5_'+new Date().toISOString().split('T')[0]+'.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // NAVEGACIÓN
+        const navItems=document.querySelectorAll('.nav-item');
+        const contentSections=document.querySelectorAll('.content-section');
+        const mainContent=document.getElementById('mainContent');
+        
+        navItems.forEach(item=>{
+            item.addEventListener('click',()=>{
+                const target=item.dataset.section;
+                navItems.forEach(n=>n.classList.remove('active'));
+                item.classList.add('active');
+                contentSections.forEach(s=>s.classList.remove('active'));
+                document.getElementById(target).classList.add('active');
+                mainContent.scrollTop=0;
+                item.classList.add('completed');
+                item.querySelector('.nav-check').textContent='✓';
+                updateProgress();
+                saveProgress();
+                if(target==='evaluacion') loadEval();
+            });
+        });
+        
+        document.addEventListener('click',(e)=>{
+            if(e.target.closest('.accordion-header')){
+                e.target.closest('.accordion-item').classList.toggle('active');
+            }
+        });
+        
+        function updateProgress(){
+            const total=navItems.length;
+            const comp=document.querySelectorAll('.nav-item.completed').length;
+            const pct=Math.round((comp/total)*100);
+            const ring=document.querySelector('.progress-ring');
+            const txt=document.querySelector('.progress-text');
+            const circ=2*Math.PI*20;
+            const offset=circ-(pct/100)*circ;
+            ring.style.strokeDashoffset=offset;
+            txt.textContent=pct+'%';
+        }
+        
+        function saveProgress(){
+            const comp=Array.from(navItems).map((it,i)=>it.classList.contains('completed')?i:null).filter(i=>i!==null);
+            localStorage.setItem('moduleProgress',JSON.stringify(comp));
+        }
+        
+        function loadProgress(){
+            const saved=localStorage.getItem('moduleProgress');
+            if(saved){
+                JSON.parse(saved).forEach(i=>{
+                    if(navItems[i]){
+                        navItems[i].classList.add('completed');
+                        navItems[i].querySelector('.nav-check').textContent='✓';
+                    }
+                });
+                updateProgress();
+            }
+        }
+        
+        // PDF
+        document.getElementById('pdfBtn').addEventListener('click',async()=>{
+            const btn=document.getElementById('pdfBtn');
+            btn.classList.add('generating');
+            btn.innerHTML='<span>⏳</span><span>Generando...</span>';
+            try{
+                const {jsPDF}=window.jspdf;
+                const pdf=new jsPDF();
+                pdf.setFontSize(16);
+                pdf.text('Módulo 5: Gestión de Incidentes',20,20);
+                pdf.setFontSize(12);
+                pdf.text('Sistema de Camiones Autónomos Mineros',20,30);
+                pdf.text('Fecha: '+new Date().toLocaleDateString(),20,40);
+                pdf.save('Modulo5_'+new Date().toISOString().split('T')[0]+'.pdf');
+                btn.innerHTML='<span>✅</span><span>¡Descargado!</span>';
+                setTimeout(()=>{
+                    btn.classList.remove('generating');
+                    btn.innerHTML='<span>📥</span><span>Descargar PDF</span>';
+                },3000);
+            }catch(e){
+                btn.classList.remove('generating');
+                btn.innerHTML='<span>❌</span><span>Error</span>';
+                setTimeout(()=>{
+                    btn.innerHTML='<span>📥</span><span>Descargar PDF</span>';
+                },3000);
+            }
+        });
+        
+        loadProgress();
+        updateProgress();
+    </script>
+</body>
+</html>
