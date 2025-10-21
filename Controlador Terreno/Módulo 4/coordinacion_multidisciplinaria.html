@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección 5: Coordinación Multidisciplinaria Avanzada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #ffd700;
+        }
+
+        .logo-space {
+            width: 200px;
+            height: 80px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .logo-space img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #87ceeb;
+            margin: 25px 0 15px 0;
+            font-size: 1.4rem;
+        }
+
+        .section h4 {
+            color: #90ee90;
+            margin: 20px 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .content-image {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            margin: 20px 0;
+            border-radius: 10px;
+            object-fit: contain;
+            border: 2px solid rgba(135, 206, 235, 0.3);
+            background: rgba(0, 0, 0, 0.2);
+            display: block;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ffd700;
+        }
+
+        .game-title {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .game-interface {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .control-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .control-button {
+            background: linear-gradient(45deg, #0066cc, #004499);
+            border: none;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: linear-gradient(45deg, #0088ff, #0066cc);
+            transform: translateY(-2px);
+        }
+
+        .quiz-container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #90ee90;
+        }
+
+        .question {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .options {
+            margin: 15px 0;
+        }
+
+        .option {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            text-align: left;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #90ee90;
+        }
+
+        .feedback.incorrect {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff6666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #90ee90);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            text-align: center;
+            border-top: 3px solid #ffd700;
+            margin-top: 50px;
+        }
+
+        .highlight-box {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .warning-box {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff6666;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .info-box {
+            background: rgba(135, 206, 235, 0.1);
+            border: 2px solid #87ceeb;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .success-box {
+            background: rgba(144, 238, 144, 0.1);
+            border: 2px solid #90ee90;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        th, td {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .simulation-display {
+            background: #000;
+            border: 2px solid #87ceeb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online { background: #00ff00; }
+        .status-warning { background: #ffff00; }
+        .status-offline { background: #ff0000; }
+
+        .case-study {
+            background: rgba(255, 255, 255, 0.08);
+            border-left: 4px solid #87ceeb;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .checklist {
+            background: rgba(144, 238, 144, 0.1);
+            border: 1px solid #90ee90;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .checklist li {
+            list-style-type: none;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .checklist li:before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-space">
+            <img src="imagotipoblanco.webp" alt="ANUPRO360 Logo" />
+        </div>
+        <h1>SECCIÓN 5: COORDINACIÓN MULTIDISCIPLINARIA AVANZADA</h1>
+        <p>Curso Integral para Controladores de Terreno - Micro-módulo Semana 5</p>
+    </div>
+
+    <div class="container">
+        <!-- CONTENIDO TEÓRICO PRINCIPAL -->
+        <div class="section">
+            <h2>📚 CONTENIDO DE ESTUDIO</h2>
+            
+            <h3>5.1 ¿Qué es la Coordinación Multidisciplinaria Avanzada?</h3>
+            <img src="coordinacion_multidisciplinaria_concepto.webp" alt="Concepto de Coordinación Multidisciplinaria" class="content-image" />
+            
+            <p>Es la capacidad de organizar y conectar distintas áreas de la mina al mismo tiempo (Operaciones, Seguridad, Mantenimiento, Medioambiente, Geotecnia y TI) para que todo funcione seguro, continuo y sin interrupciones.</p>
+
+            <div class="highlight-box">
+                <p><strong>Un Controlador/a de Terreno no solo "mira pantallas":</strong> es el centro de la operación autónoma, quien asegura que todos hablen el mismo idioma operativo y que la seguridad esté siempre por encima de la producción.</p>
+            </div>
+
+            <h4>5.1.1 Áreas que debes coordinar como Controlador de Terreno</h4>
+            <img src="areas_coordinacion_mina.webp" alt="Áreas de Coordinación en la Mina" class="content-image" />
+            
+            <table>
+                <tr>
+                    <th>Área</th>
+                    <th>Función Principal</th>
+                    <th>Interacción con Controlador</th>
+                </tr>
+                <tr>
+                    <td>Operaciones</td>
+                    <td>Producción y movimiento de material</td>
+                    <td>Optimización de rutas y flujos</td>
+                </tr>
+                <tr>
+                    <td>Seguridad</td>
+                    <td>Protección de personas y equipos</td>
+                    <td>Gestión de riesgos y emergencias</td>
+                </tr>
+                <tr>
+                    <td>Mantenimiento</td>
+                    <td>Disponibilidad de equipos</td>
+                    <td>Coordinación de intervenciones</td>
+                </tr>
+                <tr>
+                    <td>Medioambiente</td>
+                    <td>Cumplimiento normativo</td>
+                    <td>Monitoreo de impactos</td>
+                </tr>
+                <tr>
+                    <td>Geotecnia</td>
+                    <td>Estabilidad de taludes</td>
+                    <td>Actualizaciones de mapas</td>
+                </tr>
+                <tr>
+                    <td>TI</td>
+                    <td>Conectividad y sistemas</td>
+                    <td>Soporte técnico y telemetría</td>
+                </tr>
+            </table>
+
+            <h3>5.2 ¿Para qué sirve la Coordinación Multidisciplinaria?</h3>
+            <img src="beneficios_coordinacion.webp" alt="Beneficios de la Coordinación Multidisciplinaria" class="content-image" />
+
+            <div class="info-box">
+                <h4>Objetivos Principales:</h4>
+                <ul>
+                    <li><strong>Evitar accidentes:</strong> comunicar rápido un riesgo salva vidas</li>
+                    <li><strong>Evitar pérdidas de dinero:</strong> detener a tiempo un camión evita fallas costosas</li>
+                    <li><strong>Mantener la producción estable:</strong> ajustar mapas y rutas mantiene el plan minero en marcha</li>
+                    <li><strong>Proteger el medio ambiente:</strong> responder ante polvo, derrames o ruido evita multas y conflictos</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <p><strong>En simple:</strong> sirve para que la mina trabaje como un reloj, sin improvisaciones.</p>
+            </div>
+
+            <h3>5.3 ¿Por qué es importante para ti como Controlador/a?</h3>
+            <img src="importancia_controlador.webp" alt="Importancia del Rol del Controlador" class="content-image" />
+
+            <div class="warning-box">
+                <h4>Tu Responsabilidad Central:</h4>
+                <ul>
+                    <li><strong>Porque ves todo en tu consola:</strong> rutas, alarmas, cámaras, redes</li>
+                    <li><strong>Porque recibes las alertas primero</strong> y debes reaccionar antes que cualquiera en terreno</li>
+                    <li><strong>Porque tus decisiones impactan a todos:</strong> un mensaje mal comunicado puede generar un accidente; uno bien hecho puede salvar vidas</li>
+                </ul>
+            </div>
+
+            <h3>5.4 Aplicación Práctica: Casos Reales del Día a Día</h3>
+
+            <h4>5.4.1 Caso A – Obstáculo en Rampa</h4>
+            <div class="case-study">
+                <p><strong>Situación:</strong> Sensor detecta obstáculo en rampa principal</p>
+                <p><strong>Proceso de Coordinación:</strong></p>
+                <ol>
+                    <li><strong>Verificas cámaras</strong> → Confirmas presencia del obstáculo</li>
+                    <li><strong>Bloqueas ruta</strong> → Evitas que más vehículos se acerquen</li>
+                    <li><strong>Informas por radio con closed-loop</strong> → Aseguras comunicación clara</li>
+                    <li><strong>Seguridad inspecciona</strong> → Valida el riesgo in situ</li>
+                    <li><strong>Mantenimiento revisa</strong> → Determina acciones correctivas</li>
+                    <li><strong>Reabres con prueba en vacío</strong> → Validas seguridad antes de operación normal</li>
+                </ol>
+                <p><strong>👉 Coordinaste:</strong> Seguridad, Mantenimiento y Operaciones</p>
+            </div>
+            <img src="caso_obstaculo_rampa.webp" alt="Caso de Obstáculo en Rampa" class="content-image" />
+
+            <h4>5.4.2 Caso B – Red Débil en Sector Oeste</h4>
+            <div class="case-study">
+                <p><strong>Situación:</strong> Degradación de señal GPS en área operativa</p>
+                <p><strong>Proceso de Coordinación:</strong></p>
+                <ol>
+                    <li><strong>Detectas alerta de GPS</strong> → Sistema te notifica automáticamente</li>
+                    <li><strong>Activas perfil degradado</strong> → Reduces velocidades y aumentas distancias</li>
+                    <li><strong>Escalas con SBAR a TI</strong> → Reportas técnicamente el problema</li>
+                    <li><strong>Despacho ajusta colas</strong> → Optimiza operación bajo restricciones</li>
+                    <li><strong>Reinicias tras validación</strong> → Confirmas estabilidad antes de normalizar</li>
+                </ol>
+                <p><strong>👉 Coordinaste:</strong> TI y Despacho</p>
+            </div>
+            <img src="caso_red_debil.webp" alt="Caso de Red Débil" class="content-image" />
+
+            <h4>5.4.3 Caso C – Cambio de Mapa por Muro Inestable</h4>
+            <div class="case-study">
+                <p><strong>Situación:</strong> Geotecnia detecta inestabilidad en talud</p>
+                <p><strong>Proceso de Coordinación:</strong></p>
+                <ol>
+                    <li><strong>Geotecnia avisa</strong> → Recibe alerta oficial del riesgo</li>
+                    <li><strong>Publicas mapa nuevo</strong> → Implementas ruta alternativa</li>
+                    <li><strong>Informas a flota</strong> → Notificas cambio a todos los vehículos</li>
+                    <li><strong>Seguridad valida</strong> → Confirma que nueva ruta es segura</li>
+                    <li><strong>Producción ajusta</strong> → Adapta plan operativo al cambio</li>
+                </ol>
+                <p><strong>👉 Coordinaste:</strong> Geotecnia, Seguridad y Operaciones</p>
+            </div>
+            <img src="caso_cambio_mapa.webp" alt="Caso de Cambio de Mapa" class="content-image" />
+
+            <h3>5.5 Herramientas de Comunicación Críticas</h3>
+            <img src="herramientas_comunicacion.webp" alt="Herramientas de Comunicación" class="content-image" />
+
+            <h4>5.5.1 Técnica Closed-Loop</h4>
+            <div class="info-box">
+                <p><strong>Ejemplo Práctico:</strong></p>
+                <p><strong>Tú:</strong> "CAEX 412, reduzca a 25 km/h en rampa 3."</p>
+                <p><strong>CAEX 412:</strong> "Reduciendo a 25 en rampa 3."</p>
+                <p><strong>Tú:</strong> "Recibido, mantenga 25."</p>
+                <p><strong>✅ Así confirmas que la orden fue entendida.</strong></p>
+            </div>
+
+            <h4>5.5.2 Método SBAR para Escalamiento</h4>
+            <div class="highlight-box">
+                <p><strong>S - Situación:</strong> "Obstáculo en rampa 2."</p>
+                <p><strong>B - Background:</strong> "Detectado hace 2 min por sensor y cámara."</p>
+                <p><strong>A - Assessment:</strong> "Puede ser material caído."</p>
+                <p><strong>R - Recommendation:</strong> "Bloquear ruta y enviar Seguridad a verificar."</p>
+            </div>
+
+            <img src="tecnica_sbar.webp" alt="Técnica SBAR" class="content-image" />
+
+            <h3>5.6 Errores Frecuentes que Debes Evitar</h3>
+            <img src="errores_frecuentes.webp" alt="Errores Frecuentes" class="content-image" />
+
+            <div class="warning-box">
+                <h4>⚠️ Errores Críticos a Evitar:</h4>
+                <ul>
+                    <li><strong>Dar órdenes sin confirmación</strong> → Usa closed-loop</li>
+                    <li><strong>Reanudar tráfico tras una alarma sin verificar</strong> → Confirma con cámaras o inspección</li>
+                    <li><strong>Cambiar mapas sin control</strong> → Aplica MoC y prueba en vacío</li>
+                    <li><strong>Ignorar fatiga</strong> → Haz pausas cortas programadas</li>
+                </ul>
+            </div>
+
+            <h3>5.7 Checklist Práctico del Controlador</h3>
+            <img src="checklist_controlador.webp" alt="Checklist del Controlador" class="content-image" />
+
+            <div class="checklist">
+                <h4>Antes del turno:</h4>
+                <li>Red OK</li>
+                <li>Cámaras operativas</li>
+                <li>Alarmas limpias</li>
+                <li>Geocercas activas</li>
+            </div>
+
+            <div class="checklist">
+                <h4>Durante el turno:</h4>
+                <li>Usa radio correcta</li>
+                <li>Confirma órdenes</li>
+                <li>Revisa KPIs</li>
+                <li>Pausa de fatiga</li>
+            </div>
+
+            <div class="checklist">
+                <h4>Después del turno:</h4>
+                <li>Registra eventos</li>
+                <li>Documenta cambios</li>
+                <li>Entrega handover claro</li>
+            </div>
+
+            <h3>5.8 Mensaje Motivacional Final</h3>
+            <img src="mensaje_motivacional.webp" alt="Mensaje Motivacional" class="content-image" />
+
+            <div class="success-box">
+                <p><strong>Tu rol no es "estar sentado frente a una pantalla":</strong> tu rol es proteger vidas, mantener el flujo productivo y conectar equipos distintos para que la mina funcione de manera segura.</p>
+                <p><strong>Cada decisión que tomas y cada mensaje que confirmas construye confianza y seguridad en toda la operación.</strong></p>
+            </div>
+        </div>
+
+        <!-- JUEGOS EDUCATIVOS -->
+        <div class="section">
+            <h2>🎮 JUEGOS EDUCATIVOS INTERACTIVOS</h2>
+            
+            <!-- Juego 1 -->
+            <div class="game-container">
+                <div class="game-title">Juego 1: Simulador de Comunicación Closed-Loop</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Practica la técnica de comunicación closed-loop enviando mensajes claros y confirmando recepción.</p>
+                    <p><strong>Beneficio Educativo:</strong> Desarrolla habilidades de comunicación efectiva y protocolo de confirmación para evitar malentendidos operacionales.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="sendMessage('speed')">📻 REDUCIR VELOCIDAD</button>
+                        <button class="control-button" onclick="sendMessage('stop')">🛑 DETENER VEHÍCULO</button>
+                        <button class="control-button" onclick="sendMessage('route')">🛣️ CAMBIAR RUTA</button>
+                        <button class="control-button" onclick="sendMessage('confirm')">✅ CONFIRMAR RECEPCIÓN</button>
+                    </div>
+                    <div class="simulation-display" id="game1-display">
+                        CENTRO DE COMUNICACIONES ACTIVO
+                        Esperando mensaje del controlador...
+                        Vehículos conectados: 8 | Canal: Abierto
+                        Estado: Listo para comunicación
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 2 -->
+            <div class="game-container">
+                <div class="game-title">Juego 2: Gestión de Crisis Multidisciplinaria</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Coordina diferentes áreas de la mina durante una situación de emergencia usando protocolos establecidos.</p>
+                    <p><strong>Beneficio Educativo:</strong> Mejora la capacidad de toma de decisiones bajo presión y coordinación efectiva entre múltiples disciplinas.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="coordinateArea('security')">🛡️ SEGURIDAD</button>
+                        <button class="control-button" onclick="coordinateArea('maintenance')">🔧 MANTENIMIENTO</button>
+                        <button class="control-button" onclick="coordinateArea('operations')">⚙️ OPERACIONES</button>
+                        <button class="control-button" onclick="coordinateArea('environment')">🌱 MEDIOAMBIENTE</button>
+                    </div>
+                    <div class="simulation-display" id="game2-display">
+                        CRISIS SIMULADA: DERRAME EN SECTOR 4
+                        Áreas por coordinar: 4 | Tiempo crítico: 05:00
+                        Estado: Esperando coordinación del controlador
+                        Prioridad: ALTA - Acción inmediata requerida
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 3 -->
+            <div class="game-container">
+                <div class="game-title">Juego 3: Aplicación del Método SBAR</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Estructura un reporte usando el método SBAR para escalar problemas técnicos eficientemente.</p>
+                    <p><strong>Beneficio Educativo:</strong> Practica la comunicación estructurada para escalamiento efectivo de problemas a supervisores y especialistas.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="sbarStep('situation')">📋 SITUACIÓN</button>
+                        <button class="control-button" onclick="sbarStep('background')">📖 CONTEXTO</button>
+                        <button class="control-button" onclick="sbarStep('assessment')">🔍 EVALUACIÓN</button>
+                        <button class="control-button" onclick="sbarStep('recommendation')">💡 RECOMENDACIÓN</button>
+                    </div>
+                    <div class="simulation-display" id="game3-display">
+                        REPORTE SBAR EN CONSTRUCCIÓN
+                        Problema: Falla sistema GPS en sector norte
+                        Completado: 0/4 pasos
+                        Tiempo objetivo: 90 segundos
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 4 -->
+            <div class="game-container">
+                <div class="game-title">Juego 4: Coordinación de Cambio de Mapas</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Gestiona un cambio de mapa siguiendo el protocolo de Management of Change (MoC) y coordina con todas las áreas involucradas.</p>
+                    <p><strong>Beneficio Educativo:</strong> Desarrolla comprensión de procesos de cambio controlado y coordinación inter-áreas en modificaciones operacionales.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="mapChange('geotecnia')">🏔️ CONSULTAR GEOTECNIA</button>
+                        <button class="control-button" onclick="mapChange('publish')">📤 PUBLICAR MAPA</button>
+                        <button class="control-button" onclick="mapChange('validate')">✅ VALIDAR SEGURIDAD</button>
+                        <button class="control-button" onclick="mapChange('implement')">🚀 IMPLEMENTAR</button>
+                    </div>
+                    <div class="simulation-display" id="game4-display">
+                        CAMBIO DE MAPA EN PROCESO
+                        Motivo: Inestabilidad talud rampa 7
+                        Ruta alternativa: Disponible
+                        Estado: Esperando validación geotécnica
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 5 -->
+            <div class="game-container">
+                <div class="game-title">Juego 5: Gestión de Alarmas y Priorización</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Prioriza y gestiona múltiples alarmas simultáneas según su criticidad y riesgo asociado.</p>
+                    <p><strong>Beneficio Educativo:</strong> Mejora la capacidad de priorización bajo estrés y gestión eficiente de múltiples eventos simultáneos.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="manageAlarm('critical')">🔴 ALARMA CRÍTICA</button>
+                        <button class="control-button" onclick="manageAlarm('warning')">🟡 ADVERTENCIA</button>
+                        <button class="control-button" onclick="manageAlarm('info')">🔵 INFORMACIÓN</button>
+                        <button class="control-button" onclick="manageAlarm('acknowledge')">✅ RECONOCER</button>
+                    </div>
+                    <div class="simulation-display" id="game5-display">
+                        PANEL DE ALARMAS ACTIVO
+                        Críticas: 2 | Advertencias: 5 | Info: 12
+                        Sin reconocer: 7 | Tiempo respuesta: 15 seg
+                        Próxima acción: Atender alarma crítica
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 6 -->
+            <div class="game-container">
+                <div class="game-title">Juego 6: Coordinación de Mantenimiento Preventivo</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Coordina ventanas de mantenimiento minimizando impacto operacional y asegurando disponibilidad de equipos.</p>
+                    <p><strong>Beneficio Educativo:</strong> Desarrolla habilidades de planificación operacional y coordinación con áreas de mantenimiento.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="maintenance('schedule')">📅 PROGRAMAR</button>
+                        <button class="control-button" onclick="maintenance('isolate')">🔐 AISLAR EQUIPO</button>
+                        <button class="control-button" onclick="maintenance('redirect')">🔄 REDIRIGIR TRÁFICO</button>
+                        <button class="control-button" onclick="maintenance('validate')">✅ VALIDAR RETORNO</button>
+                    </div>
+                    <div class="simulation-display" id="game6-display">
+                        COORDINACIÓN MANTENIMIENTO
+                        Equipo: CAEX-007 | Tipo: Preventivo
+                        Duración estimada: 4 horas
+                        Impacto producción: Bajo
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 7 -->
+            <div class="game-container">
+                <div class="game-title">Juego 7: Respuesta a Condiciones Ambientales</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Gestiona operaciones durante condiciones ambientales adversas coordinando con el área de medioambiente.</p>
+                    <p><strong>Beneficio Educativo:</strong> Practica la gestión de riesgos ambientales y coordinación con especialistas en sostenibilidad.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="environmental('monitor')">🌡️ MONITOREAR</button>
+                        <button class="control-button" onclick="environmental('reduce')">📉 REDUCIR ACTIVIDAD</button>
+                        <button class="control-button" onclick="environmental('suspend')">⏸️ SUSPENDER</button>
+                        <button class="control-button" onclick="environmental('resume')">▶️ REANUDAR</button>
+                    </div>
+                    <div class="simulation-display" id="game7-display">
+                        MONITOREO AMBIENTAL ACTIVO
+                        Polvo: 85 μg/m³ | Ruido: 72 dB
+                        Viento: 25 km/h | Humedad: 15%
+                        Estado: Dentro de límites normales
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 8 -->
+            <div class="game-container">
+                <div class="game-title">Juego 8: Gestión de Red y Conectividad</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Coordina con TI la resolución de problemas de conectividad y implementa protocolos de operación degradada.</p>
+                    <p><strong>Beneficio Educativo:</strong> Desarrolla comprensión de sistemas tecnológicos y protocolos de contingencia ante fallas técnicas.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="network('diagnose')">🔍 DIAGNOSTICAR</button>
+                        <button class="control-button" onclick="network('degrade')">📉 MODO DEGRADADO</button>
+                        <button class="control-button" onclick="network('escalate')">📞 ESCALAR A TI</button>
+                        <button class="control-button" onclick="network('restore')">🔄 RESTAURAR</button>
+                    </div>
+                    <div class="simulation-display" id="game8-display">
+                        ESTADO DE RED - SECTOR OESTE
+                        Latencia: 45ms | Pérdida paquetes: 2%
+                        Señal GPS: 89% | Conectividad: ESTABLE
+                        Torres activas: 4/4
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 9 -->
+            <div class="game-container">
+                <div class="game-title">Juego 9: Simulador de Fatiga y Rotación</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Gestiona tu nivel de fatiga durante el turno implementando pausas estratégicas y técnicas de concentración.</p>
+                    <p><strong>Beneficio Educativo:</strong> Aprende la importancia del autocuidado y gestión personal para mantener alerta operacional durante turnos largos.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="fatigue('break')">☕ PAUSA CORTA</button>
+                        <button class="control-button" onclick="fatigue('breathe')">🫁 RESPIRAR 4-4-4</button>
+                        <button class="control-button" onclick="fatigue('rotate')">🔄 ROTAR FOCO</button>
+                        <button class="control-button" onclick="fatigue('assess')">📊 AUTOEVALUAR</button>
+                    </div>
+                    <div class="simulation-display" id="game9-display">
+                        MONITOR DE FATIGA PERSONAL
+                        Nivel alerta: 85% | Tiempo turno: 4:30h
+                        Pausas tomadas: 2 | Próxima pausa: 1:30h
+                        Estado: ÓPTIMO para operación
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego 10 -->
+            <div class="game-container">
+                <div class="game-title">Juego 10: Centro de Comando Integrado</div>
+                <div class="game-interface">
+                    <p><strong>Instrucciones:</strong> Demuestra tu coordinación multidisciplinaria gestionando un turno completo con múltiples eventos simultáneos.</p>
+                    <p><strong>Beneficio Educativo:</strong> Integra todos los conocimientos aprendidos en una simulación realista de un día completo como controlador de terreno.</p>
+                    <div class="control-panel">
+                        <button class="control-button" onclick="command('start')">🏁 INICIAR TURNO</button>
+                        <button class="control-button" onclick="command('coordinate')">🎯 COORDINAR</button>
+                        <button class="control-button" onclick="command('respond')">⚡ RESPONDER</button>
+                        <button class="control-button" onclick="command('handover')">📝 HACER HANDOVER</button>
+                    </div>
+                    <div class="simulation-display" id="game10-display">
+                        CENTRO DE COMANDO - TURNO DIURNO
+                        Vehículos activos: 8 | Personal en terreno: 24
+                        Eventos del turno: 0 | KPI cumplimiento: 98%
+                        Estado: Listo para iniciar simulación
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EVALUACIÓN CON QUIZ -->
+        <div class="section">
+            <h2>📝 EVALUACIÓN DE CONOCIMIENTOS</h2>
+            <div class="quiz-container">
+                <h3>Quiz de Certificación - 20 Preguntas</h3>
+                <div class="progress-bar">
+                    <div class="progress" id="quiz-progress" style="width: 0%"></div>
+                </div>
+                <p>Progreso: <span id="progress-text">0/20</span></p>
+
+                <!-- Pregunta 1 -->
+                <div class="question">
+                    <h4>1. ¿Qué es la coordinación multidisciplinaria avanzada?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(1, 'b', this)">a) Supervisar solo CAEX</button>
+                        <button class="option" onclick="checkAnswer(1, 'b', this)">b) Conectar y organizar distintas áreas para trabajar en conjunto</button>
+                        <button class="option" onclick="checkAnswer(1, 'b', this)">c) Operar palas directamente</button>
+                        <button class="option" onclick="checkAnswer(1, 'b', this)">d) Reemplazar al jefe de mina</button>
+                    </div>
+                    <div class="feedback" id="feedback1">
+                        <strong>Respuesta Correcta: b) Conectar y organizar distintas áreas para trabajar en conjunto</strong><br>
+                        La coordinación multidisciplinaria es la capacidad de organizar Operaciones, Seguridad, Mantenimiento, Medioambiente, Geotecnia y TI para que funcionen seguro, continuo y sin interrupciones.
+                    </div>
+                </div>
+
+                <!-- Pregunta 2 -->
+                <div class="question">
+                    <h4>2. ¿Para qué sirve la coordinación multidisciplinaria?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(2, 'c', this)">a) Solo para acelerar producción</button>
+                        <button class="option" onclick="checkAnswer(2, 'c', this)">b) Para que cada área trabaje aislada</button>
+                        <button class="option" onclick="checkAnswer(2, 'c', this)">c) Para sincronizar seguridad, producción y medioambiente</button>
+                        <button class="option" onclick="checkAnswer(2, 'c', this)">d) Para reducir horas de colación</button>
+                    </div>
+                    <div class="feedback" id="feedback2">
+                        <strong>Respuesta Correcta: c) Para sincronizar seguridad, producción y medioambiente</strong><br>
+                        El objetivo es evitar accidentes, evitar pérdidas económicas, mantener producción estable y proteger el medio ambiente.
+                    </div>
+                </div>
+
+                <!-- Pregunta 3 -->
+                <div class="question">
+                    <h4>3. ¿Cuál es tu prioridad número 1 como Controlador/a de Terreno?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(3, 'b', this)">a) Cumplir producción</button>
+                        <button class="option" onclick="checkAnswer(3, 'b', this)">b) Seguridad de las personas y equipos</button>
+                        <button class="option" onclick="checkAnswer(3, 'b', this)">c) Evitar comunicar</button>
+                        <button class="option" onclick="checkAnswer(3, 'b', this)">d) Ahorrar combustible</button>
+                    </div>
+                    <div class="feedback" id="feedback3">
+                        <strong>Respuesta Correcta: b) Seguridad de las personas y equipos</strong><br>
+                        La seguridad está siempre por encima de la producción. Un controlador debe asegurar que todos operen de manera segura.
+                    </div>
+                </div>
+
+                <!-- Pregunta 4 -->
+                <div class="question">
+                    <h4>4. ¿Qué técnica de comunicación asegura que el mensaje fue entendido?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(4, 'b', this)">a) Hablar más fuerte</button>
+                        <button class="option" onclick="checkAnswer(4, 'b', this)">b) Closed-loop</button>
+                        <button class="option" onclick="checkAnswer(4, 'b', this)">c) Enviar memes</button>
+                        <button class="option" onclick="checkAnswer(4, 'b', this)">d) Ignorar la confirmación</button>
+                    </div>
+                    <div class="feedback" id="feedback4">
+                        <strong>Respuesta Correcta: b) Closed-loop</strong><br>
+                        El closed-loop asegura que el receptor entendió el mensaje al solicitar confirmación explícita de la instrucción.
+                    </div>
+                </div>
+
+                <!-- Pregunta 5 -->
+                <div class="question">
+                    <h4>5. ¿Qué formato se usa para escalar un problema a otra área?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(5, 'b', this)">a) Texto largo</button>
+                        <button class="option" onclick="checkAnswer(5, 'b', this)">b) SBAR</button>
+                        <button class="option" onclick="checkAnswer(5, 'b', this)">c) WhatsApp</button>
+                        <button class="option" onclick="checkAnswer(5, 'b', this)">d) Señales con la mano</button>
+                    </div>
+                    <div class="feedback" id="feedback5">
+                        <strong>Respuesta Correcta: b) SBAR</strong><br>
+                        SBAR (Situación, Background, Assessment, Recommendation) estructura la comunicación para escalamiento efectivo.
+                    </div>
+                </div>
+
+                <!-- Pregunta 6 -->
+                <div class="question">
+                    <h4>6. Si un sensor detecta obstáculo en la rampa, tu primer paso es:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(6, 'b', this)">a) Ignorarlo</button>
+                        <button class="option" onclick="checkAnswer(6, 'b', this)">b) Bloquear la ruta y verificar</button>
+                        <button class="option" onclick="checkAnswer(6, 'b', this)">c) Acelerar la flota</button>
+                        <button class="option" onclick="checkAnswer(6, 'b', this)">d) Esperar que se solucione solo</button>
+                    </div>
+                    <div class="feedback" id="feedback6">
+                        <strong>Respuesta Correcta: b) Bloquear la ruta y verificar</strong><br>
+                        La prioridad es la seguridad: bloquear acceso al obstáculo y verificar la situación antes de cualquier otra acción.
+                    </div>
+                </div>
+
+                <!-- Pregunta 7 -->
+                <div class="question">
+                    <h4>7. Cuando la red GNSS está débil, debes:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(7, 'b', this)">a) Mantener todo normal</button>
+                        <button class="option" onclick="checkAnswer(7, 'b', this)">b) Activar perfil degradado y avisar a TI</button>
+                        <button class="option" onclick="checkAnswer(7, 'b', this)">c) Apagar todos los equipos</button>
+                        <button class="option" onclick="checkAnswer(7, 'b', this)">d) Desactivar alarmas</button>
+                    </div>
+                    <div class="feedback" id="feedback7">
+                        <strong>Respuesta Correcta: b) Activar perfil degradado y avisar a TI</strong><br>
+                        El perfil degradado reduce velocidades y aumenta distancias de seguridad mientras TI resuelve el problema de conectividad.
+                    </div>
+                </div>
+
+                <!-- Pregunta 8 -->
+                <div class="question">
+                    <h4>8. ¿Qué área lidera la gestión de riesgos críticos?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(8, 'b', this)">a) Finanzas</button>
+                        <button class="option" onclick="checkAnswer(8, 'b', this)">b) Seguridad y Salud Ocupacional</button>
+                        <button class="option" onclick="checkAnswer(8, 'b', this)">c) Recursos Humanos</button>
+                        <button class="option" onclick="checkAnswer(8, 'b', this)">d) Medioambiente</button>
+                    </div>
+                    <div class="feedback" id="feedback8">
+                        <strong>Respuesta Correcta: b) Seguridad y Salud Ocupacional</strong><br>
+                        El área de Seguridad es la responsable de liderar la identificación, evaluación y control de riesgos críticos.
+                    </div>
+                </div>
+
+                <!-- Pregunta 9 -->
+                <div class="question">
+                    <h4>9. ¿Cuál es la función del Controlador en un cambio de mapa?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(9, 'b', this)">a) Cambiarlo sin avisar</button>
+                        <button class="option" onclick="checkAnswer(9, 'b', this)">b) Publicarlo con control de cambios, prueba en vacío y aviso</button>
+                        <button class="option" onclick="checkAnswer(9, 'b', this)">c) Dejar que el sistema lo ajuste solo</button>
+                        <button class="option" onclick="checkAnswer(9, 'b', this)">d) No hacer nada</button>
+                    </div>
+                    <div class="feedback" id="feedback9">
+                        <strong>Respuesta Correcta: b) Publicarlo con control de cambios, prueba en vacío y aviso</strong><br>
+                        Los cambios de mapa requieren proceso MoC, validación segura y comunicación a todas las áreas involucradas.
+                    </div>
+                </div>
+
+                <!-- Pregunta 10 -->
+                <div class="question">
+                    <h4>10. En una tormenta eléctrica, lo correcto es:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(10, 'b', this)">a) Acelerar producción</button>
+                        <button class="option" onclick="checkAnswer(10, 'b', this)">b) Replegar equipos a zonas seguras</button>
+                        <button class="option" onclick="checkAnswer(10, 'b', this)">c) Continuar perforando</button>
+                        <button class="option" onclick="checkAnswer(10, 'b', this)">d) Ignorar alertas</button>
+                    </div>
+                    <div class="feedback" id="feedback10">
+                        <strong>Respuesta Correcta: b) Replegar equipos a zonas seguras</strong><br>
+                        Durante tormentas eléctricas, la prioridad es proteger vidas y equipos alejándolos de áreas expuestas.
+                    </div>
+                </div>
+
+                <!-- Pregunta 11 -->
+                <div class="question">
+                    <h4>11. Un near-miss significa:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(11, 'b', this)">a) Accidente mortal</button>
+                        <button class="option" onclick="checkAnswer(11, 'b', this)">b) Incidente sin lesión ni daño</button>
+                        <button class="option" onclick="checkAnswer(11, 'b', this)">c) Multa económica</button>
+                        <button class="option" onclick="checkAnswer(11, 'b', this)">d) Parada mayor</button>
+                    </div>
+                    <div class="feedback" id="feedback11">
+                        <strong>Respuesta Correcta: b) Incidente sin lesión ni daño</strong><br>
+                        Near-miss es un incidente que podría haber resultado en lesión o daño pero no ocurrió. Es importante reportarlo para prevenir futuros accidentes.
+                    </div>
+                </div>
+
+                <!-- Pregunta 12 -->
+                <div class="question">
+                    <h4>12. ¿Qué KPI refleja tu rapidez como Controlador?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(12, 'b', this)">a) Likes en redes</button>
+                        <button class="option" onclick="checkAnswer(12, 'b', this)">b) Tiempo de respuesta a alarmas</button>
+                        <button class="option" onclick="checkAnswer(12, 'b', this)">c) Horas de casino</button>
+                        <button class="option" onclick="checkAnswer(12, 'b', this)">d) Costos de oficina</button>
+                    </div>
+                    <div class="feedback" id="feedback12">
+                        <strong>Respuesta Correcta: b) Tiempo de respuesta a alarmas</strong><br>
+                        La rapidez de respuesta a alarmas es un KPI crítico que mide la efectividad del controlador ante situaciones que requieren acción inmediata.
+                    </div>
+                </div>
+
+                <!-- Pregunta 13 -->
+                <div class="question">
+                    <h4>13. El rol de TI en AHS es:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(13, 'b', this)">a) Planificar geología</button>
+                        <button class="option" onclick="checkAnswer(13, 'b', this)">b) Mantener red y telemetría operativas</button>
+                        <button class="option" onclick="checkAnswer(13, 'b', this)">c) Manejar CAEX</button>
+                        <button class="option" onclick="checkAnswer(13, 'b', this)">d) Pagar sueldos</button>
+                    </div>
+                    <div class="feedback" id="feedback13">
+                        <strong>Respuesta Correcta: b) Mantener red y telemetría operativas</strong><br>
+                        TI es responsable de la conectividad, telemetría y todos los sistemas tecnológicos que soportan la operación autónoma.
+                    </div>
+                </div>
+
+                <!-- Pregunta 14 -->
+                <div class="question">
+                    <h4>14. La gestión de activos (ISO 55001) busca:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(14, 'b', this)">a) Cambiar piezas al azar</button>
+                        <button class="option" onclick="checkAnswer(14, 'b', this)">b) Mejorar disponibilidad y vida útil de equipos</button>
+                        <button class="option" onclick="checkAnswer(14, 'b', this)">c) Aumentar fallas</button>
+                        <button class="option" onclick="checkAnswer(14, 'b', this)">d) Ignorar mantenciones</button>
+                    </div>
+                    <div class="feedback" id="feedback14">
+                        <strong>Respuesta Correcta: b) Mejorar disponibilidad y vida útil de equipos</strong><br>
+                        ISO 55001 establece marcos para maximizar el valor de los activos a través de gestión sistemática del ciclo de vida.
+                    </div>
+                </div>
+
+                <!-- Pregunta 15 -->
+                <div class="question">
+                    <h4>15. ¿Qué debes hacer después de cada turno?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(15, 'b', this)">a) Borrar registros</button>
+                        <button class="option" onclick="checkAnswer(15, 'b', this)">b) Documentar eventos y entregar handover</button>
+                        <button class="option" onclick="checkAnswer(15, 'b', this)">c) Irte sin avisar</button>
+                        <button class="option" onclick="checkAnswer(15, 'b', this)">d) No informar</button>
+                    </div>
+                    <div class="feedback" id="feedback15">
+                        <strong>Respuesta Correcta: b) Documentar eventos y entregar handover</strong><br>
+                        La documentación y handover aseguran continuidad operacional y transferencia efectiva de información al siguiente turno.
+                    </div>
+                </div>
+
+                <!-- Pregunta 16 -->
+                <div class="question">
+                    <h4>16. La técnica RESPIRA (4-4-4) sirve para:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(16, 'b', this)">a) Dormir</button>
+                        <button class="option" onclick="checkAnswer(16, 'b', this)">b) Calmarse y decidir bajo presión</button>
+                        <button class="option" onclick="checkAnswer(16, 'b', this)">c) Acelerar ciclos</button>
+                        <button class="option" onclick="checkAnswer(16, 'b', this)">d) Ignorar alarmas</button>
+                    </div>
+                    <div class="feedback" id="feedback16">
+                        <strong>Respuesta Correcta: b) Calmarse y decidir bajo presión</strong><br>
+                        La técnica 4-4-4 (inhalar 4 seg, mantener 4 seg, exhalar 4 seg) ayuda a controlar estrés y mejorar toma de decisiones.
+                    </div>
+                </div>
+
+                <!-- Pregunta 17 -->
+                <div class="question">
+                    <h4>17. ¿Qué significa siempre "seguridad sobre producción"?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(17, 'b', this)">a) Que la producción no importa</button>
+                        <button class="option" onclick="checkAnswer(17, 'b', this)">b) Que se prioriza evitar accidentes antes que cumplir tonelaje</button>
+                        <button class="option" onclick="checkAnswer(17, 'b', this)">c) Que nunca se produce</button>
+                        <button class="option" onclick="checkAnswer(17, 'b', this)">d) Que se descarta el plan minero</button>
+                    </div>
+                    <div class="feedback" id="feedback17">
+                        <strong>Respuesta Correcta: b) Que se prioriza evitar accidentes antes que cumplir tonelaje</strong><br>
+                        Siempre se debe privilegiar la seguridad por sobre metas productivas. No hay producción que justifique un accidente.
+                    </div>
+                </div>
+
+                <!-- Pregunta 18 -->
+                <div class="question">
+                    <h4>18. ¿Qué error es común al usar radios?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(18, 'a', this)">a) Mensajes largos y sin confirmación</button>
+                        <button class="option" onclick="checkAnswer(18, 'a', this)">b) Mensajes cortos y claros</button>
+                        <button class="option" onclick="checkAnswer(18, 'a', this)">c) Closed-loop</button>
+                        <button class="option" onclick="checkAnswer(18, 'a', this)">d) Confirmar cada orden</button>
+                    </div>
+                    <div class="feedback" id="feedback18">
+                        <strong>Respuesta Correcta: a) Mensajes largos y sin confirmación</strong><br>
+                        Los mensajes deben ser concisos, claros y siempre requieren confirmación para asegurar comprensión.
+                    </div>
+                </div>
+
+                <!-- Pregunta 19 -->
+                <div class="question">
+                    <h4>19. ¿Qué hacer si tienes fatiga durante el turno?</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(19, 'b', this)">a) Ignorarla</button>
+                        <button class="option" onclick="checkAnswer(19, 'b', this)">b) Programar pausa corta y rotar foco</button>
+                        <button class="option" onclick="checkAnswer(19, 'b', this)">c) Beber solo café</button>
+                        <button class="option" onclick="checkAnswer(19, 'b', this)">d) Apagar alarmas</button>
+                    </div>
+                    <div class="feedback" id="feedback19">
+                        <strong>Respuesta Correcta: b) Programar pausa corta y rotar foco</strong><br>
+                        La fatiga compromete la seguridad. Es necesario tomar pausas programadas y rotar el foco de atención para mantener alerta.
+                    </div>
+                </div>
+
+                <!-- Pregunta 20 -->
+                <div class="question">
+                    <h4>20. La conclusión principal de esta sección es:</h4>
+                    <div class="options">
+                        <button class="option" onclick="checkAnswer(20, 'b', this)">a) Que produces más tonelaje</button>
+                        <button class="option" onclick="checkAnswer(20, 'b', this)">b) Que tu rol es coordinar personas y áreas para seguridad y continuidad</button>
+                        <button class="option" onclick="checkAnswer(20, 'b', this)">c) Que reemplazas al gerente</button>
+                        <button class="option" onclick="checkAnswer(20, 'b', this)">d) Que ya no necesitas comunicarte</button>
+                    </div>
+                    <div class="feedback" id="feedback20">
+                        <strong>Respuesta Correcta: b) Que tu rol es coordinar personas y áreas para seguridad y continuidad</strong><br>
+                        El controlador de terreno es el coordinador central que conecta equipos y áreas para garantizar operación segura y continua.
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <p><strong>Puntaje Final: <span id="final-score">0/20</span></strong></p>
+                    <button class="control-button" onclick="resetQuiz()">🔄 REINICIAR QUIZ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; Derechos Reservados ANUPRO360 2025 - Todos los derechos reservados</p>
+        <p>Plataforma de Capacitación en Tecnología Minera Avanzada</p>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentScore = 0;
+        let questionsAnswered = 0;
+
+        // Funciones para los juegos educativos
+
+        // Juego 1: Comunicación Closed-Loop
+        function sendMessage(type) {
+            const display = document.getElementById('game1-display');
+            const messages = {
+                'speed': 'TÚ: "CAEX 412, reduzca a 25 km/h"\nCAEX 412: "Reduciendo a 25 km/h"\nTÚ: "Recibido, mantenga 25" ✅',
+                'stop': 'TÚ: "CAEX 007, detener inmediatamente"\nCAEX 007: "Deteniendo inmediatamente"\nTÚ: "Confirmado, mantenga posición" ✅',
+                'route': 'TÚ: "CAEX 023, cambiar a ruta B-7"\nCAEX 023: "Cambiando a ruta B-7"\nTÚ: "Correcto, proceda por B-7" ✅',
+                'confirm': 'PROTOCOLO CLOSED-LOOP COMPLETADO\nComunicación efectiva establecida\nOrden confirmada y ejecutada ✅'
+            };
+            display.innerHTML = `COMUNICACIÓN CLOSED-LOOP ACTIVA\n${messages[type]}\nTiempo respuesta: 8 segundos\nEfectividad: EXCELENTE`;
+        }
+
+        // Juego 2: Gestión de Crisis
+        function coordinateArea(area) {
+            const display = document.getElementById('game2-display');
+            const actions = {
+                'security': 'SEGURIDAD COORDINADA\n✅ Personal evacuado del área\n✅ Perímetro de seguridad establecido\n✅ Equipos de emergencia en camino',
+                'maintenance': 'MANTENIMIENTO ACTIVADO\n✅ Equipo especializado despachado\n✅ Material de contención disponible\n✅ ETA: 8 minutos',
+                'operations': 'OPERACIONES COORDINADAS\n✅ Tráfico redirigido\n✅ Producción suspendida en sector\n✅ Plan de contingencia activado',
+                'environment': 'MEDIOAMBIENTE NOTIFICADO\n✅ Protocolo de derrame iniciado\n✅ Monitoreo ambiental activado\n✅ Autoridades informadas'
+            };
+            display.innerHTML = `CRISIS: DERRAME CONTROLADO\n${actions[area]}\nTiempo transcurrido: 03:45\nEstado: BAJO CONTROL`;
+        }
+
+        // Juego 3: Método SBAR
+        function sbarStep(step) {
+            const display = document.getElementById('game3-display');
+            const sbarSteps = {
+                'situation': 'S - SITUACIÓN: "Falla GPS en sector norte, 3 vehículos afectados"',
+                'background': 'B - CONTEXTO: "Iniciado hace 5 min, señal degradada progresivamente"',
+                'assessment': 'A - EVALUACIÓN: "Posible interferencia en torre repetidora"',
+                'recommendation': 'R - RECOMENDACIÓN: "Activar modo degradado y verificar torre"'
+            };
+            display.innerHTML = `REPORTE SBAR COMPLETADO\n${sbarSteps[step]}\nEstructura: PROFESIONAL\nTiempo: 45 segundos ✅`;
+        }
+
+        // Juego 4: Cambio de Mapas
+        function mapChange(action) {
+            const display = document.getElementById('game4-display');
+            const actions = {
+                'geotecnia': 'GEOTECNIA CONSULTADA\n✅ Riesgo confirmado: Alto\n✅ Ruta alternativa aprobada\n✅ Restricciones establecidas',
+                'publish': 'MAPA PUBLICADO\n✅ Nueva ruta cargada\n✅ Todas las áreas notificadas\n✅ Control de cambios aplicado',
+                'validate': 'SEGURIDAD VALIDADA\n✅ Ruta inspeccionada\n✅ Señalización actualizada\n✅ Sin riesgos detectados',
+                'implement': 'IMPLEMENTACIÓN EXITOSA\n✅ Vehículos redirigidos\n✅ Operación normalizada\n✅ Monitoreo continuo'
+            };
+            display.innerHTML = `CAMBIO DE MAPA - RAMPA 7\n${actions[action]}\nProceso MoC: CUMPLIDO\nEstado: FINALIZADO ✅`;
+        }
+
+        // Juego 5: Gestión de Alarmas
+        function manageAlarm(priority) {
+            const display = document.getElementById('game5-display');
+            const alarms = {
+                'critical': 'ALARMA CRÍTICA ATENDIDA\n🔴 Persona en área restringida\n✅ Tráfico detenido inmediatamente\n✅ Seguridad despachada',
+                'warning': 'ADVERTENCIA PROCESADA\n🟡 Temperatura motor elevada\n✅ Velocidad reducida\n✅ Mantenimiento notificado',
+                'info': 'INFORMACIÓN REVISADA\n🔵 Cambio turno personal\n✅ Handover programado\n✅ Continuidad operacional',
+                'acknowledge': 'ALARMAS RECONOCIDAS\n✅ 7 alarmas procesadas\n✅ Tiempo promedio: 12 seg\n✅ Protocolos cumplidos'
+            };
+            display.innerHTML = `GESTIÓN DE ALARMAS\n${alarms[priority]}\nPendientes: 2 | Tiempo respuesta: 8 seg\nEficiencia: EXCELENTE`;
+        }
+
+        // Juego 6: Mantenimiento
+        function maintenance(action) {
+            const display = document.getElementById('game6-display');
+            const actions = {
+                'schedule': 'MANTENIMIENTO PROGRAMADO\n📅 Ventana: 14:00 - 18:00\n✅ Autorización obtenida\n✅ Recursos confirmados',
+                'isolate': 'EQUIPO AISLADO SEGURAMENTE\n🔐 CAEX-007 fuera de servicio\n✅ Área restringida\n✅ Personal notificado',
+                'redirect': 'TRÁFICO REDIRIGIDO\n🔄 Ruta alternativa activa\n✅ Flujo mantenido\n✅ Sin impacto producción',
+                'validate': 'RETORNO VALIDADO\n✅ Pruebas completadas\n✅ Sistemas operativos\n✅ Listo para producción'
+            };
+            display.innerHTML = `COORDINACIÓN MANTENIMIENTO\n${actions[action]}\nDuración real: 3:45h\nEficiencia: 106% ✅`;
+        }
+
+        // Juego 7: Condiciones Ambientales
+        function environmental(action) {
+            const display = document.getElementById('game7-display');
+            const actions = {
+                'monitor': 'MONITOREO INTENSIFICADO\n🌡️ Parámetros cada 5 min\n✅ Todas estaciones activas\n✅ Límites bajo control',
+                'reduce': 'ACTIVIDAD REDUCIDA\n📉 Velocidad máx: 20 km/h\n✅ Operaciones no esenciales suspendidas\n✅ Personal alertado',
+                'suspend': 'OPERACIONES SUSPENDIDAS\n⏸️ Todos los vehículos detenidos\n✅ Personal en refugios\n✅ Condiciones monitoreadas',
+                'resume': 'OPERACIONES REANUDADAS\n▶️ Condiciones normalizadas\n✅ Equipos reactivados gradualmente\n✅ Producción restaurada'
+            };
+            display.innerHTML = `GESTIÓN AMBIENTAL\n${actions[action]}\nÍndice calidad aire: BUENO\nCumplimiento normativo: 100%`;
+        }
+
+        // Juego 8: Red y Conectividad
+        function network(action) {
+            const display = document.getElementById('game8-display');
+            const actions = {
+                'diagnose': 'DIAGNÓSTICO COMPLETADO\n🔍 Latencia: 65ms (elevada)\n⚠️ Torre 3 con interferencia\n📊 Ancho banda reducido 15%',
+                'degrade': 'MODO DEGRADADO ACTIVO\n📉 Velocidades reducidas 30%\n✅ Distancias seguridad aumentadas\n✅ Monitoreo intensificado',
+                'escalate': 'ESCALADO A TI\n📞 Ticket #IT-2045 creado\n✅ Técnico en ruta (ETA: 25 min)\n✅ Prioridad: ALTA',
+                'restore': 'RED RESTAURADA\n🔄 Conectividad: 100%\n✅ Latencia normalizada: 35ms\n✅ Operación plena restablecida'
+            };
+            display.innerHTML = `GESTIÓN DE RED\n${actions[action]}\nTorres operativas: 4/4\nCalidad señal: EXCELENTE`;
+        }
+
+        // Juego 9: Fatiga y Rotación
+        function fatigue(action) {
+            const display = document.getElementById('game9-display');
+            const actions = {
+                'break': 'PAUSA TOMADA\n☕ Duración: 10 minutos\n✅ Hidratación completada\n✅ Nivel alerta restaurado',
+                'breathe': 'RESPIRACIÓN 4-4-4\n🫁 3 ciclos completados\n✅ Frecuencia cardíaca normalizada\n✅ Estrés reducido',
+                'rotate': 'FOCO ROTADO\n🔄 Atención redistribuida\n✅ Fatiga visual reducida\n✅ Concentración mejorada',
+                'assess': 'AUTOEVALUACIÓN REALIZADA\n📊 Nivel alerta: 88%\n✅ Capacidad decisión: ÓPTIMA\n✅ Apto para continuar'
+            };
+            display.innerHTML = `GESTIÓN PERSONAL\n${actions[action]}\nTurno restante: 3:30h\nCondición: EXCELENTE`;
+        }
+
+        // Juego 10: Centro de Comando
+        function command(action) {
+            const display = document.getElementById('game10-display');
+            const actions = {
+                'start': 'TURNO INICIADO\n🏁 Checklist pre-turno: 100%\n✅ Sistemas operativos\n✅ Handover recibido',
+                'coordinate': 'COORDINACIÓN ACTIVA\n🎯 6 áreas sincronizadas\n✅ KPIs en objetivo\n✅ Comunicación fluida',
+                'respond': 'RESPUESTA EJECUTADA\n⚡ 12 eventos gestionados\n✅ Tiempo promedio: 18 seg\n✅ Cero incidentes',
+                'handover': 'HANDOVER COMPLETADO\n📝 Documentación entregada\n✅ Próximo turno informado\n✅ Continuidad asegurada'
+            };
+            display.innerHTML = `CENTRO DE COMANDO\n${actions[action]}\nEficiencia turno: 97%\nCalificación: EXCELENTE ⭐⭐⭐⭐⭐`;
+        }
+
+        // Funciones del Quiz
+        function checkAnswer(questionNum, correctAnswer, button) {
+            const options = button.parentElement.children;
+            const feedback = document.getElementById(`feedback${questionNum}`);
+            const isCorrect = button.textContent.startsWith(correctAnswer + ')');
+            
+            // Deshabilitar todas las opciones de esta pregunta
+            for (let option of options) {
+                option.disabled = true;
+                if (option.textContent.startsWith(correctAnswer + ')')) {
+                    option.style.backgroundColor = 'rgba(0, 255, 0, 0.3)';
+                } else {
+                    option.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
+                }
+            }
+
+            // Mostrar retroalimentación
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+
+            // Actualizar puntaje solo si no se había respondido antes
+            if (!button.parentElement.parentElement.dataset.answered) {
+                questionsAnswered++;
+                if (isCorrect) currentScore++;
+                button.parentElement.parentElement.dataset.answered = 'true';
+                
+                // Actualizar progreso
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progressBar = document.getElementById('quiz-progress');
+            const progressText = document.getElementById('progress-text');
+            const finalScore = document.getElementById('final-score');
+            
+            const percentage = (questionsAnswered / 20) * 100;
+            progressBar.style.width = percentage + '%';
+            progressText.textContent = `${questionsAnswered}/20`;
+            finalScore.textContent = `${currentScore}/20`;
+        }
+
+        function resetQuiz() {
+            currentScore = 0;
+            questionsAnswered = 0;
+            
+            // Resetear todas las preguntas
+            const questions = document.querySelectorAll('.question');
+            questions.forEach(question => {
+                question.dataset.answered = '';
+                const options = question.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.disabled = false;
+                    option.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                });
+                const feedback = question.querySelector('.feedback');
+                feedback.style.display = 'none';
+            });
+            
+            updateProgress();
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
