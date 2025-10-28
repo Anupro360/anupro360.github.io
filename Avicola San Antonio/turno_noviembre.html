@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turnos · Noviembre 2025 · Avícola San Antonio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
+<style>
+:root{
+  --rojo: #D21F26;
+  --amarillo: #FFD100;
+  --bg: #fffaf0;
+  --texto: #161616;
+  --muted:#6b7280;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--texto);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{position:sticky;top:0;background:linear-gradient(180deg,var(--rojo),#a30d22);color:white;padding:10px 12px;z-index:10;box-shadow:0 6px 22px rgba(0,0,0,.18)}
+.container{max-width:720px;margin:0 auto;padding:16px}
+.card{background:white;border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.08);padding:16px;margin:12px 0;border:2px solid var(--amarillo)}
+.label{font-size:.92rem;color:var(--muted)}
+input[type=tel]{width:100%;font-size:1.25rem;padding:14px 14px;border-radius:12px;border:2px solid var(--rojo);outline:none}
+button{width:100%;margin-top:10px;background:var(--amarillo);border:none;color:#111;padding:14px 16px;border-radius:12px;font-weight:800;font-size:1.05rem;letter-spacing:.2px;cursor:pointer}
+button:active{transform:scale(.99)}
+.hidden{display:none}
+.topbar{display:flex;gap:12px;align-items:center}
+.logo{height:40px;width:auto;display:block}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800}
+.brand .title{font-size:1.1rem}
+.brand .sub{font-size:.8rem;opacity:.9}
+.userbar{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.badge{background:var(--amarillo);color:#111;padding:4px 8px;border-radius:999px;font-weight:800;font-size:.85rem}
+.actions{display:flex;gap:10px}
+.iconbtn{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--rojo);color:var(--rojo);background:#fff;padding:10px 12px;border-radius:12px;font-weight:700;font-size:.9rem;cursor:pointer}
+.iconbtn:hover{background:#fff5f5}
+.icon{width:18px;height:18px}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px dashed #eee;padding:10px 4px}
+.item .fecha{font-weight:700}
+.item .dia{font-size:.9rem;color:var(--muted)}
+.item .turno{padding:6px 10px;border-radius:10px;border:1px solid var(--rojo);min-width:74px;text-align:center;font-weight:800}
+.footer{text-align:center;color:var(--muted);font-size:.85rem;padding:20px}
+.shake{animation:shake .25s linear 2}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-4px)}100%{transform:translateX(0)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <img id="logo" src="logo.webp" alt="Avícola San Antonio" class="logo">
+    <div id="brandFallback" class="brand" style="display:none">
+      <div class="title">Avícola San Antonio</div>
+      <div class="sub">Turnos Noviembre 2025</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div id="login" class="card">
+    <div class="label">Ingresa tu código</div>
+    <input id="code" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" placeholder="0000" type="tel" autofocus />
+    <button id="btn">Ver mi turno</button>
+    <div id="error" class="label" style="color:var(--rojo);display:none;margin-top:6px">Código no válido.</div>
+  </div>
+
+  <div id="perfil" class="card hidden">
+    <div class="userbar">
+      <div style="font-size:1.05rem"><strong id="nombre"></strong></div>
+      <span class="badge">Noviembre 2025</span>
+    </div>
+    <div class="actions" style="margin-top:10px">
+      <button class="iconbtn" id="pdfBtn" title="Descargar PDF">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <path d="M6 14h12v8H6z"/><path d="M9 6h6"/>
+        </svg>
+        Descargar PDF
+      </button>
+    </div>
+    <div class="list" id="agenda"></div>
+  </div>
+
+  <div class="footer">© Avícola San Antonio · Noviembre 2025.</div>
+</div>
+
+<script src="turnos-data-octubre.js"></script>
+<script>
+function sanitizeCode(val){ return (val||'').replace(/\D/g,'').slice(0,4); }
+
+function showLogin(){ 
+  document.getElementById('perfil').classList.add('hidden'); 
+  document.getElementById('login').classList.remove('hidden'); 
+  document.getElementById('code').focus();
+}
+
+function showUser(code){ 
+  const name = window.APP_DATA.codes[code];
+  if(!name) return false;
+  document.getElementById('login').classList.add('hidden');
+  document.getElementById('perfil').classList.remove('hidden');
+  document.getElementById('nombre').textContent = name;
+  const agenda = document.getElementById('agenda'); 
+  agenda.innerHTML = '';
+  const registros = (window.APP_DATA.schedules[name]||[]).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  for(const r of registros){ 
+    const row = document.createElement('div'); 
+    row.className='item';
+    const left = document.createElement('div');
+    const f = new Date(r.fecha+'T00:00:00');
+    const fechaFmt = ('0'+f.getDate()).slice(-2) + '/' + ('0'+(f.getMonth()+1)).slice(-2);
+    left.innerHTML = '<div class="fecha">' + fechaFmt + '</div><div class="dia">' + r.dia + '</div>';
+    const right = document.createElement('div');
+    let etiqueta = (r.turno||'').trim() || '-';
+    if(etiqueta === 'T') etiqueta = 'TRABAJA';
+    if(etiqueta === 'L') etiqueta = 'LIBRE';
+    right.innerHTML = '<div class="turno">' + etiqueta + '</div>';
+    row.appendChild(left); 
+    row.appendChild(right); 
+    agenda.appendChild(row);
+  }
+  return true;
+}
+
+async function exportPDF(){ 
+  const { jsPDF } = window.jspdf || {};
+  if(!jsPDF){ alert('No se pudo cargar el generador de PDF.'); return; }
+  const name = document.getElementById('nombre').textContent || 'Trabajador';
+  const registros = Array.from(document.querySelectorAll('#agenda .item')).map(el=>({ 
+    fecha: el.querySelector('.fecha').textContent,
+    dia: el.querySelector('.dia').textContent,
+    turno: el.querySelector('.turno').textContent
+  }));
+  const doc = new jsPDF({orientation:'p', unit:'pt', format:'a4'});
+  let x=56, y=64;
+  doc.setFont('helvetica','bold'); 
+  doc.setFontSize(16); 
+  doc.setTextColor(30,30,30);
+  doc.text('Turno Noviembre 2025', x, y); 
+  y+=22;
+  doc.setFontSize(12); 
+  doc.setFont('helvetica','normal');
+  doc.text('Trabajador: ' + name, x, y); 
+  y+=18;
+  doc.setFont('helvetica','bold'); 
+  doc.setFillColor(255,209,0); 
+  doc.setTextColor(0);
+  doc.rect(x, y, 482, 24, 'F'); 
+  doc.text('Fecha', x+10, y+16); 
+  doc.text('Día', x+120, y+16); 
+  doc.text('Estado', x+340, y+16);
+  y+=28; 
+  doc.setFont('helvetica','normal'); 
+  doc.setTextColor(40,40,40);
+  for(const r of registros){ 
+    doc.setDrawColor(210,31,38);
+    doc.rect(x, y-16, 482, 28);
+    doc.text(r.fecha, x+10, y);
+    doc.text(r.dia, x+120, y);
+    let turnoTexto = r.turno;
+    if(turnoTexto === 'T') turnoTexto = 'TRABAJA';
+    if(turnoTexto === 'L') turnoTexto = 'LIBRE';
+    doc.text(turnoTexto, x+340, y);
+    y += 32;
+    if(y>760){ doc.addPage(); y=64; }
+  }
+  doc.save('turno_' + name.replace(/\s+/g,'_') + '_octubre_2025.pdf');
+}
+
+function onVer(){ 
+  const input = document.getElementById('code');
+  const code = sanitizeCode(input.value);
+  input.value = code;
+  const ok = showUser(code);
+  const err = document.getElementById('error');
+  if(!ok){ 
+    err.style.display = 'block'; 
+    input.classList.add('shake'); 
+    setTimeout(()=>input.classList.remove('shake'), 500); 
+  }
+  else{ 
+    err.style.display = 'none'; 
+  }
+}
+
+// Datos embebidos
+window.APP_DATA = {
+  "month": "Noviembre 2025",
+  "codes": {"8220": "Patricia Quiñones", "2914": "Juli Quiñones", "1122": "Kevin Rodriguez", "2486": "Erik Montaño", "1573": "Jorge Rodriguez", "2377": "Jose Wilder Paredes", "2616": "Walter Vargas", "6816": "Marco Agurto", "4885": "Felizciano Jaimes", "1286": "Pedro Mamio", "1506": "Andrés Villalobos", "1260": "Jose Manuel Casupa", "6680": "José Agurto", "8946": "Grober Flores", "8607": "Fausto Rios", "3442": "Yolfran Vargas", "2502": "Nander Salvatierra", "4010": "Andreina Gutierrez", "1240": "Maria Quiñones", "9262": "Edgar Cortez", "8994": "Falta contratar", "5108": "28 Trabajadores", "2063": "Gerardo Gomez", "9889": "Jorge Dias", "8654": "Ana Pereira"},
+  "schedules": {}
+};
+
+// Generar schedules dinámicamente para reducir tamaño
+const nombres = Object.values(window.APP_DATA.codes);
+const turnosData = {
+  "Patricia Quiñones": ["T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "L"],
+  "Maria Moy": ["T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "L"],
+  "Juli Quiñones": ["T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L"],
+  "Ana Roman": ["L", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T"],
+  "Kevin Rodriguez": ["L", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T"],
+  "Erik Montaño": ["L", "T", "T", "T", "T", "T", "T", "L", "L", "T", "L", "T", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T"],
+  "Wendy G Molina": ["T", "L", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L"],
+  "Abigail Rodriguez": ["T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "T", "L", "L", "T", "L", "T", "T", "T", "T", "T"],
+  "A.Wisleidy Moreno": ["T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T"],
+  "Virginia Gragena": ["T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T"],
+  "Jorge Rodriguez": ["T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L"],
+  "Jose Wilder Paredes": ["L", "T", "T", "T", "T", "T", "T", "L", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "L", "L", "L", "T", "T", "T", "T", "T", "T"],
+  "Walter Vargas": ["T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L"],
+  "Marco Agurto": ["T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "L", "L"],
+  "Felizciano Jaimes": ["T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "L", "T", "T", "T", "T", "T"],
+  "Pedro Mamio": ["T", "L", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L"],
+  "Andrés Villalobos": ["L", "L", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T"],
+  "Jose Manuel Casupa": ["T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "L", "T", "L", "T", "T", "T", "L", "T", "T", "T"],
+  "José Agurto": ["T", "T", "T", "T", "T", "T", "T", "L", "L", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T"],
+  "Grober Flores": ["T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "L"],
+  "Fausto Rios": ["L", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L"],
+  "Yolfran Vargas": ["L", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L"],
+  "Nander Salvatierra": ["L", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L"],
+  "Andreina Gutierrez": ["L", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T"],
+  "Maria Quiñones": ["T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "L"],
+  "Edgar Cortez": ["T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "L", "L"],
+  "Falta contratar": ["L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L"],
+  "28 Trabajadores": ["L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L"],
+  "Gerardo Gomez": ["T", "L", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "L", "T", "T", "T", "T", "T", "L"],
+  "Jorge Dias": ["T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T"],
+  "Ana Pereira": ["T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L"]
+};
+
+const diasSemana = ["Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes"];
+
+for(let nombre in turnosData){
+  window.APP_DATA.schedules[nombre] = turnosData[nombre].map((turno, i) => ({
+    fecha: `2025-10-${String(i+1).padStart(2,'0')}`,
+    dia: diasSemana[i],
+    turno: turno
+  }));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const logo = document.getElementById('logo');
+  const fallback = document.getElementById('brandFallback');
+  if(logo){ 
+    logo.addEventListener('error', () => { 
+      logo.style.display='none'; 
+      fallback.style.display='flex'; 
+    }); 
+  }
+  showLogin();
+  document.getElementById('btn').addEventListener('click', onVer);
+  document.getElementById('code').addEventListener('keydown', (e) => { 
+    if(e.key === 'Enter') onVer(); 
+  });
+  document.getElementById('pdfBtn').addEventListener('click', exportPDF);
+});
+</script>
+</body>
+</html>
