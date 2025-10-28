@@ -114,8 +114,11 @@ function showUser(code){
     left.innerHTML = '<div class="fecha">' + fechaFmt + '</div><div class="dia">' + r.dia + '</div>';
     const right = document.createElement('div');
     let etiqueta = (r.turno||'').trim() || '-';
+    const fiso = r.fecha;
+    const isFeriado = (fiso==='2025-11-01' || fiso==='2025-11-16');
     if(etiqueta === 'T') etiqueta = 'TRABAJA';
     if(etiqueta === 'L') etiqueta = 'LIBRE';
+    if(isFeriado){ etiqueta = 'FERIADO · ' + etiqueta; }
     right.innerHTML = '<div class="turno">' + etiqueta + '</div>';
     row.appendChild(left); 
     row.appendChild(right); 
@@ -188,7 +191,7 @@ function onVer(){
 // Datos embebidos
 window.APP_DATA = {
   "month": "Noviembre 2025",
-  "codes": {"8220": "Patricia Quiñones", "2914": "Juli Quiñones", "1122": "Kevin Rodriguez", "2486": "Erik Montaño", "1573": "Jorge Rodriguez", "2377": "Jose Wilder Paredes", "2616": "Walter Vargas", "6816": "Marco Agurto", "4885": "Felizciano Jaimes", "1286": "Pedro Mamio", "1506": "Andrés Villalobos", "1260": "Jose Manuel Casupa", "6680": "José Agurto", "8946": "Grober Flores", "8607": "Fausto Rios", "3442": "Yolfran Vargas", "2502": "Nander Salvatierra", "4010": "Andreina Gutierrez", "1240": "Maria Quiñones", "9262": "Edgar Cortez", "8994": "Falta contratar", "5108": "28 Trabajadores", "2063": "Gerardo Gomez", "9889": "Jorge Dias", "8654": "Ana Pereira"},
+  "codes": {"8220": "Patricia Quiñones", "2914": "Maria Moy", "1122": "Juli Quiñones", "2486": "Ana Roman", "1573": "Kevin Rodriguez", "2377": "Erik Montaño", "2616": "Wendy G Molina", "6816": "Abigail Rodriguez", "4885": "A.Wisleidy Moreno", "1286": "Virginia Gragena", "1506": "Jorge Rodriguez", "1260": "Jose Wilder Paredes", "6680": "Walter Vargas", "8946": "Marco Agurto", "8607": "Felizciano Jaimes", "3442": "Pedro Mamio", "2502": "Andrés Villalobos", "4010": "Jose Manuel Casupa", "1240": "José Agurto", "9262": "Grober Flores", "8994": "Fausto Rios", "5108": "Yolfran Vargas", "2063": "Nander Salvatierra", "9889": "Andreina Gutierrez", "8654": "Maria Quiñones", "2130": "Edgar Cortez"},
   "schedules": {}
 };
 
@@ -220,19 +223,14 @@ const turnosData = {
   "Nander Salvatierra": ["L", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L"],
   "Andreina Gutierrez": ["L", "T", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T"],
   "Maria Quiñones": ["T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "L"],
-  "Edgar Cortez": ["T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "L", "L"],
-  "Falta contratar": ["L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L"],
-  "28 Trabajadores": ["L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L", "L"],
-  "Gerardo Gomez": ["T", "L", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "L", "T", "T", "T", "T", "T", "L"],
-  "Jorge Dias": ["T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "L", "T"],
-  "Ana Pereira": ["T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L"]
+  "Edgar Cortez": ["T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "L", "T", "T", "L", "T", "T", "T", "L", "T", "T", "T", "T", "T", "T", "T", "T", "L", "L"]
 };
 
-const diasSemana = ["Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes ","Miércoles","Jueves","Viernes"];
+const diasSemana = ["Sábado","Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"];
 
 for(let nombre in turnosData){
   window.APP_DATA.schedules[nombre] = turnosData[nombre].map((turno, i) => ({
-    fecha: `2025-10-${String(i+1).padStart(2,'0')}`,
+    fecha: `2025-11-${String(i+1).padStart(2,'0')}`,
     dia: diasSemana[i],
     turno: turno
   }));
