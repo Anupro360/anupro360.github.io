@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cuaderno de Estudio · Evaluar el Desempeño — ANUPRO360</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <style>
+    :root{
+      --amarillo:#FFB81C;
+      --naranja:#FF5C00;
+      --gris:#5C6B6B;
+      --verde:#4B6F44;
+      --azul:#003B5C;
+      --blanco:#FFFFFF;
+      --radius:16px;
+      --shadow:0 10px 28px rgba(0,0,0,.15);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--blanco);color:#102027;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial}
+    .app{max-width:1024px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:var(--shadow)}
+    header.hero{background:linear-gradient(135deg,var(--azul),var(--naranja));color:#fff;padding:22px;position:relative}
+    header.hero .brand{display:flex;align-items:center;gap:12px}
+    .brand img{height:56px;width:auto;object-fit:contain;background:rgba(255,255,255,.12);border-radius:12px;padding:6px}
+    .brand .title{font-weight:900;letter-spacing:.2px}
+    .hero h1{margin:8px 0 0;font-size:22px}
+    nav.tabs{display:flex;gap:8px;padding:10px;background:#f3f6f8;position:sticky;top:0;z-index:2;border-bottom:2px solid #e1e7ea}
+    nav.tabs button{flex:1;border:none;background:#fff;border-radius:12px;padding:12px 10px;font-weight:800;color:var(--azul);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    nav.tabs button.active{background:var(--amarillo);color:#151515;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+    main{padding:18px 20px 28px}
+    section.page{display:none;animation:fade .25s ease} section.page.active{display:block}
+    @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .card{background:#fff;border:1px solid #e6ecee;border-radius:var(--radius);box-shadow:0 6px 18px rgba(0,0,0,.06);padding:16px;margin:12px 0}
+    h2{color:var(--azul);font-size:20px;margin:8px 0 8px}
+    h3{color:var(--azul);font-size:18px;margin:10px 0 6px}
+    h4{color:var(--gris);font-size:16px;margin:10px 0 4px}
+    ul,ol{margin:8px 0 8px 22px}
+    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+    .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+    .kpi .pill{background:#f6faf7;border:1px solid #e2efe4;border-radius:12px;padding:10px}
+    table{width:100%;border-collapse:collapse;margin:10px 0}
+    th,td{border:1px solid #e6ecee;padding:8px 10px;text-align:left}
+    th{background:#f7fafc;color:#0f2a3a}
+    .note{background:#fff9e6;border-left:6px solid var(--amarillo);padding:10px;border-radius:10px;margin:8px 0}
+    .tip{background:#eef7ff;border-left:6px solid var(--azul);padding:10px;border-radius:10px;margin:8px 0}
+    details{border:1px dashed #d8e2e6;border-radius:10px;padding:8px 10px;margin:8px 0}
+    summary{cursor:pointer;font-weight:800;color:var(--azul)}
+    .btn{display:inline-block;background:var(--naranja);color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer}
+    .btn.secondary{background:#fff;color:var(--azul);border:2px solid var(--azul)}
+    .score{background:var(--verde);color:#fff;border-radius:999px;padding:6px 10px;font-weight:800}
+    .answer{display:flex;align-items:center;gap:10px;border:2px solid #e5eaed;border-radius:10px;padding:10px;margin:8px 0}
+    .answer.correct{border-color:#00c853;background:#e8f5e9}
+    .answer.incorrect{border-color:#ff1744;background:#ffebee}
+    .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin:6px 0}
+    .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+    footer.footer{background:#0f2236;color:#dfeaf5;padding:16px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Cuaderno de Estudio — Evaluar Desempeño">
+    <header class="hero">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Logo ANUPRO360" onerror="this.style.display='none'">
+        <div>
+          <div class="title">ANUPRO360</div>
+          <h1>Supervisor de Área Mina · Módulo 5 — Evaluar el Desempeño de las Personas del Equipo de Trabajo</h1>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="active" data-target="lecciones" role="tab" aria-selected="true">📚 Lecciones</button>
+      <button data-target="plantillas" role="tab" aria-selected="false">📑 Plantillas</button>
+      <button data-target="casos" role="tab" aria-selected="false">🧪 Casos</button>
+      <button data-target="final" role="tab" aria-selected="false">🎓 Evaluación Final</button>
+    </nav>
+
+    <main>
+      <!-- LECCIONES -->
+      <section id="lecciones" class="page active" role="tabpanel">
+        <div class="card">
+          <h2>1. Contexto Operacional</h2>
+          <p>En minería, el/la <strong>Supervisor/a de Área</strong> asegura que las personas bajo su mando trabajen de forma <strong>segura</strong>, <strong>eficiente</strong> y conforme a los <strong>estándares operacionales</strong>. Evaluar el desempeño es un <strong>control operacional crítico</strong> para prevenir desviaciones, reducir riesgos y sostener la continuidad productiva.</p>
+          <div class="kpi">
+            <div class="pill"><strong>Seguridad:</strong> Ley 16.744, DS N°72/132, IPER, LOTO, uso EPP.</div>
+            <div class="pill"><strong>Producción:</strong> TKT, Toneladas Movidas, Disponibilidad, Ciclos.</div>
+            <div class="pill"><strong>Conductual:</strong> Disciplina operacional, comunicación por radio, trabajo en equipo.</div>
+          </div>
+          <div class="note"><strong>Ejemplo:</strong> En CAEX, una desviación en maniobra de carga eleva el tiempo de ciclo y el riesgo de golpe lateral. Una evaluación oportuna evita pérdidas y accidentes.</div>
+        </div>
+
+        <div class="card">
+          <h2>2. Conceptos Técnicos Clave</h2>
+          <table>
+            <tr><th>Concepto</th><th>Definición en contexto minero</th></tr>
+            <tr><td>Desempeño laboral</td><td>Resultado observable del cumplimiento de tareas operacionales, conductuales y de seguridad.</td></tr>
+            <tr><td>Criterio de desempeño</td><td>Estándar técnico o conductual que define qué es realizar correctamente el trabajo.</td></tr>
+            <tr><td>KPI</td><td>Dato cuantificable de eficacia del trabajador o del equipo (p. ej., TKT, disponibilidad, % PTO).</td></tr>
+            <tr><td>Evidencia objetiva</td><td>Prueba verificable: bitácoras, O.D.I., registros GPS, checklist, cámaras, reportes.</td></tr>
+            <tr><td>Retroalimentación</td><td>Comunicación estructurada para informar cumplimiento y orientar mejoras.</td></tr>
+          </table>
+
+          <h3>2.1 Tipos de desempeño</h3>
+          <ul>
+            <li><strong>Técnico:</strong> dominio de procedimiento, operación de equipos, parámetros técnicos.</li>
+            <li><strong>Conductual:</strong> disciplina, trabajo en equipo, comunicación, liderazgo personal.</li>
+            <li><strong>Seguridad:</strong> adherencia a HSEC, IPER, LOTO, EPP.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>3. Criterios y Estándares de Desempeño</h2>
+          <p>Un criterio debe ser <strong>observable</strong>, <strong>medible</strong> y <strong>trazable</strong>. A continuación, ejemplos por rol:</p>
+          <div class="grid2">
+            <div>
+              <h4>Operador/a CAEX</h4>
+              <ul>
+                <li><strong>Técnicos:</strong> PTO 100%, velocidad ≤ 35 km/h, sin sobrecargas &gt; 5%.</li>
+                <li><strong>Conductuales:</strong> Reporta desviaciones, participa en seguridad, respeta cadena de mando.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Operador/a de Pala</h4>
+              <ul>
+                <li><strong>Técnicos:</strong> Ciclo promedio &lt; 40 s, coordinación correcta con CAEX, orden de carga segura.</li>
+                <li><strong>Conductuales:</strong> Instrucciones claras, comunicación con mantenimiento.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Servicios Higiénicos</h4>
+              <ul>
+                <li><strong>Técnicos:</strong> Cumplimiento de rutas y protocolos, control de residuos, limpieza de áreas críticas.</li>
+                <li><strong>Conductuales:</strong> Puntualidad, reporte de hallazgos y anomalías.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Subjefe de Turno</h4>
+              <ul>
+                <li><strong>Técnicos:</strong> Control KPI de turno, informe diario, coordinación de contingencias.</li>
+                <li><strong>Conductuales:</strong> Lidera reuniones, motiva, mantiene disciplina.</li>
+              </ul>
+            </div>
+            <div>
+              <h4>Supervisor/a de Área</h4>
+              <ul>
+                <li><strong>Técnicos:</strong> Planifica, verifica estándares, coordina con Mantenimiento/Seguridad.</li>
+                <li><strong>Conductuales:</strong> Toma decisiones, comunica, desarrolla al equipo.</li>
+              </ul>
+            </div>
+          </div>
+
+          <h3>3.1 Escala de evaluación (4 niveles)</h3>
+          <table>
+            <tr><th>Nivel</th><th>Descripción</th><th>Evidencia típica</th></tr>
+            <tr><td>Sobresaliente (4)</td><td>Supera estándares con aporte adicional.</td><td>Propone mejoras, entrena pares.</td></tr>
+            <tr><td>Esperado (3)</td><td>Cumple estándares técnicos y conductuales.</td><td>Checklist y O.D.I. sin observaciones.</td></tr>
+            <tr><td>Parcial (2)</td><td>Cumplimiento incompleto, requiere apoyo.</td><td>Brechas puntuales, incidentes leves.</td></tr>
+            <tr><td>Bajo (1)</td><td>No cumple, afecta seguridad/producción.</td><td>Near miss, incumplimientos reiterados.</td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <h2>4. Procedimiento Paso a Paso para Evaluar</h2>
+          <h3>Paso 1: Preparación</h3>
+          <ul>
+            <li>Revisa estándares de rol y turno.</li>
+            <li>Define período de evaluación (semanal/mensual).</li>
+            <li>Reúne KPI y reportes: ciclos, toneladas, seguridad, bitácoras.</li>
+          </ul>
+          <h3>Paso 2: Observación en terreno</h3>
+          <p>Evalúa durante la jornada; observa comportamientos críticos: señales, velocidad, radio, PTO.</p>
+          <div class="note"><strong>Ejemplo:</strong> Se observa en zona de carguío que el operador realiza PTO sin verificar presión de neumáticos. Registrar en bitácora.</div>
+          <h3>Paso 3: Registro de evidencias</h3>
+          <table>
+            <tr><th>Fecha</th><th>Trabajador/a</th><th>Situación</th><th>Comportamiento observado</th><th>Resultado</th><th>Evidencia</th><th>Clasificación</th></tr>
+            <tr><td>02/08</td><td>J. Morales</td><td>PTO en CAEX 322</td><td>Omitió revisión nivel hidráulico</td><td>Riesgo leve</td><td>Foto y registro</td><td>Negativa</td></tr>
+            <tr><td>03/08</td><td>C. Torres</td><td>PTO completo</td><td>Revisión total + reporte preventivo</td><td>Mejora seguridad</td><td>Foto</td><td>Positiva</td></tr>
+          </table>
+          <h3>Paso 4: Evaluación por criterios</h3>
+          <table>
+            <tr><th>Criterio</th><th>Nivel (1–4)</th><th>Observación</th></tr>
+            <tr><td>Cumplimiento PTO</td><td>3</td><td>Ejecuta regularmente con mínima supervisión.</td></tr>
+            <tr><td>Control de velocidad</td><td>4</td><td>Usa limitador automático.</td></tr>
+            <tr><td>Participación en reuniones</td><td>2</td><td>Escasa intervención; mejorar comunicación.</td></tr>
+          </table>
+          <h3>Paso 5: Retroalimentación</h3>
+          <p>Agenda 1:1 (5–10 min). Aplica <strong>SBI + Feedforward</strong>.</p>
+          <details><summary>Guion ejemplo (exceso de velocidad en rampa)</summary>
+            <p><strong>Supervisor:</strong> “Mario, ayer en la rampa 2 excediste 35 km/h (Situación). Eso elevó riesgo de pérdida de control y activó alarma (Impacto).”</p>
+            <p><strong>Operador:</strong> “Me distraje conversando por radio.”</p>
+            <p><strong>Supervisor:</strong> “Gracias por reconocerlo. ¿Qué harás distinto? (Feedforward)”</p>
+            <p><strong>Operador:</strong> “Activaré el limitador y silenciaré radio en descenso.”</p>
+            <p><strong>Supervisor:</strong> “Perfecto. Lo revisamos en tu PTO mañana.”</p>
+          </details>
+          <h3>Paso 6: Registro y seguimiento</h3>
+          <p>Guarda resultados en planilla de desempeño y programa revisiones según acuerdos.</p>
+        </div>
+
+        <div class="card">
+          <h2>5. Retroalimentación Efectiva (SBI + Feedforward)</h2>
+          <ul>
+            <li>Basada en <strong>hechos observables</strong>, no percepciones.</li>
+            <li>Entregada <strong>lo antes posible</strong>, en privado.</li>
+            <li>Centrada en <strong>conducta y resultado</strong>, no en personalidad.</li>
+            <li>Termina con <strong>acuerdo de mejora o reconocimiento</strong>.</li>
+          </ul>
+          <div class="tip"><strong>Tip:</strong> La retroalimentación bien dada corrige sin desmotivar y genera compromiso.</div>
+        </div>
+
+        <div class="card">
+          <h2>6. Planes de Mejora (PDI / PIP)</h2>
+          <h3>Objetivo</h3>
+          <p>Desarrollar competencias o corregir brechas que impiden un desempeño seguro y eficiente.</p>
+          <h3>Contenido de un PDI técnico</h3>
+          <table>
+            <tr><th>Elemento</th><th>Ejemplo</th></tr>
+            <tr><td>Brecha</td><td>Baja aplicación de LOTO</td></tr>
+            <tr><td>Meta SMART</td><td>Ejecutar LOTO en 100% de intervenciones en 4 semanas</td></tr>
+            <tr><td>Actividades</td><td>Entrenamiento práctico + observación semanal</td></tr>
+            <tr><td>Responsable</td><td>Supervisor de Mantenimiento</td></tr>
+            <tr><td>Seguimiento</td><td>Revisión cada viernes por checklist</td></tr>
+            <tr><td>Cierre</td><td>4 observaciones consecutivas sin fallas</td></tr>
+          </table>
+          <div class="note"><strong>Caso:</strong> Operador no bloquea energía antes de mantención. Se activa PDI de 4 semanas con apoyo de Prevención de Riesgos. Resultado esperado: 100% cumplimiento de LOTO y evidencia registrada.</div>
+        </div>
+
+        <div class="card">
+          <h2>7. Casos Integrados de Simulación</h2>
+          <h3>Caso 1: Productividad y seguridad</h3>
+          <p>Operador CAEX con TKT alto y 2 near miss. Aplicar evaluación técnica, feedback y PDI. Objetivo: mejorar 10% TKT y 0 incidentes en 3 semanas.</p>
+          <h3>Caso 2: Subjefe nuevo</h3>
+          <p>No entrega retroalimentación a tiempo → baja moral. Aplicar conversación modelo, registro y seguimiento.</p>
+          <h3>Caso 3: Operador destacado</h3>
+          <p>Supera metas y apoya a nuevos. Entregar reconocimiento y usar buenas prácticas como estándar del equipo.</p>
+        </div>
+
+        <div class="card">
+          <h2>8. Autoevaluación Formativa (20 preguntas)</h2>
+          <ol>
+            <li>Define “evidencia objetiva” en contexto minero.</li>
+            <li>Orden correcto del ciclo de evaluación.</li>
+            <li>Componente del método SBI que describe el efecto sobre seguridad.</li>
+            <li>Ejemplo de KPI técnico para CAEX.</li>
+            <li>Qué diferencia “conducta” de “personalidad” en retroalimentación.</li>
+            <li>Cuándo activar un PDI.</li>
+            <li>Un ejemplo de meta SMART de seguridad.</li>
+            <li>Dos fuentes típicas de evidencia trazable.</li>
+            <li>Qué hacer si un operador supera metas pero incumple un procedimiento crítico.</li>
+            <li>Cómo registrar una observación positiva.</li>
+            <li>Cómo actuar ante recidiva en una misma desviación.</li>
+            <li>Qué rol tiene el Subjefe en la evaluación semanal.</li>
+            <li>Cómo se cierra un PDI.</li>
+            <li>Qué evitar en feedback (dos sesgos frecuentes).</li>
+            <li>Ejemplo de feedforward correcto.</li>
+            <li>Cuándo usar evaluación diaria vs. semanal.</li>
+            <li>Relación entre IPER y desempeño.</li>
+            <li>Uso correcto de la radio en retroalimentación de riesgo.</li>
+            <li>Cómo priorizar criterios (1–3 por rol) y por qué.</li>
+            <li>Beneficios de documentar acuerdos.</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h2>9. Glosario Técnico-Minero</h2>
+          <table>
+            <tr><th>Término</th><th>Definición</th></tr>
+            <tr><td>CAEX</td><td>Camión de Extracción de alta capacidad.</td></tr>
+            <tr><td>PTO</td><td>Pre-Start o Puesta en Marcha Segura.</td></tr>
+            <tr><td>LOTO</td><td>Bloqueo y Etiquetado de Energías.</td></tr>
+            <tr><td>IPER</td><td>Identificación de Peligros y Evaluación de Riesgos.</td></tr>
+            <tr><td>O.D.I.</td><td>Observación de Desempeño Individual.</td></tr>
+            <tr><td>IFR</td><td>Índice de Frecuencia de Accidentes.</td></tr>
+            <tr><td>TKT</td><td>Tiempo de ciclo de transporte.</td></tr>
+            <tr><td>Near Miss</td><td>Incidente sin lesión/daño.</td></tr>
+            <tr><td>Feedforward</td><td>Retroalimentación orientada a la acción futura.</td></tr>
+          </table>
+        </div>
+
+        <div class="card">
+          <h2>10. Cierre y Reflexión</h2>
+          <p>La evaluación de desempeño en minería busca <strong>prevenir desviaciones</strong> y <strong>mejorar resultados</strong>. Evalúa con datos, conversa con hechos y mejora con las personas.</p>
+        </div>
+      </section>
+
+      <!-- PLANTILLAS -->
+      <section id="plantillas" class="page" role="tabpanel">
+        <div class="card">
+          <h2>Plantillas listas para usar</h2>
+          <details open><summary>Ficha de meta SMART (por persona)</summary>
+            <table>
+              <tr><th>Campo</th><th>Descripción</th></tr>
+              <tr><td>Meta SMART</td><td>Específica, Medible, Alcanzable, Relevante, con Tiempo.</td></tr>
+              <tr><td>Evidencias/KPI</td><td>Datos que probarán logro (p. ej., % PTO, TKT).</td></tr>
+              <tr><td>Soportes</td><td>Entrenamiento, coaching, recursos.</td></tr>
+              <tr><td>Hitos</td><td>Fechas intermedias y revisión.</td></tr>
+            </table>
+          </details>
+          <details><summary>Bitácora de evidencias / incidentes críticos</summary>
+            <table>
+              <tr><th>Fecha</th><th>Persona</th><th>Situación</th><th>Comportamiento</th><th>Resultado</th><th>Evidencia</th><th>Nota (+/−)</th></tr>
+              <tr><td>__/__/__</td><td>____</td><td>____</td><td>____</td><td>____</td><td>____</td><td>__</td></tr>
+            </table>
+          </details>
+          <details><summary>Matriz de evaluación (4 niveles)</summary>
+            <table>
+              <tr><th>Criterio</th><th>1 — Bajo</th><th>2 — Parcial</th><th>3 — Esperado</th><th>4 — Sobresaliente</th></tr>
+              <tr><td>Seguridad</td><td>Incumple</td><td>Cumple parcial</td><td>Cumple</td><td>Excede</td></tr>
+              <tr><td>Técnico</td><td>Incumple</td><td>Cumple parcial</td><td>Cumple</td><td>Excede</td></tr>
+              <tr><td>Conductual</td><td>Incumple</td><td>Cumple parcial</td><td>Cumple</td><td>Excede</td></tr>
+            </table>
+          </details>
+          <details><summary>Guion de retroalimentación (SBI + Feedforward)</summary>
+            <p><strong>Situación:</strong> (cuándo/dónde) • <strong>Comportamiento:</strong> (observable) • <strong>Impacto:</strong> (en seguridad/calidad/producción) • <strong>Feedforward:</strong> (qué harás distinto)</p>
+          </details>
+          <details><summary>PDI/PIP (4–6 semanas)</summary>
+            <table>
+              <tr><th>Brecha</th><th>Meta SMART</th><th>Actividades</th><th>Responsable</th><th>Seguimiento</th><th>Cierre</th></tr>
+              <tr><td>____</td><td>____</td><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+            </table>
+          </details>
+        </div>
+      </section>
+
+      <!-- CASOS -->
+      <section id="casos" class="page" role="tabpanel">
+        <div class="card">
+          <h2>Casos Integrados con Solución Modelo</h2>
+          <h3>Caso 1 — TKT alto + 2 near miss</h3>
+          <p><strong>Datos:</strong> TKT promedio 10,2 min (objetivo 9,2), 2 near miss por comunicación deficiente. PTO 90%.</p>
+          <p><strong>Evaluación:</strong> Técnico 2, Seguridad 2, Conductual 2.</p>
+          <p><strong>Feedback (SBI):</strong> Detalla eventos, conductas y su impacto; acuerda uso de protocolo 3C en radio.</p>
+          <p><strong>PDI:</strong> 4 semanas con meta: TKT 9,4 min; PTO 100%; 0 incidentes.</p>
+          <details><summary>Solución modelo</summary>
+            <ul>
+              <li>Semana 1: entrenamiento radio 3C; observaciones diarias de 10 min.</li>
+              <li>Semana 2: práctica guiada con tutor; revisión de tiempos.</li>
+              <li>Semana 3: simulacro en rampa; refuerzo de señalización.</li>
+              <li>Semana 4: evaluación final; cierre si KPI cumplen.</li>
+            </ul>
+          </details>
+
+          <h3>Caso 2 — Subjefe nuevo sin feedback</h3>
+          <p>Incremento de pequeñas desviaciones por falta de retroalimentación.</p>
+          <p><strong>Acción:</strong> Coaching en reuniones de inicio/cierre; uso de bitácora; rol de ejemplo del Supervisor.</p>
+
+          <h3>Caso 3 — Operador destacado</h3>
+          <p>Supera metas y apoya a nuevos. Formalizar reconocimiento y documentar buenas prácticas.</p>
+        </div>
+      </section>
+
+      <!-- EVALUACIÓN FINAL -->
+      <section id="final" class="page" role="tabpanel" aria-live="polite">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px">
+            <h2>Evaluación Certificable Final</h2>
+            <div><span id="score" class="score">Puntaje: 0/100</span></div>
+          </div>
+          <p>Selecciona una alternativa por pregunta y presiona <strong>Enviar</strong>. Cada ítem mostrará si fue <span style="color:#0a7d32;font-weight:800">Correcto</span> o <span style="color:#b00020;font-weight:800">Incorrecto</span> y una explicación.</p>
+          <div id="quiz"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+            <button id="submit" class="btn">Enviar</button>
+            <button id="reset" class="btn secondary">Reiniciar</button>
+          </div>
+          <div class="legend" style="margin-top:10px;">
+            <span><i style="background:#00c853"></i> Correcta</span>
+            <span><i style="background:#ff1744"></i> Incorrecta</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">© ANUPRO360 2025 · Material de estudio privado</footer>
+  </div>
+
+  <script>
+    // Tabs
+    const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+    const $=(s,c=document)=>c.querySelector(s);
+    $$('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+      $$('.tabs button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      const id=b.dataset.target;
+      $$('.page').forEach(p=>p.classList.toggle('active', p.id===id));
+      history.replaceState(null,'','#'+id);
+      if(id==='final') window.scrollTo({top:0,behavior:'smooth'});
+    }));
+    window.addEventListener('DOMContentLoaded',()=>{
+      const hash=location.hash.replace('#','');
+      const target=['lecciones','plantillas','casos','final'].includes(hash)?hash:'lecciones';
+      $$('.tabs button').find(x=>x.dataset.target===target)?.click();
+    });
+
+    // QUIZ: accesible con radios, robusto en todos los navegadores
+    const DATA = [
+      { q:'1) ¿Qué es “desempeño laboral” en minería?', opts:[
+          'La opinión del supervisor sobre el trabajador.',
+          'El resultado observable del cumplimiento de tareas operacionales, conductuales y de seguridad.',
+          'El total de toneladas movidas por la faena independientemente del trabajador.',
+          'El índice IFR de la compañía.'],
+        a:1, exp:'El desempeño se define por resultados y conductas observables, no por opiniones.'},
+      { q:'2) ¿Qué característica NO debe tener un criterio de desempeño?',
+        opts:['Ser observable','Ser medible','Ser trazable','Ser subjetivo'],
+        a:3, exp:'Los criterios deben ser objetivos, trazables y medibles; lo subjetivo no corresponde.'},
+      { q:'3) Un KPI típico de operación CAEX es:',
+        opts:['Color del camión','Tiempo de ciclo (TKT)','Número de operadores en descanso','Cantidad de radios en faena'],
+        a:1, exp:'El TKT mide el tiempo de transporte por ciclo, clave para productividad.'},
+      { q:'4) La evidencia objetiva es aquella que…',
+        opts:['Se basa en percepciones del equipo','Es verificable (bitácoras, O.D.I., GPS, checklist, foto)',
+              'Siempre es confidencial','Solo existe en informes anuales'],
+        a:1, exp:'La evidencia objetiva es verificable por terceros y está documentada.'},
+      { q:'5) El método SBI corresponde a:',
+        opts:['Situación – Beneficio – Inversión','Señal – Bloqueo – Interlock',
+              'Situación – Comportamiento – Impacto','Seguridad – Bienestar – Indicadores'],
+        a:2, exp:'SBI estructura el feedback en hechos y consecuencias para una mejora clara.'},
+      { q:'6) ¿Cuándo activar un PDI/PIP?',
+        opts:['Cuando la persona pide vacaciones','Cuando hay brecha persistente que afecta desempeño o seguridad',
+              'Ante un logro sobresaliente','Siempre, cada trimestre'],
+        a:1, exp:'El PDI se usa ante brechas persistentes que requieren foco y apoyo.'},
+      { q:'7) ¿Cuál es una meta SMART correcta para seguridad?',
+        opts:['“Ser más cuidadoso en general”',
+              '“Ejecutar PTO 100% antes de 08:45 durante 6 semanas, validado en bitácora”',
+              '“Bajar accidentes de por vida”','“Mejorar la comunicación”'],
+        a:1, exp:'Es específica, medible, acotada en tiempo y verificable.'},
+      { q:'8) En evaluación, “conducta” se refiere a:',
+        opts:['Rasgos de personalidad','Resultados financieros',
+              'Comportamientos observables durante la tarea','Preferencias del supervisor'],
+        a:2, exp:'Evaluamos comportamiento observable (conducta), no rasgos personales.'},
+      { q:'9) En observación de terreno, el supervisor debe:',
+        opts:['Evitar registrar para no generar desconfianza','Registrar hechos con hora/lugar y evidencia',
+              'Solo hablar con jefatura','Esperar al cierre mensual'],
+        a:1, exp:'Registrar hechos con detalles permite trazabilidad y mejora de decisiones.'},
+      { q:'10) ¿Qué componente NO es parte de un PDI?',
+        opts:['Brecha prioritaria','Meta SMART','Actividades y seguimiento','Monto de bono anual'],
+        a:3, exp:'El bono no corresponde al contenido técnico del PDI.'},
+      { q:'11) Un near miss es:',
+        opts:['Accidente con lesión','Incidente sin lesión ni daño','Parada programada','Mantenimiento mayor'],
+        a:1, exp:'Near miss: incidente sin lesión/daño, importante para aprendizaje preventivo.'},
+      { q:'12) Para reconocer desempeño sobresaliente, el supervisor debe:',
+        opts:['Ignorarlo para evitar celos','Dar feedback público humillante',
+              'Reconocer con evidencia y promover buenas prácticas','Aplicar sanción disciplinaria'],
+        a:2, exp:'El reconocimiento oportuno con evidencia refuerza conductas deseadas.'},
+      { q:'13) ¿Cuál es un indicador de calidad en carguío?',
+        opts:['Sobrecarga (%)','Velocidad en rampa','Horas-hombre administrativas','Rotación de personal'],
+        a:0, exp:'El % de sobrecarga afecta seguridad y calidad de operación.'},
+      { q:'14) Un error común en evaluación es:',
+        opts:['Usar evidencias trazables','Retroalimentar en privado','Calificar por simpatía/antipatía (sesgo)','Acordar pasos SMART'],
+        a:2, exp:'Sesgos (halo/afinidad) distorsionan la evaluación y deben evitarse.'},
+      { q:'15) ¿Qué hacer si la persona supera metas productivas pero incumple procedimiento crítico de seguridad?',
+        opts:['Aprobar por productividad','Ignorar por ser “productivo”','Aplicar feedback correctivo y priorizar seguridad','Transferirlo sin registro'],
+        a:2, exp:'La seguridad es prioritaria y no es negociable frente a la productividad.'},
+      { q:'16) ¿Qué documento registra observaciones conductuales en faena?',
+        opts:['O.D.I.','Factura de proveedor','Carta Gantt','Informe de marketing'],
+        a:0, exp:'O.D.I. = Observación de Desempeño Individual.'},
+      { q:'17) ¿Cuál es el orden recomendado del ciclo?',
+        opts:['Evaluar → Retroalimentar → Observar → Registrar','Preparar → Observar → Registrar → Evaluar → Retroalimentar → Seguimiento',
+              'Observar → Evaluar → Registrar','Retroalimentar → Registrar → Observar'],
+        a:1, exp:'El ciclo completo asegura control y mejora continua.'},
+      { q:'18) En una bitácora adecuada, se debe incluir:',
+        opts:['Juicios personales','Evidencia, hora, lugar y relación con estándar/meta',
+              'Reclamos anónimos','Memes motivacionales'],
+        a:1, exp:'La bitácora debe ser objetiva y trazable, vinculada a estándares/metas.'},
+      { q:'19) Un buen feedforward debe:',
+        opts:['Culpar al pasado','Proponer conductas futuras concretas y verificables',
+              'Evitar acuerdos','Ser ambiguo'],
+        a:1, exp:'Feedforward orienta la acción futura, con verificabilidad.'},
+      { q:'20) ¿Qué rol tiene el Subjefe en evaluación semanal?',
+        opts:['Dirigir 3C en reuniones, consolidar KPI y apoyar feedback','Hacer memes del equipo',
+              'Solo pasar lista','Negarse a registrar'],
+        a:0, exp:'Subjefe apoya liderazgo operativo y seguimiento de KPI/feedback.'},
+      { q:'21) ¿Qué es TKT?',
+        opts:['Tiempo de ciclo de transporte','Toneladas por kilómetro','Tarjeta de control','Tarea conocida del turno'],
+        a:0, exp:'TKT = Tiempo de ciclo de transporte.'},
+      { q:'22) Un indicador de seguridad para CAEX:',
+        opts:['% PTO ejecutado','Número de colores de camiones','Precio del combustible','Likes en redes'],
+        a:0, exp:'% PTO ejecutado es un indicador de control preventivo.'},
+      { q:'23) ¿Cuándo retroalimentar?',
+        opts:['Lo antes posible tras el evento, en privado','Sólo al final del año','Nunca','En público, para escarmiento'],
+        a:0, exp:'La oportunidad y el contexto privado favorecen el aprendizaje.'},
+      { q:'24) ¿Qué hacer con observaciones positivas?',
+        opts:['No registrarlas','Registrarlas y reconocerlas','Sancionarlas','Ignorarlas'],
+        a:1, exp:'Registrar y reconocer refuerza la conducta deseada.'},
+      { q:'25) Un cierre correcto de PDI ocurre cuando:',
+        opts:['Se termina el mes','Hay 4 observaciones consecutivas cumpliendo el estándar (o criterio definido)',
+              'Lo pide el operador','Se cambia de turno'],
+        a:1, exp:'El cierre debe cumplir criterios objetivos predefinidos.'}
+    ];
+
+    const quizEl = document.getElementById('quiz');
+    let answers = new Array(DATA.length).fill(null);
+
+    function renderQuiz(){
+      quizEl.innerHTML = '';
+      DATA.forEach((item, idx)=>{
+        const card = document.createElement('div');
+        card.className = 'q card';
+        const title = document.createElement('h3');
+        title.textContent = item.q;
+        card.appendChild(title);
+
+        item.opts.forEach((opt, oi)=>{
+          const id = `q${idx}_o${oi}`;
+          const row = document.createElement('label');
+          row.className = 'answer';
+          row.setAttribute('for', id);
+
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = `q${idx}`;
+          input.id = id;
+          input.value = oi;
+          input.style.accentColor = '#FF5C00';
+          input.addEventListener('change', ()=>{
+            answers[idx] = oi;
+          });
+
+          const span = document.createElement('span');
+          span.textContent = opt;
+
+          row.appendChild(input);
+          row.appendChild(span);
+          card.appendChild(row);
+        });
+
+        const fb = document.createElement('div');
+        fb.className = 'feedback';
+        fb.style.marginTop = '6px';
+        card.appendChild(fb);
+
+        quizEl.appendChild(card);
+      });
+    }
+    renderQuiz();
+
+    function grade(){
+      let correct = 0;
+      document.querySelectorAll('#quiz .q').forEach((card, qi)=>{
+        const ans = answers[qi];
+        const fb = card.querySelector('.feedback');
+        card.querySelectorAll('.answer').forEach((row, oi)=>{
+          row.classList.remove('correct','incorrect');
+          if(oi === DATA[qi].a){
+            if(ans === oi) { row.classList.add('correct'); }
+          } else {
+            if(ans === oi) { row.classList.add('incorrect'); }
+          }
+        });
+        if(ans === DATA[qi].a){
+          correct++; fb.innerHTML = '<div style="color:#0a7d32;font-weight:700">Correcto.</div><div>'+DATA[qi].exp+'</div>';
+        }else if(ans === null){
+          fb.innerHTML = '<div style="color:#b00020;font-weight:700">Sin respuesta.</div>';
+        }else{
+          fb.innerHTML = '<div style="color:#b00020;font-weight:700">Incorrecto.</div><div>'+DATA[qi].exp+'</div>';
+        }
+      });
+      const score = Math.round((correct/DATA.length)*100);
+      document.getElementById('score').textContent = 'Puntaje: '+score+'/100';
+      window.scrollTo({top:0,behavior:'smooth'});
+      return score;
+    }
+    document.getElementById('submit').addEventListener('click', grade);
+    document.getElementById('reset').addEventListener('click', ()=>{
+      answers.fill(null);
+      renderQuiz();
+      document.getElementById('score').textContent = 'Puntaje: 0/100';
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  </script>
+</body>
+</html>
