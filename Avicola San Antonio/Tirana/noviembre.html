@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Avícola San Antonio – Instalación La Tirana – Turnos Noviembre 2025 (9–30)</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  <style>
+    :root{ --rojo:#D21F26; --amarillo:#FFD100; --fondo:#fffaf0; --texto:#161616; --borde:#e6e6e6; }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--fondo);color:var(--texto);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--borde);display:flex;align-items:center;gap:12px;padding:10px 14px}
+    header img{height:34px;width:auto}
+    header h1{font-size:16px;line-height:1.2;margin:0;font-weight:700}
+    header .sub{font-size:12px;color:#555;font-weight:600}
+    main{max-width:760px;margin:16px auto;padding:0 14px 50px}
+    .card{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:18px;box-shadow:0 8px 20px rgba(0,0,0,.04)}
+    .ingreso{display:grid;gap:10px}
+    .ingreso label{font-weight:600}
+    .ingreso input{font-size:18px;padding:12px 14px;border:1px solid var(--borde);border-radius:10px;letter-spacing:2px;width:100%;max-width:220px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--rojo);color:#fff;border:none;border-radius:10px;padding:12px 16px;font-weight:700;cursor:pointer}
+    .btn[disabled]{opacity:.55;cursor:not-allowed}
+    .perfil{margin-top:16px;display:none}
+    .perfil h2{margin:0 0 8px 0;font-size:18px}
+    .tag{display:inline-block;background:var(--amarillo);padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;margin-left:6px}
+    .rango{font-size:13px;color:#444;margin:6px 0 14px}
+    .lista{border:1px solid var(--borde);border-radius:12px;overflow:hidden}
+    .row{display:grid;grid-template-columns:150px 1fr 110px;background:#fff}
+    .row:nth-child(even){background:#fafafa}
+    .cell{padding:10px 12px;border-bottom:1px solid var(--borde);font-size:14px}
+    .head{background:#111;color:#fff;font-weight:700}
+    footer{margin-top:18px;color:#555;font-size:12px;text-align:center}
+    .acciones{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .badge-libre{background:#ececec;border-radius:999px;padding:2px 8px;font-size:12px}
+    .badge-trabaja{background:#e6f7e6;border-radius:999px;padding:2px 8px;font-size:12px}
+    .btn, .ingreso input { min-height:48px; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.webp" alt="Logo Avícola San Antonio" onerror="this.style.display='none'">
+    <div>
+      <h1>Avícola San Antonio – Instalación La Tirana</h1>
+      <div class="sub">Turnos Noviembre 2025 • Período: 9 → 30</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="card ingreso" id="ingreso">
+      <label for="codigo">Ingresa tu código (4 dígitos):</label>
+      <input id="codigo" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="0000" />
+      <button class="btn" id="btnVer">Ver mi turno</button>
+      <small id="msg" aria-live="polite"></small>
+    </section>
+
+    <section class="perfil card" id="perfil">
+      <h2 id="nombreTrabajador"></h2>
+      <div class="rango">Período: <strong>9 al 30 de noviembre de 2025</strong> • Horario referencial: 08:30–16:30</div>
+      <div class="acciones">
+        <button class="btn" id="btnPDF">Descargar PDF</button>
+      </div>
+      <div class="lista" id="listaTurnos" role="table" aria-label="Listado de días"></div>
+    </section>
+
+    <footer>© Avícola San Antonio · Noviembre 2025 · Instalación La Tirana</footer>
+  </main>
+
+  <script>
+  // ====== Fechas
+  const DIAS_NOMBRE = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+  const RANGO = { inicio: new Date(2025,10,9), fin: new Date(2025,10,30) }; // 10 = noviembre
+  const DIAS = (()=>{ const a=[]; for(let d=new Date(RANGO.inicio); d<=RANGO.fin; d.setDate(d.getDate()+1)) a.push(new Date(d)); return a; })();
+  const DIAS_NUM = DIAS.map(d=>d.getDate()); // [9..30]
+
+  // ====== Códigos y grupos (Seleccionadora + Galponeros + Líderes)
+  const APP_GROUPS = [
+    { nombre: "Seleccionadora", trabajadores: [
+      { codigo:"9101", nombre:"Neidy Gonzales" },
+      { codigo:"9102", nombre:"Alison Campos" },
+      { codigo:"9103", nombre:"Julian Chavez" },
+      { codigo:"9104", nombre:"Jesus Arteaga" },
+      { codigo:"9105", nombre:"Luis Zeballoz" },
+      { codigo:"9106", nombre:"Saulo Martinez" },
+      { codigo:"9108", nombre:"Marcelo Alvarado" },
+      { codigo:"9109", nombre:"Javier Cepeda" },
+      { codigo:"9110", nombre:"Tamara Zabala" },
+      { codigo:"9111", nombre:"Javier Abrego" },
+      { codigo:"9112", nombre:"Jafet Rivero" },
+      { codigo:"9113", nombre:"Carlos Aguilera" },
+      { codigo:"9114", nombre:"Camila Gonzalez" },
+      { codigo:"9115", nombre:"Yeison Martinez" },
+      { codigo:"9107", nombre:"Arturo Caceres" }
+    ]},
+    { nombre: "Galponeros", trabajadores: [
+      { codigo:"9301", nombre:"Edilberth Mendoza" },
+      { codigo:"9302", nombre:"Nestor Almendras" },
+      { codigo:"9303", nombre:"Eduardo Torrez" },
+      { codigo:"9304", nombre:"Raúl Jimenez" }
+    ]},
+    { nombre: "Líderes", trabajadores: [
+      { codigo:"9201", nombre:"Liliana Mogollon" }, // S1
+      { codigo:"9202", nombre:"Victo Ezpinoza" }   // S2 (tal como está en tu cuadrante)
+    ]}
+  ];
+
+  // ====== Turnos (T/L) por trabajador — 22 días (9..30)
+  //  Seleccionadora y Galponeros (como ya integré) + Líderes (extraído del cuadrante)
+  const RAW_LINES = {
+    "Neidy Gonzales": "L 0 0 T T T T T T L 6 44 L T T T T T T 6 44 L T T T L T T 5 37",
+    "Alison Campos":  "L 0 0 T T T L T T T 6 44 L T T T T T L 5 37 T T T L T T T 6 44",
+    "Julian Chavez":  "T 1 7 T T T L T T T 6 44 T T T L T T L 5 37 T L T T T T T 6 44",
+    "Jesus Arteaga":  "T 1 7 T T L T L T T 5 37 T T T L T T L 5 37 T T L T T T T 6 44",
+    "Luis Zeballoz":  "L 0 0 T T T T T T L 6 44 T T T T L T T 6 44 L T T T L T T 5 37",
+    "Saulo Martinez": "L 0 0 L T L T T T T 5 37 T L T T T T L 5 37 T L T L T T T 5 37",
+    "Marcelo Alvarado": "T 1 7 T T T T L T T 6 44 T T L T T T T 6 44 T T T T T L L 5 37",
+    "Javier Cepeda":  "T 1 7 T L T T T L T 5 37 T T T T T T L 6 44 T T T L L T T 5 37",
+    "Tamara Zabala":  "L 0 0 T T T T T L T 6 44 T T L T L T T 5 37 T T L T T L T 5 37",
+    "Javier Abrego":  "T 1 7 L T T T T L T 5 37 T T T L T T T 6 44 T T T T T L L 5 37",
+    "Jafet Rivero":   "T 1 7 T T T L L T T 5 37 T T T L T T T 6 44 T T L T T T L 5 37",
+    "Carlos Aguilera":"T 1 7 T L L T T T T 5 37 L T T T T T L 5 37 L T T T T T T 6 44",
+    "Camila Gonzalez":"L 0 0 T T T T T T T 7 51 T L T T T T T 6 44 T L T T T L T 5 37",
+    "Yeison Martinez":"T 1 7 L T L T T T T 5 37 T L T T T L T 5 37 L T T T T T L 5 37",
+    "Arturo Caceres": "T 1 7 T L T L T T T 5 37 T L T T T T L 5 37 T T T L T T L 5 37",
+
+    "Edilberth Mendoza": "T T T T T L T L T T T T T L T L T T T T T L",
+    "Nestor Almendras":  "L T T L T T T T T L T T T T L T T T T L T T",
+    "Eduardo Torrez":    "T T T T L T T L T T T T L T T T T L T T T L",
+    "Raúl Jimenez":      "L T L T T T T T T T T L T T L T T T L T T T",
+
+    // Líderes (S1/S2):
+    "Liliana Mogollon":  "T T T T T L T L T T T T T L T L T T T T T L",
+    "Victo Ezpinoza":    "L T T T T T L T L T T T T T L T T T T T L T"
+  };
+
+  // ====== Parser: toma solo T/L y arma el mes 9..30
+  function parseTokens(strTL){
+    const only = (strTL||"").split(/\s+/).filter(x=>x==="T"||x==="L");
+    while(only.length < 22) only.push("L"); // robustez
+    if(only.length > 22) only.length = 22;
+    return only.map((val,i)=>({ dia: DIAS_NUM[i], estado: (val==="T"?"Trabaja":"Libre") }));
+  }
+
+  // ====== Construye turnos para cada trabajador
+  APP_GROUPS.forEach(g=>{
+    g.trabajadores.forEach(t=>{
+      const sched = parseTokens(RAW_LINES[t.nombre] || "");
+      t.turnos = DIAS.map((fecha,idx)=>({ fecha, estado: sched[idx]?.estado || "Libre" }));
+    });
+  });
+
+  // ====== UI
+  const $ = s => document.querySelector(s);
+  const input=$("#codigo"), btnVer=$("#btnVer"), msg=$("#msg");
+  const perfil=$("#perfil"), nombreTrabajador=$("#nombreTrabajador"), lista=$("#listaTurnos"), btnPDF=$("#btnPDF");
+
+  function buscarPorCodigo(code){
+    for(const g of APP_GROUPS){
+      for(const t of g.trabajadores){
+        if(t.codigo===code) return { grupo:g.nombre, data:t };
+      }
+    }
+    return null;
+  }
+
+  function fechaTxt(d){ return `${DIAS_NOMBRE[d.getDay()]} ${String(d.getDate()).padStart(2,"0")}/${d.getMonth()+1}`; }
+
+  function pintarTabla(turnos){
+    lista.innerHTML = "";
+    const head = document.createElement("div");
+    head.className = "row head";
+    head.innerHTML = `<div class="cell">Fecha</div><div class="cell">Detalle</div><div class="cell">Estado</div>`;
+    lista.appendChild(head);
+
+    turnos.forEach(item=>{
+      const row = document.createElement("div");
+      row.className = "row";
+      const trabaja = item.estado === "Trabaja";
+      row.innerHTML = `
+        <div class="cell">${fechaTxt(item.fecha)}</div>
+        <div class="cell">${trabaja ? "Jornada programada" : "Libre"}</div>
+        <div class="cell">${trabaja ? "<span class='badge-trabaja'>Trabaja</span>" : "<span class='badge-libre'>Libre</span>"}</div>
+      `;
+      lista.appendChild(row);
+    });
+  }
+
+  function mostrarPerfil(r){
+    const {grupo, data} = r;
+    perfil.style.display = "block";
+    nombreTrabajador.innerHTML = `${data.nombre} <span class="tag">${grupo}</span>`;
+    pintarTabla(data.turnos);
+    btnPDF.onclick = () => descargarPDF(grupo, data);
+    perfil.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  btnVer.addEventListener("click", ()=>{
+    const code = (input.value||"").trim();
+    if(code.length!==4){ msg.textContent = "El código debe tener 4 dígitos."; return; }
+    const res = buscarPorCodigo(code);
+    if(!res){ msg.textContent = "Código no encontrado. Verifica con RR.HH."; perfil.style.display="none"; return; }
+    msg.textContent = ""; mostrarPerfil(res);
+  });
+  input.addEventListener("keyup",(e)=>{ if(e.key==="Enter") btnVer.click(); });
+
+  // ====== PDF
+  async function descargarPDF(grupo, trabajador){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:"pt", format:"a4", compress:true });
+
+    const L=48, T=60, H=18;
+    doc.setFont("helvetica","bold"); doc.setFontSize(14);
+    doc.text("Avícola San Antonio – Instalación La Tirana", L, T);
+    doc.setFont("helvetica","normal"); doc.setFontSize(11);
+    doc.text("Turnos Noviembre 2025 (9–30)", L, T+H);
+    doc.text(`Trabajador: ${trabajador.nombre}`, L, T+H*2);
+    doc.text(`Cargo: ${grupo}`, L, T+H*3);
+
+    let y=T+H*5;
+    doc.setFont("helvetica","bold");
+    doc.text("Fecha", L, y); doc.text("Detalle", L+140, y); doc.text("Estado", L+420, y);
+    doc.setFont("helvetica","normal"); y+=10;
+
+    trabajador.turnos.forEach(it=>{
+      y+=18; if(y>780){ doc.addPage(); y=60; }
+      const d=it.fecha;
+      const f=`${["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"][d.getDay()]} ${String(d.getDate()).padStart(2,"0")}/${d.getMonth()+1}`;
+      const tr = it.estado==="Trabaja";
+      doc.text(f, L, y);
+      doc.text(tr?"Jornada programada":"Libre", L+140, y);
+      doc.text(tr?"Trabaja":"Libre", L+420, y);
+    });
+
+    y+=30; doc.setFontSize(9); doc.text("Documento generado – Uso interno", L, y);
+    doc.save(`Turno_${trabajador.nombre.replace(/\s+/g,'_')}_Nov-2025.pdf`);
+  }
+  </script>
+</body>
+</html>
