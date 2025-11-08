@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ANUPRO360 · Módulo 6 · Apoyar el Desarrollo de Competencias</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <style>
+    :root{
+      --amarillo:#FFB81C;
+      --naranja:#FF5C00;
+      --gris:#5C6B6B;
+      --verde:#4B6F44;
+      --azul:#003B5C;
+      --blanco:#FFFFFF;
+      --bg:#f6f9fb;
+      --radius:16px;
+      --shadow:0 10px 28px rgba(0,0,0,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:#102027;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial}
+    .app{max-width:1100px;margin:0 auto;min-height:100vh;background:#fff;box-shadow:var(--shadow)}
+    header.hero{background:linear-gradient(135deg,var(--azul),var(--naranja));color:#fff;padding:22px 20px;position:relative}
+    header .brand{display:flex;align-items:center;gap:12px}
+    header img{height:56px;width:auto;object-fit:contain;background:rgba(255,255,255,.12);border-radius:12px;padding:6px}
+    header .title{font-weight:900;letter-spacing:.2px}
+    header h1{margin:6px 0 0;font-size:22px}
+    header .meta{opacity:.9;margin-top:4px;font-size:13px}
+    nav.tabs{display:flex;gap:8px;padding:10px;background:#eef3f6;position:sticky;top:0;z-index:3;border-bottom:2px solid #e1e7ea}
+    nav.tabs button{flex:1;border:none;background:#fff;border-radius:12px;padding:12px 10px;font-weight:800;color:var(--azul);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    nav.tabs button.active{background:var(--amarillo);color:#151515;box-shadow:0 6px 16px rgba(0,0,0,.12)}
+    main{padding:18px 20px 28px}
+    section.page{display:none;animation:fade .25s ease}
+    section.page.active{display:block}
+    @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .card{background:#fff;border:1px solid #e6ecee;border-radius:var(--radius);box-shadow:0 6px 18px rgba(0,0,0,.06);padding:16px;margin:12px 0}
+    h2{color:var(--azul);font-size:20px;margin:6px 0 8px}
+    h3{color:var(--azul);font-size:18px;margin:8px 0 6px}
+    h4{color:var(--gris);font-size:16px;margin:10px 0 6px}
+    p{line-height:1.5}
+    ul,ol{margin:8px 0 10px 22px}
+    table{width:100%;border-collapse:collapse;margin:10px 0}
+    th,td{border:1px solid #e6ecee;padding:8px 10px;text-align:left;vertical-align:top}
+    th{background:#f7fafc;color:#0f2a3a}
+    details{border:1px dashed #d8e2e6;border-radius:10px;padding:8px 10px;margin:8px 0}
+    summary{cursor:pointer;font-weight:800;color:var(--azul)}
+    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+    .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+    .pill{background:#f6faf7;border:1px solid #e2efe4;border-radius:12px;padding:10px}
+    .note{background:#fff9e6;border-left:6px solid var(--amarillo);padding:10px;border-radius:10px;margin:8px 0}
+    .tip{background:#eef7ff;border-left:6px solid var(--azul);padding:10px;border-radius:10px;margin:8px 0}
+    .sop{background:#f8fbff;border-left:6px solid var(--naranja);padding:10px;border-radius:10px;margin:8px 0}
+    .btn{display:inline-block;background:var(--naranja);color:#fff;border:none;padding:10px 14px;border-radius:12px;font-weight:800;cursor:pointer}
+    .btn.secondary{background:#fff;color:var(--azul);border:2px solid var(--azul)}
+    .score{background:var(--verde);color:#fff;border-radius:999px;padding:6px 10px;font-weight:800}
+    .answer{display:flex;align-items:center;gap:10px;border:2px solid #e5eaed;border-radius:10px;padding:10px;margin:8px 0}
+    .answer.correct{border-color:#00c853;background:#e8f5e9}
+    .answer.incorrect{border-color:#ff1744;background:#ffebee}
+    .legend{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;margin:6px 0}
+    .legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+    .mini-quiz{border:1px solid #e6ecee;border-radius:12px;padding:10px;margin-top:10px;background:#fbfdfd}
+    footer.footer{background:#0f2236;color:#dfeaf5;padding:16px;text-align:center}
+    .search{display:flex;gap:8px;margin:6px 0 10px}
+    .search input{flex:1;padding:10px;border:1px solid #cfd8dc;border-radius:10px}
+    .highlight{background:#fff3cd}
+    @media print{
+      nav.tabs, .search, .legend, #submit, #reset {display:none!important}
+      .app{box-shadow:none}
+      header.hero{background:#003B5C;color:#fff}
+    }
+  </style>
+</head>
+<body>
+  <div class="app" role="application" aria-label="Cuaderno de Estudio — Módulo 6">
+    <header class="hero">
+      <div class="brand">
+        <img src="imagotipoblanco.webp" alt="Logo ANUPRO360" onerror="this.style.display='none'">
+        <div>
+          <div class="title">ANUPRO360</div>
+          <h1>Módulo 6 · Apoyar el Desarrollo de Competencias en las Personas del Equipo de Trabajo</h1>
+          <div class="meta">Versión 2025 · Supervisor/a de Área Mina (Nivel 5 CCM) · Autoaprendizaje técnico-minero</div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button class="active" data-target="fase1" role="tab" aria-selected="true">Fase 1 · Fundamentos y Diagnóstico</button>
+      <button data-target="fase2" role="tab" aria-selected="false">Fase 2 · Procedimientos y Aplicación</button>
+      <button data-target="fase3" role="tab" aria-selected="false">Fase 3 · Control y Cierre</button>
+      <button data-target="plantillas" role="tab" aria-selected="false">Plantillas</button>
+      <button data-target="evaluacion" role="tab" aria-selected="false">Evaluación Final</button>
+    </nav>
+
+    <main>
+      <div class="search">
+        <input id="searchBox" type="search" placeholder="Buscar en el cuaderno (ej: PDI, OJT, coaching)">
+        <button class="btn secondary" id="clearSearch">Limpiar</button>
+      </div>
+
+      <!-- FASE 1 -->
+      <section id="fase1" class="page active" role="tabpanel" aria-live="polite">
+        <article class="card">
+          <h2>CAPÍTULO 1. PROPÓSITO DEL MÓDULO Y ALCANCE OPERACIONAL</h2>
+          <h3>1.1 Propósito</h3>
+          <p>Este módulo tiene por objetivo fortalecer la capacidad del Supervisor/a de Área para <strong>apoyar el desarrollo de competencias laborales</strong> en su personal, mediante la aplicación de <strong>métodos estructurados de observación, entrenamiento, retroalimentación y seguimiento</strong>.</p>
+          <p>El desarrollo de competencias es una función clave en la gestión de operaciones mineras, ya que garantiza que los trabajadores realicen sus tareas <strong>con seguridad, calidad y eficiencia</strong>, en concordancia con los estándares corporativos y la normativa vigente.</p>
+          <h3>1.2 Alcance</h3>
+          <p>El presente módulo aplica a todas las áreas operativas de la faena:</p>
+          <ul>
+            <li><strong>Transporte y movimiento de material</strong> (CAEX, Pala, Camiones de apoyo).</li>
+            <li><strong>Mantenimiento</strong> mecánico y eléctrico.</li>
+            <li><strong>Servicios</strong> e infraestructura industrial.</li>
+            <li><strong>Seguridad y salud ocupacional.</strong></li>
+            <li><strong>Logística interna y abastecimiento.</strong></li>
+          </ul>
+          <p>El enfoque está orientado al <strong>desarrollo de las competencias técnicas, conductuales y transversales</strong> de los trabajadores bajo supervisión directa.</p>
+          <h3>1.3 Objetivo general de aprendizaje</h3>
+          <blockquote>Aplicar metodologías formales de diagnóstico, entrenamiento, coaching y seguimiento para fortalecer las competencias del personal, contribuyendo a la mejora continua del desempeño operacional y al cumplimiento de los objetivos de seguridad, calidad y productividad.</blockquote>
+          <h3>1.4 Objetivos específicos</h3>
+          <ul>
+            <li>Comprender el concepto y la estructura de una competencia laboral.</li>
+            <li>Identificar brechas de competencia mediante la observación y análisis de evidencias.</li>
+            <li>Aplicar técnicas de <strong>coaching</strong>, <strong>mentoring</strong> y <strong>OJT</strong>.</li>
+            <li>Elaborar y gestionar <strong>PDI/PIP</strong>.</li>
+            <li>Documentar y verificar el cierre de brechas conforme a criterios técnicos definidos.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 2. CONCEPTOS FUNDAMENTALES SOBRE COMPETENCIAS LABORALES</h2>
+          <h3>2.1 Definición corporativa</h3>
+          <p><strong>Competencia laboral</strong>: Capacidad demostrada de aplicar conocimientos, habilidades, destrezas y actitudes para desempeñar tareas específicas según los estándares de seguridad, calidad y productividad definidos por la organización.</p>
+          <p>En minería, las competencias se alinean a los perfiles definidos en el <strong>Marco de Cualificaciones Mineras (CCM)</strong> y a los sistemas internos de gestión de personas.</p>
+          <h3>2.2 Componentes de una competencia</h3>
+          <table>
+            <tr><th>Componente</th><th>Descripción</th><th>Ejemplo en minería</th></tr>
+            <tr><td>Conocimiento</td><td>Saber qué hacer y por qué.</td><td>Normas de seguridad, IPER, procedimientos de carguío.</td></tr>
+            <tr><td>Habilidad</td><td>Saber cómo hacerlo.</td><td>Maniobrar el CAEX manteniendo velocidad segura.</td></tr>
+            <tr><td>Actitud</td><td>Disposición para hacerlo correctamente.</td><td>Cumplir los procedimientos sin atajos.</td></tr>
+            <tr><td>Evidencia</td><td>Prueba verificable del dominio.</td><td>Bitácoras, O.D.I., registros de PTO.</td></tr>
+          </table>
+          <h3>2.3 Tipos de competencias</h3>
+          <ol>
+            <li><strong>Técnicas:</strong> operación de equipos/procesos (control de carga, radio, LOTO, diagnóstico de fallas).</li>
+            <li><strong>Conductuales:</strong> comportamientos observables (comunicación, disciplina, trabajo en equipo).</li>
+            <li><strong>Transversales:</strong> aplicables a todo rol (seguridad, cumplimiento, mejora continua, gestión ambiental).</li>
+          </ol>
+          <h3>2.4 Niveles de dominio</h3>
+          <table>
+            <tr><th>Nivel</th><th>Descripción</th><th>Evidencia esperada</th></tr>
+            <tr><td>Básico</td><td>Requiere guía constante.</td><td>Necesita supervisión directa.</td></tr>
+            <tr><td>Intermedio</td><td>Ejecuta tareas según procedimiento.</td><td>Cumple sin supervisión directa.</td></tr>
+            <tr><td>Avanzado</td><td>Aplica mejoras y corrige desviaciones.</td><td>Registra evidencias y entrena a pares.</td></tr>
+          </table>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 3. DETECCIÓN DE BRECHAS DE COMPETENCIA</h2>
+          <h3>3.1 Definición</h3>
+          <p>Una <strong>brecha de competencia</strong> es la diferencia entre el nivel actual del trabajador y el nivel requerido por el estándar del puesto. El Supervisor/a debe identificar, registrar y clasificar dichas brechas para planificar acciones de desarrollo.</p>
+          <h3>3.2 Causas frecuentes de brechas</h3>
+          <ul>
+            <li>Incorporación reciente sin experiencia en faena.</li>
+            <li>Cambios en el procedimiento o tecnología.</li>
+            <li>Desviaciones conductuales o incumplimiento de normas.</li>
+            <li>Falta de refuerzo posterior a la capacitación inicial.</li>
+            <li>Ausencia prolongada o rotación de puesto.</li>
+          </ul>
+          <h3>3.3 Fuentes de información</h3>
+          <table>
+            <tr><th>Fuente</th><th>Tipo de información</th><th>Ejemplo</th></tr>
+            <tr><td>Observación directa</td><td>Conductas y procedimientos reales</td><td>PTO incompleto, error de maniobra</td></tr>
+            <tr><td>Indicadores de desempeño</td><td>Datos cuantitativos (KPI)</td><td>TKT alto, sobrecargas</td></tr>
+            <tr><td>Registros documentales</td><td>Bitácoras, checklist, O.D.I.</td><td>Falta de firma o campos vacíos</td></tr>
+            <tr><td>Retroalimentación entre pares</td><td>Percepciones y experiencias</td><td>Comentarios de mentores o tutores</td></tr>
+            <tr><td>Entrevistas/autoevaluaciones</td><td>Autoconfianza y conocimiento</td><td>Preparación para turno</td></tr>
+          </table>
+          <h3>3.4 Clasificación de brechas</h3>
+          <table>
+            <tr><th>Tipo</th><th>Descripción</th><th>Acción</th></tr>
+            <tr><td>Técnica</td><td>Falta de conocimiento o habilidad</td><td>Entrenamiento en terreno / OJT</td></tr>
+            <tr><td>Conductual</td><td>Comportamiento inadecuado o falta de disciplina</td><td>Coaching operacional</td></tr>
+            <tr><td>Transversal</td><td>Compromiso, comunicación, seguridad</td><td>Mentoría o refuerzo conductual</td></tr>
+          </table>
+          <h3>3.5 Procedimiento de detección paso a paso</h3>
+          <ol>
+            <li><strong>Preparación:</strong> revisar estándar del puesto y evidencia.</li>
+            <li><strong>Observación:</strong> presenciar ejecución real sin interrumpir.</li>
+            <li><strong>Registro:</strong> anotar hechos concretos y medibles.</li>
+            <li><strong>Análisis:</strong> comparar conducta observada vs. estándar.</li>
+            <li><strong>Determinación:</strong> definir tipo, gravedad y causa probable.</li>
+            <li><strong>Comunicación:</strong> retroalimentar con hechos objetivos.</li>
+            <li><strong>Planificación:</strong> definir acción de desarrollo.</li>
+          </ol>
+          <div class="note"><strong>Ejemplo:</strong> En descarga, operador CAEX excede velocidad en rampa (42 km/h). Evidencia: GPS + alarma. Brecha técnica-conductual. Acción: coaching + PDI 3 semanas.</div>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 4. ROLES Y RESPONSABILIDADES EN EL DESARROLLO DE COMPETENCIAS</h2>
+          <h3>4.1 Supervisor/a de Área</h3>
+          <p>Responsable de detectar, desarrollar y cerrar brechas de competencia en su equipo, asegurando que las personas alcancen el nivel requerido.</p>
+          <ul>
+            <li>Monitorear desempeño técnico y conductual.</li>
+            <li>Ejecutar coaching, mentoring y OJT.</li>
+            <li>Planificar y documentar acciones.</li>
+            <li>Coordinar con Capacitación y Seguridad.</li>
+            <li>Verificar cierre de brechas y reportar avances.</li>
+          </ul>
+          <h3>4.2 Trabajador/a</h3>
+          <p>Responsable de su desarrollo profesional: asistir a entrenamiento, cumplir estándares, registrar progreso y solicitar apoyo.</p>
+          <h3>4.3 Tutor/Mentor</h3>
+          <p>Acompaña el aprendizaje de trabajadores nuevos o en desarrollo; transfiere conocimiento y registra avances.</p>
+          <h3>4.4 Área de Capacitación</h3>
+          <p>Diseña, planifica y evalúa programas corporativos; mantiene estándares y consolida registros.</p>
+          <h3>4.5 Prevención de Riesgos</h3>
+          <p>Autoriza y supervisa OJT bajo condiciones seguras; verifica IPER/LOTO y requisitos legales.</p>
+          <h3>4.6 Integración de roles</h3>
+          <p>El Supervisor lidera el proceso con apoyo de mentor, trabajador y áreas técnicas para garantizar aprendizaje sostenible y verificable.</p>
+        </article>
+      </section>
+
+      <!-- FASE 2 -->
+      <section id="fase2" class="page" role="tabpanel" aria-live="polite">
+        <article class="card">
+          <h2>CAPÍTULO 5. PROCEDIMIENTO DE COACHING OPERACIONAL</h2>
+          <h3>5.1 Definición</h3>
+          <p>El <strong>Coaching Operacional</strong> es una metodología de acompañamiento estructurado que permite al supervisor guiar al trabajador hacia la mejora de su desempeño mediante <strong>observación directa, preguntas reflexivas, demostración práctica y retroalimentación inmediata</strong>.</p>
+          <h3>5.2 Principios</h3>
+          <ol>
+            <li>Basado en confianza y respeto.</li>
+            <li>Centrado en la persona y su mejora.</li>
+            <li>Fundamentado en evidencias.</li>
+            <li>Orientado a la acción.</li>
+            <li>Continuo y planificado.</li>
+          </ol>
+          <h3>5.3 Protocolo (SOP)</h3>
+          <div class="sop">
+            <ol>
+              <li><strong>Preparar:</strong> revisar antecedentes, estándar y objetivo.</li>
+              <li><strong>Observar:</strong> presenciar tarea y registrar hechos.</li>
+              <li><strong>Analizar:</strong> seleccionar foco de mejora.</li>
+              <li><strong>Conversar con SBI:</strong> Situación–Comportamiento–Impacto.</li>
+              <li><strong>Compromiso:</strong> acordar mejora concreta y verificable.</li>
+              <li><strong>Seguimiento:</strong> validar cumplimiento en plazo.</li>
+            </ol>
+          </div>
+          <h3>5.4 Registro</h3>
+          <table>
+            <tr><th>Fecha</th><th>Trabajador/a</th><th>Brecha</th><th>Acción</th><th>Plazo</th><th>Responsable</th><th>Seguimiento</th></tr>
+            <tr><td>__/__/__</td><td>____</td><td>____</td><td>____</td><td>__ días</td><td>Supervisor</td><td>____</td></tr>
+          </table>
+          <h3>5.5 Errores comunes</h3>
+          <ul>
+            <li>Confundir coaching con fiscalización.</li>
+            <li>No registrar acuerdos.</li>
+            <li>Abordar múltiples temas en una sesión.</li>
+            <li>No hacer seguimiento.</li>
+          </ul>
+
+          <div class="mini-quiz" id="mq5"></div>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 6. PROCEDIMIENTO DE MENTORING TÉCNICO</h2>
+          <h3>6.1 Definición</h3>
+          <p>El <strong>Mentoring Técnico</strong> transfiere conocimiento desde un trabajador experimentado hacia un aprendiz, coordinado por el Supervisor.</p>
+          <h3>6.2 Perfil del mentor</h3>
+          <ul>
+            <li>Competencia avanzada y trayectoria.</li>
+            <li>Historial sin incidentes ni sanciones.</li>
+            <li>Habilidades comunicacionales.</li>
+            <li>Actitud colaborativa.</li>
+          </ul>
+          <h3>6.3 Estructura del proceso</h3>
+          <table>
+            <tr><th>Etapa</th><th>Actividades</th><th>Evidencias</th></tr>
+            <tr><td>Designación</td><td>Seleccionar mentor y aprendiz</td><td>Acta firmada</td></tr>
+            <tr><td>Planificación</td><td>Metas SMART, duración</td><td>Plan individual</td></tr>
+            <tr><td>Desarrollo</td><td>Sesiones prácticas/teóricas</td><td>Bitácora semanal</td></tr>
+            <tr><td>Evaluación intermedia</td><td>Revisión conjunta</td><td>Informe de progreso</td></tr>
+            <tr><td>Cierre</td><td>Validación de competencias</td><td>Rúbrica final</td></tr>
+          </table>
+          <h3>6.4 Ejemplo práctico</h3>
+          <p><strong>Caso:</strong> Operador CAEX nuevo; <strong>Meta:</strong> PTO 100% y control de carga seguro; <strong>Duración:</strong> 4 semanas; <strong>Resultado:</strong> rúbrica ≥ 90% técnico y 100% seguridad.</p>
+
+          <div class="mini-quiz" id="mq6"></div>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 7. ENTRENAMIENTO EN EL PUESTO (OJT)</h2>
+          <h3>7.1 Definición</h3>
+          <p>El <strong>OJT</strong> es formación práctica en el entorno real de trabajo, bajo condiciones seguras y con acompañamiento del supervisor o tutor.</p>
+          <h3>7.2 Condiciones previas</h3>
+          <ul>
+            <li>IPER actualizado.</li>
+            <li>Permisos y EPP.</li>
+            <li>Equipos en condiciones seguras.</li>
+            <li>Instructor habilitado.</li>
+            <li>Briefing de seguridad.</li>
+          </ul>
+          <h3>7.3 Procedimiento paso a paso</h3>
+          <table>
+            <tr><th>Fase</th><th>Actividad</th><th>Detalle técnico</th></tr>
+            <tr><td>Preparar</td><td>Definir objetivo</td><td>“Operar tolva CAEX cumpliendo estándar.”</td></tr>
+            <tr><td>Explicar</td><td>Describir POE</td><td>Radio, señales, velocidad</td></tr>
+            <tr><td>Demostrar</td><td>Instructor ejecuta</td><td>Ángulo de descarga y distancia</td></tr>
+            <tr><td>Ejecutar</td><td>Aprendiz realiza</td><td>Retroalimentación inmediata</td></tr>
+            <tr><td>Evaluar</td><td>Comparar vs. estándar</td><td>Rúbrica 4 niveles</td></tr>
+            <tr><td>Registrar</td><td>Cerrar sesión</td><td>Bitácora + firma</td></tr>
+          </table>
+          <h3>7.4 Formato de registro</h3>
+          <table>
+            <tr><th>Fecha</th><th>Tarea</th><th>Resultado</th><th>Observaciones</th><th>Firma tutor</th><th>Firma aprendiz</th></tr>
+            <tr><td>__/__/__</td><td>____</td><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+          </table>
+
+          <div class="mini-quiz" id="mq7"></div>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 8. DISEÑO Y GESTIÓN DEL PDI/PIP</h2>
+          <h3>8.1 Definición</h3>
+          <p>El <strong>PDI/PIP</strong> formaliza brecha, meta, acciones y plazo para desarrollar una competencia específica.</p>
+          <h3>8.2 Componentes</h3>
+          <table>
+            <tr><th>Elemento</th><th>Descripción</th></tr>
+            <tr><td>Brecha</td><td>Falencia detectada</td></tr>
+            <tr><td>Meta SMART</td><td>Específica, Medible, Alcanzable, Relevante, Tiempo</td></tr>
+            <tr><td>Actividades</td><td>Coaching, OJT, simulador, mentoring</td></tr>
+            <tr><td>Responsable</td><td>Supervisor o mentor</td></tr>
+            <tr><td>Indicadores</td><td>KPI, cumplimiento de estándar</td></tr>
+            <tr><td>Fecha de cierre</td><td>Validación formal</td></tr>
+          </table>
+          <h3>8.3 Procedimiento</h3>
+          <ol>
+            <li>Identificar brecha.</li>
+            <li>Definir meta SMART.</li>
+            <li>Planificar actividades.</li>
+            <li>Asignar responsables.</li>
+            <li>Registrar en formato.</li>
+            <li>Seguimiento semanal.</li>
+            <li>Validar cierre con evidencia.</li>
+          </ol>
+          <h3>8.4 Ejemplo de PDI técnico</h3>
+          <table>
+            <tr><th>Campo</th><th>Descripción</th></tr>
+            <tr><td>Brecha</td><td>Control insuficiente de carga en CAEX.</td></tr>
+            <tr><td>Meta SMART</td><td>100% maniobras de carga seguras en 4 semanas.</td></tr>
+            <tr><td>Actividades</td><td>2 coaching + 3 OJT + observación final.</td></tr>
+            <tr><td>Responsable</td><td>Supervisor Área Mina.</td></tr>
+            <tr><td>Indicadores</td><td>0 sobrecargas; PTO 100%; velocidad ≤ 35 km/h.</td></tr>
+            <tr><td>Fecha cierre</td><td>__/__/____</td></tr>
+          </table>
+
+          <div class="mini-quiz" id="mq8"></div>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 9. CASOS INTEGRADOS DE APLICACIÓN</h2>
+          <h3>Caso 1 — CAEX: Control de carga y seguridad en rampa</h3>
+          <p><strong>Situación:</strong> Desviaciones en control de carga. <strong>Acción:</strong> Coaching + PDI 4 semanas. <strong>Resultado:</strong> 0 desviaciones; PTO 100%.</p>
+          <h3>Caso 2 — Pala: Coordinación y comunicación operacional</h3>
+          <p><strong>Situación:</strong> Errores de sincronización con CAEX. <strong>Acción:</strong> Mentoring + práctica guiada. <strong>Resultado:</strong> Mejora 12% ciclo de carga.</p>
+          <h3>Caso 3 — Mantenimiento: Procedimiento LOTO incompleto</h3>
+          <p><strong>Situación:</strong> Omisión de paso crítico. <strong>Acción:</strong> OJT + verificación Seguridad. <strong>Resultado:</strong> 100% cumplimiento en simulacros.</p>
+          <h3>Caso 4 — Servicios Higiénicos: Cumplimiento de ruta</h3>
+          <p><strong>Situación:</strong> Omisión de sectores. <strong>Acción:</strong> Coaching conductual + PDI. <strong>Resultado:</strong> Cumplimiento 100% de ruta.</p>
+          <h3>Caso 5 — Logística: Traslado de insumos</h3>
+          <p><strong>Situación:</strong> Retrasos por comunicación deficiente. <strong>Acción:</strong> Coaching + bitácora. <strong>Resultado:</strong> -15% tiempo de traslado.</p>
+          <h3>Caso 6 — Seguridad y Medio Ambiente: Reportabilidad</h3>
+          <p><strong>Situación:</strong> Bajo reporte de peligros. <strong>Acción:</strong> Taller IPER + coaching grupal. <strong>Resultado:</strong> +120% reportes válidos.</p>
+        </article>
+      </section>
+
+      <!-- FASE 3 -->
+      <section id="fase3" class="page" role="tabpanel" aria-live="polite">
+        <article class="card">
+          <h2>CAPÍTULO 10. ERRORES COMUNES DEL SUPERVISOR</h2>
+          <p>El desarrollo de competencias exige planificación, seguimiento y rigor. A continuación, se presentan errores frecuentes y medidas preventivas.</p>
+          <table>
+            <tr><th>Nº</th><th>Error</th><th>Consecuencia</th><th>Medida preventiva</th></tr>
+            <tr><td>1</td><td>No registrar evidencias</td><td>Falta de trazabilidad</td><td>Usar bitácoras y formatos oficiales</td></tr>
+            <tr><td>2</td><td>Confundir coaching con fiscalización</td><td>Resistencia del trabajador</td><td>Enfoque colaborativo</td></tr>
+            <tr><td>3</td><td>Sin metas SMART</td><td>Dificultad para medir</td><td>Definir objetivos observables</td></tr>
+            <tr><td>4</td><td>No hacer seguimiento</td><td>Brechas abiertas</td><td>Revisión semanal</td></tr>
+            <tr><td>5</td><td>Centrar solo en lo técnico</td><td>Persisten conductas inseguras</td><td>Incluir competencias conductuales</td></tr>
+            <tr><td>6</td><td>Delegar todo a Capacitación</td><td>Falta liderazgo</td><td>Rol activo del Supervisor</td></tr>
+            <tr><td>7</td><td>No comunicar avances</td><td>Falta de visibilidad</td><td>Reportes periódicos</td></tr>
+            <tr><td>8</td><td>No reconocer logros</td><td>Desmotivación</td><td>Reconocimiento oportuno</td></tr>
+          </table>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 11. AUTOEVALUACIONES FORMATIVAS</h2>
+          <h3>Autoevaluación 1 — Detección de brechas</h3>
+          <ol>
+            <li>Diferencia entre brecha técnica y conductual.</li>
+            <li>Fuentes de información para identificar brechas.</li>
+            <li>Pasos previos a planificar una acción de desarrollo.</li>
+            <li>Ejemplo de detección de brecha en su área.</li>
+          </ol>
+          <h3>Autoevaluación 2 — Coaching, Mentoring y OJT</h3>
+          <ol>
+            <li>Diferencia principal entre coaching y mentoring.</li>
+            <li>Etapas del coaching operacional.</li>
+            <li>Condiciones previas para OJT.</li>
+            <li>Relevancia de registrar la evidencia.</li>
+          </ol>
+          <h3>Autoevaluación 3 — PDI</h3>
+          <ol>
+            <li>Elementos de un PDI.</li>
+            <li>Significado de meta SMART.</li>
+            <li>Criterios para cierre de brecha.</li>
+            <li>Cómo documentar cierre de PDI.</li>
+          </ol>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 12. EVALUACIÓN CERTIFICABLE FINAL (Descripción)</h2>
+          <p>La evaluación final consta de <strong>25 preguntas de selección múltiple</strong>, con retroalimentación por pregunta y cálculo de puntaje 0–100. Aprobación mínima: <strong>70 puntos</strong>.</p>
+          <table>
+            <tr><th>Rango</th><th>Nivel</th><th>Interpretación</th></tr>
+            <tr><td>90–100</td><td>Destacado</td><td>Aplica metodologías con autonomía</td></tr>
+            <tr><td>75–89</td><td>Competente</td><td>Aplica correctamente</td></tr>
+            <tr><td>60–74</td><td>En desarrollo</td><td>Requiere refuerzo</td></tr>
+            <tr><td>0–59</td><td>No aprobado</td><td>No demuestra dominio suficiente</td></tr>
+          </table>
+        </article>
+
+        <article class="card">
+          <h2>CAPÍTULO 13. ANEXOS Y FORMATOS</h2>
+          <h3>Plantilla — Bitácora de Desarrollo</h3>
+          <table>
+            <tr><th>Fecha</th><th>Colaborador/a</th><th>Brecha</th><th>Acción</th><th>Evidencia</th><th>Próximo paso</th><th>Responsable</th></tr>
+            <tr><td>__/__/__</td><td>________</td><td>________</td><td>Coaching/OJT/PDI</td><td>________</td><td>________</td><td>________</td></tr>
+          </table>
+          <h3>Plantilla — Plan de Desarrollo Individual (PDI)</h3>
+          <table>
+            <tr><th>Elemento</th><th>Descripción</th></tr>
+            <tr><td>Brecha</td><td>____________________________</td></tr>
+            <tr><td>Meta SMART</td><td>____________________________</td></tr>
+            <tr><td>Actividades</td><td>____________________________</td></tr>
+            <tr><td>Responsable</td><td>____________________________</td></tr>
+            <tr><td>Inicio</td><td>__/__/__</td></tr>
+            <tr><td>Cierre</td><td>__/__/__</td></tr>
+            <tr><td>Evidencias</td><td>____________________________</td></tr>
+            <tr><td>Validación Supervisor</td><td>____________________________</td></tr>
+          </table>
+          <h3>Rúbrica de Evaluación de Competencia</h3>
+          <table>
+            <tr><th>Criterio</th><th>Nivel 1</th><th>Nivel 2</th><th>Nivel 3</th><th>Nivel 4</th></tr>
+            <tr><td>Seguridad</td><td>Incumple</td><td>Parcial</td><td>Cumple</td><td>Promueve</td></tr>
+            <tr><td>Técnico</td><td>Errores</td><td>Guía</td><td>Estándar</td><td>Mejora</td></tr>
+            <tr><td>Conductual</td><td>Resistencia</td><td>Ocasional</td><td>Colabora</td><td>Lidera</td></tr>
+          </table>
+          <h3>Glosario Técnico-Minero</h3>
+          <table>
+            <tr><th>Término</th><th>Definición</th></tr>
+            <tr><td>Brecha de competencia</td><td>Diferencia entre desempeño actual y estándar requerido</td></tr>
+            <tr><td>Coaching operacional</td><td>Acompañamiento basado en observación, reflexión y acción</td></tr>
+            <tr><td>Mentoring técnico</td><td>Transferencia de conocimiento desde un experto</td></tr>
+            <tr><td>OJT</td><td>Entrenamiento práctico en el puesto bajo condiciones seguras</td></tr>
+            <tr><td>PDI/PIP</td><td>Plan formal de desarrollo o mejora individual</td></tr>
+            <tr><td>Rúbrica</td><td>Escala que define niveles de cumplimiento por criterio</td></tr>
+            <tr><td>CCM</td><td>Consejo de Competencias Mineras</td></tr>
+            <tr><td>Feedforward</td><td>Retroalimentación orientada a la acción futura</td></tr>
+            <tr><td>Evidencia objetiva</td><td>Registro verificable de cumplimiento</td></tr>
+            <tr><td>Cierre de brecha</td><td>Validación del nivel requerido</td></tr>
+          </table>
+        </article>
+      </section>
+
+      <!-- PLANTILLAS -->
+      <section id="plantillas" class="page" role="tabpanel">
+        <article class="card">
+          <h2>Plantillas oficiales del módulo</h2>
+          <details open><summary>Matriz de competencias (modelo base)</summary>
+            <table>
+              <tr><th>Rol</th><th>Competencia</th><th>Nivel requerido</th><th>Nivel actual</th><th>Brecha</th><th>Acción</th></tr>
+              <tr><td>CAEX</td><td>Control de carga</td><td>Avanzado</td><td>Intermedio</td><td>Sí</td><td>PDI + OJT</td></tr>
+            </table>
+          </details>
+          <details><summary>Ficha de brecha (diagnóstico)</summary>
+            <table>
+              <tr><th>Persona</th><th>Puesto</th><th>Brecha</th><th>Evidencia</th><th>Riesgo</th><th>Acción</th></tr>
+              <tr><td>________</td><td>________</td><td>________</td><td>________</td><td>Bajo/Medio/Alto</td><td>Coaching/OJT/PDI</td></tr>
+            </table>
+          </details>
+          <details><summary>Guion de coaching (SBI + Feedforward)</summary>
+            <p><strong>Situación:</strong> ____ • <strong>Comportamiento:</strong> ____ • <strong>Impacto:</strong> ____ • <strong>Feedforward:</strong> ____</p>
+          </details>
+          <details><summary>Guion de mentoring (plan 2–6 semanas)</summary>
+            <table>
+              <tr><th>Semana</th><th>Objetivo</th><th>Actividad</th><th>Evidencia</th></tr>
+              <tr><td>1</td><td>____</td><td>____</td><td>____</td></tr>
+            </table>
+          </details>
+          <details><summary>Plan OJT (sesión)</summary>
+            <table>
+              <tr><th>Objetivo</th><th>Tarea</th><th>Riesgos</th><th>Control</th><th>Verificación</th></tr>
+              <tr><td>____</td><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+            </table>
+          </details>
+          <details><summary>PDI/PIP (4–6 semanas)</summary>
+            <table>
+              <tr><th>Brecha</th><th>Meta SMART</th><th>Actividades</th><th>Responsable</th><th>Seguimiento</th><th>Cierre</th></tr>
+              <tr><td>____</td><td>____</td><td>____</td><td>____</td><td>____</td><td>____</td></tr>
+            </table>
+          </details>
+          <details><summary>Bitácora de evidencias</summary>
+            <table>
+              <tr><th>Fecha</th><th>Situación</th><th>Conducta</th><th>Impacto</th><th>Evidencia</th><th>Clasificación (+/−)</th></tr>
+              <tr><td>__/__/__</td><td>____</td><td>____</td><td>____</td><td>____</td><td>+</td></tr>
+            </table>
+          </details>
+          <details><summary>Rúbrica de cierre</summary>
+            <table>
+              <tr><th>Criterio</th><th>1 — Bajo</th><th>2 — Parcial</th><th>3 — Esperado</th><th>4 — Sobresaliente</th></tr>
+              <tr><td>Seguridad</td><td>Incumple</td><td>Parcial</td><td>Cumple</td><td>Promueve</td></tr>
+              <tr><td>Técnico</td><td>Errores</td><td>Guía</td><td>Estándar</td><td>Mejora</td></tr>
+              <tr><td>Conductual</td><td>Resistencia</td><td>Ocasional</td><td>Colabora</td><td>Lidera</td></tr>
+            </table>
+          </details>
+        </article>
+      </section>
+
+      <!-- EVALUACIÓN FINAL -->
+      <section id="evaluacion" class="page" role="tabpanel" aria-live="polite">
+        <article class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px">
+            <h2>Evaluación Certificable Final (25 preguntas)</h2>
+            <div><span id="score" class="score">Puntaje: 0/100</span></div>
+          </div>
+          <p>Selecciona una alternativa por pregunta y presiona <strong>Enviar</strong>. Cada ítem mostrará si fue <span style="color:#0a7d32;font-weight:800">Correcto</span> o <span style="color:#b00020;font-weight:800">Incorrecto</span> y una explicación.</p>
+          <div id="quiz"></div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:10px;">
+            <button id="submit" class="btn">Enviar</button>
+            <button id="reset" class="btn secondary">Reiniciar</button>
+          </div>
+          <div class="legend" style="margin-top:10px;">
+            <span><i style="background:#00c853"></i> Correcta</span>
+            <span><i style="background:#ff1744"></i> Incorrecta</span>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">© ANUPRO360 2025 · Material de estudio privado</footer>
+  </div>
+
+  <script>
+    const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+    const $=(s,c=document)=>c.querySelector(s);
+
+    $$('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+      $$('.tabs button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      const id=b.dataset.target;
+      $$('.page').forEach(p=>p.classList.toggle('active', p.id===id));
+      history.replaceState(null,'','#'+id);
+      if(id==='evaluacion') window.scrollTo({top:0,behavior:'smooth'});
+    }));
+    window.addEventListener('DOMContentLoaded',()=>{
+      const hash=location.hash.replace('#','');
+      const target=['fase1','fase2','fase3','plantillas','evaluacion'].includes(hash)?hash:'fase1';
+      $$('.tabs button').find(x=>x.dataset.target===target)?.click();
+    });
+
+    // Search
+    const sb = $('#searchBox'), clearBtn = $('#clearSearch');
+    let lastHighlights=[];
+    function clearHighlights(){
+      lastHighlights.forEach(n=>{ n.outerHTML = n.textContent; });
+      lastHighlights=[];
+    }
+    function highlight(term){
+      if(!term) return;
+      clearHighlights();
+      $$('.page.active *:not(script):not(style)').forEach(el=>{
+        if(el.children.length===0 && el.textContent.match(new RegExp(term,'i'))){
+          el.innerHTML = el.innerHTML.replace(new RegExp('('+term+')','gi'),'<mark class="highlight">$1</mark>');
+          lastHighlights.push(...el.querySelectorAll('mark.highlight'));
+        }
+      });
+    }
+    sb.addEventListener('input', e=>{ clearHighlights(); highlight(e.target.value.trim()); });
+    clearBtn.addEventListener('click', ()=>{ sb.value=''; clearHighlights(); sb.focus(); });
+
+    // Mini-quizzes
+    function renderMini(containerId, data){
+      const cont = document.getElementById(containerId);
+      if(!cont) return;
+      const quiz = document.createElement('div');
+      data.forEach((q,qi)=>{
+        const card = document.createElement('div');
+        card.className='q';
+        const h = document.createElement('h4'); h.textContent=q.q; card.appendChild(h);
+        q.opts.forEach((opt,oi)=>{
+          const id=`${containerId}_${qi}_${oi}`;
+          const row=document.createElement('label'); row.className='answer'; row.setAttribute('for',id);
+          const input=document.createElement('input'); input.type='radio'; input.name=`${containerId}_${qi}`; input.id=id; input.value=oi; input.style.accentColor='#FF5C00';
+          const span=document.createElement('span'); span.textContent=opt;
+          row.appendChild(input); row.appendChild(span); card.appendChild(row);
+          input.addEventListener('change',()=>{
+            card.querySelectorAll('.answer').forEach(r=>r.classList.remove('correct','incorrect'));
+            row.classList.add(oi===q.a?'correct':'incorrect');
+          });
+        });
+        const fb=document.createElement('div'); fb.className='feedback'; fb.style.marginTop='6px'; fb.textContent=q.exp||''; card.appendChild(fb);
+        quiz.appendChild(card);
+      });
+      cont.innerHTML=''; cont.appendChild(quiz);
+    }
+    renderMini('mq5',[
+      {q:'En coaching, el foco correcto es…',opts:['Comparar personas entre sí','Una brecha específica y observable','Evaluar todo el desempeño del mes'],a:1,exp:'Coaching efectivo se concentra en un foco observable.'},
+      {q:'El método SBI corresponde a…',opts:['Situación–Beneficio–Indicador','Situación–Comportamiento–Impacto','Señal–Bloqueo–Interlock'],a:1,exp:'SBI estructura la conversación en hechos y consecuencias.'},
+      {q:'Cierre mínimo de microciclo de coaching:',opts:['1 observación','2 observaciones consecutivas al estándar','Informe mensual'],a:1,exp:'Se recomienda 2 observaciones consecutivas cumpliendo el estándar.'}
+    ]);
+    renderMini('mq6',[
+      {q:'El mentor debe…',opts:['Tener nivel avanzado y buena conducta','Solo ser carismático','Rotar semanalmente por azar'],a:0,exp:'Perfil técnico y conductual robusto.'},
+      {q:'Evidencia clave del mentoring:',opts:['Bitácora semanal','Sticker motivacional','Foto grupal'],a:0,exp:'La bitácora asegura trazabilidad.'},
+      {q:'Duración típica del mentoring técnico:',opts:['1 día','2–6 semanas','1 año'],a:1,exp:'Suficiente para transferencia efectiva en faena.'}
+    ]);
+    renderMini('mq7',[
+      {q:'Condición previa crítica para OJT:',opts:['IPER actualizado','Música de fondo','Día despejado'],a:0,exp:'Control de riesgos al día es imprescindible.'},
+      {q:'El OJT privilegia…',opts:['Teoría extensa','Aprender haciendo bajo control','Evaluación anual'],a:1,exp:'OJT = práctica real supervisada.'},
+      {q:'Cierre formal de sesión OJT:',opts:['Entrega de casco','Bitácora + firma de tutor y aprendiz','Foto del equipo'],a:1,exp:'Registro firmado valida la sesión.'}
+    ]);
+    renderMini('mq8',[
+      {q:'Un PDI comienza con…',opts:['Designar un mentor','Identificar la brecha','Comprar equipos nuevos'],a:1,exp:'La brecha define el propósito del plan.'},
+      {q:'La meta SMART debe ser…',opts:['Inspiracional','Específica y medible con plazo','Secreta'],a:1,exp:'SMART asegura evaluación objetiva.'},
+      {q:'El cierre del PDI exige…',opts:['Percepción positiva','Evidencia objetiva de cumplimiento','Aprobación informal'],a:1,exp:'Siempre con evidencia verificable.'}
+    ]);
+
+    // Final exam (25 items)
+    const DATA = [
+      { q:'1) ¿Qué documento formaliza la planificación de acciones para cerrar una brecha?', opts:['Informe de gestión','Plan de Desarrollo Individual (PDI)','Checklist de mantenimiento','Bitácora de turno'], a:1, exp:'El PDI define brecha, meta, acciones, plazos y responsables.'},
+      { q:'2) Primer paso del coaching operacional:', opts:['Retroalimentar','Preparar sesión y revisar antecedentes','Observar y emitir juicio','Felicitar en público'], a:1, exp:'Siempre preparar: estándar, evidencias y objetivo.'},
+      { q:'3) Función principal del mentor técnico:', opts:['Calificar formalmente','Ejecutar tareas críticas','Transferir conocimiento y guiar práctica','Revisar KPI financieros'], a:2, exp:'Mentoring es transferencia estructurada de experiencia.'},
+      { q:'4) Criterio de seguridad en OJT:', opts:['Cumplir la meta productiva','Acelerar la tarea','Ejecutar en condiciones seguras y controladas','Delegar la supervisión'], a:2, exp:'La seguridad es condición no negociable.'},
+      { q:'5) Una meta SMART debe ser:', opts:['General y motivacional','Específica, medible, alcanzable, relevante y con tiempo','Flexible y sin indicadores','Solo conductual'], a:1, exp:'SMART permite medir y verificar.'},
+      { q:'6) Brecha técnica típicamente requiere:', opts:['Mentoring exclusivamente','OJT y práctica guiada','Cambio de contrato','Reconocimiento público'], a:1, exp:'La habilidad se desarrolla haciendo con guía.'},
+      { q:'7) Evidencia objetiva de aprendizaje:', opts:['Opinión del supervisor','Bitácora firmada + checklist','Rumores de pasillo','Foto informal'], a:1, exp:'Registros verificables y trazables.'},
+      { q:'8) En coaching, el método SBI incluye:', opts:['Situación – Comportamiento – Impacto','Señal – Bloqueo – Interlock','Seguridad – Beneficio – Indicador','Situación – Beneficio – Idea'], a:0, exp:'SBI estructura la conversación en hechos.'},
+      { q:'9) ¿Cuándo activar PDI?', opts:['Ante logro sobresaliente','Con brecha persistente que afecta desempeño o seguridad','Siempre fin de mes','Durante vacaciones'], a:1, exp:'PDI se usa para cerrar brechas específicas.'},
+      { q:'10) Condición previa para OJT:', opts:['IPER actualizado','Anuncio en redes sociales','Evento corporativo','Cambio de uniforme'], a:0, exp:'Control de riesgos al día.'},
+      { q:'11) En mentoring, la evidencia mínima es:', opts:['Sticker de motivación','Bitácora semanal de avance','Selfie del turno','Listín telefónico'], a:1, exp:'La bitácora es registro clave.'},
+      { q:'12) Cierre correcto de PDI:', opts:['Por fecha de calendario','Tras 4 observaciones consecutivas cumpliendo estándar (o criterio definido)','Cuando lo pide el operador','Al cambiar de turno'], a:1, exp:'Cierre exige evidencia sostenida.'},
+      { q:'13) Un error frecuente del supervisor:', opts:['Registrar evidencias','Definir metas SMART','No hacer seguimiento','Reconocer logros'], a:2, exp:'Sin seguimiento no hay mejora sostenida.'},
+      { q:'14) Diferencia principal Coaching vs. Mentoring:', opts:['Coaching = imponer; Mentoring = preguntar','Coaching = reflexión sobre desempeño; Mentoring = transferencia de experiencia','No existe diferencia','Coaching = solo teoría; Mentoring = solo práctica'], a:1, exp:'Coaching desarrolla autoconciencia; Mentoring transfiere expertise.'},
+      { q:'15) Indicador adecuado para medir desarrollo:', opts:['Likes en redes','% PTO ejecutado','Color del camión','Asistencia a la fiesta'], a:1, exp:'% PTO ejecutado evidencia disciplina y control preventivo.'},
+      { q:'16) Orden recomendado del ciclo de desarrollo:', opts:['Planificar → Ejecutar → Observar → Cerrar','Detectar brecha → Planificar → Ejecutar → Seguir → Cerrar','Observar → Cerrar → Planificar','Cerrar → Ejecutar → Detectar'], a:1, exp:'Ciclo lógico con seguimiento.'},
+      { q:'17) En un OJT, la evaluación se realiza:', opts:['Solo por percepción','Con rúbrica y comparación vs. estándar','Por encuesta anónima','Al final del año'], a:1, exp:'Rúbrica objetiva y observable.'},
+      { q:'18) Reporte de peligros (IPER) se relaciona con:', opts:['Solo con Medio Ambiente','Cultura de seguridad y aprendizaje','Solo con Recursos Humanos','Marketing'], a:1, exp:'Incrementa reportabilidad y prevención.'},
+      { q:'19) Para reforzar conducta destacada se debe:', opts:['Ignorar para evitar celos','Reconocer con evidencia y difundir buenas prácticas','Sancionar por sobre cumplimiento','Eliminar registros positivos'], a:1, exp:'El reconocimiento oportuno refuerza lo deseado.'},
+      { q:'20) La trazabilidad del desarrollo depende de:', opts:['Bitácoras, rúbricas y registros formales','Mensajes de WhatsApp','Memoria del supervisor','Rumores del turno'], a:0, exp:'Sin registro no hay control.'},
+      { q:'21) ¿Qué rol tiene el Subjefe en el desarrollo?', opts:['Hacer memes','Apoyar coaching/OJT y consolidar KPI del turno','Evitar registrar','Decidir bonos'], a:1, exp:'Apoyo operativo y seguimiento.'},
+      { q:'22) ¿Qué componente NO pertenece al PDI?', opts:['Brecha','Meta SMART','Actividades','Monto de bono anual'], a:3, exp:'El bono no es parte del plan de aprendizaje.'},
+      { q:'23) En comunicación 3C, el supervisor debe:', opts:['Ser ambiguo','Ser claro, conciso y concreto','Evitar radios','Hablar en clave'], a:1, exp:'3C mejora seguridad y coordinación.'},
+      { q:'24) Para una brecha conductual es más adecuado:', opts:['Coaching operacional','Comprar equipo nuevo','Rotar sin explicar','Sancionar primero'], a:0, exp:'El coaching aborda conducta observable.'},
+      { q:'25) Para medir eficacia de un plan de desarrollo se usa:', opts:['Encuesta general','KPI específicos y evidencia de cierre','Comentarios informales','Aplausos del equipo'], a:1, exp:'Indicadores y evidencia objetiva.'}
+    ];
+
+    const quizEl = document.getElementById('quiz');
+    let answers = new Array(DATA.length).fill(null);
+
+    function renderQuiz(){
+      quizEl.innerHTML = '';
+      DATA.forEach((item, idx)=>{
+        const card = document.createElement('div');
+        card.className = 'q card';
+        const title = document.createElement('h3');
+        title.textContent = item.q;
+        card.appendChild(title);
+
+        item.opts.forEach((opt, oi)=>{
+          const id = `q${idx}_o${oi}`;
+          const row = document.createElement('label');
+          row.className = 'answer';
+          row.setAttribute('for', id);
+
+          const input = document.createElement('input');
+          input.type = 'radio';
+          input.name = `q${idx}`;
+          input.id = id;
+          input.value = oi;
+          input.style.accentColor = '#FF5C00';
+          input.addEventListener('change', ()=>{
+            answers[idx] = oi;
+          });
+
+          const span = document.createElement('span');
+          span.textContent = opt;
+
+          row.appendChild(input);
+          row.appendChild(span);
+          card.appendChild(row);
+        });
+
+        const fb = document.createElement('div');
+        fb.className = 'feedback';
+        fb.style.marginTop = '6px';
+        card.appendChild(fb);
+
+        quizEl.appendChild(card);
+      });
+    }
+    renderQuiz();
+
+    function grade(){
+      let correct = 0;
+      document.querySelectorAll('#quiz .q').forEach((card, qi)=>{
+        const ans = answers[qi];
+        const fb = card.querySelector('.feedback');
+        card.querySelectorAll('.answer').forEach((row, oi)=>{
+          row.classList.remove('correct','incorrect');
+          if(oi === DATA[qi].a){
+            if(ans === oi) { row.classList.add('correct'); }
+          } else {
+            if(ans === oi) { row.classList.add('incorrect'); }
+          }
+        });
+        if(ans === DATA[qi].a){
+          correct++; fb.innerHTML = '<div style="color:#0a7d32;font-weight:700">Correcto.</div><div>'+DATA[qi].exp+'</div>';
+        }else if(ans === null){
+          fb.innerHTML = '<div style="color:#b00020;font-weight:700">Sin respuesta.</div>';
+        }else{
+          fb.innerHTML = '<div style="color:#b00020;font-weight:700">Incorrecto.</div><div>'+DATA[qi].exp+'</div>';
+        }
+      });
+      const score = Math.round((correct/DATA.length)*100);
+      document.getElementById('score').textContent = 'Puntaje: '+score+'/100';
+      window.scrollTo({top:0,behavior:'smooth'});
+      return score;
+    }
+    document.getElementById('submit').addEventListener('click', grade);
+    document.getElementById('reset').addEventListener('click', ()=>{
+      answers.fill(null);
+      renderQuiz();
+      document.getElementById('score').textContent = 'Puntaje: 0/100';
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  </script>
+</body>
+</html>
