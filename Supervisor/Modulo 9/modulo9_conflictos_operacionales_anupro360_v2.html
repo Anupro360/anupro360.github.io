@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Módulo 9 · Conflictos Operacionales — ANUPRO360</title>
+  <meta name="description" content="Módulo 9 interactivo (autoaprendizaje): Conflictos Operacionales y su Impacto en el Equipo. Incluye práctica guiada, drag & drop táctil, simulador y mini-quiz."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C;
+      --naranja:#FF5C00;
+      --gris:#5C6B6B;
+      --verde:#4B6F44;
+      --azul:#003B5C;
+      --blanco:#FFFFFF;
+
+      --bg1:#071621;
+      --bg2:#0b2434;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --muted:rgba(255,255,255,.72);
+      --text:#eef6ff;
+      --shadow:0 10px 28px rgba(0,0,0,.28);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,184,28,.14), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(255,92,0,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+    .wrap{max-width:1120px; margin:0 auto; padding:18px}
+    header{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+    }
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(255,184,28,.9), rgba(255,92,0,.9));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 12px 26px rgba(255,92,0,.18);
+      display:grid; place-items:center;
+      font-weight:900; color:#1b1b1b;
+      user-select:none;
+    }
+    .brand h1{margin:0; font-size:16px; letter-spacing:.2px}
+    .brand p{margin:0; color:var(--muted); font-size:12px}
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+      font-size:12px; color:var(--muted);
+    }
+    .hero{padding:16px 0 6px}
+    .hero h2{margin:.2rem 0 .3rem; font-size:1.45rem}
+    .hero p{margin:0; color:var(--muted); line-height:1.5}
+    .progress{
+      height:10px; width:100%; border-radius:999px;
+      background: rgba(255,255,255,.12);
+      overflow:hidden;
+    }
+    .progress > i{
+      display:block; height:100%; width:0%;
+      background: linear-gradient(90deg, var(--amarillo), var(--naranja));
+      transition: width .35s ease;
+    }
+
+    .grid{display:grid; gap:16px; margin-top:16px}
+    @media(min-width:980px){ .grid{grid-template-columns:1.25fr .75fr} }
+
+    .card{
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    .card h3{margin:0 0 10px; font-size:1.05rem}
+    .card p{margin:.5rem 0; color:var(--muted); line-height:1.55}
+    .small{font-size:12px; color:rgba(255,255,255,.68)}
+    .kpi{
+      display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px
+    }
+    .kpi > div{
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:12px;
+    }
+    .kpi b{display:block; font-size:18px; color:var(--amarillo)}
+    .kpi span{font-size:12px; color:rgba(255,255,255,.72)}
+    .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    button{font:inherit}
+    .btn, .btn-sec, .btn-ghost{
+      cursor:pointer; border:none; border-radius:12px;
+      padding:10px 14px; font-weight:700;
+      transition: transform .08s ease, filter .15s ease, background .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn{background: linear-gradient(180deg, var(--amarillo), var(--naranja)); color:#1b1b1b}
+    .btn:hover{filter:brightness(1.02)}
+    .btn:active{transform:translateY(1px)}
+    .btn-sec{background: rgba(255,255,255,.08); color:var(--text); border:1px solid rgba(255,255,255,.14)}
+    .btn-ghost{background: transparent; color:var(--muted); border:1px dashed rgba(255,255,255,.18)}
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+    }
+    .tag i{width:8px; height:8px; border-radius:50%; display:inline-block; background:var(--verde)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background:rgba(255,255,255,.10); margin:14px 0}
+
+    details{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      border-radius:14px;
+      padding:12px;
+    }
+    details + details{margin-top:10px}
+    summary{cursor:pointer; font-weight:800}
+    summary::marker{color:rgba(255,255,255,.55)}
+    .callout{
+      border-left:4px solid var(--amarillo);
+      background: rgba(255,184,28,.08);
+      padding:12px; border-radius:12px;
+    }
+    .callout b{color:var(--amarillo)}
+
+    /* Forms */
+    .form-grid{display:grid; gap:10px}
+    @media(min-width:700px){ .form-grid{grid-template-columns:1fr 1fr} }
+    label{display:block; font-size:12px; color:rgba(255,255,255,.72); margin-bottom:6px}
+    select, input[type="text"], textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      padding:10px 12px;
+      outline:none;
+    }
+    textarea{min-height:110px; resize:vertical}
+    .hint{font-size:12px; color:rgba(255,255,255,.65)}
+    .ok{color:#8cff98}
+    .warn{color:#ffd27a}
+    .bad{color:#ff9b9b}
+
+    /* Drag & Drop */
+    .dd{display:grid; gap:12px}
+    @media(min-width:880px){ .dd{grid-template-columns:1fr 1fr} }
+    .dd-col{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      border-radius:14px;
+      padding:12px;
+      min-height:160px;
+    }
+    .dd-col h4{margin:0 0 10px; font-size:14px; color:rgba(255,255,255,.86)}
+    .chip{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      margin:8px 0;
+      touch-action:none;
+    }
+    .chip b{font-size:13px}
+    .chip small{opacity:.75}
+    .chip[draggable="true"]{cursor:grab}
+    .chip:active{cursor:grabbing}
+    .dropzone{
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:12px;
+      padding:10px 12px;
+      margin:8px 0;
+      min-height:52px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background: rgba(0,0,0,.12);
+    }
+    .dropzone.dragover{
+      border-color: rgba(140,255,152,.65);
+      background: rgba(140,255,152,.10);
+    }
+    .dz-title{font-weight:800; font-size:12px; opacity:.9}
+    .dz-value{font-size:12px; color:rgba(255,255,255,.70)}
+    .dd-result{
+      margin-top:10px; padding:10px 12px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      font-size:13px;
+    }
+
+    /* Scenario / simulator */
+    .scenario{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:12px;
+    }
+    .qhead{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+    .qmeta{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .badge{
+      background: rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+    }
+    .question{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      font-weight:800;
+      line-height:1.4;
+    }
+    .choices{display:grid; gap:10px; margin-top:10px}
+    @media(min-width:700px){ .choices{grid-template-columns:1fr 1fr} }
+    .choice{
+      padding:12px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+    }
+    .choice:hover{background: rgba(255,255,255,.08)}
+    .choice:active{transform:translateY(1px)}
+    .choice.correct{border-color: rgba(140,255,152,.70); background: rgba(140,255,152,.12)}
+    .choice.incorrect{border-color: rgba(255,155,155,.70); background: rgba(255,155,155,.10)}
+    .explain{
+      margin-top:10px; padding:10px 12px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      color:rgba(255,255,255,.78);
+      font-size:13px;
+    }
+
+    /* Quiz */
+    .opt{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      cursor:pointer;
+      transition:.12s;
+    }
+    .opt:hover{background: rgba(255,255,255,.07)}
+    .opt.selected{border-color: rgba(255,184,28,.65); background: rgba(255,184,28,.10)}
+    .opt.correct{border-color: rgba(140,255,152,.70); background: rgba(140,255,152,.12)}
+    .opt.incorrect{border-color: rgba(255,155,155,.70); background: rgba(255,155,155,.10)}
+
+    .toast{
+      position:fixed; left:50%; top:16px; transform:translateX(-50%);
+      background: rgba(0,0,0,.78);
+      border:1px solid rgba(255,255,255,.14);
+      padding:10px 12px; border-radius:999px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      z-index:99;
+      display:none;
+      max-width:min(94vw, 820px);
+      color:rgba(255,255,255,.90);
+      font-size:13px;
+    }
+
+    footer{padding:18px 0 26px; color:rgba(255,255,255,.62); font-size:12px}
+    .right .card{position:sticky; top:14px}
+
+    /* Small UX fixes */
+    a{color:inherit}
+    .btn:focus,.btn-sec:focus,.btn-ghost:focus, summary:focus {outline:2px solid rgba(255,184,28,.55); outline-offset:2px}
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">A360</div>
+        <div>
+          <h1>ANUPRO360 · Supervisor de Área Mina</h1>
+          <p>Módulo 9 (Autoaprendizaje) · Conflictos Operacionales</p>
+        </div>
+      </div>
+
+      <div class="pill" title="Progreso guardado automáticamente en este dispositivo">
+        <span>📈 Progreso</span>
+        <span style="min-width:48px; text-align:right"><b id="pct">0%</b></span>
+      </div>
+    </div>
+
+    <div class="wrap hero">
+      <h2>Gestiona conflictos <span style="color:var(--amarillo)">sin perder el control</span> del turno.</h2>
+      <p>
+        En minería los conflictos aparecen por recursos, roles, comunicación y presión. Tu desafío como supervisor es
+        <strong>resolver el proceso</strong> (no atacar a la persona), proteger la seguridad y sostener la continuidad operacional.
+      </p>
+      <div class="divider"></div>
+      <div class="progress" aria-label="Barra de progreso"><i id="bar"></i></div>
+      <div class="small" style="margin-top:8px">Tip: completa cada sección. Queda guardado automáticamente.</div>
+    </div>
+  </header>
+
+  <main class="wrap grid">
+    <!-- LEFT -->
+    <section class="left">
+
+      <article class="card" data-section="s1">
+        <div class="row" style="justify-content:space-between">
+          <h3>1) Cómo usar este módulo (sin profesor)</h3>
+          <span class="tag"><i></i> Autoaprendizaje</span>
+        </div>
+        <p>
+          Trabajarás con el ciclo <strong>Identificar → Analizar → Resolver → Verificar</strong>. El objetivo no es “ganar la discusión”,
+          sino recuperar la coordinación y reducir riesgo.
+        </p>
+        <details>
+          <summary>Ruta recomendada (30–40 min)</summary>
+          <p><b>1)</b> Conceptos y tipos de conflicto (7–10 min).</p>
+          <p><b>2)</b> Método 4 pasos (Hechos–Impacto–Acuerdo–Seguimiento) (6–8 min).</p>
+          <p><b>3)</b> Juego Drag &amp; Drop (3–6 min).</p>
+          <p><b>4)</b> Simulador de intervención del supervisor (8–10 min).</p>
+          <p><b>5)</b> Mini‑quiz (6–8 min) + reflexión (2 min).</p>
+        </details>
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s1_state"></div>
+      </article>
+
+      <article class="card" data-section="s2">
+        <div class="row" style="justify-content:space-between">
+          <h3>2) Qué es un conflicto operacional (y qué NO es)</h3>
+          <span class="tag"><i style="background:var(--amarillo)"></i> Concepto</span>
+        </div>
+        <p>
+          Un <strong>conflicto operacional</strong> es una fricción entre personas/áreas/procesos por diferencias en <b>prioridades</b>, <b>información</b>,
+          <b>recursos</b> o <b>decisiones</b> durante el turno.
+        </p>
+        <div class="callout">
+          <b>Clave del supervisor:</b><br/>
+          El conflicto no es el problema. El problema es <b>no gestionarlo</b>, dejando que se transforme en riesgo (omisiones, apuro, silencios).
+        </div>
+        <details>
+          <summary>Qué NO es conflicto (pero se parece)</summary>
+          <p>• Diferencia técnica con evidencia (se resuelve con datos).</p>
+          <p>• Retroalimentación respetuosa (no es ataque).</p>
+          <p>• Un cambio de plan comunicado a tiempo (evita conflicto).</p>
+        </details>
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s2_state"></div>
+      </article>
+
+      <article class="card" data-section="s3">
+        <div class="row" style="justify-content:space-between">
+          <h3>3) Tipos de conflicto y señales tempranas</h3>
+          <span class="tag"><i style="background:var(--verde)"></i> Detección</span>
+        </div>
+        <p>Identificar el tipo te ayuda a resolver rápido. Usa “señales tempranas” para intervenir antes de que escale.</p>
+
+        <details open>
+          <summary>Tipos más comunes en faena</summary>
+          <p><b>Recursos:</b> faltan equipos, personal, tiempo, ventanas.</p>
+          <p><b>Rol/Responsabilidad:</b> “eso no me corresponde”, “¿quién autoriza?”.</p>
+          <p><b>Comunicación:</b> información tardía, órdenes contradictorias, supuestos.</p>
+          <p><b>Presión:</b> apuro por KPI, metas, atrasos (sube el tono y baja el control).</p>
+          <p><b>Interpersonal derivado:</b> se vuelve personal cuando no se resuelve el proceso.</p>
+        </details>
+
+        <details>
+          <summary>Señales tempranas (cuando intervenir)</summary>
+          <p>• Radios saturadas o “silencios peligrosos”.</p>
+          <p>• Aumento de reprocesos: “hazlo de nuevo”.</p>
+          <p>• Frases absolutas: “siempre”, “nunca”, “ustedes”.</p>
+          <p>• Pérdida de confirmaciones (nadie verifica).</p>
+          <p>• Conductas de evasión: “yo no me meto”.</p>
+        </details>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s3_state"></div>
+      </article>
+
+      <article class="card" data-section="s4">
+        <div class="row" style="justify-content:space-between">
+          <h3>4) Método 4 pasos del supervisor (para resolver sin escalar)</h3>
+          <span class="tag"><i style="background:var(--naranja)"></i> Método</span>
+        </div>
+        <p>
+          Cuando hay conflicto, tu objetivo es volver a lo operacional y cerrar con un acuerdo verificable.
+          Usa este protocolo:
+        </p>
+
+        <details open>
+          <summary>Modelo 4 pasos: Hechos → Impacto → Acuerdo → Seguimiento</summary>
+          <p><b>1) Hechos (sin opinión):</b> qué pasó / dónde / cuándo.</p>
+          <p><b>2) Impacto operacional:</b> riesgo + continuidad + producción (qué se afecta).</p>
+          <p><b>3) Acuerdo operacional:</b> qué se hará, quién, cuándo (regla “si pasa X, hacemos Y”).</p>
+          <p><b>4) Seguimiento:</b> cómo se verifica y quién informa cierre.</p>
+        </details>
+
+        <div class="callout">
+          <b>Regla de comunicación:</b><br/>
+          “Corregimos el proceso, no atacamos a la persona”. Evita “ustedes son…” y usa “observé…, el impacto es…, acordamos…”.
+        </div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s4_state"></div>
+      </article>
+
+      <article class="card" data-section="s5">
+        <div class="row" style="justify-content:space-between">
+          <h3>5) Práctica guiada: resuelve tu conflicto con el Modelo 4 Pasos</h3>
+          <span class="tag"><i style="background:var(--verde)"></i> Aplicación</span>
+        </div>
+        <p>Trae un conflicto real (o simulado). Completa y guarda. Te servirá para tu portafolio y para el turno.</p>
+
+        <div class="form-grid">
+          <div>
+            <label>Tipo de conflicto</label>
+            <select id="p_type">
+              <option value="">Selecciona…</option>
+              <option>Recursos</option>
+              <option>Rol / Responsabilidad</option>
+              <option>Comunicación</option>
+              <option>Presión operacional</option>
+              <option>Interpersonal derivado</option>
+            </select>
+            <div class="hint">Tip: si no sabes, elige “Comunicación” (la mayoría nace ahí).</div>
+          </div>
+          <div>
+            <label>Situación (1 frase, concreta)</label>
+            <input type="text" id="p_sit" placeholder="Ej.: Mantención pide intervenir equipo sin ventana; Operación se opone." />
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <details open>
+          <summary>Completa el Modelo 4 Pasos</summary>
+          <label>1) Hechos (sin opinión)</label>
+          <textarea id="p_fact" placeholder="Qué pasó / dónde / cuándo. Evita: 'siempre' 'nunca'."></textarea>
+
+          <label style="margin-top:10px">2) Impacto operacional</label>
+          <textarea id="p_impact" placeholder="Riesgo + efecto en continuidad/producción + qué pasa si sigue."></textarea>
+
+          <div class="form-grid" style="margin-top:10px">
+            <div>
+              <label>3) Acuerdo operacional (qué / quién / cuándo)</label>
+              <textarea id="p_agree" placeholder="Ej.: 11:30 ventana; responsable: Jefe Mantención; control: aislamiento y liberación formal."></textarea>
+            </div>
+            <div>
+              <label>4) Seguimiento (verificación / evidencia)</label>
+              <textarea id="p_follow" placeholder="Ej.: Supervisor verifica señalización; Control registra detención; cierre por radio."></textarea>
+            </div>
+          </div>
+        </details>
+
+        <div class="btnrow">
+          <button class="btn" id="p_save">💾 Guardar práctica</button>
+          <button class="btn-sec" id="p_copy">📋 Copiar</button>
+          <button class="btn-ghost" id="p_reset">↺ Reiniciar</button>
+        </div>
+        <div class="dd-result" id="p_feedback">Completa tu caso y guarda. (Queda en este dispositivo).</div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s5_state"></div>
+      </article>
+
+      <article class="card" data-section="s6">
+        <div class="row" style="justify-content:space-between">
+          <h3>6) Juego: Tipo de conflicto → Intervención correcta (Drag &amp; Drop táctil)</h3>
+          <span class="tag"><i style="background:var(--amarillo)"></i> Juego</span>
+        </div>
+        <p>
+          Arrastra la <b>intervención del supervisor</b> hacia el <b>tipo de conflicto</b> correcto.
+          Funciona con mouse y con táctil.
+        </p>
+
+        <div class="dd" id="dd">
+          <div class="dd-col">
+            <h4>Intervenciones (arrastra)</h4>
+            <div id="dd_controls"></div>
+            <div class="small">En celular: mantén presionado y suelta sobre el tipo.</div>
+          </div>
+          <div class="dd-col">
+            <h4>Tipos de conflicto (suelta aquí)</h4>
+            <div id="dd_zones"></div>
+            <div class="dd-result" id="dd_feedback">Completa todas las asignaciones y presiona “Verificar”.</div>
+            <div class="btnrow">
+              <button class="btn" id="dd_check">✅ Verificar</button>
+              <button class="btn-sec" id="dd_reset">↺ Reiniciar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s6_state"></div>
+      </article>
+
+      <article class="card" data-section="s7">
+        <div class="row" style="justify-content:space-between">
+          <h3>7) Simulador: intervención del supervisor (elige la mejor acción)</h3>
+          <span class="tag"><i style="background:#ff7777"></i> Simulación</span>
+        </div>
+        <p>
+          Resuelve escenarios reales. La mejor respuesta es la que <b>baja el tono</b>, vuelve a <b>hechos</b> y cierra con un
+          <b>acuerdo verificable</b>.
+        </p>
+
+        <div class="scenario">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="badge">Escenario <b id="sc_idx">1</b>/<span id="sc_total">4</span></span>
+              <span class="badge">Puntaje: <b id="sc_score">0</b></span>
+            </div>
+            <div class="btnrow" style="margin:0">
+              <button class="btn-sec" id="sc_next">Siguiente ▶</button>
+              <button class="btn-ghost" id="sc_reset">↺ Reiniciar</button>
+            </div>
+          </div>
+
+          <div class="question" id="sc_text">—</div>
+          <div class="choices" id="sc_choices"></div>
+          <div class="explain" id="sc_explain">Selecciona una acción. Tu meta es recuperar coordinación y reducir riesgo.</div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s7_state"></div>
+      </article>
+
+      <article class="card" data-section="s8">
+        <div class="row" style="justify-content:space-between">
+          <h3>8) Mini‑quiz (12 preguntas) — criterio del supervisor</h3>
+          <span class="tag"><i style="background:var(--amarillo)"></i> Evaluación</span>
+        </div>
+        <p>Preguntas de criterio y decisiones. Meta recomendada: <strong>80%</strong> o más.</p>
+
+        <div class="scenario" id="quiz">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="badge">Pregunta <b id="q_idx">1</b>/<span id="q_total">12</span></span>
+              <span class="badge">Puntaje: <b id="q_score">0</b></span>
+              <span class="badge">Mejor: <b id="q_best">—</b></span>
+            </div>
+            <div class="btnrow" style="margin:0">
+              <button class="btn-sec" id="q_prev">◀ Anterior</button>
+              <button class="btn-sec" id="q_next">Siguiente ▶</button>
+              <button class="btn" id="q_finish">Finalizar</button>
+              <button class="btn-ghost" id="q_reset">↺ Reiniciar</button>
+            </div>
+          </div>
+
+          <div class="question" id="q_text">—</div>
+          <div id="q_opts"></div>
+          <div class="explain" id="q_explain">Selecciona una alternativa para ver retroalimentación.</div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s8_state"></div>
+      </article>
+
+      <article class="card" data-section="s9">
+        <div class="row" style="justify-content:space-between">
+          <h3>9) Reflexión (transferencia al turno)</h3>
+          <span class="tag"><i style="background:var(--azul)"></i> Transferencia</span>
+        </div>
+        <p>Escribe 3 reglas personales para gestionar conflictos en tu próximo turno (acciones observables).</p>
+        <textarea id="reflection" placeholder="1) ...&#10;2) ...&#10;3) ..."></textarea>
+        <div class="btnrow">
+          <button class="btn" id="saveReflection">💾 Guardar</button>
+          <button class="btn-sec" id="copyReflection">📋 Copiar</button>
+        </div>
+        <div class="small" id="ref_state"></div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s9_state"></div>
+      </article>
+
+      <footer class="wrap" style="padding-left:0;padding-right:0">
+        © Copyright Anupro360 2025. Todos los derechos reservados.
+      </footer>
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="right">
+      <div class="card">
+        <h3>Ficha del Módulo 9</h3>
+        <div class="divider"></div>
+        <p class="small"><b>Competencia:</b> Gestionar conflictos operacionales para sostener coordinación, seguridad y continuidad.</p>
+        <div class="kpi">
+          <div><b>40 min</b><span>Tiempo recomendado</span></div>
+          <div><b>12</b><span>Preguntas mini‑quiz</span></div>
+          <div><b>4</b><span>Escenarios</span></div>
+          <div><b>1</b><span>Juego Drag &amp; Drop</span></div>
+        </div>
+
+        <div class="divider"></div>
+        <h3 style="font-size:14px; margin-bottom:8px">Herramientas rápidas</h3>
+        <div class="btnrow">
+          <button class="btn-sec" id="copy4steps">🧩 Copiar Modelo 4 Pasos</button>
+          <button class="btn-sec" id="copyPhrases">🗣️ Copiar Frases Útiles</button>
+          <button class="btn-ghost" id="resetAll">⚠️ Reiniciar todo</button>
+        </div>
+
+        <div class="divider"></div>
+        <div class="small" id="last_saved">—</div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // ============ Safe clipboard fallback ============
+    async function safeCopy(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        return true;
+      }catch(e){
+        // Fallback for file:// contexts where clipboard may be blocked
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position="fixed";
+        ta.style.left="-9999px";
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try{
+          const ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          return ok;
+        }catch(err){
+          document.body.removeChild(ta);
+          return false;
+        }
+      }
+    }
+
+    // ---------- Storage helpers ----------
+    const KEY = "a360_mod9_conflictos_v2";
+    const nowISO = ()=> new Date().toISOString();
+    const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+    const save = (data) => localStorage.setItem(KEY, JSON.stringify(data));
+
+    const toast = (msg) => {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(toast._tm);
+      toast._tm = setTimeout(()=> t.style.display="none", 1600);
+    };
+
+    // ---------- Progress ----------
+    const sections = ["s1","s2","s3","s4","s5","s6","s7","s8","s9"];
+    function computeProgress(state){
+      const done = sections.filter(s => state.completed?.includes(s)).length;
+      const pct = Math.round((done/sections.length)*100);
+      return {done, total:sections.length, pct};
+    }
+    function renderProgress(){
+      const st = load();
+      const {pct} = computeProgress(st);
+      document.getElementById("pct").textContent = pct+"%";
+      document.getElementById("bar").style.width = pct+"%";
+      sections.forEach(id=>{
+        const el = document.getElementById(id+"_state");
+        if(!el) return;
+        el.textContent = (st.completed?.includes(id)) ? "Estado: ✅ completado" : "Estado: ⏳ pendiente";
+      });
+      document.getElementById("last_saved").textContent =
+        st.lastSaved ? ("Último guardado: " + new Date(st.lastSaved).toLocaleString()) : "Sin guardados aún";
+    }
+    function toggleComplete(sectionId){
+      const st = load();
+      st.completed = st.completed || [];
+      const idx = st.completed.indexOf(sectionId);
+      if(idx >= 0) st.completed.splice(idx,1);
+      else st.completed.push(sectionId);
+      st.lastSaved = nowISO();
+      save(st);
+      renderProgress();
+      toast(idx>=0 ? "Sección marcada como pendiente" : "Sección completada ✅");
+    }
+    function resetSection(sectionId){
+      const st = load();
+      st.completed = (st.completed||[]).filter(x=>x!==sectionId);
+      if(sectionId==="s5"){ st.practice = null; }
+      if(sectionId==="s6"){ st.dd = null; }
+      if(sectionId==="s7"){ st.sc = null; }
+      if(sectionId==="s8"){ st.quiz = null; }
+      if(sectionId==="s9"){ st.reflection = null; }
+      st.lastSaved = nowISO();
+      save(st);
+
+      initPractice();
+      initDragDrop();
+      initScenario();
+      initQuiz();
+      initReflection();
+      renderProgress();
+      toast("Sección reiniciada ↺");
+    }
+    document.addEventListener("click", (e)=>{
+      const btn = e.target.closest("button");
+      if(!btn) return;
+      const action = btn.dataset.action;
+      const card = btn.closest(".card");
+      if(!action || !card) return;
+      const sectionId = card.dataset.section;
+      if(action==="toggleComplete") toggleComplete(sectionId);
+      if(action==="resetSection") resetSection(sectionId);
+    });
+
+    // ---------- Practice (4 steps) ----------
+    function initPractice(){
+      const st = load();
+      const p = st.practice || {};
+      document.getElementById("p_type").value = p.type || "";
+      document.getElementById("p_sit").value = p.sit || "";
+      document.getElementById("p_fact").value = p.fact || "";
+      document.getElementById("p_impact").value = p.impact || "";
+      document.getElementById("p_agree").value = p.agree || "";
+      document.getElementById("p_follow").value = p.follow || "";
+
+      const fb = document.getElementById("p_feedback");
+      fb.textContent = st.practice ? "Práctica guardada ✅ (puedes copiarla)" : "Completa tu caso y guarda. (Queda en este dispositivo).";
+
+      document.getElementById("p_save").onclick = ()=>{
+        const st2 = load();
+        st2.practice = {
+          type: document.getElementById("p_type").value.trim(),
+          sit: document.getElementById("p_sit").value.trim(),
+          fact: document.getElementById("p_fact").value.trim(),
+          impact: document.getElementById("p_impact").value.trim(),
+          agree: document.getElementById("p_agree").value.trim(),
+          follow: document.getElementById("p_follow").value.trim()
+        };
+        st2.lastSaved = nowISO();
+        save(st2);
+        fb.innerHTML = qualityPractice(st2.practice);
+        renderProgress();
+        toast("Práctica guardada 💾");
+      };
+
+      document.getElementById("p_copy").onclick = async ()=>{
+        const ok = await safeCopy(practiceToText());
+        toast(ok ? "Copiado al portapapeles" : "No se pudo copiar (permiso bloqueado)");
+      };
+
+      document.getElementById("p_reset").onclick = ()=>{
+        const st2 = load();
+        st2.practice = null;
+        st2.lastSaved = nowISO();
+        save(st2);
+        initPractice();
+        renderProgress();
+        toast("Práctica reiniciada ↺");
+      };
+
+      if(st.practice){
+        fb.innerHTML = qualityPractice(st.practice);
+      }
+    }
+
+    function practiceToText(){
+      return `MÓDULO 9 · PRÁCTICA (Modelo 4 Pasos)
+Tipo: ${document.getElementById("p_type").value}
+Situación: ${document.getElementById("p_sit").value}
+
+1) Hechos:
+${document.getElementById("p_fact").value}
+
+2) Impacto operacional:
+${document.getElementById("p_impact").value}
+
+3) Acuerdo operacional:
+${document.getElementById("p_agree").value}
+
+4) Seguimiento:
+${document.getElementById("p_follow").value}
+`;
+    }
+
+    function qualityPractice(p){
+      const miss = [];
+      if(!p.type) miss.push("Tipo");
+      if(!p.sit) miss.push("Situación");
+      if(!p.fact) miss.push("Hechos");
+      if(!p.impact) miss.push("Impacto");
+      if(!p.agree) miss.push("Acuerdo");
+      if(!p.follow) miss.push("Seguimiento");
+
+      if(miss.length){
+        return `<span class="warn"><b>⚠️ Incompleto:</b> falta(n) ${miss.join(", ")}.</span> <span class="hint">Tip: el acuerdo debe incluir qué/quién/cuándo y el seguimiento debe ser evidencia.</span>`;
+      }
+
+      const agree = (p.agree||"").toLowerCase();
+      const follow = (p.follow||"").toLowerCase();
+      const hasWho = /responsable|quién|supervisor|control|mantención|sso|operador/.test(agree);
+      const hasWhen = /\b\d{1,2}:\d{2}\b|hoy|turno|ventana|antes de/.test(agree);
+      const hasEvidence = /registro|check|checklist|foto|confirmación|radio|bitácora|evidencia|verificación/.test(follow);
+
+      let score = 0;
+      score += hasWho ? 1 : 0;
+      score += hasWhen ? 1 : 0;
+      score += hasEvidence ? 1 : 0;
+
+      if(score===3){
+        return `<span class="ok"><b>✅ Muy bien:</b> tu caso tiene acuerdo verificable (qué/quién/cuándo) y seguimiento con evidencia.</span>`;
+      }
+      return `<span class="warn"><b>⚠️ Bien, pero mejorable:</b> fortalece ${
+        !hasWho ? "responsable" : !hasWhen ? "momento/ventana" : "evidencia"
+      }.</span> <span class="hint">Meta: acuerdo operacional que se pueda auditar.</span>`;
+    }
+
+    // ---------- Drag & Drop ----------
+    const DD = {
+      types: [
+        {id:"t_rec", title:"Recursos", accept:"c_rec"},
+        {id:"t_rol", title:"Rol/Responsabilidad", accept:"c_rol"},
+        {id:"t_com", title:"Comunicación", accept:"c_com"},
+        {id:"t_pre", title:"Presión operacional", accept:"c_pre"}
+      ],
+      controls: [
+        {id:"c_rec", title:"Priorizar + redistribuir recursos + plan B con Control"},
+        {id:"c_rol", title:"Aclarar cadena de mando + quién decide + reglas de autorización"},
+        {id:"c_com", title:"Mensaje estructurado (hecho-impacto-acuerdo) + confirmación"},
+        {id:"c_pre", title:"Pausa–Claridad–Decisión: seguridad→continuidad→producción"}
+      ]
+    };
+
+    function initDragDrop(){
+      const st = load();
+      const saved = st.dd || {placements:{}};
+
+      const controlsWrap = document.getElementById("dd_controls");
+      const zonesWrap = document.getElementById("dd_zones");
+      controlsWrap.innerHTML = "";
+      zonesWrap.innerHTML = "";
+
+      // Build zones
+      DD.types.forEach(r=>{
+        const dz = document.createElement("div");
+        dz.className = "dropzone";
+        dz.dataset.accept = r.accept;
+        dz.dataset.typeid = r.id;
+        dz.innerHTML = `<div>
+            <div class="dz-title">🎯 ${escapeHtml(r.title)}</div>
+            <div class="dz-value" id="${r.id}_val">Suelta aquí la intervención…</div>
+          </div>
+          <button class="btn-ghost" style="padding:6px 10px; border-radius:10px" data-clear="${r.id}">Limpiar</button>`;
+        zonesWrap.appendChild(dz);
+      });
+
+      // Controls list excluding already placed
+      const placed = new Set(Object.values(saved.placements || {}).filter(Boolean));
+      DD.controls.forEach(c=>{
+        if(placed.has(c.id)) return;
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.draggable = true;
+        chip.dataset.id = c.id;
+        chip.innerHTML = `<b>${escapeHtml(c.title)}</b><small>⠿</small>`;
+        controlsWrap.appendChild(chip);
+      });
+
+      // Apply placements
+      DD.types.forEach(r=>{
+        const cid = saved.placements?.[r.id];
+        if(cid){
+          const c = DD.controls.find(x=>x.id===cid);
+          const val = document.getElementById(r.id+"_val");
+          if(val) val.textContent = c ? c.title : "—";
+        }
+      });
+
+      // Mouse DnD
+      controlsWrap.addEventListener("dragstart", (e)=>{
+        const chip = e.target.closest(".chip");
+        if(!chip) return;
+        e.dataTransfer.setData("text/plain", chip.dataset.id);
+        e.dataTransfer.effectAllowed = "move";
+      });
+      zonesWrap.addEventListener("dragover", (e)=>{
+        const dz = e.target.closest(".dropzone");
+        if(!dz) return;
+        e.preventDefault();
+        dz.classList.add("dragover");
+      });
+      zonesWrap.addEventListener("dragleave", (e)=>{
+        const dz = e.target.closest(".dropzone");
+        if(dz) dz.classList.remove("dragover");
+      });
+      zonesWrap.addEventListener("drop", (e)=>{
+        const dz = e.target.closest(".dropzone");
+        if(!dz) return;
+        e.preventDefault();
+        dz.classList.remove("dragover");
+        const cid = e.dataTransfer.getData("text/plain");
+        placeControl(dz.dataset.typeid, cid);
+      });
+
+      // Touch
+      enablePointerDrag(controlsWrap, zonesWrap);
+
+      // Clear
+      zonesWrap.addEventListener("click", (e)=>{
+        const b = e.target.closest("[data-clear]");
+        if(!b) return;
+        clearPlacement(b.dataset.clear);
+      });
+
+      document.getElementById("dd_check").onclick = ()=>{
+        const st2 = load();
+        const placements = st2.dd?.placements || {};
+        let ok = 0;
+        let total = DD.types.length;
+        const wrong = [];
+        DD.types.forEach(r=>{
+          const got = placements[r.id];
+          if(got === r.accept) ok++;
+          else wrong.push(r.title);
+        });
+        const fb = document.getElementById("dd_feedback");
+        if(ok===total){
+          fb.innerHTML = `<span class="ok"><b>✅ Perfecto:</b> ${ok}/${total} correctos.</span><br/><span class="hint">Traducción a turno: respondes con método según el tipo de conflicto.</span>`;
+          toast("Juego completado 🎮✅");
+        }else{
+          fb.innerHTML = `<span class="warn"><b>⚠️ Aún no:</b> ${ok}/${total} correctos.</span> Revisa: <b>${escapeHtml(wrong.join(", "))}</b>.`;
+          toast("Revisa asignaciones");
+        }
+      };
+
+      document.getElementById("dd_reset").onclick = ()=>{
+        const st2 = load();
+        st2.dd = null;
+        st2.lastSaved = nowISO();
+        save(st2);
+        initDragDrop();
+        renderProgress();
+        toast("Juego reiniciado ↺");
+      };
+
+      function placeControl(typeId, controlId){
+        const st2 = load();
+        st2.dd = st2.dd || {placements:{}};
+        st2.dd.placements = st2.dd.placements || {};
+
+        // If control already placed elsewhere, remove it
+        for(const k of Object.keys(st2.dd.placements)){
+          if(st2.dd.placements[k] === controlId){
+            st2.dd.placements[k] = null;
+            const v = document.getElementById(k+"_val");
+            if(v) v.textContent = "Suelta aquí la intervención…";
+          }
+        }
+        st2.dd.placements[typeId] = controlId;
+        st2.lastSaved = nowISO();
+        save(st2);
+
+        const c = DD.controls.find(x=>x.id===controlId);
+        const val = document.getElementById(typeId+"_val");
+        if(val) val.textContent = c ? c.title : "—";
+
+        // remove chip
+        const chip = controlsWrap.querySelector(`.chip[data-id="${controlId}"]`);
+        if(chip) chip.remove();
+
+        renderProgress();
+      }
+
+      function clearPlacement(typeId){
+        const st2 = load();
+        const cid = st2.dd?.placements?.[typeId];
+        if(!cid) return;
+        st2.dd.placements[typeId] = null;
+
+        const c = DD.controls.find(x=>x.id===cid);
+        if(c){
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.draggable = true;
+          chip.dataset.id = c.id;
+          chip.innerHTML = `<b>${escapeHtml(c.title)}</b><small>⠿</small>`;
+          controlsWrap.appendChild(chip);
+        }
+        const val = document.getElementById(typeId+"_val");
+        if(val) val.textContent = "Suelta aquí la intervención…";
+
+        st2.lastSaved = nowISO();
+        save(st2);
+        renderProgress();
+        toast("Asignación limpiada");
+      }
+    }
+
+    function enablePointerDrag(controlsWrap, zonesWrap){
+      let ghost = null;
+      let dragId = null;
+
+      const moveGhost = (e)=>{
+        if(!ghost) return;
+        const x = e.clientX, y = e.clientY;
+        ghost.style.left = x + "px";
+        ghost.style.top = y + "px";
+        zonesWrap.querySelectorAll(".dropzone").forEach(z=>z.classList.remove("dragover"));
+        const el = document.elementFromPoint(x,y);
+        const dz = el && el.closest && el.closest(".dropzone");
+        if(dz) dz.classList.add("dragover");
+      };
+
+      const onDown = (e)=>{
+        const chip = e.target.closest(".chip");
+        if(!chip) return;
+        dragId = chip.dataset.id;
+        ghost = chip.cloneNode(true);
+        ghost.style.position="fixed";
+        ghost.style.zIndex="999";
+        ghost.style.opacity="0.92";
+        ghost.style.pointerEvents="none";
+        ghost.style.transform="translate(-50%,-50%) scale(1.02)";
+        document.body.appendChild(ghost);
+        moveGhost(e);
+        try{ chip.setPointerCapture(e.pointerId); }catch{}
+      };
+
+      const onUp = (e)=>{
+        if(!ghost) return;
+        const x = e.clientX, y = e.clientY;
+        zonesWrap.querySelectorAll(".dropzone").forEach(z=>z.classList.remove("dragover"));
+        const el = document.elementFromPoint(x,y);
+        const dz = el && el.closest && el.closest(".dropzone");
+        if(dz && dragId){
+          const typeId = dz.dataset.typeid;
+          const st = load();
+          st.dd = st.dd || {placements:{}};
+          st.dd.placements = st.dd.placements || {};
+
+          for(const k of Object.keys(st.dd.placements)){
+            if(st.dd.placements[k] === dragId){
+              st.dd.placements[k] = null;
+              const v = document.getElementById(k+"_val");
+              if(v) v.textContent = "Suelta aquí la intervención…";
+            }
+          }
+          st.dd.placements[typeId] = dragId;
+          st.lastSaved = nowISO();
+          save(st);
+
+          const c = DD.controls.find(x=>x.id===dragId);
+          const val = document.getElementById(typeId+"_val");
+          if(val) val.textContent = c ? c.title : "—";
+
+          const orig = controlsWrap.querySelector(`.chip[data-id="${dragId}"]`);
+          if(orig) orig.remove();
+
+          toast("Asignado ✅");
+          renderProgress();
+        }
+        ghost.remove(); ghost=null; dragId=null;
+      };
+
+      const bindChip = (chip)=>{
+        if(chip.dataset.bound) return;
+        chip.dataset.bound = "1";
+        chip.addEventListener("pointerdown", onDown);
+        chip.addEventListener("pointermove", moveGhost);
+        chip.addEventListener("pointerup", onUp);
+        chip.addEventListener("pointercancel", onUp);
+      };
+      controlsWrap.querySelectorAll(".chip").forEach(bindChip);
+
+      const mo = new MutationObserver(()=>{
+        controlsWrap.querySelectorAll(".chip").forEach(bindChip);
+      });
+      mo.observe(controlsWrap, {childList:true, subtree:true});
+    }
+
+    // ---------- Scenarios ----------
+    const SCENARIOS = [
+      {
+        text:"Operación acusa a Mantención de 'parar equipos por gusto'. Mantención responde 'ustedes operan inseguro'. El tono sube frente a todos.",
+        choices:[
+          {t:"Intervenir: pausar conversación, ir a hechos, definir impacto, acordar ventana + controles y cerrar con seguimiento.", ok:true, why:"Correcto: vuelves al proceso (hechos-impacto-acuerdo-seguimiento) y reduces escalada."},
+          {t:"Tomar partido por Operación porque hay meta de producción.", ok:false, why:"Incorrecto: polariza, sube conflicto y aumenta riesgo (se omiten controles)."},
+          {t:"Ignorar para que se calmen solos.", ok:false, why:"Incorrecto: el conflicto crece y se traduce en silencios, omisiones y decisiones impulsivas."},
+          {t:"Gritar para imponer autoridad y seguir operando.", ok:false, why:"Incorrecto: sube tensión y baja cooperación. No resuelve el proceso."}
+        ]
+      },
+      {
+        text:"Control reasigna rutas sin avisar a terreno. Un operador reclama por radio: '¡Siempre cambian todo sin decir nada!'.",
+        choices:[
+          {t:"Responder con hechos: confirmar cambio, explicar motivo, acordar canal y confirmación obligatoria para cambios.", ok:true, why:"Correcto: resuelves comunicación y estableces regla verificable (confirmación)."},
+          {t:"Contestar: 'si no te gusta, bájate del equipo'.", ok:false, why:"Incorrecto: personaliza y escala. Pierdes control y confianza."},
+          {t:"Decir 'después lo vemos' y cortar.", ok:false, why:"Incorrecto: deja el problema activo y aumenta riesgo por supuestos."},
+          {t:"Cambiar nuevamente la ruta sin informar para evitar reclamos.", ok:false, why:"Incorrecto: empeoras la causa raíz (comunicación)."}]
+      },
+      {
+        text:"Faltan 2 operadores por ausentismo. Dos áreas pelean por el único respaldo disponible.",
+        choices:[
+          {t:"Priorizar por riesgo/criticidad, redistribuir y comunicar plan B con Control; dejar acuerdo por turno.", ok:true, why:"Correcto: conflicto de recursos se resuelve con priorización + plan B, no con discusión."},
+          {t:"Dar el respaldo al que grite más fuerte.", ok:false, why:"Incorrecto: refuerza conductas negativas y desordena el sistema."},
+          {t:"No decidir y esperar instrucciones superiores.", ok:false, why:"Incorrecto: el turno pierde continuidad; tu rol es decidir y coordinar."},
+          {t:"Prometer 'mañana habrá más gente' y seguir igual.", ok:false, why:"Incorrecto: no resuelve el turno y aumenta la presión."}
+        ]
+      },
+      {
+        text:"Un operador dice: 'eso no me corresponde, pregúntale a otro'. Nadie asume una tarea crítica de señalización.",
+        choices:[
+          {t:"Aclarar roles: quién decide, quién ejecuta; asignar responsable ahora y verificar cierre.", ok:true, why:"Correcto: conflicto de rol se resuelve con claridad + asignación + seguimiento."},
+          {t:"Hacer tú mismo la tarea siempre para evitar discusiones.", ok:false, why:"Incorrecto: te sobrecargas, ocultas el problema y el sistema no aprende."},
+          {t:"Castigar al operador en público.", ok:false, why:"Incorrecto: humilla, escala y no asegura ejecución sostenida."},
+          {t:"Dejar la tarea sin hacer para que aprendan.", ok:false, why:"Incorrecto: pones en riesgo la operación."}
+        ]
+      }
+    ];
+
+    function initScenario(){
+      const st = load();
+      st.sc = st.sc || {idx:0, score:0, answered:{}};
+      save(st);
+
+      document.getElementById("sc_total").textContent = SCENARIOS.length;
+
+      const render = ()=>{
+        const st2 = load();
+        const idx = st2.sc?.idx ?? 0;
+        const sc = SCENARIOS[idx];
+        document.getElementById("sc_idx").textContent = (idx+1);
+        document.getElementById("sc_score").textContent = st2.sc?.score ?? 0;
+        document.getElementById("sc_text").textContent = sc.text;
+
+        const box = document.getElementById("sc_choices");
+        box.innerHTML = "";
+        const answered = st2.sc?.answered?.[idx];
+
+        sc.choices.forEach((c,ci)=>{
+          const d = document.createElement("div");
+          d.className = "choice";
+          d.textContent = c.t;
+          if(answered!=null){
+            d.classList.add(c.ok ? "correct" : (ci===answered ? "incorrect" : ""));
+          }
+          d.onclick = ()=>{
+            const st3 = load();
+            st3.sc = st3.sc || {idx:idx, score:0, answered:{}};
+            if(st3.sc.answered[idx]!=null){ toast("Ya respondiste este escenario"); return; }
+            st3.sc.answered[idx] = ci;
+            if(c.ok) st3.sc.score = (st3.sc.score||0) + 1;
+            st3.lastSaved = nowISO();
+            save(st3);
+            document.getElementById("sc_explain").innerHTML =
+              c.ok ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(c.why)}</span>`
+                   : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(c.why)}</span>`;
+            render();
+          };
+          box.appendChild(d);
+        });
+
+        if(answered!=null){
+          const chosen = sc.choices[answered];
+          document.getElementById("sc_explain").innerHTML =
+            chosen.ok ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(chosen.why)}</span>`
+                      : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(chosen.why)}</span>`;
+        }else{
+          document.getElementById("sc_explain").textContent = "Selecciona una acción. Tu meta es recuperar coordinación y reducir riesgo.";
+        }
+      };
+
+      document.getElementById("sc_next").onclick = ()=>{
+        const st2 = load();
+        st2.sc = st2.sc || {idx:0, score:0, answered:{}};
+        st2.sc.idx = (st2.sc.idx + 1) % SCENARIOS.length;
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+      };
+      document.getElementById("sc_reset").onclick = ()=>{
+        const st2 = load();
+        st2.sc = {idx:0, score:0, answered:{}};
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+        renderProgress();
+        toast("Simulador reiniciado ↺");
+      };
+
+      render();
+    }
+
+    // ---------- Quiz ----------
+    const QUIZ = [
+      { q:"La meta al gestionar un conflicto operacional es…",
+        opts:["Ganar la discusión", "Volver a la coordinación y reducir riesgo", "Evitar hablar del tema", "Sancionar a alguien"],
+        a:1, why:"El objetivo es recuperar el proceso: coordinación, seguridad y continuidad." },
+      { q:"¿Qué frase es más adecuada para intervenir sin escalar?",
+        opts:["Ustedes siempre hacen lo mismo", "Observé X, el impacto es Y, acordemos Z", "Si no te gusta, renuncia", "Ya, cállense"],
+        a:1, why:"Hecho–Impacto–Acuerdo es lenguaje operativo, no ataque personal." },
+      { q:"El conflicto por rol/autoridad se resuelve mejor con…",
+        opts:["Castigos", "Claridad de cadena de mando y quién decide", "Ignorarlo", "Dejarlo para el próximo turno"],
+        a:1, why:"Ambigüedad de rol crea fricción. Aclara decisión y responsabilidades." },
+      { q:"Cuando el conflicto nace por comunicación, lo primero es…",
+        opts:["Suponer que entendieron", "Estructurar mensaje y exigir confirmación", "Hablar más fuerte", "Evitar la radio"],
+        a:1, why:"Sin confirmación, crecen supuestos y errores operacionales." },
+      { q:"El Modelo 4 Pasos incluye:",
+        opts:["Hechos–Impacto–Acuerdo–Seguimiento", "Culpa–Castigo–Silencio–Olvido", "Opinión–Emoción–Reclamo–Grito", "Producción–Producción–Producción–Producción"],
+        a:0, why:"Es un protocolo simple para cerrar y verificar acuerdos." },
+      { q:"Un conflicto no gestionado impacta en seguridad porque…",
+        opts:["Aumenta omisiones y apuro", "Baja el color del casco", "Mejora la cooperación", "No afecta"],
+        a:0, why:"El conflicto eleva estrés y baja controles (confirmaciones, verificación, orden)." },
+      { q:"Frases absolutas como 'siempre' o 'nunca' suelen indicar…",
+        opts:["Hechos verificables", "Escalada emocional y generalización", "Buena coordinación", "Cierre del problema"],
+        a:1, why:"Generalizan y aumentan polarización. Vuelve a hechos concretos." },
+      { q:"Si faltan recursos y dos áreas compiten, tu acción correcta es…",
+        opts:["No decidir", "Priorizar por criticidad + plan B con Control", "Dar el recurso al que grite más", "Prometer que mañana se arregla"],
+        a:1, why:"Conflicto de recursos se gestiona con priorización y redistribución." },
+      { q:"Cuando el conflicto se vuelve personal, el supervisor debe…",
+        opts:["Atacar a una de las partes", "Separar personas del problema y volver a proceso", "Ignorarlo", "Sumar más gente para pelear"],
+        a:1, why:"Separa persona/proceso. Enfócate en seguridad, hechos y acuerdos." },
+      { q:"Una señal temprana de conflicto es…",
+        opts:["Confirmaciones claras", "Silencios peligrosos o radios saturadas", "Checklist completo", "Orden y limpieza"],
+        a:1, why:"Silencios o saturación indican fricción y pérdida de coordinación." },
+      { q:"En presión, la técnica recomendada para intervenir es…",
+        opts:["Acelerar", "Pausa–Claridad–Decisión", "Gritar", "Improvisar"],
+        a:1, why:"Baja impulsividad y permite decisión firme con criterio." },
+      { q:"Un acuerdo operacional de calidad debe incluir…",
+        opts:["Solo buenas intenciones", "Qué / quién / cuándo + seguimiento con evidencia", "Solo opinión", "Solo sanciones"],
+        a:1, why:"Debe ser verificable y con evidencia para que se cumpla." }
+    ];
+
+    function initQuiz(){
+      const st = load();
+      st.quiz = st.quiz || {idx:0, answers:Array(QUIZ.length).fill(null), score:0, best:null};
+      save(st);
+
+      document.getElementById("q_total").textContent = QUIZ.length;
+      document.getElementById("q_best").textContent = st.quiz.best==null ? "—" : (st.quiz.best + "/" + QUIZ.length);
+
+      const render = ()=>{
+        const st2 = load();
+        const qz = st2.quiz;
+        const idx = qz.idx || 0;
+
+        document.getElementById("q_idx").textContent = (idx+1);
+        document.getElementById("q_score").textContent = qz.score || 0;
+
+        const item = QUIZ[idx];
+        document.getElementById("q_text").textContent = item.q;
+        const box = document.getElementById("q_opts");
+        box.innerHTML = "";
+
+        const chosen = qz.answers[idx];
+        item.opts.forEach((t, oi)=>{
+          const d = document.createElement("div");
+          d.className = "opt";
+          d.textContent = t;
+          if(chosen===oi) d.classList.add("selected");
+          if(chosen!=null){
+            if(oi===item.a) d.classList.add("correct");
+            else if(oi===chosen) d.classList.add("incorrect");
+          }
+          d.onclick = ()=>{
+            const st3 = load();
+            st3.quiz = st3.quiz || {idx:idx, answers:Array(QUIZ.length).fill(null), score:0, best:null};
+            if(st3.quiz.answers[idx]!=null){ toast("Ya respondiste esta pregunta (reinicia si quieres repetir)"); return; }
+            st3.quiz.answers[idx] = oi;
+            if(oi===item.a) st3.quiz.score = (st3.quiz.score||0) + 1;
+            st3.lastSaved = nowISO();
+            save(st3);
+            document.getElementById("q_explain").innerHTML =
+              (oi===item.a)
+                ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(item.why)}</span>`
+                : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(item.why)}</span>`;
+            render();
+          };
+          box.appendChild(d);
+        });
+
+        if(chosen!=null){
+          document.getElementById("q_explain").innerHTML =
+            (chosen===item.a)
+              ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(item.why)}</span>`
+              : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(item.why)}</span>`;
+        }else{
+          document.getElementById("q_explain").textContent = "Selecciona una alternativa para ver retroalimentación.";
+        }
+
+        document.getElementById("q_best").textContent = st2.quiz.best==null ? "—" : (st2.quiz.best + "/" + QUIZ.length);
+      };
+
+      document.getElementById("q_prev").onclick = ()=>{
+        const st2 = load();
+        st2.quiz.idx = Math.max(0, (st2.quiz.idx||0) - 1);
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+      };
+      document.getElementById("q_next").onclick = ()=>{
+        const st2 = load();
+        st2.quiz.idx = Math.min(QUIZ.length-1, (st2.quiz.idx||0) + 1);
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+      };
+      document.getElementById("q_finish").onclick = ()=>{
+        const st2 = load();
+        const answered = st2.quiz.answers.filter(x=>x!=null).length;
+        const score = st2.quiz.score || 0;
+        const pct = Math.round((score/QUIZ.length)*100);
+        if(answered < QUIZ.length){
+          toast("Aún faltan preguntas por responder");
+          document.getElementById("q_explain").innerHTML =
+            `<span class="warn"><b>Faltan ${QUIZ.length-answered}</b> preguntas. Completa todo para cerrar.</span>`;
+          return;
+        }
+        st2.quiz.best = Math.max(st2.quiz.best||0, score);
+        st2.lastSaved = nowISO();
+        save(st2);
+        const msg = pct>=80
+          ? `<span class="ok"><b>✅ Excelente:</b> ${score}/${QUIZ.length} (${pct}%). Dominio de criterio supervisor.</span>`
+          : `<span class="warn"><b>⚠️ A reforzar:</b> ${score}/${QUIZ.length} (${pct}%). Repite simulador y modelo 4 pasos.</span>`;
+        document.getElementById("q_explain").innerHTML = msg + `<div class="divider"></div><span class="hint">Consejo: tu “acuerdo” debe ser verificable (qué/quién/cuándo) y tu seguimiento debe tener evidencia.</span>`;
+        render();
+        toast("Quiz finalizado");
+      };
+      document.getElementById("q_reset").onclick = ()=>{
+        const st2 = load();
+        st2.quiz = {idx:0, answers:Array(QUIZ.length).fill(null), score:0, best: st2.quiz?.best ?? null};
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+        renderProgress();
+        toast("Quiz reiniciado ↺");
+      };
+
+      render();
+    }
+
+    // ---------- Reflection ----------
+    function initReflection(){
+      const st = load();
+      if(st.reflection) document.getElementById("reflection").value = st.reflection;
+      document.getElementById("ref_state").textContent = st.reflection ? "Guardado ✅" : "Sin guardar";
+
+      document.getElementById("saveReflection").onclick = ()=>{
+        const st2 = load();
+        st2.reflection = document.getElementById("reflection").value;
+        st2.lastSaved = nowISO();
+        save(st2);
+        document.getElementById("ref_state").textContent = "Guardado ✅";
+        renderProgress();
+        toast("Reflexión guardada");
+      };
+      document.getElementById("copyReflection").onclick = async ()=>{
+        const ok = await safeCopy(document.getElementById("reflection").value || "");
+        toast(ok ? "Copiado al portapapeles" : "No se pudo copiar (permiso bloqueado)");
+      };
+    }
+
+    // ---------- Quick tools ----------
+    const MODEL4 = `MODELO 4 PASOS · Gestión de Conflicto Operacional
+1) HECHOS (sin opinión): qué pasó / dónde / cuándo.
+2) IMPACTO: riesgo + continuidad + producción (qué se afecta).
+3) ACUERDO OPERACIONAL: qué / quién / cuándo + regla “si pasa X, hacemos Y”.
+4) SEGUIMIENTO: evidencia + responsable de cierre (registro/confirmación/check).`;
+
+    const PHRASES = `FRASES ÚTILES DEL SUPERVISOR (sin escalar)
+• “Volvamos a hechos: ¿qué pasó exactamente y dónde?”
+• “El impacto operativo es… (riesgo/continuidad/producción).”
+• “Acordemos una acción: qué, quién y cuándo.”
+• “¿Cómo verificamos y quién confirma el cierre?”
+• “Corregimos el proceso, no atacamos a la persona.”
+• “Si falla el control, aplicamos: (regla) y avisamos por (canal).”`;
+
+    document.getElementById("copy4steps").onclick = async ()=>{
+      const ok = await safeCopy(MODEL4);
+      toast(ok ? "Modelo 4 pasos copiado 🧩" : "No se pudo copiar (permiso bloqueado)");
+    };
+    document.getElementById("copyPhrases").onclick = async ()=>{
+      const ok = await safeCopy(PHRASES);
+      toast(ok ? "Frases útiles copiadas 🗣️" : "No se pudo copiar (permiso bloqueado)");
+    };
+    document.getElementById("resetAll").onclick = ()=>{
+      if(!confirm("Esto borrará TODO el progreso guardado de este módulo en este dispositivo. ¿Continuar?")) return;
+      localStorage.removeItem(KEY);
+      location.reload();
+    };
+
+    // ---------- Utilities ----------
+    function escapeHtml(s){
+      return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+    }
+
+    // ---------- Boot ----------
+    function boot(){
+      const st = load();
+      st.completed = st.completed || [];
+      save(st);
+
+      initPractice();
+      initDragDrop();
+      initScenario();
+      initQuiz();
+      initReflection();
+      renderProgress();
+    }
+    window.addEventListener("DOMContentLoaded", boot);
+  </script>
+</body>
+</html>
