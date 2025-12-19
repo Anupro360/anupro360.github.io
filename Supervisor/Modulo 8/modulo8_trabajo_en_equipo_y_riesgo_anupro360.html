@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Módulo 8 · Trabajo en Equipo y Control del Riesgo — ANUPRO360</title>
+  <meta name="description" content="Módulo 8 (autoaprendizaje): Trabajo en Equipo y Control del Riesgo. Incluye práctica guiada, drag & drop táctil, simulador STOP WORK y mini-quiz con retroalimentación."/>
+  <style>
+    :root{
+      --amarillo:#FFB81C; /* Amarillo Minero */
+      --naranja:#FF5C00;  /* Naranja */
+      --gris:#5C6B6B;     /* Gris Acero */
+      --verde:#4B6F44;    /* Verde Mineral */
+      --azul:#003B5C;     /* Azul Oscuro */
+      --blanco:#FFFFFF;   /* Blanco */
+
+      --bg1:#071621;
+      --bg2:#0b2434;
+      --card:rgba(255,255,255,.06);
+      --line:rgba(255,255,255,.12);
+      --muted:rgba(255,255,255,.72);
+      --text:#eef6ff;
+      --shadow:0 10px 28px rgba(0,0,0,.28);
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(255,184,28,.14), transparent 55%),
+        radial-gradient(900px 600px at 80% 20%, rgba(255,92,0,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+    a{color:inherit}
+    .wrap{max-width:1120px; margin:0 auto; padding:18px}
+    header{
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), transparent);
+    }
+    .topbar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(255,184,28,.9), rgba(255,92,0,.9));
+      box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 12px 26px rgba(255,92,0,.18);
+      display:grid; place-items:center;
+      font-weight:900; color:#1b1b1b;
+      user-select:none;
+    }
+    .brand h1{margin:0; font-size:16px; letter-spacing:.2px}
+    .brand p{margin:0; color:var(--muted); font-size:12px}
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+      font-size:12px; color:var(--muted);
+    }
+    .hero{padding:16px 0 6px}
+    .hero h2{margin:.2rem 0 .3rem; font-size:1.45rem}
+    .hero p{margin:0; color:var(--muted); line-height:1.5}
+    .progress{
+      height:10px; width:100%; border-radius:999px;
+      background: rgba(255,255,255,.12);
+      overflow:hidden;
+    }
+    .progress > i{
+      display:block; height:100%; width:0%;
+      background: linear-gradient(90deg, var(--amarillo), var(--naranja));
+      transition: width .35s ease;
+    }
+
+    .grid{display:grid; gap:16px; margin-top:16px}
+    @media(min-width:980px){ .grid{grid-template-columns:1.25fr .75fr} }
+
+    .card{
+      background: var(--card);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+    }
+    .card h3{margin:0 0 10px; font-size:1.05rem}
+    .card p{margin:.5rem 0; color:var(--muted); line-height:1.55}
+    .small{font-size:12px; color:rgba(255,255,255,.68)}
+    .kpi{
+      display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px
+    }
+    .kpi > div{
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:14px;
+      padding:12px;
+    }
+    .kpi b{display:block; font-size:18px; color:var(--amarillo)}
+    .kpi span{font-size:12px; color:rgba(255,255,255,.72)}
+    .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    button{font:inherit}
+    .btn, .btn-sec, .btn-ghost{
+      cursor:pointer; border:none; border-radius:12px;
+      padding:10px 14px; font-weight:700;
+      transition: transform .08s ease, filter .15s ease, background .15s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn{background: linear-gradient(180deg, var(--amarillo), var(--naranja)); color:#1b1b1b}
+    .btn:hover{filter:brightness(1.02)}
+    .btn:active{transform:translateY(1px)}
+    .btn-sec{background: rgba(255,255,255,.08); color:var(--text); border:1px solid rgba(255,255,255,.14)}
+    .btn-ghost{background: transparent; color:var(--muted); border:1px dashed rgba(255,255,255,.18)}
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.78);
+      font-size:12px;
+    }
+    .tag i{width:8px; height:8px; border-radius:50%; display:inline-block; background:var(--verde)}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .divider{height:1px; background:rgba(255,255,255,.10); margin:14px 0}
+
+    details{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      border-radius:14px;
+      padding:12px;
+    }
+    details + details{margin-top:10px}
+    summary{cursor:pointer; font-weight:800}
+    summary::marker{color:rgba(255,255,255,.55)}
+    .callout{
+      border-left:4px solid var(--amarillo);
+      background: rgba(255,184,28,.08);
+      padding:12px; border-radius:12px;
+    }
+    .callout b{color:var(--amarillo)}
+
+    /* Interactive: Top 3 */
+    .form-grid{display:grid; gap:10px}
+    @media(min-width:700px){ .form-grid{grid-template-columns:1fr 1fr} }
+    label{display:block; font-size:12px; color:rgba(255,255,255,.72); margin-bottom:6px}
+    select, input[type="text"], textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      padding:10px 12px;
+      outline:none;
+    }
+    textarea{min-height:110px; resize:vertical}
+    .hint{font-size:12px; color:rgba(255,255,255,.65)}
+    .ok{color:#8cff98}
+    .warn{color:#ffd27a}
+    .bad{color:#ff9b9b}
+
+    /* Drag & Drop */
+    .dd{
+      display:grid; gap:12px;
+    }
+    @media(min-width:880px){ .dd{grid-template-columns:1fr 1fr} }
+    .dd-col{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.16);
+      border-radius:14px;
+      padding:12px;
+      min-height:140px;
+    }
+    .dd-col h4{margin:0 0 10px; font-size:14px; color:rgba(255,255,255,.86)}
+    .chip{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      margin:8px 0;
+      touch-action:none; /* important for touch dragging */
+    }
+    .chip b{font-size:13px}
+    .chip small{opacity:.75}
+    .chip[draggable="true"]{cursor:grab}
+    .chip:active{cursor:grabbing}
+    .dropzone{
+      border:1px dashed rgba(255,255,255,.18);
+      border-radius:12px;
+      padding:10px 12px;
+      margin:8px 0;
+      min-height:48px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background: rgba(0,0,0,.12);
+    }
+    .dropzone.dragover{
+      border-color: rgba(140,255,152,.65);
+      background: rgba(140,255,152,.10);
+    }
+    .dz-title{font-weight:800; font-size:12px; opacity:.9}
+    .dz-value{font-size:12px; color:rgba(255,255,255,.70)}
+    .dd-result{
+      margin-top:10px; padding:10px 12px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      font-size:13px;
+    }
+
+    /* STOP WORK */
+    .scenario{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      border-radius:14px;
+      padding:12px;
+    }
+    .choices{display:grid; gap:10px; margin-top:10px}
+    @media(min-width:700px){ .choices{grid-template-columns:1fr 1fr} }
+    .choice{
+      padding:12px; border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      transition: transform .08s ease, background .15s ease, border-color .15s ease;
+    }
+    .choice:hover{background: rgba(255,255,255,.08)}
+    .choice:active{transform:translateY(1px)}
+    .choice.correct{border-color: rgba(140,255,152,.70); background: rgba(140,255,152,.12)}
+    .choice.incorrect{border-color: rgba(255,155,155,.70); background: rgba(255,155,155,.10)}
+    .toast{
+      position:fixed; left:50%; top:16px; transform:translateX(-50%);
+      background: rgba(0,0,0,.78);
+      border:1px solid rgba(255,255,255,.14);
+      padding:10px 12px; border-radius:999px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      z-index:99;
+      display:none;
+      max-width:min(94vw, 820px);
+      color:rgba(255,255,255,.90);
+      font-size:13px;
+    }
+
+    /* Quiz */
+    .qhead{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+    .qmeta{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+    .badge{
+      background: rgba(0,0,0,.20);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:12px;
+      color:rgba(255,255,255,.78);
+    }
+    .question{
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      font-weight:800;
+      line-height:1.4;
+    }
+    .opt{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      cursor:pointer;
+      transition:.12s;
+    }
+    .opt:hover{background: rgba(255,255,255,.07)}
+    .opt.selected{border-color: rgba(255,184,28,.65); background: rgba(255,184,28,.10)}
+    .opt.correct{border-color: rgba(140,255,152,.70); background: rgba(140,255,152,.12)}
+    .opt.incorrect{border-color: rgba(255,155,155,.70); background: rgba(255,155,155,.10)}
+    .explain{
+      margin-top:10px; padding:10px 12px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      color:rgba(255,255,255,.78);
+      font-size:13px;
+    }
+    footer{padding:18px 0 26px; color:rgba(255,255,255,.62); font-size:12px}
+    .right .card{position:sticky; top:14px}
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <header>
+    <div class="wrap topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">A360</div>
+        <div>
+          <h1>ANUPRO360 · Supervisor de Área Mina</h1>
+          <p>Módulo 8 (Autoaprendizaje) · Trabajo en Equipo y Control del Riesgo</p>
+        </div>
+      </div>
+
+      <div class="pill" title="Progreso guardado automáticamente en este dispositivo">
+        <span>📈 Progreso</span>
+        <span style="min-width:48px; text-align:right"><b id="pct">0%</b></span>
+      </div>
+    </div>
+
+    <div class="wrap hero">
+      <h2>Aprende a controlar el riesgo <span style="color:var(--amarillo)">con el equipo</span>, no “solo con reglas”.</h2>
+      <p>
+        Este módulo te entrena para identificar riesgos, definir controles <strong>concretos</strong>, verificar barreras críticas y decidir cuándo aplicar <strong>STOP WORK</strong>.
+        Incluye práctica guiada, drag &amp; drop táctil y mini‑quiz con retroalimentación.
+      </p>
+      <div class="divider"></div>
+      <div class="progress" aria-label="Barra de progreso"><i id="bar"></i></div>
+      <div class="small" style="margin-top:8px">Tip: marca cada sección como completada para avanzar. Todo queda guardado.</div>
+    </div>
+  </header>
+
+  <main class="wrap grid">
+    <!-- LEFT -->
+    <section class="left">
+      <!-- 1) Cómo usar -->
+      <article class="card" data-section="s1">
+        <div class="row" style="justify-content:space-between">
+          <h3>1) Cómo usar este módulo (sin profesor)</h3>
+          <span class="tag"><i></i> Autoaprendizaje</span>
+        </div>
+        <p>
+          Estudiarás con la lógica <strong>Leer → Aplicar → Verificar</strong>. En mina, “entender” no basta: debes poder <strong>ejecutar</strong> en turno.
+        </p>
+        <details>
+          <summary>Rutina recomendada (20–30 min)</summary>
+          <p><b>1)</b> Lee el concepto operativo (2–3 min).</p>
+          <p><b>2)</b> Haz la práctica guiada (10–15 min).</p>
+          <p><b>3)</b> Completa el juego Drag &amp; Drop (3–6 min).</p>
+          <p><b>4)</b> Resuelve 1 escenario STOP WORK (2–4 min).</p>
+          <p><b>5)</b> Mini‑quiz (5–8 min) + reflexión (2 min).</p>
+        </details>
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s1_state"></div>
+      </article>
+
+      <!-- 2) Concepto -->
+      <article class="card" data-section="s2">
+        <div class="row" style="justify-content:space-between">
+          <h3>2) Qué significa “control del riesgo” en equipo</h3>
+          <span class="tag"><i style="background:var(--amarillo)"></i> Barreras</span>
+        </div>
+        <p>
+          Controlar riesgo no es “tener cuidado”. Es asegurar que existan <strong>barreras</strong> (controles) que eviten que un peligro se transforme en incidente.
+          Cuando el control depende de una sola persona, es frágil. Cuando el control es <strong>del equipo</strong>, se vuelve robusto.
+        </p>
+
+        <div class="callout">
+          <b>Definición operacional:</b><br/>
+          Un riesgo está controlado cuando el equipo puede responder “Sí” a 3 preguntas:
+          <div class="divider"></div>
+          <p>✅ <b>Control:</b> ¿Qué barrera concreta está instalada?</p>
+          <p>✅ <b>Verificación:</b> ¿Cómo verificamos que funciona (evidencia)?</p>
+          <p>✅ <b>Acción:</b> ¿Qué hacemos si falla (escalamiento / STOP WORK)?</p>
+        </div>
+
+        <details>
+          <summary>Ejemplo rápido (Tránsito interno)</summary>
+          <p><b>Peligro:</b> Interacciones CAEX / livianos en cruces.</p>
+          <p><b>Control concreto:</b> segregación de rutas + señalización + límite de velocidad + control en puntos críticos.</p>
+          <p><b>Verificación:</b> observación en terreno + registro de control de velocidad + checklist de señalética.</p>
+          <p><b>Acción si falla:</b> restringir cruce / detener actividad / escalar a Control + SSO.</p>
+        </details>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s2_state"></div>
+      </article>
+
+      <!-- 3) Top 3 riesgos interactivo -->
+      <article class="card" data-section="s3">
+        <div class="row" style="justify-content:space-between">
+          <h3>3) Top 3 Riesgos del Turno (práctica interactiva)</h3>
+          <span class="tag"><i style="background:var(--verde)"></i> Aplicación</span>
+        </div>
+        <p>
+          La herramienta más simple y efectiva para un supervisor en turno es levantar el <strong>Top 3</strong> de riesgos y definir
+          <strong>control + verificación</strong>. Aquí lo practicarás como si fuera tu briefing.
+        </p>
+
+        <div class="form-grid" id="top3">
+          <!-- rows injected by JS -->
+        </div>
+
+        <div class="divider"></div>
+        <div class="row" style="justify-content:space-between">
+          <div class="small">
+            Criterio de calidad: evita controles vagos como “estar atento”. Usa acciones verificables: <i>señalizar, aislar, medir, bloquear, registrar</i>.
+          </div>
+          <span class="badge" id="top3_quality">Calidad: —</span>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn" id="saveTop3">💾 Guardar Top 3</button>
+          <button class="btn-sec" id="autoFeedback">🧠 Revisar calidad</button>
+          <button class="btn-ghost" id="resetTop3">↺ Reiniciar</button>
+        </div>
+
+        <div class="dd-result" id="top3_feedback">Completa el Top 3 y presiona “Revisar calidad”.</div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s3_state"></div>
+      </article>
+
+      <!-- 4) Drag drop -->
+      <article class="card" data-section="s4">
+        <div class="row" style="justify-content:space-between">
+          <h3>4) Juego: Riesgo → Control → Verificación (Drag &amp; Drop táctil)</h3>
+          <span class="tag"><i style="background:var(--naranja)"></i> Juego</span>
+        </div>
+        <p>
+          Arrastra cada <b>control</b> a su <b>riesgo</b> correcto. Este ejercicio entrena rapidez mental para “pensar en barreras”, no solo en peligros.
+          Funciona con mouse y con <b>pantalla táctil</b>.
+        </p>
+
+        <div class="dd" id="dd">
+          <div class="dd-col">
+            <h4>Controles disponibles (arrastra)</h4>
+            <div id="dd_controls"></div>
+            <div class="small">Tip: si estás en celular, mantén presionado y suelta sobre el riesgo.</div>
+          </div>
+          <div class="dd-col">
+            <h4>Riesgos del turno (suelta aquí)</h4>
+            <div id="dd_zones"></div>
+            <div class="dd-result" id="dd_feedback">Completa todas las asignaciones y presiona “Verificar”.</div>
+            <div class="btnrow">
+              <button class="btn" id="dd_check">✅ Verificar</button>
+              <button class="btn-sec" id="dd_reset">↺ Reiniciar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s4_state"></div>
+      </article>
+
+      <!-- 5) STOP WORK -->
+      <article class="card" data-section="s5">
+        <div class="row" style="justify-content:space-between">
+          <h3>5) Simulador: decisión STOP WORK (árbol práctico)</h3>
+          <span class="tag"><i style="background:#ff7777"></i> Decisión</span>
+        </div>
+        <p>
+          En presión, el error típico es seguir operando “para no atrasar”. Aquí entrenas el criterio:
+          <strong>Seguridad → Continuidad → Producción</strong>. Resuelve escenarios y recibe retroalimentación inmediata.
+        </p>
+
+        <div class="scenario">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="badge">Escenario <b id="sc_idx">1</b>/<span id="sc_total">4</span></span>
+              <span class="badge">Puntaje: <b id="sc_score">0</b></span>
+            </div>
+            <div class="btnrow" style="margin:0">
+              <button class="btn-sec" id="sc_next">Siguiente ▶</button>
+              <button class="btn-ghost" id="sc_reset">↺ Reiniciar</button>
+            </div>
+          </div>
+
+          <div class="question" id="sc_text">—</div>
+          <div class="choices" id="sc_choices"></div>
+          <div class="explain" id="sc_explain">Selecciona una acción. Tu meta es decidir rápido y bien.</div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s5_state"></div>
+      </article>
+
+      <!-- 6) Correcto vs incorrecto -->
+      <article class="card" data-section="s6">
+        <div class="row" style="justify-content:space-between">
+          <h3>6) Ejemplos: conducta correcta vs. incorrecta</h3>
+          <span class="tag"><i style="background:var(--gris)"></i> Criterio</span>
+        </div>
+        <p>Compara escenarios típicos de turno. La idea es internalizar “qué se ve” cuando el riesgo está controlado (o no).</p>
+
+        <details>
+          <summary>Ejemplo A: Interacción de equipos en zona de carguío</summary>
+          <p><b>Incorrecto:</b> CAEX acercándose sin señalero/segregación, radios saturadas, nadie confirma, “avancen no más”.</p>
+          <p><b>Correcto:</b> zona delimitada + señalero activo + confirmación por radio + velocidad controlada + verificación visual.</p>
+          <p class="hint">Indicador de control: todos pueden describir el control en una frase (“zona segregada con señalero y confirmación”).</p>
+        </details>
+
+        <details>
+          <summary>Ejemplo B: Mantención solicita intervención “rápida”</summary>
+          <p><b>Incorrecto:</b> se interviene con área operando, sin aislamiento, “solo es un minuto”.</p>
+          <p><b>Correcto:</b> ventana coordinada + área aislada + permiso/LOTO si aplica + liberación formal a Control/Operación.</p>
+        </details>
+
+        <details>
+          <summary>Ejemplo C: Presión por meta de producción</summary>
+          <p><b>Incorrecto:</b> se reduce inspección / se omiten confirmaciones / se acelera en rampas.</p>
+          <p><b>Correcto:</b> se priorizan controles críticos, se comunica plan B, y se ajusta la meta con trazabilidad.</p>
+        </details>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s6_state"></div>
+      </article>
+
+      <!-- 7) Actividades -->
+      <article class="card" data-section="s7">
+        <div class="row" style="justify-content:space-between">
+          <h3>7) Actividades guiadas (aprende aplicando)</h3>
+          <span class="tag"><i style="background:var(--verde)"></i> Práctica</span>
+        </div>
+
+        <details open>
+          <summary>Actividad 1: Briefing Top 3 riesgos (texto listo)</summary>
+          <p>Escribe tu briefing como si hablaras al equipo (máx. 60 segundos):</p>
+          <textarea id="act1" placeholder="Ejemplo: 'Equipo, meta del turno..., Top 3 riesgos..., controles..., si falla control: STOP WORK y me avisan...'"></textarea>
+          <div class="btnrow">
+            <button class="btn" id="saveAct1">💾 Guardar</button>
+            <button class="btn-sec" id="copyAct1">📋 Copiar</button>
+          </div>
+          <div class="small" id="act1_state"></div>
+        </details>
+
+        <details>
+          <summary>Actividad 2: Verificación de barrera (evidencia)</summary>
+          <p>Elige un control crítico (ej.: señalero, segregación, checklist preoperacional) y define cómo lo verificarás en terreno.</p>
+          <div class="form-grid">
+            <div>
+              <label>Control crítico</label>
+              <input type="text" id="act2_control" placeholder="Ej.: Segregación de rutas en cruce norte" />
+            </div>
+            <div>
+              <label>Evidencia / verificación (observable)</label>
+              <input type="text" id="act2_evidence" placeholder="Ej.: Observación + foto + registro de checklist señalética" />
+            </div>
+          </div>
+          <div class="btnrow">
+            <button class="btn" id="saveAct2">💾 Guardar</button>
+          </div>
+          <div class="small" id="act2_state"></div>
+        </details>
+
+        <details>
+          <summary>Actividad 3: Plan de acción si falla el control</summary>
+          <p>Completa la regla “Si pasa X, hacemos Y” (para evitar improvisación bajo presión):</p>
+          <div class="form-grid">
+            <div>
+              <label>Si falla (evento)</label>
+              <input type="text" id="act3_event" placeholder="Ej.: señalero no está presente / ruta no segregada" />
+            </div>
+            <div>
+              <label>Hacemos (acción)</label>
+              <input type="text" id="act3_action" placeholder="Ej.: detengo el cruce, reasigno ruta, aviso Control + SSO, registro" />
+            </div>
+          </div>
+          <div class="btnrow">
+            <button class="btn" id="saveAct3">💾 Guardar</button>
+          </div>
+          <div class="small" id="act3_state"></div>
+        </details>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s7_state"></div>
+      </article>
+
+      <!-- 8) Quiz -->
+      <article class="card" data-section="s8">
+        <div class="row" style="justify-content:space-between">
+          <h3>8) Mini‑quiz (12 preguntas) — retroalimentación visual</h3>
+          <span class="tag"><i style="background:var(--amarillo)"></i> Evaluación</span>
+        </div>
+        <p>
+          Preguntas de criterio operativo (no de memoria). Responde y revisa la explicación.
+          Meta recomendada: <strong>80%</strong> o más.
+        </p>
+
+        <div class="scenario" id="quiz">
+          <div class="qhead">
+            <div class="qmeta">
+              <span class="badge">Pregunta <b id="q_idx">1</b>/<span id="q_total">12</span></span>
+              <span class="badge">Puntaje: <b id="q_score">0</b></span>
+              <span class="badge">Mejor: <b id="q_best">—</b></span>
+            </div>
+            <div class="btnrow" style="margin:0">
+              <button class="btn-sec" id="q_prev">◀ Anterior</button>
+              <button class="btn-sec" id="q_next">Siguiente ▶</button>
+              <button class="btn" id="q_finish">Finalizar</button>
+              <button class="btn-ghost" id="q_reset">↺ Reiniciar</button>
+            </div>
+          </div>
+
+          <div class="question" id="q_text">—</div>
+          <div id="q_opts"></div>
+          <div class="explain" id="q_explain">Selecciona una alternativa para ver retroalimentación.</div>
+        </div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s8_state"></div>
+      </article>
+
+      <!-- 9) Reflexión -->
+      <article class="card" data-section="s9">
+        <div class="row" style="justify-content:space-between">
+          <h3>9) Reflexión (para llevar al turno)</h3>
+          <span class="tag"><i style="background:var(--azul)"></i> Transferencia</span>
+        </div>
+        <p>Escribe 3 compromisos concretos para tu próximo turno. Deben ser acciones observables.</p>
+        <textarea id="reflection" placeholder="1) ...&#10;2) ...&#10;3) ..."></textarea>
+        <div class="btnrow">
+          <button class="btn" id="saveReflection">💾 Guardar</button>
+          <button class="btn-sec" id="copyReflection">📋 Copiar</button>
+        </div>
+        <div class="small" id="ref_state"></div>
+
+        <div class="btnrow">
+          <button class="btn-sec" data-action="toggleComplete">✅ Marcar como completado</button>
+          <button class="btn-ghost" data-action="resetSection">↺ Reiniciar sección</button>
+        </div>
+        <div class="small" id="s9_state"></div>
+      </article>
+
+      <footer class="wrap" style="padding-left:0;padding-right:0">
+        © Copyright Anupro360 2025. Todos los derechos reservados.
+      </footer>
+    </section>
+
+    <!-- RIGHT -->
+    <aside class="right">
+      <div class="card">
+        <h3>Ficha del Módulo 8</h3>
+        <div class="divider"></div>
+        <p class="small"><b>Competencia:</b> Coordinar el trabajo en equipo asegurando control del riesgo (barreras y verificación).</p>
+        <div class="kpi">
+          <div><b>30 min</b><span>Tiempo recomendado</span></div>
+          <div><b>12</b><span>Preguntas mini‑quiz</span></div>
+          <div><b>4</b><span>Escenarios STOP WORK</span></div>
+          <div><b>1</b><span>Juego Drag &amp; Drop</span></div>
+        </div>
+
+        <div class="divider"></div>
+        <h3 style="font-size:14px; margin-bottom:8px">Herramientas rápidas</h3>
+        <div class="btnrow">
+          <button class="btn-sec" id="copyChecklist">📋 Copiar Checklist</button>
+          <button class="btn-sec" id="copySBAR">📻 Copiar SBAR</button>
+          <button class="btn-ghost" id="resetAll">⚠️ Reiniciar todo</button>
+        </div>
+
+        <div class="divider"></div>
+        <div class="small" id="last_saved">—</div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // ---------- Storage helpers ----------
+    const KEY = "a360_mod8_riesgo_v1";
+    const nowISO = ()=> new Date().toISOString();
+    const load = () => {
+      try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+      catch { return {}; }
+    };
+    const save = (data) => localStorage.setItem(KEY, JSON.stringify(data));
+
+    const toast = (msg) => {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      clearTimeout(toast._tm);
+      toast._tm = setTimeout(()=> t.style.display="none", 1600);
+    };
+
+    // ---------- Progress ----------
+    const sections = ["s1","s2","s3","s4","s5","s6","s7","s8","s9"];
+    function computeProgress(state){
+      const done = sections.filter(s => state.completed?.includes(s)).length;
+      const total = sections.length;
+      const pct = Math.round((done/total)*100);
+      return {done, total, pct};
+    }
+    function renderProgress(){
+      const st = load();
+      const {pct} = computeProgress(st);
+      document.getElementById("pct").textContent = pct+"%";
+      document.getElementById("bar").style.width = pct+"%";
+      // per-section state labels
+      sections.forEach(id=>{
+        const el = document.getElementById(id+"_state");
+        if(!el) return;
+        const done = st.completed?.includes(id);
+        el.textContent = done ? "Estado: ✅ completado" : "Estado: ⏳ pendiente";
+      });
+      document.getElementById("last_saved").textContent =
+        st.lastSaved ? ("Último guardado: " + new Date(st.lastSaved).toLocaleString()) : "Sin guardados aún";
+    }
+    function toggleComplete(sectionId){
+      const st = load();
+      st.completed = st.completed || [];
+      const idx = st.completed.indexOf(sectionId);
+      if(idx >= 0) st.completed.splice(idx,1);
+      else st.completed.push(sectionId);
+      st.lastSaved = nowISO();
+      save(st);
+      renderProgress();
+      toast(idx>=0 ? "Sección marcada como pendiente" : "Sección completada ✅");
+    }
+    function resetSection(sectionId){
+      const st = load();
+      st.completed = (st.completed||[]).filter(x=>x!==sectionId);
+      // also clear section-specific content where applicable
+      if(sectionId==="s3"){ st.top3 = null; }
+      if(sectionId==="s4"){ st.dd = null; }
+      if(sectionId==="s5"){ st.sc = null; }
+      if(sectionId==="s7"){ st.act1=null; st.act2=null; st.act3=null; }
+      if(sectionId==="s8"){ st.quiz=null; }
+      if(sectionId==="s9"){ st.reflection=null; }
+      st.lastSaved = nowISO();
+      save(st);
+      // re-render interactive parts
+      initTop3();
+      initDragDrop();
+      initScenario();
+      initActivities();
+      initQuiz();
+      renderProgress();
+      toast("Sección reiniciada ↺");
+    }
+
+    document.addEventListener("click", (e)=>{
+      const btn = e.target.closest("button");
+      if(!btn) return;
+      const action = btn.dataset.action;
+      const card = btn.closest(".card");
+      if(!action || !card) return;
+      const sectionId = card.dataset.section;
+      if(action==="toggleComplete") toggleComplete(sectionId);
+      if(action==="resetSection") resetSection(sectionId);
+    });
+
+    // ---------- Top 3 interactive ----------
+    const RISK_OPTIONS = [
+      "Tránsito interno / interacción livianos–CAEX",
+      "Interferencia en zona de carguío (pala–CAEX–personas)",
+      "Fatiga / somnolencia (turno largo / conducción)",
+      "Condición de rampa (pendiente, bermas, material suelto)",
+      "Clima extremo (viento/polvo/lluvia)",
+      "Energías peligrosas (LOTO / intervención)",
+      "Pérdida de comunicación (radio / señal)",
+      "Derrame de combustible/aceite",
+      "Trabajo en altura / acceso",
+      "Herramientas/objetos sueltos (FOD)"
+    ];
+    const CONTROL_SUGGEST = {
+      "Tránsito interno / interacción livianos–CAEX": ["Segregación de rutas", "Límite de velocidad", "Control en cruces (señalero)", "Prohibición de adelantamiento"],
+      "Interferencia en zona de carguío (pala–CAEX–personas)": ["Zona delimitada", "Señalero", "Comunicación y confirmación", "Ruta única entrada/salida"],
+      "Fatiga / somnolencia (turno largo / conducción)": ["Pausas planificadas", "Rotación de tarea", "Chequeo de aptitud", "Monitoreo / reporte"],
+      "Condición de rampa (pendiente, bermas, material suelto)": ["Inspección de rampa", "Mantención de bermas", "Riego/control de polvo", "Restricción de velocidad"],
+      "Clima extremo (viento/polvo/lluvia)": ["Restricción de operación", "Ajuste de rutas", "Detención temporal", "Verificación de visibilidad"],
+      "Energías peligrosas (LOTO / intervención)": ["Aislamiento de energía", "Permiso de trabajo", "Bloqueo/etiquetado", "Liberación formal"],
+      "Pérdida de comunicación (radio / señal)": ["Canal alternativo", "Puntos de reporte", "Restricción de movimiento", "Protocolos de señalización"],
+      "Derrame de combustible/aceite": ["Contención inmediata", "Kit de derrames", "Aislar área", "Reporte y disposición"],
+      "Trabajo en altura / acceso": ["Barandas/linea de vida", "Permiso", "Inspección de anclajes", "Supervisión directa"],
+      "Herramientas/objetos sueltos (FOD)": ["Orden y limpieza", "Inspección previa", "Contención/portaherramientas", "Revisión de cabina"]
+    };
+
+    function buildTop3UI(){
+      const root = document.getElementById("top3");
+      root.innerHTML = "";
+      for(let i=1;i<=3;i++){
+        const row = document.createElement("div");
+        row.className = "card";
+        row.style.padding = "12px";
+        row.style.boxShadow = "none";
+        row.style.background = "rgba(0,0,0,.16)";
+        row.style.borderRadius = "14px";
+        row.style.border = "1px solid rgba(255,255,255,.10)";
+        row.innerHTML = `
+          <div class="row" style="justify-content:space-between">
+            <b>Riesgo #${i}</b>
+            <span class="badge" id="q_r${i}">—</span>
+          </div>
+          <div class="divider"></div>
+          <label>Riesgo</label>
+          <select id="r${i}_risk">
+            <option value="">Selecciona…</option>
+            ${RISK_OPTIONS.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join("")}
+          </select>
+          <div class="divider"></div>
+          <div class="form-grid">
+            <div>
+              <label>Control (barrera concreta)</label>
+              <input type="text" id="r${i}_control" placeholder="Ej.: segregación de rutas + señalero" />
+              <div class="hint" id="r${i}_hint"></div>
+            </div>
+            <div>
+              <label>Verificación (evidencia observable)</label>
+              <input type="text" id="r${i}_verify" placeholder="Ej.: observación + registro checklist" />
+              <div class="hint">Evita: “revisar” sin indicar qué evidencia.</div>
+            </div>
+          </div>
+        `;
+        root.appendChild(row);
+      }
+    }
+
+    function initTop3(){
+      const st = load();
+      buildTop3UI();
+
+      const saved = st.top3 || [];
+      for(let i=1;i<=3;i++){
+        const item = saved[i-1] || {};
+        const riskSel = document.getElementById(`r${i}_risk`);
+        const ctl = document.getElementById(`r${i}_control`);
+        const ver = document.getElementById(`r${i}_verify`);
+        riskSel.value = item.risk || "";
+        ctl.value = item.control || "";
+        ver.value = item.verify || "";
+        updateTop3Hints(i);
+        updateRowQuality(i);
+        riskSel.addEventListener("change", ()=>{ updateTop3Hints(i); updateRowQuality(i); });
+        ctl.addEventListener("input", ()=> updateRowQuality(i));
+        ver.addEventListener("input", ()=> updateRowQuality(i));
+      }
+
+      document.getElementById("saveTop3").onclick = ()=>{
+        const data = [];
+        for(let i=1;i<=3;i++){
+          data.push({
+            risk: document.getElementById(`r${i}_risk`).value.trim(),
+            control: document.getElementById(`r${i}_control`).value.trim(),
+            verify: document.getElementById(`r${i}_verify`).value.trim()
+          });
+        }
+        st.top3 = data;
+        st.lastSaved = nowISO();
+        save(st);
+        renderProgress();
+        toast("Top 3 guardado 💾");
+      };
+
+      document.getElementById("autoFeedback").onclick = ()=>{
+        const fb = autoReviewTop3();
+        document.getElementById("top3_feedback").innerHTML = fb.html;
+        document.getElementById("top3_quality").textContent = "Calidad: " + fb.label;
+        toast("Revisión aplicada");
+      };
+
+      document.getElementById("resetTop3").onclick = ()=>{
+        const st2 = load();
+        st2.top3 = null;
+        st2.lastSaved = nowISO();
+        save(st2);
+        initTop3();
+        renderProgress();
+        toast("Top 3 reiniciado ↺");
+      };
+
+      // show stored review if exists
+      document.getElementById("top3_feedback").textContent = "Completa el Top 3 y presiona “Revisar calidad”.";
+      document.getElementById("top3_quality").textContent = "Calidad: —";
+    }
+
+    function updateTop3Hints(i){
+      const risk = document.getElementById(`r${i}_risk`).value;
+      const hint = document.getElementById(`r${i}_hint`);
+      if(!risk){ hint.textContent = ""; return; }
+      const sugg = CONTROL_SUGGEST[risk] || [];
+      hint.innerHTML = sugg.length
+        ? `Sugerencias: <span style="color:rgba(255,255,255,.8)">${sugg.map(x=>escapeHtml(x)).join(" · ")}</span>`
+        : "";
+    }
+
+    function scoreTextQuality(text){
+      const t = (text||"").toLowerCase();
+      if(!t.trim()) return 0;
+      const vague = ["tener cuidado","estar atento","ojo","precaución","vigilar","controlar bien","revisar"];
+      if(vague.some(v=>t.includes(v))) return 1;
+      const concrete = ["señal","señalero","segreg","aisl","bloq","loto","permiso","delimit","registro","check","checklist","foto","medir","velocidad","barr","baranda","kit","contener","ruta","canal altern","deten"];
+      const hits = concrete.filter(w=>t.includes(w)).length;
+      if(hits>=2) return 3;
+      if(hits==1) return 2;
+      return 1;
+    }
+
+    function updateRowQuality(i){
+      const ctl = document.getElementById(`r${i}_control`).value;
+      const ver = document.getElementById(`r${i}_verify`).value;
+      const risk = document.getElementById(`r${i}_risk`).value;
+      const q = document.getElementById(`q_r${i}`);
+      if(!risk && !ctl && !ver){ q.textContent = "—"; return; }
+      const s = scoreTextQuality(ctl) + scoreTextQuality(ver);
+      if(s>=5){ q.textContent="✅ Alta"; q.style.color="#8cff98"; }
+      else if(s>=3){ q.textContent="⚠️ Media"; q.style.color="#ffd27a"; }
+      else { q.textContent="❌ Baja"; q.style.color="#ff9b9b"; }
+    }
+
+    function autoReviewTop3(){
+      const rows = [];
+      let score = 0;
+      for(let i=1;i<=3;i++){
+        const risk = document.getElementById(`r${i}_risk`).value.trim();
+        const ctl = document.getElementById(`r${i}_control`).value.trim();
+        const ver = document.getElementById(`r${i}_verify`).value.trim();
+        const s = scoreTextQuality(ctl) + scoreTextQuality(ver);
+        score += s;
+        let msg = "";
+        if(!risk) msg = `<span class="bad">Falta seleccionar el riesgo.</span>`;
+        else if(!ctl || !ver) msg = `<span class="warn">Completa control y verificación.</span>`;
+        else if(s>=5) msg = `<span class="ok">Bien: control y verificación son concretos.</span>`;
+        else if(s>=3) msg = `<span class="warn">Mejorable: agrega evidencia específica (registro, observación, check, etc.).</span>`;
+        else msg = `<span class="bad">Muy general: evita “tener cuidado”. Define barrera + evidencia.</span>`;
+        rows.push(`<p><b>Riesgo #${i}:</b> ${escapeHtml(risk||"—")}<br/>${msg}</p>`);
+      }
+      const max = 18; // 3 rows * (3+3)
+      const pct = Math.round((score/max)*100);
+      let label = pct>=75 ? "ALTA" : pct>=55 ? "MEDIA" : "BAJA";
+      const headline = `<b>Resultado:</b> ${pct}% (calidad ${label}).`;
+      const tip = `<p class="hint">Tip rápido: Un control de calidad suena a acción concreta + condición verificable. Ej.: “Segregación de ruta + señalero + confirmación por radio”.</p>`;
+      return {label, html: `<div>${headline}</div><div class="divider"></div>${rows.join("")}${tip}`};
+    }
+
+    // ---------- Drag & Drop (mouse + touch) ----------
+    const DD = {
+      risks: [
+        {id:"r_trafico", title:"Tránsito interno", accept:"c_trafico"},
+        {id:"r_carguio", title:"Zona de carguío", accept:"c_carguio"},
+        {id:"r_fatiga", title:"Fatiga / somnolencia", accept:"c_fatiga"},
+        {id:"r_loto", title:"Energías peligrosas", accept:"c_loto"}
+      ],
+      controls: [
+        {id:"c_loto", title:"Aislar energía + permiso + liberación formal", tip:"LOTO / PT / verificación"},
+        {id:"c_trafico", title:"Segregación + velocidad + control en cruces", tip:"Rutas / señalética / control"},
+        {id:"c_fatiga", title:"Pausas + chequeo aptitud + rotación", tip:"Gestión de fatiga"},
+        {id:"c_carguio", title:"Zona delimitada + señalero + confirmación", tip:"Entrada/salida controlada"}
+      ]
+    };
+
+    function initDragDrop(){
+      const st = load();
+      const saved = st.dd || {placements:{}};
+
+      const controlsWrap = document.getElementById("dd_controls");
+      const zonesWrap = document.getElementById("dd_zones");
+      controlsWrap.innerHTML = "";
+      zonesWrap.innerHTML = "";
+
+      // Build zones
+      DD.risks.forEach(r=>{
+        const dz = document.createElement("div");
+        dz.className = "dropzone";
+        dz.dataset.accept = r.accept;
+        dz.dataset.riskid = r.id;
+        dz.innerHTML = `<div>
+            <div class="dz-title">🎯 ${escapeHtml(r.title)}</div>
+            <div class="dz-value" id="${r.id}_val">Suelta aquí el control…</div>
+          </div>
+          <button class="btn-ghost" style="padding:6px 10px; border-radius:10px" data-clear="${r.id}">Limpiar</button>`;
+        zonesWrap.appendChild(dz);
+      });
+
+      // Build controls list excluding already placed
+      const placed = new Set(Object.values(saved.placements || {}));
+      DD.controls.forEach(c=>{
+        if(placed.has(c.id)) return;
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.draggable = true;
+        chip.dataset.id = c.id;
+        chip.innerHTML = `<b>${escapeHtml(c.title)}</b><small>⠿</small>`;
+        controlsWrap.appendChild(chip);
+      });
+
+      // Apply placements
+      (DD.risks||[]).forEach(r=>{
+        const cid = saved.placements?.[r.id];
+        if(cid){
+          const c = DD.controls.find(x=>x.id===cid);
+          const val = document.getElementById(r.id+"_val");
+          if(val) val.textContent = c ? c.title : "—";
+          const dz = [...zonesWrap.querySelectorAll(".dropzone")].find(z=>z.dataset.riskid===r.id);
+          if(dz) dz.dataset.filled = "1";
+        }
+      });
+
+      // Mouse DnD
+      controlsWrap.addEventListener("dragstart", (e)=>{
+        const chip = e.target.closest(".chip");
+        if(!chip) return;
+        e.dataTransfer.setData("text/plain", chip.dataset.id);
+        e.dataTransfer.effectAllowed = "move";
+      });
+      zonesWrap.addEventListener("dragover", (e)=>{
+        const dz = e.target.closest(".dropzone");
+        if(!dz) return;
+        e.preventDefault();
+        dz.classList.add("dragover");
+      });
+      zonesWrap.addEventListener("dragleave", (e)=>{
+        const dz = e.target.closest(".dropzone");
+        if(dz) dz.classList.remove("dragover");
+      });
+      zonesWrap.addEventListener("drop", (e)=>{
+        const dz = e.target.closest(".dropzone");
+        if(!dz) return;
+        e.preventDefault();
+        dz.classList.remove("dragover");
+        const cid = e.dataTransfer.getData("text/plain");
+        placeControl(dz.dataset.riskid, cid);
+      });
+
+      // Touch / Pointer drag (clone follows finger)
+      enablePointerDrag(controlsWrap, zonesWrap);
+
+      // Clear buttons
+      zonesWrap.addEventListener("click", (e)=>{
+        const b = e.target.closest("[data-clear]");
+        if(!b) return;
+        clearPlacement(b.dataset.clear);
+      });
+
+      document.getElementById("dd_check").onclick = ()=>{
+        const st2 = load();
+        const placements = st2.dd?.placements || {};
+        let ok = 0;
+        let total = DD.risks.length;
+        const wrong = [];
+        DD.risks.forEach(r=>{
+          const got = placements[r.id];
+          if(got === r.accept) ok++;
+          else wrong.push(r.title);
+        });
+        const fb = document.getElementById("dd_feedback");
+        if(ok===total){
+          fb.innerHTML = `<span class="ok"><b>✅ Perfecto:</b> asignaste correctamente los ${total} controles.</span><br/><span class="hint">Traducción a turno: ya sabes pensar “barrera + verificación” por tipo de riesgo.</span>`;
+          toast("Juego completado 🎮✅");
+        }else{
+          fb.innerHTML = `<span class="warn"><b>⚠️ Aún no:</b> ${ok}/${total} correctos.</span> Revisa: <b>${escapeHtml(wrong.join(", "))}</b>.`;
+          toast("Revisa asignaciones");
+        }
+      };
+
+      document.getElementById("dd_reset").onclick = ()=>{
+        const st2 = load();
+        st2.dd = null;
+        st2.lastSaved = nowISO();
+        save(st2);
+        initDragDrop();
+        renderProgress();
+        toast("Juego reiniciado ↺");
+      };
+
+      function placeControl(riskId, controlId){
+        const st2 = load();
+        st2.dd = st2.dd || {placements:{}};
+        st2.dd.placements = st2.dd.placements || {};
+        // If this control is already placed elsewhere, remove from there first
+        for(const k of Object.keys(st2.dd.placements)){
+          if(st2.dd.placements[k] === controlId){
+            st2.dd.placements[k] = null;
+            const v = document.getElementById(k+"_val");
+            if(v) v.textContent = "Suelta aquí el control…";
+          }
+        }
+        st2.dd.placements[riskId] = controlId;
+        st2.lastSaved = nowISO();
+        save(st2);
+
+        const c = DD.controls.find(x=>x.id===controlId);
+        const val = document.getElementById(riskId+"_val");
+        if(val) val.textContent = c ? c.title : "—";
+
+        // remove chip from list
+        const chip = controlsWrap.querySelector(`.chip[data-id="${controlId}"]`);
+        if(chip) chip.remove();
+
+        renderProgress();
+      }
+
+      function clearPlacement(riskId){
+        const st2 = load();
+        const cid = st2.dd?.placements?.[riskId];
+        if(!cid) return;
+        st2.dd.placements[riskId] = null;
+
+        // add control back to list
+        const c = DD.controls.find(x=>x.id===cid);
+        if(c){
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.draggable = true;
+          chip.dataset.id = c.id;
+          chip.innerHTML = `<b>${escapeHtml(c.title)}</b><small>⠿</small>`;
+          controlsWrap.appendChild(chip);
+        }
+
+        const val = document.getElementById(riskId+"_val");
+        if(val) val.textContent = "Suelta aquí el control…";
+        st2.lastSaved = nowISO();
+        save(st2);
+        renderProgress();
+        toast("Asignación limpiada");
+      }
+    }
+
+    function enablePointerDrag(controlsWrap, zonesWrap){
+      let ghost = null;
+      let dragId = null;
+      const onDown = (e)=>{
+        const chip = e.target.closest(".chip");
+        if(!chip) return;
+        dragId = chip.dataset.id;
+        ghost = chip.cloneNode(true);
+        ghost.style.position = "fixed";
+        ghost.style.zIndex = "999";
+        ghost.style.opacity = "0.92";
+        ghost.style.pointerEvents = "none";
+        ghost.style.transform = "translate(-50%, -50%) scale(1.02)";
+        document.body.appendChild(ghost);
+        chip.dataset.dragging = "1";
+        moveGhost(e);
+        try{ chip.setPointerCapture(e.pointerId); }catch{}
+      };
+      const moveGhost = (e)=>{
+        if(!ghost) return;
+        const x = e.clientX ?? (e.touches && e.touches[0].clientX);
+        const y = e.clientY ?? (e.touches && e.touches[0].clientY);
+        ghost.style.left = x + "px";
+        ghost.style.top = y + "px";
+        // highlight dropzone under pointer
+        const el = document.elementFromPoint(x,y);
+        zonesWrap.querySelectorAll(".dropzone").forEach(z=>z.classList.remove("dragover"));
+        const dz = el && el.closest && el.closest(".dropzone");
+        if(dz) dz.classList.add("dragover");
+      };
+      const onUp = (e)=>{
+        if(!ghost) return;
+        const x = e.clientX, y = e.clientY;
+        const el = document.elementFromPoint(x,y);
+        const dz = el && el.closest && el.closest(".dropzone");
+        zonesWrap.querySelectorAll(".dropzone").forEach(z=>z.classList.remove("dragover"));
+        if(dz && dragId){
+          // emulate drop
+          const riskId = dz.dataset.riskid;
+          // place control
+          const st = load();
+          st.dd = st.dd || {placements:{}};
+          // if already placed elsewhere remove
+          for(const k of Object.keys(st.dd.placements||{})){
+            if(st.dd.placements[k] === dragId){
+              st.dd.placements[k] = null;
+              const v = document.getElementById(k+"_val");
+              if(v) v.textContent = "Suelta aquí el control…";
+            }
+          }
+          st.dd.placements[riskId] = dragId;
+          st.lastSaved = nowISO();
+          save(st);
+
+          const c = DD.controls.find(x=>x.id===dragId);
+          const val = document.getElementById(riskId+"_val");
+          if(val) val.textContent = c ? c.title : "—";
+
+          // remove original chip
+          const orig = controlsWrap.querySelector(`.chip[data-id="${dragId}"]`);
+          if(orig) orig.remove();
+
+          toast("Asignado ✅");
+          renderProgress();
+        }
+        ghost.remove();
+        ghost = null;
+        dragId = null;
+      };
+
+      // pointer events
+      controlsWrap.querySelectorAll(".chip").forEach(chip=>{
+        chip.addEventListener("pointerdown", onDown);
+        chip.addEventListener("pointermove", moveGhost);
+        chip.addEventListener("pointerup", onUp);
+        chip.addEventListener("pointercancel", onUp);
+      });
+
+      // Rebind after dynamic changes using MutationObserver
+      const mo = new MutationObserver(()=>{
+        controlsWrap.querySelectorAll(".chip").forEach(chip=>{
+          if(chip.dataset.bound) return;
+          chip.dataset.bound = "1";
+          chip.addEventListener("pointerdown", onDown);
+          chip.addEventListener("pointermove", moveGhost);
+          chip.addEventListener("pointerup", onUp);
+          chip.addEventListener("pointercancel", onUp);
+        });
+      });
+      mo.observe(controlsWrap, {childList:true, subtree:true});
+    }
+
+    // ---------- STOP WORK scenarios ----------
+    const SCENARIOS = [
+      {
+        text: "En rampa norte, un liviano ingresa a zona de tránsito CAEX sin segregación visible. Control te pide 'mantener flujo' porque hay cola.",
+        choices: [
+          {t:"Detener cruce, aislar zona y coordinar segregación/ señalero antes de continuar.", ok:true, why:"Correcto: control crítico falló (interacción). Prioridad: seguridad y control de interferencias."},
+          {t:"Permitir paso solo a los CAEX más urgentes y luego ver señalética.", ok:false, why:"Incorrecto: normaliza el riesgo. Un evento crítico no se gestiona por urgencia de producción."},
+          {t:"Avisar por radio 'ojo' y continuar con precaución.", ok:false, why:"Incorrecto: 'ojo' no es barrera. Falta control concreto y verificación."},
+          {t:"Pedir al liviano que salga y continuar sin cambios.", ok:false, why:"Incorrecto: el sistema puede repetir el error. Debes asegurar barreras para todo el equipo."}
+        ]
+      },
+      {
+        text: "Mantención solicita intervenir un CAEX 'rápido', pero el equipo está en zona operativa y no hay confirmación de aislamiento.",
+        choices: [
+          {t:"Aplicar ventana coordinada + aislamiento/LOTO si aplica + liberación formal antes de intervenir.", ok:true, why:"Correcto: energías peligrosas requieren control verificable y autorización."},
+          {t:"Autorizar intervención si el mecánico 'asegura' que será rápido.", ok:false, why:"Incorrecto: depende de persona, no de sistema. Riesgo alto."},
+          {t:"Detener solo los equipos cercanos y comenzar intervención sin permisos.", ok:false, why:"Incorrecto: falta trazabilidad y control crítico."},
+          {t:"Postergar toda mantención hasta fin de turno siempre.", ok:false, why:"Incorrecto: decisión absoluta sin análisis. Lo correcto es coordinar con control de riesgo."}
+        ]
+      },
+      {
+        text: "Se levanta viento fuerte, cae visibilidad en zona de carguío. Operadores reportan polvo y pérdida intermitente de radio.",
+        choices: [
+          {t:"Reducir/pausar operación según estándar, definir condiciones mínimas y confirmar canal alternativo.", ok:true, why:"Correcto: clima + comunicación afectan barreras. Ajusta condiciones y verifica."},
+          {t:"Aumentar velocidad para compensar pérdidas por detenciones.", ok:false, why:"Incorrecto: aumenta riesgo en rampas y reduce control."},
+          {t:"Continuar igual y pedir 'más atención'.", ok:false, why:"Incorrecto: control vago. Falta barrera concreta (visibilidad mínima / restricción)."},
+          {t:"Solo registrar el evento para informe y seguir operando.", ok:false, why:"Incorrecto: registrar sin controlar no reduce riesgo."}
+        ]
+      },
+      {
+        text: "Detectas operador con signos de fatiga (respuestas lentas). Hay presión por meta. El operador dice 'estoy bien'.",
+        choices: [
+          {t:"Aplicar protocolo de fatiga: pausa, evaluación, reasignación/rotación y registro.", ok:true, why:"Correcto: la fatiga es riesgo crítico. Debe gestionarse como sistema, no por autodeclaración."},
+          {t:"Dejarlo operar y observar 'por si acaso'.", ok:false, why:"Incorrecto: la observación sin intervención no es barrera suficiente."},
+          {t:"Cambiarlo a una tarea más rápida para que 'se active'.", ok:false, why:"Incorrecto: aumenta carga. Riesgo se eleva."},
+          {t:"Ignorar para no afectar producción.", ok:false, why:"Incorrecto: prioriza producción sobre seguridad."}
+        ]
+      }
+    ];
+
+    function initScenario(){
+      const st = load();
+      st.sc = st.sc || {idx:0, score:0, answered:{}};
+      save(st);
+
+      document.getElementById("sc_total").textContent = SCENARIOS.length;
+
+      const render = ()=>{
+        const st2 = load();
+        const idx = st2.sc?.idx ?? 0;
+        const sc = SCENARIOS[idx];
+        document.getElementById("sc_idx").textContent = (idx+1);
+        document.getElementById("sc_score").textContent = st2.sc?.score ?? 0;
+        document.getElementById("sc_text").textContent = sc.text;
+
+        const box = document.getElementById("sc_choices");
+        box.innerHTML = "";
+        const answered = st2.sc?.answered?.[idx];
+        sc.choices.forEach((c,ci)=>{
+          const d = document.createElement("div");
+          d.className = "choice";
+          d.textContent = c.t;
+          if(answered!=null){
+            d.classList.add(c.ok ? "correct" : (ci===answered ? "incorrect" : ""));
+          }
+          d.onclick = ()=>{
+            const st3 = load();
+            st3.sc = st3.sc || {idx:idx, score:0, answered:{}};
+            if(st3.sc.answered[idx]!=null){
+              toast("Ya respondiste este escenario");
+              return;
+            }
+            st3.sc.answered[idx] = ci;
+            if(c.ok) st3.sc.score = (st3.sc.score||0) + 1;
+            st3.lastSaved = nowISO();
+            save(st3);
+            document.getElementById("sc_explain").innerHTML = (c.ok ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(c.why)}</span>` : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(c.why)}</span>`);
+            render();
+          };
+          box.appendChild(d);
+        });
+
+        if(answered!=null){
+          const chosen = sc.choices[answered];
+          document.getElementById("sc_explain").innerHTML = (chosen.ok ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(chosen.why)}</span>` : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(chosen.why)}</span>`);
+        }else{
+          document.getElementById("sc_explain").textContent = "Selecciona una acción. Tu meta es decidir rápido y bien.";
+        }
+      };
+
+      document.getElementById("sc_next").onclick = ()=>{
+        const st2 = load();
+        st2.sc = st2.sc || {idx:0, score:0, answered:{}};
+        st2.sc.idx = (st2.sc.idx + 1) % SCENARIOS.length;
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+      };
+      document.getElementById("sc_reset").onclick = ()=>{
+        const st2 = load();
+        st2.sc = {idx:0, score:0, answered:{}};
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+        renderProgress();
+        toast("Simulador reiniciado ↺");
+      };
+
+      render();
+    }
+
+    // ---------- Activities ----------
+    function initActivities(){
+      const st = load();
+      if(st.act1) document.getElementById("act1").value = st.act1;
+      if(st.act2){
+        document.getElementById("act2_control").value = st.act2.control || "";
+        document.getElementById("act2_evidence").value = st.act2.evidence || "";
+      }
+      if(st.act3){
+        document.getElementById("act3_event").value = st.act3.event || "";
+        document.getElementById("act3_action").value = st.act3.action || "";
+      }
+      document.getElementById("act1_state").textContent = st.act1 ? "Guardado ✅" : "Sin guardar";
+      document.getElementById("act2_state").textContent = st.act2 ? "Guardado ✅" : "Sin guardar";
+      document.getElementById("act3_state").textContent = st.act3 ? "Guardado ✅" : "Sin guardar";
+
+      document.getElementById("saveAct1").onclick = ()=>{
+        const st2 = load();
+        st2.act1 = document.getElementById("act1").value;
+        st2.lastSaved = nowISO();
+        save(st2);
+        document.getElementById("act1_state").textContent = "Guardado ✅";
+        renderProgress();
+        toast("Actividad 1 guardada");
+      };
+      document.getElementById("copyAct1").onclick = async ()=>{
+        await navigator.clipboard.writeText(document.getElementById("act1").value || "");
+        toast("Copiado al portapapeles");
+      };
+      document.getElementById("saveAct2").onclick = ()=>{
+        const st2 = load();
+        st2.act2 = {
+          control: document.getElementById("act2_control").value,
+          evidence: document.getElementById("act2_evidence").value
+        };
+        st2.lastSaved = nowISO();
+        save(st2);
+        document.getElementById("act2_state").textContent = "Guardado ✅";
+        renderProgress();
+        toast("Actividad 2 guardada");
+      };
+      document.getElementById("saveAct3").onclick = ()=>{
+        const st2 = load();
+        st2.act3 = {
+          event: document.getElementById("act3_event").value,
+          action: document.getElementById("act3_action").value
+        };
+        st2.lastSaved = nowISO();
+        save(st2);
+        document.getElementById("act3_state").textContent = "Guardado ✅";
+        renderProgress();
+        toast("Actividad 3 guardada");
+      };
+    }
+
+    // ---------- Quiz ----------
+    const QUIZ = [
+      {
+        q:"¿Cuál frase describe mejor “control del riesgo” en turno?",
+        opts:["Tener cuidado y experiencia", "Barreras concretas + verificación + acción si falla", "Hacer más rápido el trabajo", "Depende del SSO solamente"],
+        a:1,
+        why:"Control del riesgo = barreras (controles) concretas, verificables y con acción si fallan."
+      },
+      {
+        q:"Un control ‘vago’ (débil) es…",
+        opts:["Señalero en cruce + registro", "Segregación de rutas", "‘Ojo y estén atentos’", "Checklist preoperacional"],
+        a:2,
+        why:"“Ojo” no es una barrera. No es verificable y depende de la voluntad."
+      },
+      {
+        q:"¿Qué completa correctamente el ciclo: Riesgo → Control → ____ ?",
+        opts:["Producción", "Verificación (evidencia)", "Opinión", "Motivación"],
+        a:1,
+        why:"Sin verificación, el control se vuelve suposición."
+      },
+      {
+        q:"Si un control crítico falla (ej.: no hay señalero en cruce), la prioridad es…",
+        opts:["Seguir para no atrasar", "STOP WORK o restricción hasta restablecer barrera", "Solo informar al final del turno", "Rezar que no pase nada"],
+        a:1,
+        why:"Cuando falla una barrera crítica, se restringe o detiene hasta restaurar control."
+      },
+      {
+        q:"En coordinación con Mantención, la opción correcta es…",
+        opts:["Intervenir rápido sin permisos", "Ventana + aislamiento/permiso + liberación formal", "Hacerlo cuando puedan", "Pedir al mecánico que se cuide"],
+        a:1,
+        why:"Coordinar = sincronizar + controlar energías + trazabilidad."
+      },
+      {
+        q:"La verificación ‘buena’ se reconoce porque…",
+        opts:["Es corta", "Se puede observar/medir/registrar", "No requiere evidencia", "Depende de memoria"],
+        a:1,
+        why:"Evidencia observable: checklist, foto, medición, registro, observación directa."
+      },
+      {
+        q:"Fatiga en conducción es un riesgo porque…",
+        opts:["Baja la atención y aumenta error crítico", "Aumenta la producción", "No influye en seguridad", "Se soluciona con café"],
+        a:0,
+        why:"Fatiga afecta tiempos de reacción y toma de decisiones. Requiere gestión sistemática."
+      },
+      {
+        q:"Bajo presión, el método recomendado es…",
+        opts:["Acelerar", "Pausa–Piensa–Actúa", "Gritar para ordenar", "Improvisar"],
+        a:1,
+        why:"Pausa–Piensa–Actúa reduce impulsividad y mejora decisiones."
+      },
+      {
+        q:"¿Qué indicador refleja mala coordinación y riesgo en zona de carguío?",
+        opts:["Colas/esperas y radios saturadas sin confirmación", "Música en cabina", "Color del casco", "Temperatura ambiente"],
+        a:0,
+        why:"Colas + comunicación pobre aumentan interferencias y exposición."
+      },
+      {
+        q:"El control del riesgo ‘del equipo’ significa que…",
+        opts:["Solo el supervisor decide", "Cualquiera puede detener y verificar controles críticos", "Solo Control/Despacho manda", "Solo SSO revisa"],
+        a:1,
+        why:"La robustez aumenta cuando el equipo comparte verificación y derecho a detener por seguridad."
+      },
+      {
+        q:"En clima extremo con baja visibilidad, lo correcto es…",
+        opts:["Seguir igual", "Definir condiciones mínimas y ajustar/pausar", "Aumentar velocidad", "Quitar controles para recuperar producción"],
+        a:1,
+        why:"Visibilidad afecta barreras. Se ajusta operación según estándar y se verifica."
+      },
+      {
+        q:"¿Qué acción deja trazabilidad operativa real?",
+        opts:["Decir ‘lo vi’", "Registrar evento + acción + responsable", "Solo comentar en pasillo", "Esperar que pase"],
+        a:1,
+        why:"Trazabilidad = registro de decisión y acción (qué, quién, cuándo)."
+      }
+    ];
+
+    function initQuiz(){
+      const st = load();
+      st.quiz = st.quiz || {idx:0, answers:Array(QUIZ.length).fill(null), score:0, best:null};
+      save(st);
+
+      document.getElementById("q_total").textContent = QUIZ.length;
+      document.getElementById("q_best").textContent = st.quiz.best==null ? "—" : (st.quiz.best + "/" + QUIZ.length);
+
+      const render = ()=>{
+        const st2 = load();
+        const qz = st2.quiz;
+        const idx = qz.idx || 0;
+        document.getElementById("q_idx").textContent = (idx+1);
+        document.getElementById("q_score").textContent = qz.score || 0;
+
+        const item = QUIZ[idx];
+        document.getElementById("q_text").textContent = item.q;
+        const box = document.getElementById("q_opts");
+        box.innerHTML = "";
+
+        const chosen = qz.answers[idx];
+        item.opts.forEach((t, oi)=>{
+          const d = document.createElement("div");
+          d.className = "opt";
+          d.textContent = t;
+          if(chosen===oi) d.classList.add("selected");
+          // show correctness if already answered
+          if(chosen!=null){
+            if(oi===item.a) d.classList.add("correct");
+            else if(oi===chosen) d.classList.add("incorrect");
+          }
+          d.onclick = ()=>{
+            const st3 = load();
+            st3.quiz = st3.quiz || {idx:idx, answers:Array(QUIZ.length).fill(null), score:0, best:null};
+            if(st3.quiz.answers[idx]!=null){
+              toast("Ya respondiste esta pregunta (reinicia si quieres repetir)");
+              return;
+            }
+            st3.quiz.answers[idx] = oi;
+            if(oi===item.a) st3.quiz.score = (st3.quiz.score||0) + 1;
+            st3.lastSaved = nowISO();
+            save(st3);
+            document.getElementById("q_explain").innerHTML =
+              (oi===item.a)
+                ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(item.why)}</span>`
+                : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(item.why)}</span>`;
+            render();
+          };
+          box.appendChild(d);
+        });
+
+        if(chosen!=null){
+          document.getElementById("q_explain").innerHTML =
+            (chosen===item.a)
+              ? `<span class="ok"><b>✅ Correcto:</b> ${escapeHtml(item.why)}</span>`
+              : `<span class="bad"><b>❌ Incorrecto:</b> ${escapeHtml(item.why)}</span>`;
+        }else{
+          document.getElementById("q_explain").textContent = "Selecciona una alternativa para ver retroalimentación.";
+        }
+
+        document.getElementById("q_best").textContent = st2.quiz.best==null ? "—" : (st2.quiz.best + "/" + QUIZ.length);
+      };
+
+      document.getElementById("q_prev").onclick = ()=>{
+        const st2 = load();
+        st2.quiz.idx = Math.max(0, (st2.quiz.idx||0) - 1);
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+      };
+      document.getElementById("q_next").onclick = ()=>{
+        const st2 = load();
+        st2.quiz.idx = Math.min(QUIZ.length-1, (st2.quiz.idx||0) + 1);
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+      };
+      document.getElementById("q_finish").onclick = ()=>{
+        const st2 = load();
+        const answered = st2.quiz.answers.filter(x=>x!=null).length;
+        const score = st2.quiz.score || 0;
+        const pct = Math.round((score/QUIZ.length)*100);
+        if(answered < QUIZ.length){
+          toast("Aún faltan preguntas por responder");
+          document.getElementById("q_explain").innerHTML =
+            `<span class="warn"><b>Faltan ${QUIZ.length-answered}</b> preguntas. Completa todo para cerrar.</span>`;
+          return;
+        }
+        st2.quiz.best = Math.max(st2.quiz.best||0, score);
+        st2.lastSaved = nowISO();
+        save(st2);
+        const msg = pct>=80
+          ? `<span class="ok"><b>✅ Excelente:</b> ${score}/${QUIZ.length} (${pct}%). Listo para aplicar en turno.</span>`
+          : `<span class="warn"><b>⚠️ A reforzar:</b> ${score}/${QUIZ.length} (${pct}%). Repite el juego y escenarios.</span>`;
+        document.getElementById("q_explain").innerHTML = msg + `<div class="divider"></div><span class="hint">Recomendación: vuelve a “Top 3” y escribe controles verificables.</span>`;
+        render();
+        toast("Quiz finalizado");
+      };
+      document.getElementById("q_reset").onclick = ()=>{
+        const st2 = load();
+        st2.quiz = {idx:0, answers:Array(QUIZ.length).fill(null), score:0, best: st2.quiz?.best ?? null};
+        st2.lastSaved = nowISO();
+        save(st2);
+        render();
+        renderProgress();
+        toast("Quiz reiniciado ↺");
+      };
+
+      render();
+    }
+
+    // ---------- Reflection ----------
+    function initReflection(){
+      const st = load();
+      if(st.reflection) document.getElementById("reflection").value = st.reflection;
+      document.getElementById("ref_state").textContent = st.reflection ? "Guardado ✅" : "Sin guardar";
+
+      document.getElementById("saveReflection").onclick = ()=>{
+        const st2 = load();
+        st2.reflection = document.getElementById("reflection").value;
+        st2.lastSaved = nowISO();
+        save(st2);
+        document.getElementById("ref_state").textContent = "Guardado ✅";
+        renderProgress();
+        toast("Reflexión guardada");
+      };
+      document.getElementById("copyReflection").onclick = async ()=>{
+        await navigator.clipboard.writeText(document.getElementById("reflection").value || "");
+        toast("Copiado al portapapeles");
+      };
+    }
+
+    // ---------- Quick tools ----------
+    const CHECKLIST = `CHECKLIST · Control del Riesgo en Equipo (Módulo 8)
+1) Meta del turno (1 frase) definida y compartida.
+2) Top 3 riesgos del turno definidos con:
+   - Control (barrera concreta)
+   - Verificación (evidencia)
+   - Acción si falla (escalamiento / STOP WORK)
+3) Barreras críticas verificadas en terreno (no asumidas).
+4) Reglas de STOP WORK claras (quién detiene, cómo se comunica).
+5) Coordinación con Control/Mantención/SSO para ventanas críticas.
+6) Cierre: lección aprendida + pendiente crítico + traspaso formal.`;
+
+    const SBAR = `FORMATO SBAR (mensaje operativo por radio)
+S (Situación): ¿Qué pasa ahora?
+B (Background): Contexto mínimo (dónde/desde cuándo).
+A (Acción): Qué harás o ya hiciste (control instalado).
+R (Requerimiento): Qué necesitas del otro (Control/SSO/Mantención).
+
+Ejemplo:
+“Control, situación: cruce norte sin señalero y liviano ingresó.
+Contexto: visibilidad baja por polvo.
+Acción: restrinjo cruce y desvío ruta.
+Requiero: apoyo de señalero y registrar restricción.”`;
+
+    document.getElementById("copyChecklist").onclick = async ()=>{
+      await navigator.clipboard.writeText(CHECKLIST);
+      toast("Checklist copiado 📋");
+    };
+    document.getElementById("copySBAR").onclick = async ()=>{
+      await navigator.clipboard.writeText(SBAR);
+      toast("SBAR copiado 📻");
+    };
+
+    document.getElementById("resetAll").onclick = ()=>{
+      if(!confirm("Esto borrará TODO el progreso guardado de este módulo en este dispositivo. ¿Continuar?")) return;
+      localStorage.removeItem(KEY);
+      location.reload();
+    };
+
+    // ---------- Utilities ----------
+    function escapeHtml(s){
+      return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+    }
+
+    // ---------- Boot ----------
+    function boot(){
+      // Ensure structure exists
+      const st = load();
+      st.completed = st.completed || [];
+      save(st);
+
+      initTop3();
+      initDragDrop();
+      initScenario();
+      initActivities();
+      initQuiz();
+      initReflection();
+      renderProgress();
+    }
+    window.addEventListener("DOMContentLoaded", boot);
+  </script>
+</body>
+</html>
