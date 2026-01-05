@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turnos · Enero 2026 · Avícola San Antonio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#D21F26;
+  --amarillo:#FFD100;
+  --bg:#fffaf0;
+  --texto:#161616;
+  --muted:#6b7280;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--texto);
+  font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif;
+}
+.topbar{
+  width:100%;
+  background:var(--rojo);
+  padding:10px 14px;
+  position:relative;
+  z-index:5;
+}
+.topbar .inner{
+  max-width:980px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.topbar img.logo{
+  height:54px;
+  width:auto;
+  display:block;
+  object-fit:contain;
+}
+.container{
+  max-width:860px;
+  margin:0 auto;
+  padding:18px;
+}
+.card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px 18px 16px 18px;
+  box-shadow:0 18px 45px rgba(15,23,42,.18);
+  margin-bottom:18px;
+}
+.label{
+  font-size:.9rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:600;
+}
+h1{
+  margin:0 0 4px 0;
+  font-size:1.5rem;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:.9rem;
+  margin-bottom:12px;
+}
+.input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  font-size:1.1rem;
+  font-weight:600;
+  letter-spacing:.3em;
+  text-align:center;
+}
+button{
+  margin-top:10px;
+  width:100%;
+  border:none;
+  border-radius:999px;
+  padding:10px 14px;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--rojo),#ff6b35);
+  color:#ffffff;
+  box-shadow:0 10px 25px rgba(220,38,38,.45);
+  transition:transform .08s ease,box-shadow .08s ease,opacity .2s;
+}
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 40px rgba(220,38,38,.5);
+}
+button:active{
+  transform:translateY(1px);
+  box-shadow:0 6px 18px rgba(220,38,38,.35);
+}
+.footer{
+  margin-top:10px;
+  font-size:.8rem;
+  color:var(--muted);
+  text-align:center;
+}
+.table-wrap{
+  overflow-x:auto;
+  margin-top:10px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.85rem;
+}
+thead{
+  background:#f9fafb;
+}
+th,td{
+  padding:6px 8px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
+}
+th{
+  font-size:.75rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:#6b7280;
+}
+tbody tr:nth-child(even){
+  background:#f9fafb;
+}
+.row{
+  transition:background .15s ease;
+}
+.row:hover{
+  background:#eef2ff;
+}
+.row td:first-child{
+  border-top-left-radius:12px;
+  border-bottom-left-radius:12px;
+}
+.row td:last-child{
+  border-top-right-radius:12px;
+  border-bottom-right-radius:12px;
+}
+.day{
+  color:var(--muted);
+}
+.chip{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:.85rem;
+  font-weight:800;
+}
+.chip-t{
+  background:#d1fae5;
+  color:#065f46;
+}
+.chip-l{
+  background:#ede9fe;
+  color:#7c3aed;
+}
+.legend{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:.9rem;
+}
+.legend .chip{
+  margin-left:6px;
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border-radius:999px;
+  padding:4px 10px;
+  background:#f3f4ff;
+  font-size:.75rem;
+  font-weight:600;
+  color:#4b5563;
+}
+.badge-dot{
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:#4b5563;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+.actions button{
+  flex:1 1 220px;
+}
+@media print{
+  .topbar,
+  .actions,
+  .input,
+  .legend{
+    display:none !important;
+  }
+  .card{
+    border:none;
+    box-shadow:none;
+  }
+  body{
+    background:#ffffff;
+  }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="inner">
+    <img class="logo" src="logo.webp" alt="Avícola San Antonio">
+  </div>
+</div>
+
+<main class="container">
+  <section class="card">
+    <div class="label">Ingresa tu código</div>
+    <input id="code" class="input" type="tel" inputmode="numeric"
+           pattern="[0-9]{4}" maxlength="4" placeholder="0000"/>
+    <button id="buscar">Ver mi turno</button>
+    <div id="msg" class="footer" style="margin:8px 0 0 0;"></div>
+  </section>
+
+  <section id="result"></section>
+
+  <div class="footer">© Avícola San Antonio · Enero 2026.</div>
+</main>
+
+<script>
+const APP = {
+  month: 1,
+  year: 2026,
+  codes: {
+    "8220": "Patricia Quiñones",
+    "2914": "Maria Moy",
+    "1122": "Juli Quiñones",
+    "2486": "Ana Roman",
+    "1573": "Kevin Rodriguez",
+    "2377": "Erik Montaño",
+    "2616": "Wendy G Molina",
+    "6816": "Abigail Rodriguez",
+    "4885": "A.Wisleidy Moreno",
+    "1286": "Virginia Gragena",
+    "1506": "Jorge Rodriguez",
+    "1260": "Luis Arias",
+    "6680": "Walter Vargas",
+    "8946": "Marco Agurto",
+    "8607": "Beymar Choque",
+    "3442": "Felizciano Jaimes",
+    "2502": "Andrés Villalobos",
+    "4010": "Maickol Ruiz",
+    "1240": "Jose Manuel Casupa",
+    "9262": "José Agurto",
+    "8994": "Grober Flores",
+    "5108": "Fausto Rios",
+    "2063": "Yolfran Vargas",
+    "9889": "Nander Salvatierra",
+    "8654": "Andreina Gutierrez",
+    "2130": "Maria Quiñones",
+    "2466": "Edgar Cortez",
+    "2040": "Gerardo Gomez",
+    "5976": "Jorge Dias",
+    "8909": "Ana Pereira",
+    "4602": "Jose Wilder Paredes"
+  },
+  // Turnos reales sacados de la hoja "Ene.2026" del Excel.
+  turnos: {
+    "Patricia Quiñones": "LTTTTTLTTTLTTTTTLTTTTTTLLTTTTTL",
+    "Maria Moy": "TLTTLTTTTTLTTTTLTTLTTTTTLTTTTLT",
+    "Juli Quiñones": "TTLTTLTTTTLTTTLTTTTLTTTTLTTTLTT",
+    "Ana Roman": "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
+    "Kevin Rodriguez": "TTTLTTTTLTTTTLTTTLTTTTLTTTTLTTT",
+    "Erik Montaño": "LTTLTTTTTLTTTTLTTLTTTTTLTTTTLTT",
+    "Wendy G Molina": "TLTTTLTTTTLTTTLTTTTLTTTTLTTTLTT",
+    "Abigail Rodriguez": "TTTLTTTTTLTTTTTLTLTTTTTLTTTTTLT",
+    "A.Wisleidy Moreno": "TTTLTTTTLTTTTLTTTLTTTTLTTTTLTTT",
+    "Virginia Gragena": "LTTLTTTTLTTTTLTTTLTTTTLTTTTLTTT",
+    "Jorge Rodriguez": "TLTTTTTLTTLTTTTTLTTTTLTTLTTTTTL",
+    "Luis Arias": "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
+    "Walter Vargas": "TTLTTTTLTTLTTTTLTTTTTLTTLTTTTLT",
+    "Marco Agurto": "LTTTTTLTTTLTTLTTTTTTLTTTLTTLTTT",
+    "Beymar Choque": "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
+    "Felizciano Jaimes": "TTTLTTTTTLTTTTLTTLTTTLTTTTTTLTT",
+    "Andrés Villalobos": "TTTLTTTTLTTLTTTTTLTTTTLTTLTTTTT",
+    "Maickol Ruiz": "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLL",
+    "Jose Manuel Casupa": "TTTLTTTLTTTLTTTTTLTTTLTTTLTTTTT",
+    "José Agurto": "TTLLTTLTTTTLTTTTTLTTLTTTTLTTTTT",
+    "Grober Flores": "LTTTTLLLLLLLLLLLLLLLLLLLLLLTTLT",
+    "Fausto Rios": "TTTLTTTTTTLTTTTTTLTTTTTTLTTTTTT",
+    "Yolfran Vargas": "TTTLTTTTTTLTTTTTTLTTTTTTLTTTTTT",
+    "Nander Salvatierra": "TTTLTTTTTTLTTTTTTLTTTTTTLTTTTTT",
+    "Andreina Gutierrez": "TTTTLTTTTTLTTTTLTTLTTTTTLTTTTLT",
+    "Maria Quiñones": "TTTTLTTTTTLTTTTTLTLTTTTTLTTTTTL",
+    "Edgar Cortez": "TTTTLTTTTTLTTTTTLTLTTTTTLTTTTTL",
+    "Gerardo Gomez": "TTLTTLTTTTLTTLTTTTTLTTTTLTTTTLT",
+    "Jorge Dias": "TTTLTTLTTTTTLTTTTLTTTTLTTLTTTTT",
+    "Ana Pereira": "TTTLTTTTTTLTTTTTTLTTTTTTLTTTTTT",
+    "Jose Wilder Paredes": "TTLLTTTTTLTLTTTTTLTTTTTLTLTTTTT"
+  }
+};
+
+const WEEKDAYS = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+
+function formatDate(d){
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  return `${dd}/${mm}`;
+}
+
+function buildTable(name){
+  const pattern = APP.turnos[name] || "";
+  const arr = (typeof pattern === "string") ? pattern.split("") : pattern;
+
+  let html = `
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;">
+      <div>
+        <h1>Turno de ${name}</h1>
+        <div class="subtitle">Mes: Enero ${APP.year}</div>
+      </div>
+      <div class="badge"><span class="badge-dot"></span> Código personal</div>
+    </div>
+    <div class="legend">
+      Leyenda:
+      <span class="chip chip-t">T = TRABAJA</span>
+      <span class="chip chip-l">L = LIBRE</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Día</th><th>Fecha</th><th>Día</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+  `;
+
+  for(let i=0;i<31;i++){
+    const day = new Date(APP.year, APP.month-1, i+1);
+    const estado = arr[i] || "L";
+    const chip = (estado === "T")
+      ? '<span class="chip chip-t">TRABAJA</span>'
+      : '<span class="chip chip-l">LIBRE</span>';
+    html += `
+      <tr class="row">
+        <td>${i+1}</td>
+        <td>${formatDate(day)}</td>
+        <td class="day">${WEEKDAYS[day.getDay()]}</td>
+        <td>${chip}</td>
+      </tr>`;
+  }
+
+  html += `
+        </tbody>
+      </table>
+    </div>
+    <div class="actions">
+      <button onclick="window.print()">Imprimir / Guardar como PDF</button>
+    </div>
+  </section>`;
+
+  return html;
+}
+
+function findNameByCode(code){
+  return APP.codes[code] || null;
+}
+
+document.getElementById("buscar").addEventListener("click", () => {
+  const input = document.getElementById("code");
+  const code = input.value.trim();
+  const msg = document.getElementById("msg");
+  const result = document.getElementById("result");
+
+  msg.textContent = "";
+  result.innerHTML = "";
+
+  if (code.length !== 4){
+    msg.textContent = "Ingresa un código de 4 dígitos.";
+    return;
+  }
+
+  const name = findNameByCode(code);
+  if (!name){
+    msg.textContent = "Código no encontrado. Revisa el número entregado por la empresa.";
+    return;
+  }
+
+  result.innerHTML = buildTable(name);
+});
+</script>
+</body>
+</html>
