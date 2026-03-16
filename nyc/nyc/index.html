@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NYC Street English Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff4500">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197484.png">
+    <style>
+        :root { 
+            --ny-orange: #ff4500; 
+            --ny-blue: #00d4ff; 
+            --dark-bg: #0f0f0f; 
+            --card-bg: #1e1e1e; 
+            --text-main: #ffffff; 
+            --text-sub: #b1b1b1; 
+        }
+
+        body { 
+            background-color: var(--dark-bg); 
+            color: var(--text-main); 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            touch-action: manipulation; 
+        }
+
+        #main-app { width: 100%; max-width: 500px; }
+
+        h1 { 
+            color: var(--ny-blue); 
+            text-align: center; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 0; 
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        h1:active { transform: scale(0.95); }
+
+        .subtitle { 
+            color: var(--ny-orange); 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 0.8rem; 
+            margin-bottom: 30px; 
+            letter-spacing: 1px;
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            width: 100%;
+        }
+
+        .item { 
+            background: var(--card-bg); 
+            border: 1px solid #333; 
+            border-radius: 15px; 
+            padding: 25px 10px; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+        }
+
+        .item:hover { border-color: var(--ny-blue); background: #252525; transform: translateY(-3px); }
+        .item .icon { font-size: 2.2rem; margin-bottom: 10px; }
+        .item .name { font-weight: bold; font-size: 0.75rem; color: var(--text-main); text-transform: uppercase; }
+        
+        .full { grid-column: span 2; border: 1px solid var(--ny-orange); }
+
+        .back-area { 
+            width: 100%; 
+            margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            animation: fadeIn 0.3s;
+        }
+
+        .back-btn { 
+            background: none; 
+            border: 1px solid var(--ny-blue); 
+            color: var(--ny-blue); 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .cred-badge { 
+            color: var(--ny-orange); 
+            font-size: 0.9rem; 
+            font-weight: 800; 
+            background: rgba(255, 69, 0, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        /* DISEÑO DE PESTAÑA CORPORATIVA PREMIUM */
+        #install-banner { 
+            display: none; 
+            position: fixed; 
+            bottom: 30px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: rgba(30, 30, 30, 0.98); 
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--ny-orange); 
+            padding: 20px; 
+            border-radius: 25px; 
+            z-index: 10000; 
+            width: 85%; 
+            max-width: 400px; 
+            flex-direction: column; 
+            box-shadow: 0 20px 50px rgba(0,0,0,1);
+            animation: popUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popUp { from { bottom: -150px; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+
+        .verse-card { 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            padding: 18px; 
+            margin-bottom: 15px; 
+            border-left: 5px solid var(--ny-orange); 
+            cursor: pointer; 
+            position: relative;
+            transition: 0.2s;
+        }
+        
+        .verse-card:active { transform: scale(0.98); background: #252525; }
+
+        .eng { font-size: 1.15rem; font-weight: 800; color: var(--ny-blue); margin-bottom: 6px; padding-right: 25px; }
+        .pro { font-size: 0.95rem; color: var(--ny-orange); margin-bottom: 6px; font-weight: 600; font-style: italic; }
+        .esp { font-size: 1rem; color: var(--text-sub); line-height: 1.4; }
+        .audio-hint { font-size: 0.6rem; color: #555; text-align: right; margin-top: 8px; font-weight: bold; text-transform: uppercase; }
+
+        /* Estilos Juego */
+        #game-container { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            padding: 25px; 
+            text-align: center; 
+            min-height: 350px; 
+            border: 2px solid #333; 
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .tf-btn { width: 100%; padding: 18px; margin: 10px 0; border-radius: 12px; border: none; font-weight: bold; font-size: 1.1rem; cursor: pointer; text-transform: uppercase; transition: 0.2s; }
+        .v-btn { background: #00c853; color: white; }
+        .f-btn { background: #d50000; color: white; }
+        .v-btn:active, .f-btn:active { opacity: 0.7; transform: scale(0.95); }
+
+        .hidden { display: none !important; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div id="main-app">
+        <div id="header">
+            <h1 onclick="location.reload()">Street English</h1>
+            <div class="subtitle">NYC MASTER CHALLENGE</div>
+        </div>
+
+        <div id="nav-bar" class="back-area hidden">
+            <button class="back-btn" onclick="handleBack()">← VOLVER</button>
+            <div class="cred-badge">STREET CRED: <span id="cred-score">0</span></div>
+        </div>
+
+        <div id="view-categories" class="grid">
+            <div class="item full" style="background: linear-gradient(45deg, #ff4500, #ff8c00); border:none;" onclick="startChallenge()">
+                <span class="icon">🎮</span>
+                <span class="name" style="color:black; font-size:1.1rem;">STREET CHALLENGE</span>
+            </div>
+            <div class="item" onclick="showArtists()">
+                <span class="icon">🎙️</span><span class="name">THE PLAYLIST</span>
+            </div>
+            <div class="item" onclick="showCategory('reactions')">
+                <span class="icon">🔥</span><span class="name">REACTIONS</span>
+            </div>
+            <div class="item" onclick="showCategory('danger')">
+                <span class="icon">⚠️</span><span class="name">DANGER</span>
+            </div>
+            <div class="item" onclick="showCategory('money')">
+                <span class="icon">💰</span><span class="name">MONEY</span>
+            </div>
+            <div class="item" onclick="showCategory('bodega')">
+                <span class="icon">🥪</span><span class="name">BODEGA</span>
+            </div>
+            <div class="item" onclick="showCategory('subway')">
+                <span class="icon">🚇</span><span class="name">SUBWAY</span>
+            </div>
+            <div class="item full" onclick="showCategory('slang')">
+                <span class="icon">🗽</span><span class="name">STREET DICTIONARY A-Z</span>
+            </div>
+        </div>
+
+        <div id="view-content" class="hidden"></div>
+        <div id="view-game" class="hidden">
+            <div id="game-container"></div>
+        </div>
+    </div>
+
+    <div id="install-banner">
+        <button onclick="this.parentElement.style.display='none'" style="position:absolute; top: 10px; right:15px; color:var(--text-sub); background:none; border:none; font-size:1.5rem; cursor:pointer;">✕</button>
+        <div style="text-align:center;">
+            <div style="font-size: 3.5rem; margin-bottom: 10px;">🗽</div>
+            <h3 style="margin: 0 0 10px 0; color:var(--ny-blue); font-size: 1.4rem;">NYC Street English</h3>
+            <p style="color:var(--text-sub); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5;">Instala la App para estudiar sin conexión y llevar el estilo de New York siempre contigo.</p>
+            <button id="btn-install-now" style="background:var(--ny-orange); color:white; padding:16px; border-radius:15px; border:none; font-weight:bold; width:100%; cursor:pointer; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(255,69,0,0.3);">INSTALAR AHORA</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(reg => {
+                    console.log('PWA: Service Worker Activo');
+                }).catch(err => {
+                    console.log('PWA: Error', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
