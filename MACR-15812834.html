@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validación de Certificado - MACR-15812834</title>
+<style>
+    :root {
+        --anupro-blue: #002D62; 
+        --text-color: #333333;
+        --bg-color: #f4f7f6;
+        --card-bg: #ffffff;
+        --border-radius: 12px;
+        --shadow: 0 10px 25px rgba(0,0,0,0.05);
+        --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+        font-family: var(--font-main);
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    header {
+        background-color: #ffffff;
+        padding: 30px 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+
+    .main-container {
+        flex: 1;
+        max-width: 900px;
+        width: 100%;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .certificate-card {
+        background-color: var(--card-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        border-top: 6px solid var(--anupro-blue);
+    }
+
+    .card-header {
+        background-color: #fafbfc;
+        padding: 25px 35px;
+        border-bottom: 1px solid #eaecef;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        color: var(--anupro-blue);
+        font-size: 22px;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-row {
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+    .field-label {
+        color: #7f8c8d;
+        padding: 20px 35px;
+        font-weight: 600;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        width: 30%;
+        vertical-align: top;
+    }
+
+    .field-value {
+        padding: 20px 35px;
+        font-size: 16px;
+        vertical-align: top;
+    }
+
+    .highlight-blue {
+        color: var(--anupro-blue);
+        font-weight: 700;
+    }
+
+    .course-level {
+        background-color: #e6f7ff;
+        color: var(--anupro-blue);
+        padding: 3px 12px;
+        border-radius: 4px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        margin-left: 5px;
+    }
+
+    .content-item {
+        margin-bottom: 18px;
+    }
+
+    .unit-title {
+        font-weight: 700;
+        color: #444;
+        margin-bottom: 6px;
+        font-size: 15px;
+        text-decoration: underline;
+    }
+
+    .content-list {
+        margin: 0;
+        padding-left: 18px;
+        list-style-type: none;
+    }
+
+    .content-list li {
+        position: relative;
+        padding-bottom: 6px;
+        line-height: 1.4;
+        font-size: 14.5px;
+    }
+
+    .content-list li::before {
+        content: "■";
+        color: var(--anupro-blue);
+        position: absolute;
+        left: -18px;
+        font-size: 10px;
+        top: 2px;
+    }
+
+    .hash-value {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 13px;
+        word-break: break-all;
+        color: #6c757d;
+        background-color: #f8f9fa;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid #e2e6ea;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .status-badge {
+        display: inline-block;
+        background-color: #27ae60;
+        color: white;
+        padding: 10px 22px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(39, 174, 96, 0.15);
+    }
+
+    footer {
+        background-color: var(--anupro-blue);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 13px;
+        margin-top: auto;
+    }
+
+    @media (max-width: 650px) {
+        .field-label, .field-value {
+            display: block;
+            width: auto;
+            padding: 15px 25px;
+        }
+        .field-label {
+            padding-bottom: 0;
+            background-color: #fcfcfc;
+        }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <img src="Isologo_horizontal.png" alt="Anupro360 Logo" width="280">
+</header>
+
+<main class="main-container">
+    <div class="certificate-card">
+        <div class="card-header">
+            <h2>VALIDACIÓN DE CERTIFICACIÓN PROFESIONAL</h2>
+        </div>
+        
+        <table class="data-table">
+            <tr class="data-row">
+                <td class="field-label">Nombre del Alumno</td>
+                <td class="field-value highlight-blue">Marcelo Andres Ciudad Rojas</td>
+            </tr>
+            <tr class="data-row">
+                <td class="field-label">RUN / ID</td>
+                <td class="field-value">15.812.834-9</td>
+            </tr>
+            <tr class="data-row">
+                <td class="field-label">Código de Registro</td>
+                <td class="field-value highlight-blue">MACR-15812834</td>
+            </tr>
+            <tr class="data-row">
+                <td class="field-label">Curso Realizado</td>
+                <td class="field-value">TRAIN THE TRAINERS <span class="course-level">Nivel V</span></td>
+            </tr>
+            <tr class="data-row">
+                <td class="field-label">Contenidos del Programa</td>
+                <td class="field-value">
+                    <div class="content-item">
+                        <div class="unit-title">Unidad 1</div>
+                        <ul class="content-list">
+                            <li>Diferencias entre formación e información.</li>
+                            <li>Habilidades comunicacionales esenciales en formación.</li>
+                            <li>Diferencias formativas: Pedagogía y Andragogía.</li>
+                            <li>Técnicas de interés y atención de alumnos.</li>
+                        </ul>
+                    </div>
+                    <div class="content-item">
+                        <div class="unit-title">Unidad 2</div>
+                        <ul class="content-list">
+                            <li>La voz como herramienta fundamental (Matices, tonos, volumen, ritmo).</li>
+                            <li>Lenguaje verbal y no verbal. Desafíos en entornos digitales.</li>
+                        </ul>
+                    </div>
+                    <div class="content-item">
+                        <div class="unit-title">Unidad 3</div>
+                        <ul class="content-list">
+                            <li>Dinámicas lúdicas, gamificación y metodologías aplicadas.</li>
+                            <li>Herramientas de Feedback y Feedforward.</li>
+                            <li>Las preguntas como herramienta fundamental.</li>
+                        </ul>
+                    </div>
+                    <div class="content-item">
+                        <div class="unit-title">Unidad 4</div>
+                        <ul class="content-list">
+                            <li>Inteligencia emocional y gestión de emociones en el aprendizaje.</li>
+                            <li>Manejo de dinámicas grupales para la formación.</li>
+                            <li>Creación de planes de formación y herramientas de evaluación.</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr class="data-row">
+                <td class="field-label">Hash de Seguridad</td>
+                <td class="field-value">
+                    <span class="hash-value">e2ef5718b41a7bb7171e8ee2ab6f948fc92391f3b82a7dc909602468fd3ee1a7</span>
+                </td>
+            </tr>
+            <tr class="data-row">
+                <td class="field-label">Estado de Validación</td>
+                <td class="field-value">
+                    <span class="status-badge">Aprobado y Titulado</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 Anupro360 Servicios de Consultoría y Capacitación. Certificación verificada.</p>
+</footer>
+
+</body>
+</html>
