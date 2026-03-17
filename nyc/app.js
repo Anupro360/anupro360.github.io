@@ -1,184 +1,170 @@
+/**
+ * NYC STREET ENGLISH PRO - APP.JS
+ * VERSIÓN MAESTRA FINAL AUDITADA
+ */
+
+let score = parseInt(localStorage.getItem('streetCred')) || 0;
 let currentView = 'categories';
-let selectedArtist = null;
-let score = 0;
 let usedQuestions = [];
+let deferredPrompt;
+
+const scoreDisplay = document.getElementById('cred-score');
+if (scoreDisplay) {
+    scoreDisplay.innerText = score;
+}
 
 function speak(text) {
+    if (!text) return;
     window.speechSynthesis.cancel();
     const msg = new SpeechSynthesisUtterance(text);
-    msg.lang = 'en-US'; msg.rate = 0.8;
+    msg.lang = 'en-US';
+    msg.rate = 0.85;
     window.speechSynthesis.speak(msg);
 }
 
 function hideAll() {
-    ['view-categories', 'view-artists', 'view-songs', 'view-lyrics', 'view-game'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.classList.add('hidden');
+    ['view-categories', 'view-content', 'view-game'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.classList.add('hidden');
     });
-    document.getElementById('nav-bar').classList.remove('hidden');
+    const navBar = document.getElementById('nav-bar');
+    if (navBar) navBar.classList.remove('hidden');
 }
 
 function handleBack() {
-    if (currentView === 'lyrics') {
-        if (selectedArtist) showSongs(selectedArtist);
-        else showMain();
-    } else if (currentView === 'songs') {
-        showArtists();
-    } else {
-        showMain();
-    }
+    window.location.reload();
 }
 
-function showMain() {
+function showCategory(cat) {
     hideAll();
-    document.getElementById('view-categories').classList.remove('hidden');
-    document.getElementById('nav-bar').classList.add('hidden');
-    currentView = 'categories';
+    const container = document.getElementById('view-content');
+    container.classList.remove('hidden');
+    
+    const items = nycData.categories[cat];
+    if (!items) return;
+
+    const titles = { 
+        reactions: '🔥 REACTIONS', 
+        danger: '⚠️ DANGER', 
+        money: '💰 MONEY', 
+        bodega: '🥪 BODEGA', 
+        subway: '🚇 SUBWAY', 
+        slang: '🗽 DICTIONARY A-Z' 
+    };
+
+    let headerHtml = `<h2 style="text-align:center; color:var(--ny-orange); margin-bottom:25px;">${titles[cat] || cat.toUpperCase()}</h2>`;
+    let listHtml = '';
+
+    items.forEach(item => {
+        listHtml += `
+            <div class="verse-card" onclick="speak('${item.eng.replace(/'/g, "\\'")}')">
+                <div class="eng">${item.eng} <span style="font-size:0.9rem">🔊</span></div>
+                <div class="pro">${item.pro}</div>
+                <div class="esp">${item.esp}</div>
+            </div>`;
+    });
+
+    container.innerHTML = headerHtml + listHtml;
+    window.scrollTo(0, 0);
 }
 
 function showArtists() {
-    currentView = 'artists'; hideAll();
-    const container = document.getElementById('view-artists');
-    container.classList.remove('hidden'); container.innerHTML = '';
-    data.artists.forEach(art => {
-        const div = document.createElement('div');
-        div.className = 'item'; div.onclick = () => showSongs(art);
-        div.innerHTML = `<span class="icon">${art.icon}</span><span class="name">${art.name}</span>`;
-        container.appendChild(div);
+    hideAll();
+    const container = document.getElementById('view-content');
+    container.classList.remove('hidden');
+    let html = `<h2 style="text-align:center; color:var(--ny-orange); margin-bottom:25px;">THE PLAYLIST</h2><div class="grid">`;
+    nycData.artists.forEach(art => {
+        html += `<div class="item" onclick="showSongs('${art.id}')">
+                    <span class="icon">${art.icon}</span>
+                    <span class="name">${art.name}</span>
+                </div>`;
     });
+    container.innerHTML = html + `</div>`;
 }
 
-function showSongs(artist) {
-    currentView = 'songs'; selectedArtist = artist; hideAll();
-    const container = document.getElementById('view-songs');
-    container.classList.remove('hidden');
-    container.innerHTML = `<h2 style="text-align:center; width:100%; color:var(--ny-orange)">${artist.name}</h2>`;
-    artist.songs.forEach(song => {
-        const div = document.createElement('div');
-        div.className = 'item'; div.onclick = () => showLyrics(song);
-        div.innerHTML = `<span class="icon">🎵</span><span class="name">${song.title}</span>`;
-        container.appendChild(div);
+function showSongs(artId) {
+    const art = nycData.artists.find(a => a.id === artId);
+    const container = document.getElementById('view-content');
+    let html = `<h2 style="text-align:center; margin-bottom:20px;">${art.name}</h2>`;
+    art.songs.forEach(song => {
+        html += `<div class="item full" style="margin-bottom:12px; padding:20px;" onclick="showLyrics('${artId}', '${song.id}')">
+                    <span class="name" style="font-size:1rem;">🎵 ${song.title}</span>
+                </div>`;
     });
+    container.innerHTML = html;
 }
 
-function showLyrics(song) {
-    currentView = 'lyrics'; hideAll();
-    const container = document.getElementById('view-lyrics');
-    container.classList.remove('hidden');
-    container.innerHTML = `<h2 style="text-align:center; color:var(--ny-blue)">${song.title}</h2>`;
+function showLyrics(artId, songId) {
+    const art = nycData.artists.find(a => a.id === artId);
+    const song = art.songs.find(s => s.id === songId);
+    const container = document.getElementById('view-content');
+    let html = `<h2 style="text-align:center; color:var(--ny-blue); margin-bottom:20px;">${song.title}</h2>`;
     song.lyrics.forEach(line => {
-        const div = document.createElement('div');
-        div.className = 'verse-card'; div.onclick = () => speak(line.e);
-        div.innerHTML = `<div class="eng">${line.e}</div><div class="pro">${line.p}</div><div class="esp">${line.s}</div><div class="audio-hint">🔊 TOCAR</div>`;
-        container.appendChild(div);
+        html += `<div class="verse-card" onclick="speak('${line.eng.replace(/'/g, "\\'")}')">
+                    <div class="eng">${line.eng} 🔊</div>
+                    <div class="pro">${line.pro}</div>
+                    <div class="esp">${line.esp}</div>
+                </div>`;
     });
+    container.innerHTML = html;
+    window.scrollTo(0, 0);
 }
 
-function showCategory(catId) {
-    currentView = 'category_simple'; selectedArtist = null; hideAll();
-    const container = document.getElementById('view-lyrics');
-    container.classList.remove('hidden');
-    const titles = { reactions: 'REACTIONS 🔥', danger: 'DANGER ⚠️', money: 'MONEY 💰', bodega: 'BODEGA 🥪', subway: 'SUBWAY 🚇', slang: 'DICTIONARY' };
-    container.innerHTML = `<h2 style="text-align:center; text-transform:uppercase; color:var(--ny-orange)">${titles[catId] || catId}</h2>`;
-    data[catId].forEach(line => {
-        const div = document.createElement('div');
-        div.className = 'verse-card'; div.onclick = () => speak(line.e);
-        div.innerHTML = `<div class="eng">${line.e}</div><div class="pro">${line.p}</div><div class="esp">${line.s}</div>`;
-        container.appendChild(div);
-    });
-}
-
-// --- JUEGOS ---
-
+// --- STREET CHALLENGE (Juego) ---
 function startChallenge() {
     hideAll();
     document.getElementById('view-game').classList.remove('hidden');
-    currentView = 'game';
-    score = 0; usedQuestions = [];
-    document.getElementById('cred-score').innerText = score;
     nextGame();
-}
-
-function updateScore(points) {
-    score += points; if (score < 0) score = 0;
-    document.getElementById('cred-score').innerText = score;
 }
 
 function nextGame() {
     const container = document.getElementById('game-container');
     container.innerHTML = '';
-    Math.random() > 0.5 ? renderTFQuiz() : renderDragQuiz();
-}
-
-function renderTFQuiz() {
-    const container = document.getElementById('game-container');
-    const all = [...data.slang, ...data.reactions, ...data.money];
-    let item = all[Math.floor(Math.random() * all.length)];
     
-    // Evitar repetición inmediata
-    if(usedQuestions.includes(item.e)) item = all[Math.floor(Math.random() * all.length)];
-    usedQuestions.push(item.e);
-    if(usedQuestions.length > 20) usedQuestions.shift();
-
+    const allItems = [...nycData.categories.slang, ...nycData.categories.reactions];
+    const item = allItems[Math.floor(Math.random() * allItems.length)];
     const isCorrect = Math.random() > 0.5;
-    let displaySpanish = isCorrect ? item.s : all[Math.floor(Math.random() * all.length)].s;
+    let displaySpanish = isCorrect ? item.esp : allItems[Math.floor(Math.random() * allItems.length)].esp;
 
     container.innerHTML = `
-        <div class="q-text">¿"${item.e}" significa "${displaySpanish}"?</div>
-        <button class="tf-btn v-btn" onclick="validateTF(${isCorrect}, true)">VERDADERO</button>
-        <button class="tf-btn f-btn" onclick="validateTF(${isCorrect}, false)">FALSO</button>
-    `;
+        <div style="margin-top:40px; color:white; font-size:1.2rem;">
+            ¿"${item.eng}" significa <br>
+            <span style="color:var(--ny-blue); font-weight:bold;">"${displaySpanish}"</span>?
+        </div>
+        <div style="margin-top:50px;">
+            <button class="tf-btn v-btn" onclick="checkTF(${isCorrect}, true)">VERDADERO</button>
+            <button class="tf-btn f-btn" onclick="checkTF(${isCorrect}, false)">FALSO</button>
+        </div>`;
 }
 
-function validateTF(correct, user) {
-    if(correct === user) { alert("FACTS! ✅ +10"); updateScore(10); }
-    else { alert("YOU BUGGIN' ❌ -5"); updateScore(-5); }
-    nextGame();
-}
-
-function renderDragQuiz() {
-    const container = document.getElementById('game-container');
-    const art = data.artists[Math.floor(Math.random() * data.artists.length)];
-    const song = art.songs[Math.floor(Math.random() * art.songs.length)];
-    const line = song.lyrics[Math.floor(Math.random() * song.lyrics.length)];
-    
-    let words = line.e.split(' ');
-    if(words.length < 3) return renderTFQuiz();
-
-    const targetIndex = Math.floor(Math.random() * words.length);
-    const targetWord = words[targetIndex].replace(/[.,?]/g,"");
-    words[targetIndex] = "_______";
-    
-    container.innerHTML = `
-        <div class="q-text">Completa la letra de ${art.name}:</div>
-        <div style="font-style: italic; margin-bottom:20px; font-size:1.1rem;">"${words.join(' ')}"</div>
-        <div class="drop-zone" id="drop-box">Arrastra aquí o haz Clic</div>
-        <div class="options-flex" id="options"></div>
-    `;
-
-    let options = [targetWord];
-    while(options.length < 3) {
-        let rWord = data.slang[Math.floor(Math.random() * data.slang.length)].e;
-        if(!options.includes(rWord)) options.push(rWord);
+function checkTF(correct, user) {
+    if (correct === user) {
+        alert("FACTS! ✅ +10 Street Cred");
+        score += 10;
+    } else {
+        alert("YOU BUGGIN! ❌ -5 Street Cred");
+        score -= 5;
     }
-    options.sort(() => Math.random() - 0.5);
-
-    options.forEach(opt => {
-        const btn = document.createElement('div');
-        btn.className = 'drag-item'; btn.innerText = opt; btn.draggable = true;
-        btn.ondragstart = (e) => e.dataTransfer.setData("text", opt);
-        btn.onclick = () => validateResult(opt, targetWord);
-        document.getElementById('options').appendChild(btn);
-    });
-
-    const box = document.getElementById('drop-box');
-    box.ondragover = (e) => { e.preventDefault(); box.classList.add('over'); };
-    box.ondragleave = () => box.classList.remove('over');
-    box.ondrop = (e) => { e.preventDefault(); validateResult(e.dataTransfer.getData("text"), targetWord); };
+    if (score < 0) score = 0;
+    localStorage.setItem('streetCred', score);
+    if (scoreDisplay) scoreDisplay.innerText = score;
+    nextGame();
 }
 
-function validateResult(selected, correct) {
-    if(selected.toLowerCase() === correct.toLowerCase()) { alert("VALID! 🗽 +15"); updateScore(15); }
-    else { alert("YOU BUGGIN' ❌ Era: " + correct); updateScore(-5); }
-    nextGame();
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const banner = document.getElementById('install-banner');
+    if (banner) banner.style.display = 'flex';
+});
+
+const installBtn = document.getElementById('btn-install-now');
+if (installBtn) {
+    installBtn.onclick = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt = null;
+            document.getElementById('install-banner').style.display = 'none';
+        }
+    };
 }
