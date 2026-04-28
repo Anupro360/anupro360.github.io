@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turnos · Mayo 2026 · Avícola San Antonio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#D21F26;
+  --amarillo:#FFD100;
+  --bg:#fffaf0;
+  --texto:#161616;
+  --muted:#6b7280;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--texto);
+  font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif;
+}
+.topbar{
+  width:100%;
+  background:var(--rojo);
+  padding:10px 14px;
+  position:relative;
+  z-index:5;
+  height: 50px;
+}
+.container{
+  max-width:500px;
+  margin:20px auto;
+  padding:0 15px;
+}
+.card{
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 4px 6px -1px rgba(0,0,0,0.1);
+  border:1px solid #eee;
+}
+h1{margin:0;font-size:1.4rem;color:var(--rojo);font-weight:800}
+.subtitle{color:var(--muted);font-size:0.9rem;margin-bottom:15px;font-weight:400}
+.search-box{display:flex;gap:10px;margin-bottom:20px}
+input{
+  flex:1;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-family:inherit;
+  font-size:1rem;
+}
+button{
+  background:var(--rojo);
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+}
+.table-wrap{margin-top:10px;border-radius:8px;overflow:hidden;border:1px solid #f0f0f0}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;color:var(--muted);font-size:0.75rem;text-transform:uppercase;padding:12px 10px;background:#f9fafb}
+.row{border-top:1px solid #f0f0f0}
+td{padding:12px 10px;font-size:0.95rem}
+.day{font-weight:600;color:var(--muted);width:80px}
+.chip{
+  padding:4px 8px;
+  border-radius:4px;
+  font-size:0.75rem;
+  font-weight:800;
+}
+.chip-t{background:#e1f5fe;color:#0288d1}
+.chip-l{background:#f5f5f5;color:#9e9e9e}
+</style>
+</head>
+<body>
+
+<div class="topbar"></div>
+
+<div class="container">
+  <div class="card" style="margin-bottom:20px">
+    <h1 style="font-size:1.1rem">Consulta de Turnos</h1>
+    <div class="subtitle" style="margin-bottom:10px">Ingresa tu código de trabajador</div>
+    <div class="search-box">
+      <input type="text" id="code" placeholder="Ej: 7116">
+      <button id="buscar">BUSCAR</button>
+    </div>
+  </div>
+  <div id="resultado"></div>
+</div>
+
+<script>
+const WEEKDAYS = ["DOMINGO","LUNES","MARTES","MIÉRCOLES","JUEVES","VIERNES","SÁBADO"];
+const APP = { year: 2026, month: 5 };
+
+const DATA = {
+  "7101": { n: "Operador S1", t: ["T","L","T","T","T","T","T","T","L","L","T","T","T","T","T","L","T","T","T","T","T","T","L","L","T","T","T","T","T","L","T"] },
+  "7123": { n: "Luis Rosseau", t: ["T","T","T","T","T","T","L","T","T","L","T","T","T","L","T","T","T","T","T","T","L","T","T","L","T","T","T","L","T","T","T"] },
+  "7105": { n: "Luis Zeballoz", t: ["L","T","T","T","T","T","T","L","T","L","T","T","T","T","L","T","T","T","T","T","T","L","T","L","T","T","T","T","L","T","T"] },
+  "7106": { n: "Patrcia Justiniano", t: ["T","L","T","T","T","T","T","T","L","L","T","T","T","T","T","L","T","T","T","T","T","T","L","L","T","T","T","T","T","L","T"] },
+  "7108": { n: "Operador S8", t: ["T","T","T","T","L","T","T","T","T","L","T","L","T","T","T","T","T","T","L","T","T","T","T","L","T","L","T","T","T","T","T"] },
+  "7109": { n: "Javier Cepeda", t: ["T","T","T","T","T","L","T","T","T","L","T","T","L","T","T","T","T","T","T","L","T","T","T","L","T","T","L","T","T","T","T"] },
+  "7113": { n: "Carlos Aguilera", t: ["T","T","T","L","T","T","T","T","T","L","L","T","T","T","T","T","T","L","T","T","T","T","T","L","L","T","T","T","T","T","T"] },
+  "7114": { n: "Camila Gonzalez", t: ["T","T","T","T","L","T","T","T","T","L","T","L","T","T","T","T","T","T","L","T","T","T","T","L","T","L","T","T","T","T","T"] },
+  "7102": { n: "Alison Campos", t: ["T","T","L","T","L","T","T","T","T","T","T","L","T","T","T","T","L","T","L","T","T","T","T","T","T","L","T","T","T","T","L"] },
+  "7103": { n: "Julian Chavez", t: ["T","T","L","T","T","L","T","T","T","T","T","T","L","T","T","T","L","T","T","L","T","T","T","T","T","T","L","T","T","T","L"] },
+  "7107": { n: "Daniel Robledo", t: ["T","T","L","L","T","T","T","T","T","T","L","T","T","T","T","T","L","L","T","T","T","T","T","T","L","T","T","T","T","T","L"] },
+  "7110": { n: "Tamara Zabala", t: ["T","T","L","T","T","T","L","T","T","T","T","T","T","L","T","T","L","T","T","T","L","T","T","T","T","T","T","L","T","T","L"] },
+  "7111": { n: "Javier Abrego", t: ["L","T","L","T","T","T","T","L","T","T","T","T","T","T","L","T","L","T","T","T","T","L","T","T","T","T","T","T","L","T","L"] },
+  "7112": { n: "Operador S12", t: ["T","L","L","T","T","T","T","T","L","T","T","T","T","T","T","L","L","T","T","T","T","T","L","T","T","T","T","T","T","L","L"] },
+  "7115": { n: "Yeison Martinez", t: ["T","T","L","T","T","L","T","T","T","T","T","T","L","T","T","T","L","T","T","L","T","T","T","T","T","T","L","T","T","T","L"] },
+  "7122": { n: "Sebastian Olmos", t: ["T","T","L","T","T","T","L","T","T","T","T","T","T","L","T","T","L","T","T","T","L","T","T","T","T","T","T","L","T","T","L"] },
+  "7104": { n: "Operador S4", t: ["T","T","L","T","T","T","T","T","T","L","T","T","T","T","T","T","L","T","T","T","T","T","T","L","T","T","T","T","T","T","L"] },
+  "7116": { n: "Liliana Mogollon", t: ["L","L","T","T","T","T","T","T","L","L","T","T","T","T","T","T","L","T","T","T","T","L","T","T","T","T","T","T","L","T","L"] },
+  "7117": { n: "Neidy Gonzales", t: ["T","T","L","T","T","L","T","T","T","T","T","L","T","T","T","L","T","T","L","T","T","T","T","L","T","L","T","T","T","L","T"] },
+  "7118": { n: "Edilberth Mendoza", t: ["L","L","T","T","T","T","T","T","L","L","T","T","T","T","T","T","L","T","T","T","T","L","T","T","T","T","T","T","L","T","L"] },
+  "7121": { n: "Eduardo Torrez", t: ["L","T","T","T","L","T","T","T","T","L","T","T","T","T","L","T","T","T","T","T","L","T","T","L","L","T","T","T","L","T","T"] },
+  "7119": { n: "Nestor Almendras", t: ["T","T","L","T","T","L","T","T","T","T","T","L","T","T","T","L","T","T","L","T","T","T","T","L","T","L","T","T","T","L","T"] },
+  "7120": { n: "Raúl Jimenez", t: ["T","T","L","T","T","T","L","T","T","T","T","T","T","L","T","T","L","T","T","L","T","T","T","T","T","T","L","T","T","T","L"] }
+};
+
+function renderTurno(nombre, arr) {
+  let html = `<section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <div>
+        <h1>${nombre}</h1>
+        <div class="subtitle">Mes: Mayo ${APP.year}</div>
+      </div>
+      <div class="chip chip-t">CUADRANTE MAYO</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Día</th><th>Fecha</th><th>Estado</th></tr></thead>
+        <tbody>`;
+
+  for(let i=0; i < 31; i++){
+    const day = new Date(APP.year, APP.month - 1, i + 1);
+    const estado = arr[i];
+    const chip = (estado === "T") ? '<span class="chip chip-t">TRABAJA</span>' : '<span class="chip chip-l">LIBRE</span>';
+    html += `<tr class="row"><td class="day">${WEEKDAYS[day.getDay()]}</td><td>${String(i+1).padStart(2,"0")}/05</td><td>${chip}</td></tr>`;
+  }
+
+  html += `</tbody></table></div>
+    <button onclick="window.print()" style="margin-top:15px; width:100%">Imprimir / Guardar PDF</button>
+  </section>`;
+  return html;
+}
+
+document.getElementById("buscar").addEventListener("click", () => {
+  const code = document.getElementById("code").value.trim();
+  const res = document.getElementById("resultado");
+  if(DATA[code]){
+    res.innerHTML = renderTurno(DATA[code].n, DATA[code].t);
+  } else {
+    res.innerHTML = '<div class="card"><p style="color:red;margin:0">Código no encontrado</p></div>';
+  }
+});
+</script>
+</body>
+</html>
