@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Turnos · Julio 2026 · Avícola San Antonio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#D21F26;
+  --amarillo:#FFD100;
+  --bg:#fffaf0;
+  --texto:#161616;
+  --muted:#6b7280;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--texto);
+  font-family:'Inter',system-ui,Segoe UI,Roboto,Arial,sans-serif;
+}
+.topbar{
+  width:100%;
+  background:var(--rojo);
+  padding:10px 14px;
+  position:relative;
+  z-index:5;
+}
+.topbar .inner{
+  max-width:980px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.topbar img.logo{
+  height:54px;
+  width:auto;
+  display:block;
+  object-fit:contain;
+}
+.container{
+  max-width:860px;
+  margin:0 auto;
+  padding:18px;
+}
+.card{
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px 18px 16px 18px;
+  box-shadow:0 18px 45px rgba(15,23,42,.18);
+  margin-bottom:18px;
+}
+.label{
+  font-size:.9rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-weight:600;
+}
+h1{
+  margin:0 0 4px 0;
+  font-size:1.5rem;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:.9rem;
+  margin-bottom:12px;
+}
+.input{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #d1d5db;
+  font-size:1.1rem;
+  font-weight:600;
+  letter-spacing:.3em;
+  text-align:center;
+}
+button{
+  margin-top:10px;
+  width:100%;
+  border:none;
+  border-radius:999px;
+  padding:10px 14px;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--rojo),#ff6b35);
+  color:#ffffff;
+  box-shadow:0 10px 25px rgba(220,38,38,.45);
+  transition:transform .08s ease,box-shadow .08s ease,opacity .2s;
+}
+button:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 40px rgba(220,38,38,.5);
+}
+.footer{
+  margin-top:10px;
+  font-size:.8rem;
+  color:var(--muted);
+  text-align:center;
+}
+.table-wrap{
+  overflow-x:auto;
+  margin-top:10px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.85rem;
+}
+th,td{
+  padding:8px 10px;
+  border-bottom:1px solid #e5e7eb;
+  text-align:left;
+}
+th{
+  background:#f9fafb;
+  font-size:.75rem;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  color:#6b7280;
+}
+.chip{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:.8rem;
+  font-weight:800;
+}
+.chip-t{ background:#d1fae5; color:#065f46; }
+.chip-l{ background:#ede9fe; color:#7c3aed; }
+@media print{
+  .topbar, .actions, .input, .legend { display:none !important; }
+  .card { box-shadow:none; border:none; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="inner"><img class="logo" src="logo.webp" alt="Avícola San Antonio"></div>
+</div>
+
+<main class="container">
+  <section class="card">
+    <div class="label">Ingresa tu código</div>
+    <input id="code" class="input" type="tel" inputmode="numeric" maxlength="4" placeholder="0000"/>
+    <button id="buscar">Ver mi turno</button>
+    <div id="msg" class="footer"></div>
+  </section>
+
+  <section id="result"></section>
+
+  <div class="footer">© Avícola San Antonio · Julio 2026.</div>
+</main>
+
+<script>
+const APP = {
+  month: 7,
+  year: 2026,
+  codes: {
+    "1573": "Operador S1 - Kevin Rodriguez",
+    "2377": "Operador S2 - Erik Montaño",
+    "6816": "Operador S3 - Juli Quiñones (Vacaciones.)",
+    "4885": "Operador S4 - A.Wisleidy Moreno",
+    "1260": "Operador S5 - Jose Manuel Quispe",
+    "2486": "Operador S6",
+    "8220": "Operador S7 - Patricia Quiñones",
+    "2130": "Operador S8 - Maria Quiñones",
+    "2914": "Operador S9 - Maria Moy",
+    "1122": "Operador S10 - Natividad Chagua",
+    "8607": "Operador S11",
+    "2616": "Operador S12 - Wendy G Molina",
+    "3442": "Operador S13 - Virginia Gragena",
+    "9262": "Operador G1 - José Agurto R.",
+    "4602": "Operador G2 - William Terrazas",
+    "2502": "Operador G3 - Yolfran Vargas",
+    "4010": "Operador G4 - Feliciano Jaimes",
+    "1506": "Operador G5 - Jorge Rodriguez",
+    "6680": "Operador G6",
+    "8994": "Operador G7 - Grober Flores",
+    "2466": "Operador G8",
+    "1240": "Operador G9 - Jose Manuel Casupa",
+    "8946": "Operador G10 - Marco Agurto",
+    "8654": "Operador G11 - Esteban Villaseca",
+    "5976": "Lider S - Mauricio Jara",
+    "2040": "Capataz - José Espindola",
+    "5108": "Operador A1 - Fausto Rios",
+    "2063": "Operador A2",
+    "1286": "Operador L",
+    "9889": "Montacarguista - Nander Salvatierra",
+    "8909": "Backup 1 - Jose Banegas",
+    "3001": "Operador G12 - Claudio Chagua",
+    "3002": "Operador G13 - Leandro Gonzales",
+    "3003": "Operador S14 - Jhon Cañas",
+    "3004": "Operador G14 - Miguel Parada"
+  },
+  turnos: {
+    "Operador S1 - Kevin Rodriguez": "TTTTLLTTTTTTLTTTTTLLTTTTTTLTTTT",
+    "Operador S2 - Erik Montaño": "TTTTLLTTTTTTLTTTTTLLTTTTTTLTTTT",
+    "Operador S3 - Juli Quiñones (Vacaciones.)": "TTTTLTLTTTTTTLTTTTLTLTTTTTTLTTT",
+    "Operador S4 - A.Wisleidy Moreno": "TTTTLTLTTTTTTLTTTTLTLTTTTTTLTTT",
+    "Operador S5 - Jose Manuel Quispe": "LTTTLTTLTTTTTTLTTTLTTLTTTTTTLTT",
+    "Operador S6": "LTTTLTTLTTTTTTLTTTLTTLTTTTTTLTT",
+    "Operador S7 - Patricia Quiñones": "TLTTTTTTLTTLTTTLTTTTTTLTTLTTTLT",
+    "Operador S8 - Maria Quiñones": "TLTTTTTTLTTLTTTLTTTTTTLTTLTTTLT",
+    "Operador S9 - Maria Moy": "TTLTTTTTTLTLTTTTLTTTTTTLTLTTTTL",
+    "Operador S10 - Natividad Chagua": "TTLTTTTTTLTLTTTTLTTTTTTLTLTTTTL",
+    "Operador S11": "TTTLTTTTTTLLTTTTTLTTTTTTLLTTTTT",
+    "Operador S12 - Wendy G Molina": "TTTLTTTTTTLLTTTTTLTTTTTTLLTTTTT",
+    "Operador S13 - Virginia Gragena": "TTTLLTTTTTLTTTTTTLLTTTTTLTTTTTT",
+    "Operador G1 - José Agurto R.": "TTTLLTTTTLTTTTTTLTLTTTTTLTTTTTT",
+    "Operador G2 - William Terrazas": "TLTTLTTTLTTTTTTLTTLTTTLTTTTTTLT",
+    "Operador G3 - Yolfran Vargas": "TTLTLTTTTLTTTTTTLTLTTTTLTTTTTTL",
+    "Operador G4 - Feliciano Jaimes": "TTTLLTTTTTLTTTTTTLLTTTTTLTTTTTT",
+    "Operador G5 - Jorge Rodriguez": "TTTTTLTTTTTLLTTTTTTLTTTTTLLTTTT",
+    "Operador G6": "TTTTTLTTTTTLLTTTTTTLTTTTTLLTTTT",
+    "Operador G7 - Grober Flores": "TTTTTTLTTTTLTLTTTTTTLTTTTLTLTTT",
+    "Operador G8": "TTTTTTLTTTTLTLTTTTTTLTTTTLTLTTT",
+    "Operador G9 - Jose Manuel Casupa": "LTTTLTTLTTTTTTLTTTLTTTTLTTTTLTT",
+    "Operador G10 - Marco Agurto": "TTLTTTTTTLTLTTTTLTTTTLTTTLTTTTL",
+    "Operador G11 - Esteban Villaseca": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Lider S - Mauricio Jara": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Capataz - José Espindola": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Operador A1 - Fausto Rios": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Operador A2": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Operador L": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Montacarguista - Nander Salvatierra": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Backup 1 - Jose Banegas": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Operador G12 - Claudio Chagua": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Operador G13 - Leandro Gonzales": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Operador S14 - Jhon Cañas": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT",
+    "Operador G14 - Miguel Parada": "TTTTLTTTTTTLTTTTTTLTTTTTTLTTTTT"
+  }
+};
+
+const WEEKDAYS = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+
+function buildTable(cargo){
+  const pattern = APP.turnos[cargo] || "L".repeat(31);
+  const arr = pattern.split("");
+
+  let html = `
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <div>
+        <h1>${cargo}</h1>
+        <div class="subtitle">Mes: Julio ${APP.year}</div>
+      </div>
+      <div class="chip chip-t">CUADRANTE JULIO</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Día</th><th>Fecha</th><th>Estado</th></tr></thead>
+        <tbody>`;
+
+  for(let i=0; i < 31; i++){
+    const day = new Date(APP.year, APP.month - 1, i + 1);
+    const estado = arr[i];
+    const chip = (estado === "T") 
+      ? '<span class="chip chip-t">TRABAJA</span>' 
+      : '<span class="chip chip-l">LIBRE</span>';
+    
+    html += `<tr class="row">
+      <td class="day">${WEEKDAYS[day.getDay()]}</td>
+      <td>${String(i+1).padStart(2,"0")}/07</td>
+      <td>${chip}</td>
+    </tr>`;
+  }
+
+  html += `</tbody></table></div>
+    <button onclick="window.print()" style="margin-top:15px">Imprimir / Guardar PDF</button>
+  </section>`;
+  return html;
+}
+
+document.getElementById("buscar").addEventListener("click", () => {
+  const code = document.getElementById("code").value.trim();
+  const msg = document.getElementById("msg");
+  const result = document.getElementById("result");
+  
+  msg.textContent = "";
+  result.innerHTML = "";
+
+  const cargo = APP.codes[code];
+  if (!cargo) {
+    msg.textContent = "Código no encontrado.";
+    return;
+  }
+  result.innerHTML = buildTable(cargo);
+});
+</script>
+</body>
+</html>
