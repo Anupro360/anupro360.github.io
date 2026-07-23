@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#1e3a5f">
 <title>Plan Ingles 12 Semanas</title>
 
@@ -19,13 +19,63 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f4f8;color:#1e3a5f;line-height:1.5;-webkit-tap-highlight-color:transparent}
 .app{max-width:600px;margin:0 auto;min-height:100vh}
 
-/* Banner de Instalación PWA Visibilidad Forzada */
-.pwa-banner{display:none;background:#ffffff;border-bottom:2px solid #2d5a87;padding:12px 16px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
-.pwa-banner-info{display:flex;align-items:center;gap:10px}
-.pwa-banner-icon{font-size:24px}
-.pwa-banner-title{font-size:13px;color:#1e3a5f;display:block}
-.pwa-banner-sub{font-size:11px;color:#64748b}
-.pwa-banner-btn{background:#2d5a87;color:white;border:none;padding:8px 14px;border-radius:20px;font-weight:700;font-size:12px;cursor:pointer}
+/* ESTILO DEL MODAL DE INSTALACIÓN PWA (ESTILO PREMIUM FLOATING CARD) */
+#install-banner { 
+    display: none; 
+    position: fixed; 
+    bottom: 30px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: rgba(30, 58, 95, 0.96); 
+    backdrop-filter: blur(15px);
+    border: 2px solid #4a90c2; 
+    padding: 25px 20px 20px; 
+    border-radius: 25px; 
+    z-index: 10000; 
+    width: 88%; 
+    max-width: 420px; 
+    flex-direction: column; 
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    animation: popUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: white;
+}
+
+@keyframes popUp { 
+    from { bottom: -200px; opacity: 0; } 
+    to { bottom: 30px; opacity: 1; } 
+}
+
+.install-close-btn {
+    position: absolute; 
+    top: 12px; 
+    right: 16px; 
+    color: rgba(255, 255, 255, 0.7); 
+    background: none; 
+    border: none; 
+    font-size: 1.5rem; 
+    cursor: pointer;
+}
+
+.install-body { text-align: center; }
+.install-icon { font-size: 3.2rem; margin-bottom: 8px; }
+.install-title { margin: 0 0 8px 0; color: #ffffff; font-size: 1.3rem; font-weight: 800; }
+.install-desc { color: #e2e8f0; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4; }
+.install-btn-action {
+    background: linear-gradient(135deg, #4a90c2, #2d5a87); 
+    color: white; 
+    padding: 15px; 
+    border-radius: 15px; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    font-weight: bold; 
+    width: 100%; 
+    cursor: pointer; 
+    font-size: 1rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    transition: transform 0.15s ease;
+}
+.install-btn-action:active { transform: scale(0.97); }
 
 .header{background:linear-gradient(135deg,#1e3a5f,#2d5a87);padding:20px 16px;color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
 .header h1{font-size:20px;font-weight:700;margin-bottom:4px}
@@ -94,18 +144,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <body>
 <div class="app">
 
-<!-- Banner de Instalación Inmediata PWA -->
-<div id="pwaInstallBanner" class="pwa-banner">
-  <div class="pwa-banner-info">
-    <span class="pwa-banner-icon">📲</span>
-    <div>
-      <strong class="pwa-banner-title">Instalar Aplicación</strong>
-      <span class="pwa-banner-sub">Accede rápido sin abrir el navegador</span>
-    </div>
-  </div>
-  <button id="btnPwaInstall" class="pwa-banner-btn">Descargar</button>
-</div>
-
 <div class="header">
 <h1>Plan Ingles 12 Semanas</h1>
 <p>Frases + Pronunciacion + Traduccion</p>
@@ -143,6 +181,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <button class="nav-btn active" onclick="showPage('main',event)">&#128218;<span>Estudiar</span></button>
 <button class="nav-btn" onclick="showPage('stats',event)">&#128202;<span>Progreso</span></button>
 </div>
+</div>
+
+<!-- TARJETA FLOATING MODAL DE INSTALACIÓN PWA -->
+<div id="install-banner">
+    <button onclick="closeInstallBanner()" class="install-close-btn">✕</button>
+    <div class="install-body">
+        <div class="install-icon">📚</div>
+        <h3 class="install-title">Plan Inglés 12 Semanas</h3>
+        <p class="install-desc">Instala la App para estudiar sin conexión, acelerar la carga y llevar tu progreso siempre contigo.</p>
+        <button id="btn-install-now" class="install-btn-action">INSTALAR AHORA</button>
+    </div>
 </div>
 
 <script>
@@ -338,59 +387,60 @@ function showPage(pageName,evt){
 
 loadProg();renderWeekTabs();renderDayTabs();renderPhrases();updateProgress();
 
-// --- LÓGICA DE INSTALACIÓN PWA VISIBLE Y AUTOMÁTICA ---
-const installBanner = document.getElementById('pwaInstallBanner');
-const installBtn = document.getElementById('btnPwaInstall');
+// --- LÓGICA DEL MODAL DE INSTALACIÓN PWA ---
 let deferredPrompt;
+const installBanner = document.getElementById('install-banner');
+const installBtn = document.getElementById('btn-install-now');
 
-// Fuerza la visibilidad del banner al cargar si no está abierta como App nativa
-window.addEventListener('load', () => {
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if (!isStandalone && installBanner) {
-    installBanner.style.display = 'flex';
-  }
-});
-
-// Detecta la capacidad de instalación nativa en Android/Chrome
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (installBanner) {
-    installBanner.style.display = 'flex';
-  }
-});
-
-// Manejo del botón "Descargar"
-if (installBtn) {
-  installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        installBanner.style.display = 'none';
-      }
-      deferredPrompt = null;
-    } else {
-      alert("Para instalar la aplicación en tu celular:\n\n1. En Android (Chrome): Toca los 3 puntos del navegador y elige 'Instalar aplicación' o 'Agregar a la pantalla principal'.\n\n2. En iPhone (Safari): Toca el botón Compartir (el ícono con una flecha hacia arriba) y selecciona 'Agregar al inicio'.");
-    }
-  });
+function closeInstallBanner() {
+    if (installBanner) installBanner.style.display = 'none';
 }
 
-// Ocultar automáticamente si ya está instalada
-window.addEventListener('appinstalled', () => {
-  if (installBanner) installBanner.style.display = 'none';
-  deferredPrompt = null;
+window.addEventListener('load', () => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    if (!isStandalone && installBanner) {
+        // Muestra el modal con un breve retardo de animación
+        setTimeout(() => {
+            installBanner.style.display = 'flex';
+        }, 800);
+    }
 });
 
-// Registro del Service Worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').then(function(registration) {
-      console.log('SW registrado con exito:', registration.scope);
-    }, function(err) {
-      console.log('Fallo en registro de SW:', err);
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBanner) installBanner.style.display = 'flex';
+});
+
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                closeInstallBanner();
+            }
+            deferredPrompt = null;
+        } else {
+            alert("Para instalar la aplicación:\n\n• En Android (Chrome): Pulsa los 3 puntos superiores y selecciona 'Agregar a la pantalla principal' o 'Instalar aplicación'.\n\n• En iPhone (Safari): Pulsa el botón Compartir (ícono con flecha hacia arriba) y selecciona 'Agregar al inicio'.");
+        }
     });
-  });
+}
+
+window.addEventListener('appinstalled', () => {
+    closeInstallBanner();
+    deferredPrompt = null;
+});
+
+// REGISTRO DEL SERVICE WORKER
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+            console.log('Service Worker Activo:', reg.scope);
+        }).catch(err => {
+            console.log('Error al registrar Service Worker:', err);
+        });
+    });
 }
 </script>
 </body>
