@@ -18,6 +18,15 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f4f8;color:#1e3a5f;line-height:1.5;-webkit-tap-highlight-color:transparent}
 .app{max-width:600px;margin:0 auto;min-height:100vh}
+
+/* Banner de Instalación PWA */
+.pwa-banner{display:none;background:#ffffff;border-bottom:2px solid #2d5a87;padding:12px 16px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.pwa-banner-info{display:flex;align-items:center;gap:10px}
+.pwa-banner-icon{font-size:24px}
+.pwa-banner-title{font-size:13px;color:#1e3a5f;display:block}
+.pwa-banner-sub{font-size:11px;color:#64748b}
+.pwa-banner-btn{background:#2d5a87;color:white;border:none;padding:8px 14px;border-radius:20px;font-weight:700;font-size:12px;cursor:pointer}
+
 .header{background:linear-gradient(135deg,#1e3a5f,#2d5a87);padding:20px 16px;color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
 .header h1{font-size:20px;font-weight:700;margin-bottom:4px}
 .header p{font-size:13px;opacity:0.9}
@@ -84,6 +93,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </head>
 <body>
 <div class="app">
+
+<!-- Banner de Instalación Inmediata PWA -->
+<div id="pwaInstallBanner" class="pwa-banner">
+  <div class="pwa-banner-info">
+    <span class="pwa-banner-icon">📲</span>
+    <div>
+      <strong class="pwa-banner-title">Instalar Aplicación</strong>
+      <span class="pwa-banner-sub">Accede rápido sin abrir el navegador</span>
+    </div>
+  </div>
+  <button id="btnPwaInstall" class="pwa-banner-btn">Descargar</button>
+</div>
+
 <div class="header">
 <h1>Plan Ingles 12 Semanas</h1>
 <p>Frases + Pronunciacion + Traduccion</p>
@@ -93,6 +115,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="stat-badge"><span id="hp">0</span>%</div>
 </div>
 </div>
+
 <div id="mainPage" class="content-area">
 <div class="progress-section">
 <div class="progress-header"><span>Progreso semana <span id="pw">1</span></span><span id="wpt">0/15</span></div>
@@ -105,6 +128,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="info-box reminder"><div class="icon">&#9200;</div><div class="content"><div class="label">Recordatorio de hoy</div><div class="text" id="rt"></div></div></div>
 <div class="info-box tip"><div class="icon">&#128161;</div><div class="content"><div class="label">Tip del dia</div><div class="text" id="tt"></div></div></div>
 </div>
+
 <div id="statsPage" class="content-area" style="display:none">
 <div class="stats-grid">
 <div class="stat-card"><div class="number" id="st">300</div><div class="label">Frases totales</div></div>
@@ -114,13 +138,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </div>
 <div id="wsl"></div>
 </div>
+
 <div class="bottom-nav">
 <button class="nav-btn active" onclick="showPage('main',event)">&#128218;<span>Estudiar</span></button>
 <button class="nav-btn" onclick="showPage('stats',event)">&#128202;<span>Progreso</span></button>
 </div>
 </div>
-<script>
 
+<script>
 const DATA={
 1:{n:"Sobrevivir reuniones",f:"Frases de emergencia para cuando no entiendes nada",p:{1:[{e:"Could you repeat that, please?",h:"KUD iu ri-PIT dat, plis?",s:"Podrias repetir eso, por favor?"},{e:"Could you speak more slowly?",h:"KUD iu spik mor ESLO-li?",s:"Podrias hablar mas despacio?"},{e:"I'm not sure I follow.",h:"Aim not shur ai FA-lou",s:"No estoy seguro de seguir (entiendo)."},{e:"What do you mean by that?",h:"Uat du iu min bai dat?",s:"Que quieres decir con eso?"},{e:"Let me make sure I understand.",h:"Let mi meik shur ai an-der-STAND",s:"Dejame asegurarme de que entiendo."}],2:[{e:"I didn't catch that.",h:"Ai DID-ent kach dat",s:"No capte eso."},{e:"Can you say that again?",h:"Kan iu SEI dat a-GEN?",s:"Puedes decir eso de nuevo?"},{e:"I'm lost. Can you explain?",h:"Aim lost. Kan iu ex-PLEIN?",s:"Estoy perdido. Puedes explicar?"},{e:"Sorry, I missed that.",h:"SO-ri, ai MIST dat",s:"Perdon, me perdi eso."},{e:"Could you break that down?",h:"KUD iu breik dat daun?",s:"Podrias desglosar eso?"}],3:[{e:"From my perspective...",h:"From mai per-SPEK-tiv",s:"Desde mi perspectiva..."},{e:"I see it differently.",h:"Ai si it DI-frnt-li",s:"Lo veo diferente."},{e:"That makes sense to me.",h:"Dat meiks sens tu mi",s:"Eso tiene sentido para mi."},{e:"I'm on board with that.",h:"Aim on BORD with dat",s:"Estoy de acuerdo con eso."},{e:"I'd like to add something.",h:"Aid laik tu ad SAM-zing",s:"Me gustaria agregar algo."}],4:[{e:"I agree with you.",h:"Ai a-GRI with iu",s:"Estoy de acuerdo contigo."},{e:"I see your point.",h:"Ai si ior point",s:"Entiendo tu punto."},{e:"I have a different view.",h:"Ai jav a DI-frnt viu",s:"Tengo una opinion diferente."},{e:"I'm not convinced.",h:"Aim not kon-VINST",s:"No estoy convencido."},{e:"Let's agree to disagree.",h:"Lets a-GRI tu dis-a-GRI",s:"Aceptemos que no estamos de acuerdo."}],5:[{e:"Let me think about that.",h:"Let mi zink a-BAUT dat",s:"Dejame pensar en eso."},{e:"I'll get back to you on that.",h:"Ail get bak tu iu on dat",s:"Te respondo sobre eso despues."},{e:"I need to look into that.",h:"Ai nid tu luk IN-tu dat",s:"Necesito investigar eso."},{e:"Can we take this offline?",h:"Kan ui teik dis OF-lain?",s:"Podemos hablar de esto fuera de la reunion?"},{e:"I don't have that information right now.",h:"Ai dont jav dat in-for-MEI-shon rait nau",s:"No tengo esa informacion ahora mismo."}]}},
 2:{n:"Participar activamente",f:"Opinar, proponer y dirigir reuniones",p:{1:[{e:"Let's kick off.",h:"Lets KIK of",s:"Empecemos."},{e:"Are we all on the same page?",h:"Ar iu ol on de seim peich?",s:"Estamos todos de acuerdo?"},{e:"Let's put a pin in that.",h:"Lets put a PIN in dat",s:"Dejemos eso para despues."},{e:"That's off the table.",h:"Dats of de TEI-bol",s:"Eso esta fuera de discusion."},{e:"Let's wrap this up.",h:"Lets rap dis ap",s:"Terminemos con esto."}],2:[{e:"To sum up...",h:"Tu sam ap",s:"En resumen..."},{e:"Let's recap.",h:"Lets RI-kap",s:"Hagamos un resumen."},{e:"Any questions?",h:"Eni KUES-chons?",s:"Alguna pregunta?"},{e:"Thanks for your time.",h:"Zanks for ior taim",s:"Gracias por tu tiempo."},{e:"I'll send a follow-up email.",h:"Ail send a FA-lou-ap i-mel",s:"Enviare un correo de seguimiento."}],3:[{e:"We need to think outside the box.",h:"Ui nid tu zink AUT-said de boks",s:"Necesitamos pensar fuera de la caja."},{e:"Let's move the needle.",h:"Lets muv de NI-dol",s:"Hagamos un impacto real."},{e:"We need all hands on deck.",h:"Ui nid ol jands on dek",s:"Necesitamos a todo el equipo."},{e:"In a nutshell...",h:"In a NA-shal",s:"En resumen / En pocas palabras..."},{e:"Let's get our ducks in a row.",h:"Lets get aur daks in a rou",s:"Organicemos todo bien."}],4:[{e:"Keep me in the loop.",h:"Kip mi in de LUP",s:"Mantenme al tanto."},{e:"Good to go.",h:"GUD tu gou",s:"Listo para entregarse."},{e:"I'll get back to you.",h:"Ail get bak tu iu",s:"Contactare contigo en breve."},{e:"As soon as possible.",h:"As SUN as PO-si-bol",s:"Tan pronto como sea posible."},{e:"Back to the drawing board.",h:"Bak tu de DRO-ing bord",s:"Volver a empezar."}],5:[{e:"On the same page.",h:"On de seim peich",s:"En la misma pagina (de acuerdo)."},{e:"Deep dive.",h:"DIP daiv",s:"Profundizar."},{e:"Ducks in a row.",h:"Daks in a rou",s:"Organizado."},{e:"On board.",h:"On BORD",s:"De acuerdo / A bordo."},{e:"Move the goalposts.",h:"Muv de GOUL-posts",s:"Mover la porteria (cambiar objetivos)."}]}},
@@ -133,7 +158,7 @@ const DATA={
 9:{n:"Problemas y soluciones",f:"Manejar crisis con calma",p:{1:[{e:"We have a problem.",h:"Ui jav a PRO-blem",s:"Tenemos un problema."},{e:"Let's troubleshoot this.",h:"Lets TRU-bel-shut dis",s:"Resolvamos esto."},{e:"What's the root cause?",h:"Uats de RUT kos?",s:"Cual es la causa raiz?"},{e:"We need a contingency plan.",h:"Ui nid a kon-TIN-yen-si plan",s:"Necesitamos un plan de contingencia."},{e:"Let's not panic.",h:"Lets not PA-nik",s:"No entremos en panico."}],2:[{e:"I take full responsibility.",h:"Ai teik ful ri-spon-si-BI-li-ti",s:"Asumo toda la responsabilidad."},{e:"Let's find a workaround.",h:"Lets faind a UORK-a-raund",s:"Encontremos una solucion temporal."},{e:"We need to escalate this.",h:"Ui nid tu ES-ka-leit dis",s:"Necesitamos escalar esto."},{e:"What's our backup plan?",h:"Uats aur BAK-ap plan?",s:"Cual es nuestro plan B?"},{e:"Let's damage control.",h:"Lets DA-mij kon-TROL",s:"Hagamos control de danos."}],3:[{e:"We need to act fast.",h:"Ui nid tu akt fast",s:"Necesitamos actuar rapido."},{e:"Let's get everyone on a call.",h:"Lets get EV-ri-uon on a kol",s:"Reunamos a todos en una llamada."},{e:"Who's the point person?",h:"Hus de point PER-son?",s:"Quien es la persona de contacto?"},{e:"We need to communicate clearly.",h:"Ui nid tu ko-MIU-ni-keit KLI-er-li",s:"Necesitamos comunicarnos claramente."},{e:"Let's document everything.",h:"Lets DO-kiu-ment EV-ri-zing",s:"Documentemos todo."}],4:[{e:"I have a solution.",h:"Ai jav a so-LIU-shon",s:"Tengo una solucion."},{e:"Let's think this through.",h:"Lets zink dis zru",s:"Pensemos esto bien."},{e:"We can fix this.",h:"Ui kan fiks dis",s:"Podemos arreglar esto."},{e:"What are our options?",h:"Uat ar aur OP-shons?",s:"Cuales son nuestras opciones?"},{e:"Let's learn from this.",h:"Lets lern from dis",s:"Aprendamos de esto."}],5:[{e:"Crisis averted.",h:"KRAI-sis a-VERT-ed",s:"Crisis evitada."},{e:"We're back on track.",h:"Ui bak on trak",s:"Estamos de vuelta en camino."},{e:"Lesson learned.",h:"LE-son LER-nd",s:"Leccion aprendida."},{e:"Let's prevent this next time.",h:"Lets pri-VENT dis nekst taim",s:"Prevengamos esto la proxima vez."},{e:"Good save.",h:"GUD seiv",s:"Buena recuperacion."}]}},
 10:{n:"Networking y relaciones",f:"Construir conexiones profesionales",p:{1:[{e:"Nice to meet you.",h:"Nais tu mit iu",s:"Gusto en conocerte."},{e:"What do you do?",h:"Uat du iu du?",s:"A que te dedicas?"},{e:"How long have you been with the company?",h:"Jau long jav iu bin with de KOM-pa-ni?",s:"Cuanto tiempo llevas en la empresa?"},{e:"What brings you here?",h:"Uat brins iu JIR?",s:"Que te trae por aqui?"},{e:"I've heard great things about you.",h:"Aiiv jerd greit zings a-BAUT iu",s:"He escuchado cosas geniales sobre ti."}],2:[{e:"Let's grab coffee sometime.",h:"Lets grab KO-fi sam-taim",s:"Tomemos un cafe alguna vez."},{e:"I'd love to pick your brain.",h:"Aid lav tu pik ior brein",s:"Me encantaria consultarte."},{e:"We should collaborate.",h:"Ui shud ko-LA-bo-reit",s:"Deberiamos colaborar."},{e:"Let's stay in touch.",h:"Lets stei in tach",s:"Mantengamonos en contacto."},{e:"Here's my card.",h:"Jirs mai kard",s:"Aqui esta mi tarjeta."}],3:[{e:"I'm looking forward to working with you.",h:"Ai LU-king FOR-word tu UOR-king with iu",s:"Espero con interes trabajar contigo."},{e:"Let's find synergies.",h:"Lets faind SI-ner-yis",s:"Encontremos sinergias."},{e:"We have a lot in common.",h:"Ui jav a lot in KO-mon",s:"Tenemos mucho en comun."},{e:"I'd like to introduce you to...",h:"Aid laik tu in-tro-DIUS iu tu",s:"Me gustaria presentarte a..."},{e:"Let's connect on LinkedIn.",h:"Lets ko-NEKT on LINK-ed-IN",s:"Conectemos en LinkedIn."}],4:[{e:"It was a pleasure meeting you.",h:"It uoz a PLE-zher MI-ting iu",s:"Fue un placer conocerte."},{e:"Let's follow up next week.",h:"Lets FA-lou ap nekst uik",s:"Demosle seguimiento la proxima semana."},{e:"I enjoyed our conversation.",h:"Ai en-YOID aur kon-ver-SEI-shon",s:"Disfrute nuestra conversacion."},{e:"Let's schedule a follow-up.",h:"Lets SHE-jul a FA-lou-ap",s:"Agendemos un seguimiento."},{e:"I'll be in touch.",h:"Ail bi in tach",s:"Estare en contacto."}],5:[{e:"Thanks for the introduction.",h:"Zanks for de in-tro-DUK-shon",s:"Gracias por la presentacion."},{e:"Let's build something together.",h:"Lets bild SAM-zing tu-GE-der",s:"Construyamos algo juntos."},{e:"I value our partnership.",h:"Ai VA-lu aur PART-ner-ship",s:"Valoro nuestra alianza."},{e:"Let's circle back soon.",h:"Lets SER-kol bak SUN",s:"Volvamos a hablar pronto."},{e:"It was great catching up.",h:"It uoz greit KA-ching ap",s:"Fue genial ponernos al dia."}]}},
 11:{n:"Escucha activa avanzada",f:"Entender conversaciones rapidas y complejas",p:{1:[{e:"If I understand correctly...",h:"If ai an-der-STAND ko-REKT-li",s:"Si entiendo correctamente..."},{e:"So what you're saying is...",h:"Sou uat iur SEI-ing is",s:"Entonces lo que estas diciendo es..."},{e:"Let me paraphrase.",h:"Let mi PA-ra-freiz",s:"Dejame parafrasear."},{e:"Correct me if I'm wrong.",h:"Ko-REKT mi if aim rong",s:"Corrigeme si me equivoco."},{e:"I hear what you're saying.",h:"Ai JIR uat iur SEI-ing",s:"Escucho lo que dices."}],2:[{e:"That's an interesting point.",h:"Dats an IN-tres-ting point",s:"Ese es un punto interesante."},{e:"I see where you're coming from.",h:"Ai si uer iur KA-ming from",s:"Entiendo de donde vienes."},{e:"Let's unpack that.",h:"Lets an-PAK dat",s:"Desglosemos eso."},{e:"Can you elaborate?",h:"Kan iu i-LA-bo-reit?",s:"Puedes elaborar?"},{e:"What led you to that conclusion?",h:"Uat led iu tu dat kon-KLU-shon?",s:"Que te llevo a esa conclusion?"}],3:[{e:"I want to make sure I got this right.",h:"Ai uant tu meik shur ai got dis rait",s:"Quiero asegurarme de que entendi bien."},{e:"Let me confirm.",h:"Let mi kon-FIRM",s:"Dejame confirmar."},{e:"So the action items are...",h:"Sou di AK-shon AI-tems ar",s:"Entonces los puntos de accion son..."},{e:"Who's responsible for...?",h:"Hus ri-SPON-si-bol for?",s:"Quien es responsable de...?"},{e:"What's the deadline?",h:"Uats de DED-lain?",s:"Cual es la fecha limite?"}],4:[{e:"Let's prioritize.",h:"Lets prai-OR-i-tais",s:"Prioricemos."},{e:"What's the urgency?",h:"Uats di UR-yen-si?",s:"Que tan urgente es?"},{e:"Let's assign owners.",h:"Lets a-SAIN OU-ners",s:"Asignemos responsables."},{e:"When do you need this by?",h:"Uen du iu nid dis bai?",s:"Para cuando necesitas esto?"},{e:"Let's set a timeline.",h:"Lets set a TAIM-lain",s:"Establezcamos un cronograma."}],5:[{e:"I need more context.",h:"Ai nid mor KON-tekst",s:"Necesito mas contexto."},{e:"Let's back up for a second.",h:"Lets bak ap for a SE-kond",s:"Retrocedamos un segundo."},{e:"Walk me through that again.",h:"Uok mi zru dat a-GEN",s:"Guiame por eso de nuevo."},{e:"I'm trying to connect the dots.",h:"Ai TRAI-ing tu ko-NEKT de dots",s:"Estoy tratando de conectar los puntos."},{e:"That clears things up.",h:"Dat klirs zings ap",s:"Eso aclara las cosas."}]}},
-12:{n:"Fluidez y confianza",f:"Hablar sin bloqueos, como un profesional",p:{1:[{e:"To be honest...",h:"Tu bi A-nest",s:"Para ser honesto..."},{e:"Frankly speaking...",h:"FRANK-li SPI-king",s:"Francamente hablando..."},{e:"The way I see it...",h:"De uei ai si it",s:"La forma en que lo veo..."},{e:"If you ask me...",h:"If iu ask mi",s:"Si me preguntas..."},{e:"I tend to think that...",h:"Ai tend tu zink dat",s:"Tiendo a pensar que..."}],2:[{e:"At the end of the day...",h:"At di end of de dei",s:"Al final del dia..."},{e:"When all is said and done...",h:"Uen ol is sed and dan",s:"Cuando todo se dice y se hace..."},{e:"The long and short of it is...",h:"De long and short of it is",s:"En resumen..."},{e:"It boils down to...",h:"It BOILS daun tu",s:"Se reduce a..."},{e:"The reality is...",h:"De ri-A-li-ti is",s:"La reality es..."}],3:[{e:"I'm not going to lie...",h:"Ai not gou-ing tu lai",s:"No voy a mentir..."},{e:"Let's not beat around the bush.",h:"Lets not bit a-RAUND de bush",s:"Vayamos al grano."},{e:"Call a spade a spade.",h:"Kol a speid a speid",s:"Llamar las cosas por su nombre."},{e:"Let's cut to the chase.",h:"Lets kat tu de cheis",s:"Vayamos al punto."},{e:"No sugarcoating.",h:"NO SHU-ger-kou-ting",s:"Sin adornos."}],4:[{e:"I couldn't agree more.",h:"Ai KUD-ent a-GRI mor",s:"No podria estar mas de acuerdo."},{e:"You took the words right out of my mouth.",h:"Iu tuk de uords rait aut of mai mauz",s:"Me quitaste las palabras de la boca."},{e:"That's exactly what I was thinking.",h:"Dats ek-ZAK-tli uat ai uas ZIN-king",s:"Eso es exactamente lo que estaba pensando."},{e:"I see eye to eye with you.",h:"Ai si ai tu ai with iu",s:"Estoy completamente de acuerdo contigo."},{e:"We're on the same wavelength.",h:"Ui ar on de seim UEIV-lengz",s:"Estamos en la misma sintonia."}],5:[{e:"I see your point, but...",h:"Ai si ior point, bat",s:"Entiendo tu punto, pero..."},{e:"I respectfully disagree.",h:"Ai ri-SPEKT-ful-li dis-a-GRI",s:"Respetuosamente no estoy de acuerdo."},{e:"I'm afraid I have to differ.",h:"Ai m-a-FREID ai jav tu DI-fer",s:"Me temo que tengo que discrepar."},{e:"That's one way to look at it.",h:"Dats uan uei tu luk at it",s:"Esa es una forma de verlo."},{e:"Let's agree to disagree.",h:"Lets a-GRI tu dis-a-GRI",s:"Aceptemos que no estamos de acuerdo."}]}}
+12:{n:"Fluidez y confianza",f:"Hablar sin bloqueos, como un profesional",p:{1:[{e:"To be honest...",h:"Tu bi A-nest",s:"Para ser honesto..."},{e:"Frankly speaking...",h:"FRANK-li SPI-king",s:"Francamente hablando..."},{e:"The way I see it...",h:"De uei ai si it",s:"La forma en que lo veo..."},{e:"If you ask me...",h:"If iu ask mi",s:"Si me preguntas..."},{e:"I tend to think that...",h:"Ai tend tu zink dat",s:"Tiendo a pensar que..."}],2:[{e:"At the end of the day...",h:"At di end of de dei",s:"Al final del dia..."},{e:"When all is said and done...",h:"Uen ol is sed and dan",s:"Cuando todo se dice y se hace..."},{e:"The long and short of it is...",h:"De long and short of it is",s:"En resumen..."},{e:"It boils down to...",h:"It BOILS daun tu",s:"Se reduce a..."},{e:"The reality is...",h:"De ri-A-li-ti is",s:"La realidad es..."}],3:[{e:"I'm not going to lie...",h:"Ai not gou-ing tu lai",s:"No voy a mentir..."},{e:"Let's not beat around the bush.",h:"Lets not bit a-RAUND de bush",s:"Vayamos al grano."},{e:"Call a spade a spade.",h:"Kol a speid a speid",s:"Llamar las cosas por su nombre."},{e:"Let's cut to the chase.",h:"Lets kat tu de cheis",s:"Vayamos al punto."},{e:"No sugarcoating.",h:"NO SHU-ger-kou-ting",s:"Sin adornos."}],4:[{e:"I couldn't agree more.",h:"Ai KUD-ent a-GRI mor",s:"No podria estar mas de acuerdo."},{e:"You took the words right out of my mouth.",h:"Iu tuk de uords rait aut of mai mauz",s:"Me quitaste las palabras de la boca."},{e:"That's exactly what I was thinking.",h:"Dats ek-ZAK-tli uat ai uas ZIN-king",s:"Eso es exactamente lo que estaba pensando."},{e:"I see eye to eye with you.",h:"Ai si ai tu ai with iu",s:"Estoy completamente de acuerdo contigo."},{e:"We're on the same wavelength.",h:"Ui ar on de seim UEIV-lengz",s:"Estamos en la misma sintonia."}],5:[{e:"I see your point, but...",h:"Ai si ior point, bat",s:"Entiendo tu punto, pero..."},{e:"I respectfully disagree.",h:"Ai ri-SPEKT-ful-li dis-a-GRI",s:"Respetuosamente no estoy de acuerdo."},{e:"I'm afraid I have to differ.",h:"Ai m-a-FREID ai jav tu DI-fer",s:"Me temo que tengo que discrepar."},{e:"That's one way to look at it.",h:"Dats uan uei tu luk at it",s:"Esa es una forma de verlo."},{e:"Let's agree to disagree.",h:"Lets a-GRI tu dis-a-GRI",s:"Aceptemos que no estamos de acuerdo."}]}}
 };
 
 const REMINDERS=["Hoy: Escucha cada frase 3 veces, repite en voz alta 5 veces. Grabate.","Hoy: Usa 2 frases en tu trabajo real (aunque sea mentalmente).","Hoy: Escucha un podcast de negocios en ingles por 10 minutos.","Hoy: Repasa las frases de ayer antes de aprender las nuevas.","Hoy: Practica con un companero o frente al espejo.","Hoy: Escribe 3 frases en un email o mensaje.","Hoy: Ve una escena de una serie en ingles con subtitulos en ingles."];
@@ -313,15 +338,45 @@ function showPage(pageName,evt){
 
 loadProg();renderWeekTabs();renderDayTabs();renderPhrases();updateProgress();
 
-// Registro del Service Worker para PWA
+// --- LÓGICA DE INSTALACIÓN PWA E INTEGRACIÓN ---
+let deferredPrompt;
+const installBanner = document.getElementById('pwaInstallBanner');
+const installBtn = document.getElementById('btnPwaInstall');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installBanner) {
+    installBanner.style.display = 'flex';
+  }
+});
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`Resultado de la instalación: ${outcome}`);
+    deferredPrompt = null;
+    installBanner.style.display = 'none';
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  if (installBanner) installBanner.style.display = 'none';
+  deferredPrompt = null;
+  console.log('PWA instalada exitosamente');
+});
+
+// Registro del Service Worker
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('sw.js').then(function(registration) {
-            console.log('SW registrado con exito:', registration.scope);
-        }, function(err) {
-            console.log('Fallo en registro de SW:', err);
-        });
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').then(function(registration) {
+      console.log('SW registrado con exito:', registration.scope);
+    }, function(err) {
+      console.log('Fallo en registro de SW:', err);
     });
+  });
 }
 </script>
 </body>
