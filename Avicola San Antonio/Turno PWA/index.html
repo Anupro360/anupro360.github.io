@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>TurnoApp - Control Faena</title>
+  <title>TurnoApp - Control de Supervisión</title>
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#1E3A8A" />
+  <meta name="theme-color" content="#0F172A" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <!-- Tailwind CSS -->
@@ -14,77 +14,94 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    .pin-btn:active { transform: scale(0.95); }
+    .pin-btn:active { transform: scale(0.94); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between select-none">
 
-  <!-- ==================== PANTALLA 1: LOGIN PIN ==================== -->
+  <!-- ==================== PANTALLA 1: LOGIN PIN MEJORADO ==================== -->
   <div id="view-login" class="flex-1 flex flex-col justify-center items-center p-6 max-w-sm mx-auto w-full">
-    <div class="text-center mb-8">
-      <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/30 mb-4">
-        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <div class="text-center mb-6">
+      <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center shadow-xl shadow-blue-500/20 mb-3 border border-blue-400/30">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
       </div>
-      <h1 class="text-2xl font-bold tracking-tight">TurnoApp Faena</h1>
-      <p class="text-slate-400 text-sm mt-1">Ingresa tu código PIN de 4 dígitos</p>
+      <h1 class="text-2xl font-bold tracking-tight text-white">TurnoApp Faena</h1>
+      <p class="text-slate-400 text-xs mt-1 font-medium tracking-wide uppercase">Portal de Supervisión y Control Operacional</p>
     </div>
 
-    <!-- Indicador de PIN (4 bolitas) -->
-    <div class="flex justify-center gap-4 mb-8">
-      <div id="dot-0" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
-      <div id="dot-1" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
-      <div id="dot-2" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
-      <div id="dot-3" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
+    <!-- Indicador de PIN -->
+    <div class="flex justify-center gap-4 mb-6">
+      <div id="dot-0" class="w-4 h-4 rounded-full border-2 border-slate-700 transition-all"></div>
+      <div id="dot-1" class="w-4 h-4 rounded-full border-2 border-slate-700 transition-all"></div>
+      <div id="dot-2" class="w-4 h-4 rounded-full border-2 border-slate-700 transition-all"></div>
+      <div id="dot-3" class="w-4 h-4 rounded-full border-2 border-slate-700 transition-all"></div>
     </div>
 
-    <div id="login-error" class="hidden text-rose-400 text-sm font-semibold text-center mb-4"></div>
+    <div id="login-error" class="hidden text-rose-400 text-xs font-semibold text-center mb-3 py-1 px-3 bg-rose-950/50 rounded-lg border border-rose-800/50"></div>
 
-    <!-- Teclado Numérico Táctil -->
-    <div class="grid grid-cols-3 gap-4 w-full max-w-[280px]">
-      <button onclick="pressKey('1')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">1</button>
-      <button onclick="pressKey('2')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">2</button>
-      <button onclick="pressKey('3')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">3</button>
-      <button onclick="pressKey('4')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">4</button>
-      <button onclick="pressKey('5')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">5</button>
-      <button onclick="pressKey('6')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">6</button>
-      <button onclick="pressKey('7')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">7</button>
-      <button onclick="pressKey('8')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">8</button>
-      <button onclick="pressKey('9')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">9</button>
-      <button onclick="clearPin()" class="pin-btn h-16 rounded-2xl bg-slate-800/50 text-sm font-semibold text-slate-400 hover:bg-slate-800">BORRAR</button>
-      <button onclick="pressKey('0')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">0</button>
-      <button onclick="deleteLast()" class="pin-btn h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center text-slate-400 hover:bg-slate-800">
+    <!-- Teclado Numérico con botón INGRESAR -->
+    <div class="grid grid-cols-3 gap-3.5 w-full max-w-[290px]">
+      <button onclick="pressKey('1')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">1</button>
+      <button onclick="pressKey('2')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">2</button>
+      <button onclick="pressKey('3')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">3</button>
+      <button onclick="pressKey('4')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">4</button>
+      <button onclick="pressKey('5')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">5</button>
+      <button onclick="pressKey('6')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">6</button>
+      <button onclick="pressKey('7')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">7</button>
+      <button onclick="pressKey('8')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">8</button>
+      <button onclick="pressKey('9')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">9</button>
+      <button onclick="deleteLast()" class="pin-btn h-14 rounded-2xl bg-slate-900/60 flex items-center justify-center text-slate-400 hover:bg-slate-800 border border-slate-800/80">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"/></svg>
       </button>
+      <button onclick="pressKey('0')" class="pin-btn h-14 rounded-2xl bg-slate-900 text-2xl font-semibold text-white hover:bg-slate-800 shadow-md border border-slate-800">0</button>
+      <button onclick="clearPin()" class="pin-btn h-14 rounded-2xl bg-slate-900/60 text-xs font-bold text-slate-400 hover:bg-slate-800 border border-slate-800/80 tracking-wider">BORRAR</button>
     </div>
+
+    <!-- BOTÓN INGRESAR EXPLÍCITO -->
+    <button id="btn-enter" onclick="verifyPin()" disabled class="w-full max-w-[290px] mt-4 py-3.5 rounded-2xl bg-slate-800 text-slate-500 font-bold text-sm tracking-wider flex items-center justify-center gap-2 border border-slate-700/50 transition-all cursor-not-allowed">
+      <span id="btn-enter-text">INGRESAR</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+    </button>
   </div>
 
   <!-- ==================== PANTALLA 2: PANEL PRINCIPAL ==================== -->
   <div id="view-dashboard" class="hidden flex-1 flex flex-col">
     <!-- Barra Superior -->
-    <header class="bg-slate-800/90 backdrop-blur border-b border-slate-700 px-4 py-3 flex justify-between items-center sticky top-0 z-20">
-      <div>
-        <h2 id="dash-user" class="font-bold text-white text-base">Cargando...</h2>
-        <p id="dash-faena" class="text-xs text-blue-400 font-semibold uppercase tracking-wider">Faena</p>
+    <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-3 sticky top-0 z-20 shadow-md">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 id="dash-user" class="font-bold text-white text-base leading-tight">Cargando...</h2>
+          <p id="dash-faena-badge" class="text-[11px] text-blue-400 font-semibold uppercase tracking-wider">Supervisor</p>
+        </div>
+        <button onclick="logout()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-slate-300 font-semibold border border-slate-700">Salir</button>
       </div>
-      <div class="flex items-center gap-2">
-        <button onclick="logout()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 font-medium">Salir</button>
+
+      <!-- SELECTOR SEGMENTADO DE FAENAS (Solo visible para Administrador) -->
+      <div id="admin-faena-toggle" class="hidden mt-3 p-1 bg-slate-950 rounded-xl border border-slate-800 flex">
+        <button id="toggle-tam" onclick="selectAdminFaena('Tamarugal')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-center">Tamarugal (22)</button>
+        <button id="toggle-ver" onclick="selectAdminFaena('Verdes')" class="flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-center">Verdes (31)</button>
       </div>
     </header>
 
-    <!-- Pestañas (Para Admin o Supervisor) -->
-    <div class="flex border-b border-slate-800 bg-slate-850 px-4 pt-2 gap-4 text-sm font-medium">
-      <button id="tab-btn-workers" onclick="switchTab('workers')" class="pb-2 border-b-2 border-blue-500 text-blue-400">Dotación</button>
-      <button id="tab-btn-requests" onclick="switchTab('requests')" class="pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200">
-        Solicitudes <span id="badge-requests" class="hidden ml-1 px-1.5 py-0.5 text-xs bg-rose-500 text-white rounded-full font-bold">0</span>
+    <!-- Pestañas de Navegación -->
+    <div class="flex border-b border-slate-800 bg-slate-900/50 px-4 pt-2 gap-6 text-sm font-medium">
+      <button id="tab-btn-workers" onclick="switchTab('workers')" class="pb-2.5 border-b-2 border-blue-500 text-blue-400 font-semibold">Dotación</button>
+      <button id="tab-btn-requests" onclick="switchTab('requests')" class="pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+        Solicitudes <span id="badge-requests" class="hidden ml-1 px-1.5 py-0.5 text-[10px] bg-rose-500 text-white rounded-full font-bold">0</span>
       </button>
     </div>
 
     <!-- Contenido: Dotación -->
-    <div id="tab-workers" class="flex-1 p-4 overflow-y-auto">
+    <div id="tab-workers" class="flex-1 p-4 overflow-y-auto no-scrollbar">
       <div class="flex justify-between items-center mb-3">
-        <div id="date-label" class="text-xs text-slate-400 font-medium">Hoy</div>
-        <button onclick="openModalRequest()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1 shadow">
-          <span>+ Solicitar Cambio</span>
+        <div>
+          <div id="date-label" class="text-xs text-slate-300 font-bold">Octubre 2026</div>
+          <div class="text-[10px] text-slate-500">Toca a un colaborador para ver su turno mensual</div>
+        </div>
+        <button onclick="openModalRequest()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-1.5 rounded-xl flex items-center gap-1 shadow-lg shadow-blue-600/30">
+          <span>+ Reemplazo</span>
         </button>
       </div>
 
@@ -95,73 +112,120 @@
     </div>
 
     <!-- Contenido: Solicitudes de Cambio -->
-    <div id="tab-requests" class="hidden flex-1 p-4 overflow-y-auto">
-      <h3 class="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Solicitudes de Cambio de Turno</h3>
+    <div id="tab-requests" class="hidden flex-1 p-4 overflow-y-auto no-scrollbar">
+      <h3 class="text-xs font-bold text-slate-400 mb-3 uppercase tracking-wider">Gestión de Solicitudes de Turno</h3>
       <div id="requests-list" class="space-y-3">
         <div class="text-center py-8 text-slate-500 text-sm">No hay solicitudes pendientes.</div>
       </div>
     </div>
   </div>
 
-  <!-- ==================== MODAL: SOLICITAR CAMBIO DE TURNO ==================== -->
-  <div id="modal-request" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
-    <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 text-slate-100 shadow-2xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-base font-bold text-white">Solicitar Reemplazo / Cambio</h3>
-        <button onclick="closeModalRequest()" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
+  <!-- ==================== MODAL 1: CALENDARIO MENSUAL TRABAJADOR ==================== -->
+  <div id="modal-worker-schedule" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 text-slate-100 shadow-2xl max-h-[90vh] overflow-y-auto no-scrollbar">
+      <!-- Encabezado Trabajador -->
+      <div class="flex justify-between items-start mb-4 pb-3 border-b border-slate-800">
+        <div class="flex items-center gap-3">
+          <div id="m-worker-code" class="w-12 h-12 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center font-bold text-sm">7101</div>
+          <div>
+            <h3 id="m-worker-name" class="text-base font-bold text-white">Nombre Trabajador</h3>
+            <p id="m-worker-sub" class="text-xs text-slate-400">Puesto · Faena</p>
+          </div>
+        </div>
+        <button onclick="closeWorkerSchedule()" class="text-slate-400 hover:text-white p-1 text-2xl font-bold leading-none">&times;</button>
       </div>
 
-      <div class="space-y-3 text-sm">
+      <!-- Título de Mes -->
+      <div class="flex justify-between items-center mb-3">
+        <div class="text-xs font-bold text-blue-400 uppercase tracking-wider">Octubre 2026</div>
+        <div class="text-[11px] text-slate-400">Jornada estándar: 7 hrs/día</div>
+      </div>
+
+      <!-- Cabecera Días Semana (L M X J V S D) -->
+      <div class="grid grid-cols-7 gap-1 text-center text-[10px] font-bold text-slate-400 mb-1">
+        <div>L</div><div>M</div><div>X</div><div>J</div><div>V</div><div>S</div><div class="text-amber-400">D</div>
+      </div>
+
+      <!-- Grilla Calendario 7x5 -->
+      <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 mb-4"></div>
+
+      <!-- Resumen Acumulado del Colaborador -->
+      <div class="grid grid-cols-3 gap-2 p-3 bg-slate-950 rounded-2xl border border-slate-800 text-center mb-4">
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Fecha del Cambio</label>
-          <input id="req-date" type="date" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" />
+          <div class="text-[10px] text-slate-400 uppercase font-bold">Días (DT)</div>
+          <div id="m-stat-dt" class="text-lg font-bold text-white">--</div>
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Trabajador que sale (o no asiste)</label>
-          <select id="req-worker-out" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500"></select>
+          <div class="text-[10px] text-slate-400 uppercase font-bold">Horas (HT)</div>
+          <div id="m-stat-ht" class="text-lg font-bold text-blue-400">--</div>
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Trabajador sustituto (debe estar Libre)</label>
-          <select id="req-worker-in" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500"></select>
+          <div class="text-[10px] text-slate-400 uppercase font-bold">Dom / DC</div>
+          <div id="m-stat-dom" class="text-lg font-bold text-emerald-400">--</div>
+        </div>
+      </div>
+
+      <button onclick="closeWorkerSchedule()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700">Cerrar Ficha</button>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: SOLICITAR CAMBIO DE TURNO ==================== -->
+  <div id="modal-request" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 text-slate-100 shadow-2xl">
+      <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="text-base font-bold text-white">Solicitar Reemplazo / Cambio</h3>
+          <p class="text-[11px] text-slate-400">Sujeto a aprobación de la administración</p>
+        </div>
+        <button onclick="closeModalRequest()" class="text-slate-400 hover:text-white text-2xl font-bold leading-none">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">Fecha del Cambio</label>
+          <input id="req-date" type="date" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500" />
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1">Motivo / Observación</label>
-          <input id="req-reason" type="text" placeholder="Ej. Solicitud de cliente / Permiso urgente" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" />
+          <label class="block font-medium text-slate-300 mb-1">Trabajador que sale (o no asiste)</label>
+          <select id="req-worker-out" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500"></select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">Trabajador sustituto (debe estar Libre)</label>
+          <select id="req-worker-in" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500"></select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">Motivo / Observación</label>
+          <input id="req-reason" type="text" placeholder="Ej. Permiso legal / Solicitud cliente" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-blue-500" />
         </div>
       </div>
 
       <div class="mt-5 flex gap-2">
-        <button onclick="closeModalRequest()" class="w-1/2 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 font-semibold text-sm">Cancelar</button>
-        <button onclick="submitShiftRequest()" class="w-1/2 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow">Enviar Solicitud</button>
+        <button onclick="closeModalRequest()" class="w-1/2 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs border border-slate-700">Cancelar</button>
+        <button onclick="submitShiftRequest()" class="w-1/2 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs shadow-lg shadow-blue-600/30">Enviar Solicitud</button>
       </div>
     </div>
   </div>
 
   <!-- Script Supabase & Lógica PWA -->
   <script>
-    // Credenciales del usuario
     const SUPABASE_URL = 'https://dwqhbsczmrlnqipvvjeb.supabase.co';
     const SUPABASE_ANON = 'sb_publishable_3bEuZraEw8_zybY2jMc5Jw_xrO-vbCk';
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
+    // Turnos de Octubre 2026 integrados para cada trabajador
+    const SHIFTS_DATABASE = {"7101": {"1": "T", "2": "T", "3": "L", "4": "T", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "L", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "T", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "L"}, "7123": {"1": "L", "2": "T", "3": "T", "4": "T", "5": "T", "6": "T", "7": "T", "8": "L", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "L", "16": "T", "17": "T", "18": "T", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "7105": {"1": "T", "2": "L", "3": "T", "4": "T", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "T", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "L", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "7106": {"1": "T", "2": "T", "3": "L", "4": "T", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "L", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "T", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "L"}, "7109": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "T", "7": "L", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "T", "19": "T", "20": "T", "21": "L", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "L", "29": "T", "30": "T", "31": "T"}, "7113": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "L", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "L", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "T", "19": "L", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "L", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "7114": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "L", "14": "T", "15": "T", "16": "T", "17": "T", "18": "T", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "L", "28": "T", "29": "T", "30": "T", "31": "T"}, "7102": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "T", "12": "T", "13": "L", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "T", "26": "T", "27": "L", "28": "T", "29": "T", "30": "T", "31": "T"}, "7103": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "L", "8": "T", "9": "T", "10": "T", "11": "T", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "L", "22": "T", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "L", "29": "T", "30": "T", "31": "T"}, "7107": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "L", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "T", "12": "L", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "L", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "T", "26": "L", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "7110": {"1": "L", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "L", "9": "T", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "L", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "7111": {"1": "T", "2": "L", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "L", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "L", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "7112": {"1": "T", "2": "T", "3": "L", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "L", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "T", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "L"}, "7115": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "L", "8": "T", "9": "T", "10": "T", "11": "T", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "L", "22": "T", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "L", "29": "T", "30": "T", "31": "T"}, "7122": {"1": "L", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "L", "9": "T", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "L", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "7104": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "7116": {"1": "L", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "L", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "7117": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "T", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "7118": {"1": "L", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "L", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "L", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "7121": {"1": "T", "2": "L", "3": "T", "4": "T", "5": "T", "6": "T", "7": "T", "8": "L", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "L", "16": "T", "17": "T", "18": "T", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "7119": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "T", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "7120": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "L", "8": "T", "9": "T", "10": "T", "11": "T", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "L", "22": "T", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "L", "29": "T", "30": "T", "31": "T"}, "1573": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "L", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "L", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "T", "19": "L", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "L", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "2377": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "L", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "L", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "T", "19": "L", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "L", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "6816": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "L", "14": "T", "15": "T", "16": "T", "17": "T", "18": "T", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "L", "28": "T", "29": "T", "30": "T", "31": "T"}, "4885": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "L", "14": "T", "15": "T", "16": "T", "17": "T", "18": "T", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "L", "28": "T", "29": "T", "30": "T", "31": "T"}, "1260": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "T", "7": "L", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "T", "19": "T", "20": "T", "21": "L", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "L", "29": "T", "30": "T", "31": "T"}, "2486": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "T", "7": "L", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "T", "19": "T", "20": "T", "21": "L", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "L", "29": "T", "30": "T", "31": "T"}, "8220": {"1": "L", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "L", "9": "T", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "L", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "2130": {"1": "L", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "L", "9": "T", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "L", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "2914": {"1": "T", "2": "L", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "L", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "L", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "1122": {"1": "T", "2": "L", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "L", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "L", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "8607": {"1": "T", "2": "T", "3": "L", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "L", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "T", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "L"}, "2616": {"1": "T", "2": "T", "3": "L", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "L", "11": "T", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "T", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "L"}, "3442": {"1": "T", "2": "T", "3": "L", "4": "T", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "L", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "T", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "L"}, "9262": {"1": "T", "2": "L", "3": "T", "4": "T", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "T", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "4602": {"1": "L", "2": "T", "3": "T", "4": "T", "5": "T", "6": "T", "7": "T", "8": "L", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "L", "16": "T", "17": "T", "18": "T", "19": "T", "20": "T", "21": "T", "22": "L", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "L", "30": "T", "31": "T"}, "2502": {"1": "T", "2": "L", "3": "T", "4": "T", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "L", "17": "T", "18": "T", "19": "T", "20": "T", "21": "T", "22": "T", "23": "L", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "4010": {"1": "T", "2": "T", "3": "L", "4": "T", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "L", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "L", "18": "T", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "L", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "L"}, "1506": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "L", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "T", "12": "L", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "L", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "T", "26": "L", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "6680": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "L", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "T", "12": "L", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "L", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "T", "26": "L", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "8994": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "T", "12": "T", "13": "L", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "T", "26": "T", "27": "L", "28": "T", "29": "T", "30": "T", "31": "T"}, "2466": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "L", "7": "T", "8": "T", "9": "T", "10": "T", "11": "T", "12": "T", "13": "L", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "L", "21": "T", "22": "T", "23": "T", "24": "T", "25": "T", "26": "T", "27": "L", "28": "T", "29": "T", "30": "T", "31": "T"}, "1240": {"1": "T", "2": "T", "3": "T", "4": "T", "5": "T", "6": "T", "7": "L", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "L", "17": "T", "18": "T", "19": "T", "20": "T", "21": "L", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "L", "29": "T", "30": "T", "31": "T"}, "8946": {"1": "T", "2": "L", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "L", "10": "T", "11": "T", "12": "T", "13": "T", "14": "L", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "L", "24": "T", "25": "T", "26": "T", "27": "T", "28": "T", "29": "T", "30": "L", "31": "T"}, "5976": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "2040": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "2063": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "9889": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "8909": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "3001": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "3002": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}, "3003": {"1": "T", "2": "T", "3": "T", "4": "L", "5": "T", "6": "T", "7": "T", "8": "T", "9": "T", "10": "T", "11": "L", "12": "T", "13": "T", "14": "T", "15": "T", "16": "T", "17": "T", "18": "L", "19": "T", "20": "T", "21": "T", "22": "T", "23": "T", "24": "T", "25": "L", "26": "T", "27": "T", "28": "T", "29": "T", "30": "T", "31": "T"}};
+
     let currentPin = '';
     let currentUser = null;
+    let selectedAdminFaena = 'Tamarugal';
     let workersList = [];
     let requestsList = [];
-
-    // Formatear fecha local hoy
-    const todayStr = new Date().toISOString().split('T')[0];
-    document.getElementById('date-label').innerText = 'Fecha: ' + new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    document.getElementById('req-date').value = todayStr;
 
     // Teclado PIN
     function pressKey(num) {
       if (currentPin.length < 4) {
         currentPin += num;
         updateDots();
-        if (currentPin.length === 4) {
-          setTimeout(verifyPin, 150);
-        }
       }
     }
 
@@ -181,19 +245,33 @@
         if (i < currentPin.length) {
           dot.className = 'w-4 h-4 rounded-full bg-blue-500 border-2 border-blue-400 scale-110 transition-all';
         } else {
-          dot.className = 'w-4 h-4 rounded-full border-2 border-slate-600 transition-all';
+          dot.className = 'w-4 h-4 rounded-full border-2 border-slate-700 transition-all';
         }
       }
       document.getElementById('login-error').classList.add('hidden');
+
+      const enterBtn = document.getElementById('btn-enter');
+      if (currentPin.length === 4) {
+        enterBtn.disabled = false;
+        enterBtn.className = 'w-full max-w-[290px] mt-4 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 transition-all cursor-pointer';
+      } else {
+        enterBtn.disabled = true;
+        enterBtn.className = 'w-full max-w-[290px] mt-4 py-3.5 rounded-2xl bg-slate-800 text-slate-500 font-bold text-sm tracking-wider flex items-center justify-center gap-2 border border-slate-700/50 transition-all cursor-not-allowed';
+      }
     }
 
     async function verifyPin() {
+      if (currentPin.length !== 4) return;
       const errEl = document.getElementById('login-error');
+      const btnText = document.getElementById('btn-enter-text');
       errEl.classList.add('hidden');
+      btnText.innerText = 'VERIFICANDO...';
 
       const { data, error } = await db.from('supervisores').select('*').eq('pin', currentPin).single();
+      btnText.innerText = 'INGRESAR';
+
       if (error || !data) {
-        errEl.innerText = 'PIN no reconocido. Reintenta.';
+        errEl.innerText = 'PIN no reconocido. Inténtalo nuevamente.';
         errEl.classList.remove('hidden');
         clearPin();
         return;
@@ -208,10 +286,37 @@
       document.getElementById('view-login').classList.add('hidden');
       document.getElementById('view-dashboard').classList.remove('hidden');
       document.getElementById('dash-user').innerText = currentUser.nombre;
-      document.getElementById('dash-faena').innerText = 'Faena: ' + currentUser.faena + ' (' + currentUser.rol.toUpperCase() + ')';
-      loadWorkers();
+      
+      const badgeEl = document.getElementById('dash-faena-badge');
+      const toggleEl = document.getElementById('admin-faena-toggle');
+
+      if (currentUser.rol === 'admin') {
+        badgeEl.innerText = 'ADMINISTRADOR GENERAL';
+        toggleEl.classList.remove('hidden');
+        selectAdminFaena('Tamarugal');
+      } else {
+        badgeEl.innerText = 'SUPERVISOR · FAENA ' + currentUser.faena.toUpperCase();
+        toggleEl.classList.add('hidden');
+        loadWorkers(currentUser.faena);
+      }
+
       loadRequests();
       initRealtime();
+    }
+
+    function selectAdminFaena(faena) {
+      selectedAdminFaena = faena;
+      const btnTam = document.getElementById('toggle-tam');
+      const btnVer = document.getElementById('toggle-ver');
+
+      if (faena === 'Tamarugal') {
+        btnTam.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-center bg-blue-600 text-white shadow';
+        btnVer.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-center text-slate-400 hover:text-white';
+      } else {
+        btnTam.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-center text-slate-400 hover:text-white';
+        btnVer.className = 'flex-1 py-1.5 rounded-lg text-xs font-bold transition-all text-center bg-blue-600 text-white shadow';
+      }
+      loadWorkers(faena);
     }
 
     function logout() {
@@ -227,62 +332,137 @@
       if (tab === 'workers') {
         document.getElementById('tab-workers').classList.remove('hidden');
         document.getElementById('tab-requests').classList.add('hidden');
-        document.getElementById('tab-btn-workers').className = 'pb-2 border-b-2 border-blue-500 text-blue-400';
-        document.getElementById('tab-btn-requests').className = 'pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        document.getElementById('tab-btn-workers').className = 'pb-2.5 border-b-2 border-blue-500 text-blue-400 font-semibold';
+        document.getElementById('tab-btn-requests').className = 'pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200';
       } else {
         document.getElementById('tab-workers').classList.add('hidden');
         document.getElementById('tab-requests').classList.remove('hidden');
-        document.getElementById('tab-btn-workers').className = 'pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200';
-        document.getElementById('tab-btn-requests').className = 'pb-2 border-b-2 border-blue-500 text-blue-400';
+        document.getElementById('tab-btn-workers').className = 'pb-2.5 border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        document.getElementById('tab-btn-requests').className = 'pb-2.5 border-b-2 border-blue-500 text-blue-400 font-semibold';
       }
     }
 
-    async function loadWorkers() {
-      let query = db.from('trabajadores').select('*').order('codigo');
-      if (currentUser.faena !== 'Ambas') {
-        query = query.eq('faena', currentUser.faena);
-      }
-      const { data, error } = await query;
-      if (error) return;
-      workersList = data;
-
+    async function loadWorkers(faenaToLoad) {
       const container = document.getElementById('workers-list');
-      container.innerHTML = '';
+      container.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">Cargando nómina ' + faenaToLoad + '...</div>';
 
+      const { data, error } = await db.from('trabajadores').select('*').eq('faena', faenaToLoad).order('codigo');
+      if (error) return;
+      workersList = data || [];
+
+      container.innerHTML = '';
       workersList.forEach(w => {
         const card = document.createElement('div');
-        card.className = 'p-3 bg-slate-800 rounded-xl border border-slate-700/80 flex items-center justify-between shadow-sm';
+        card.className = 'p-3.5 bg-slate-900 rounded-2xl border border-slate-800 hover:border-blue-500/50 flex items-center justify-between shadow-sm cursor-pointer active:bg-slate-850 transition-all';
+        card.onclick = () => openWorkerSchedule(w);
         card.innerHTML = `
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-lg bg-slate-700 flex items-center justify-center font-bold text-xs text-blue-400 border border-slate-600">
+            <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center font-bold text-xs text-blue-400 border border-slate-700/80">
               ${w.codigo}
             </div>
             <div>
-              <div class="text-sm font-semibold text-white leading-tight">${w.nombre}</div>
-              <div class="text-xs text-slate-400">${w.puesto || 'Operador'} · <span class="text-slate-500">${w.faena}</span></div>
+              <div class="text-sm font-bold text-white leading-tight">${w.nombre}</div>
+              <div class="text-xs text-slate-400">${w.puesto || 'Operador'} <span class="text-slate-600 font-normal">· ${w.grupo || faenaToLoad}</span></div>
             </div>
           </div>
-          <span class="px-2.5 py-1 rounded text-xs font-bold bg-emerald-900/60 text-emerald-300 border border-emerald-700/40">Activo</span>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800/40">Ver Turno</span>
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </div>
         `;
         container.appendChild(card);
       });
 
-      // Rellenar selects del modal
+      // Actualizar selects del modal con los trabajadores de esta faena
       const outSelect = document.getElementById('req-worker-out');
       const inSelect = document.getElementById('req-worker-in');
-      outSelect.innerHTML = workersList.map(w => `<option value="${w.id}">${w.nombre} (${w.codigo} - ${w.faena})</option>`).join('');
-      inSelect.innerHTML = workersList.map(w => `<option value="${w.id}">${w.nombre} (${w.codigo} - ${w.faena})</option>`).join('');
+      outSelect.innerHTML = workersList.map(w => `<option value="${w.id}">${w.nombre} (${w.codigo})</option>`).join('');
+      inSelect.innerHTML = workersList.map(w => `<option value="${w.id}">${w.nombre} (${w.codigo})</option>`).join('');
     }
 
+    // Visualización del Turno Completo del Mes
+    function openWorkerSchedule(worker) {
+      document.getElementById('m-worker-code').innerText = worker.codigo;
+      document.getElementById('m-worker-name').innerText = worker.nombre;
+      document.getElementById('m-worker-sub').innerText = (worker.puesto || 'Operador') + ' · ' + worker.faena + ' (' + (worker.grupo || 'General') + ')';
+
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+
+      // Octubre 2026 empieza el Jueves 1.
+      // Días vacíos previos (Lunes, Martes, Miércoles): 3 días
+      for (let i = 0; i < 3; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'h-10 rounded-lg bg-slate-950/40 border border-slate-900';
+        grid.appendChild(emptyCell);
+      }
+
+      const workerShifts = SHIFTS_DATABASE[worker.codigo] || {};
+      let dtCount = 0;
+      let domLabCount = 0;
+      let dcCount = 0;
+
+      for (let day = 1; day <= 31; day++) {
+        const shift = workerShifts[day] || 'T';
+        // Determinar si es domingo:
+        // En Octubre 2026, los domingos son: 4, 11, 18, 25
+        const isSunday = (day === 4 || day === 11 || day === 18 || day === 25);
+        if (shift === 'T') dtCount++;
+        if (shift === 'T' && isSunday) domLabCount++;
+        if (shift === 'DC') dcCount++;
+
+        const cell = document.createElement('div');
+        let styleClass = 'bg-slate-800 text-slate-200 border-slate-700'; // Default T
+        if (shift === 'L' || shift === 'D') {
+          styleClass = 'bg-emerald-950 text-emerald-300 border-emerald-800 font-bold';
+        } else if (shift === 'DC') {
+          styleClass = 'bg-blue-950 text-blue-300 border-blue-800 font-bold';
+        } else if (shift === 'LM' || shift === 'F') {
+          styleClass = 'bg-rose-950 text-rose-300 border-rose-800 font-bold';
+        } else if (shift === 'VAC') {
+          styleClass = 'bg-amber-950 text-amber-300 border-amber-800 font-bold';
+        }
+
+        cell.className = `h-11 rounded-xl border flex flex-col items-center justify-center p-0.5 ${styleClass}`;
+        cell.innerHTML = `
+          <span class="text-[9px] opacity-60 leading-none">${day}</span>
+          <span class="text-xs font-bold leading-tight">${shift}</span>
+        `;
+        grid.appendChild(cell);
+      }
+
+      // Rellenar días sobrantes de la última semana (Noviembre 1 es domingo, 1 casilla para completar semana)
+      const emptyEnd = document.createElement('div');
+      emptyEnd.className = 'h-10 rounded-lg bg-slate-950/40 border border-slate-900';
+      grid.appendChild(emptyEnd);
+
+      const baseHours = (worker.faena === 'Verdes') ? 7.0 : 7.33;
+      document.getElementById('m-stat-dt').innerText = dtCount;
+      document.getElementById('m-stat-ht').innerText = (dtCount * baseHours).toFixed(1) + 'h';
+      document.getElementById('m-stat-dom').innerText = domLabCount + ' / ' + dcCount;
+
+      document.getElementById('modal-worker-schedule').classList.remove('hidden');
+    }
+
+    function closeWorkerSchedule() {
+      document.getElementById('modal-worker-schedule').classList.add('hidden');
+    }
+
+    // Solicitudes de cambio
     async function loadRequests() {
       const { data, error } = await db.from('solicitudes_cambio')
-        .select('*, trabajador_sale:trabajador_sale_id(nombre, codigo), trabajador_entra:trabajador_entra_id(nombre, codigo), supervisor:supervisor_id(nombre)')
+        .select('*, trabajador_sale:trabajador_sale_id(nombre, codigo, faena), trabajador_entra:trabajador_entra_id(nombre, codigo, faena), supervisor:supervisor_id(nombre, faena)')
         .order('id', { ascending: false });
 
       if (error) return;
       requestsList = data || [];
 
-      const pendingCount = requestsList.filter(r => r.estado === 'PENDIENTE').length;
+      // Filtrar para el supervisor (solo ve las de su faena)
+      const filtered = (currentUser.rol === 'admin') 
+        ? requestsList 
+        : requestsList.filter(r => r.supervisor?.faena === currentUser.faena || r.trabajador_sale?.faena === currentUser.faena);
+
+      const pendingCount = filtered.filter(r => r.estado === 'PENDIENTE').length;
       const badge = document.getElementById('badge-requests');
       if (pendingCount > 0) {
         badge.innerText = pendingCount;
@@ -292,21 +472,21 @@
       }
 
       const container = document.getElementById('requests-list');
-      if (requestsList.length === 0) {
-        container.innerHTML = '<div class="text-center py-8 text-slate-500 text-sm">No hay solicitudes registradas.</div>';
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs">No hay solicitudes registradas.</div>';
         return;
       }
 
       container.innerHTML = '';
-      requestsList.forEach(r => {
+      filtered.forEach(r => {
         const isPending = r.estado === 'PENDIENTE';
         const card = document.createElement('div');
-        card.className = 'p-3.5 bg-slate-800 rounded-xl border border-slate-700 space-y-2';
+        card.className = 'p-3.5 bg-slate-900 rounded-2xl border border-slate-800 space-y-2.5 shadow-sm';
         
         let statusBadge = '';
-        if (r.estado === 'APROBADA') statusBadge = '<span class="text-xs bg-emerald-900 text-emerald-300 px-2 py-0.5 rounded font-bold">Aprobada</span>';
-        else if (r.estado === 'RECHAZADA') statusBadge = '<span class="text-xs bg-rose-900 text-rose-300 px-2 py-0.5 rounded font-bold">Rechazada</span>';
-        else statusBadge = '<span class="text-xs bg-amber-900 text-amber-300 px-2 py-0.5 rounded font-bold">Pendiente</span>';
+        if (r.estado === 'APROBADA') statusBadge = '<span class="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded-lg font-bold">Aprobada</span>';
+        else if (r.estado === 'RECHAZADA') statusBadge = '<span class="text-[10px] bg-rose-950 text-rose-300 border border-rose-800 px-2 py-0.5 rounded-lg font-bold">Rechazada</span>';
+        else statusBadge = '<span class="text-[10px] bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded-lg font-bold">Pendiente</span>';
 
         card.innerHTML = `
           <div class="flex justify-between items-center text-xs">
@@ -320,9 +500,9 @@
             <div class="text-slate-500 text-[10px]">Solicitado por: ${r.supervisor?.nombre || 'Supervisor'}</div>
           </div>
           ${currentUser.rol === 'admin' && isPending ? `
-            <div class="flex gap-2 pt-2 border-t border-slate-700">
-              <button onclick="handleRequest(${r.id}, 'APROBADA')" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold">Autorizar</button>
-              <button onclick="handleRequest(${r.id}, 'RECHAZADA')" class="flex-1 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded text-xs font-bold">Rechazar</button>
+            <div class="flex gap-2 pt-2 border-t border-slate-800">
+              <button onclick="handleRequest(${r.id}, 'APROBADA')" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow">Autorizar</button>
+              <button onclick="handleRequest(${r.id}, 'RECHAZADA')" class="flex-1 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold shadow">Rechazar</button>
             </div>
           ` : ''}
         `;
@@ -330,7 +510,10 @@
       });
     }
 
-    function openModalRequest() { document.getElementById('modal-request').classList.remove('hidden'); }
+    function openModalRequest() { 
+      document.getElementById('req-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('modal-request').classList.remove('hidden'); 
+    }
     function closeModalRequest() { document.getElementById('modal-request').classList.add('hidden'); }
 
     async function submitShiftRequest() {
@@ -354,7 +537,7 @@
       }]);
 
       if (error) {
-        alert('Error al enviar la solicitud: ' + error.message);
+        alert('Error al enviar solicitud: ' + error.message);
       } else {
         closeModalRequest();
         loadRequests();
@@ -376,12 +559,10 @@
         .subscribe();
     }
 
-    // Registrar Service Worker para PWA
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+      navigator.serviceWorker.register('sw.js').catch(err => console.log('SW:', err));
     }
 
-    // Auto login si ya había sesión
     const saved = localStorage.getItem('user_session');
     if (saved) {
       try {
