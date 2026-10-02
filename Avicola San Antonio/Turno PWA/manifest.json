@@ -1,0 +1,21 @@
+{
+  "name": "Turno Control Faena",
+  "short_name": "TurnoApp",
+  "description": "Gestión interactiva de turnos y dotación Tamarugal y Verdes",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#1E3A8A",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

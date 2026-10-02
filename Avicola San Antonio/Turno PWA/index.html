@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>TurnoApp - Control Faena</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1E3A8A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    .pin-btn:active { transform: scale(0.95); }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+  <!-- ==================== PANTALLA 1: LOGIN PIN ==================== -->
+  <div id="view-login" class="flex-1 flex flex-col justify-center items-center p-6 max-w-sm mx-auto w-full">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-blue-500/30 mb-4">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h1 class="text-2xl font-bold tracking-tight">TurnoApp Faena</h1>
+      <p class="text-slate-400 text-sm mt-1">Ingresa tu código PIN de 4 dígitos</p>
+    </div>
+
+    <!-- Indicador de PIN (4 bolitas) -->
+    <div class="flex justify-center gap-4 mb-8">
+      <div id="dot-0" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
+      <div id="dot-1" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
+      <div id="dot-2" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
+      <div id="dot-3" class="w-4 h-4 rounded-full border-2 border-slate-600"></div>
+    </div>
+
+    <div id="login-error" class="hidden text-rose-400 text-sm font-semibold text-center mb-4"></div>
+
+    <!-- Teclado Numérico Táctil -->
+    <div class="grid grid-cols-3 gap-4 w-full max-w-[280px]">
+      <button onclick="pressKey('1')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">1</button>
+      <button onclick="pressKey('2')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">2</button>
+      <button onclick="pressKey('3')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">3</button>
+      <button onclick="pressKey('4')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">4</button>
+      <button onclick="pressKey('5')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">5</button>
+      <button onclick="pressKey('6')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">6</button>
+      <button onclick="pressKey('7')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">7</button>
+      <button onclick="pressKey('8')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">8</button>
+      <button onclick="pressKey('9')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">9</button>
+      <button onclick="clearPin()" class="pin-btn h-16 rounded-2xl bg-slate-800/50 text-sm font-semibold text-slate-400 hover:bg-slate-800">BORRAR</button>
+      <button onclick="pressKey('0')" class="pin-btn h-16 rounded-2xl bg-slate-800 text-2xl font-semibold text-white hover:bg-slate-700 shadow border border-slate-700">0</button>
+      <button onclick="deleteLast()" class="pin-btn h-16 rounded-2xl bg-slate-800/50 flex items-center justify-center text-slate-400 hover:bg-slate-800">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== PANTALLA 2: PANEL PRINCIPAL ==================== -->
+  <div id="view-dashboard" class="hidden flex-1 flex flex-col">
+    <!-- Barra Superior -->
+    <header class="bg-slate-800/90 backdrop-blur border-b border-slate-700 px-4 py-3 flex justify-between items-center sticky top-0 z-20">
+      <div>
+        <h2 id="dash-user" class="font-bold text-white text-base">Cargando...</h2>
+        <p id="dash-faena" class="text-xs text-blue-400 font-semibold uppercase tracking-wider">Faena</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="logout()" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-slate-300 font-medium">Salir</button>
+      </div>
+    </header>
+
+    <!-- Pestañas (Para Admin o Supervisor) -->
+    <div class="flex border-b border-slate-800 bg-slate-850 px-4 pt-2 gap-4 text-sm font-medium">
+      <button id="tab-btn-workers" onclick="switchTab('workers')" class="pb-2 border-b-2 border-blue-500 text-blue-400">Dotación</button>
+      <button id="tab-btn-requests" onclick="switchTab('requests')" class="pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200">
+        Solicitudes <span id="badge-requests" class="hidden ml-1 px-1.5 py-0.5 text-xs bg-rose-500 text-white rounded-full font-bold">0</span>
+      </button>
+    </div>
+
+    <!-- Contenido: Dotación -->
+    <div id="tab-workers" class="flex-1 p-4 overflow-y-auto">
+      <div class="flex justify-between items-center mb-3">
+        <div id="date-label" class="text-xs text-slate-400 font-medium">Hoy</div>
+        <button onclick="openModalRequest()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1 shadow">
+          <span>+ Solicitar Cambio</span>
+        </button>
+      </div>
+
+      <!-- Lista de Colaboradores -->
+      <div id="workers-list" class="space-y-2">
+        <div class="text-center py-8 text-slate-500 text-sm">Cargando nómina...</div>
+      </div>
+    </div>
+
+    <!-- Contenido: Solicitudes de Cambio -->
+    <div id="tab-requests" class="hidden flex-1 p-4 overflow-y-auto">
+      <h3 class="text-sm font-bold text-slate-300 mb-3 uppercase tracking-wider">Solicitudes de Cambio de Turno</h3>
+      <div id="requests-list" class="space-y-3">
+        <div class="text-center py-8 text-slate-500 text-sm">No hay solicitudes pendientes.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: SOLICITAR CAMBIO DE TURNO ==================== -->
+  <div id="modal-request" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-t-2xl sm:rounded-2xl p-5 text-slate-100 shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-base font-bold text-white">Solicitar Reemplazo / Cambio</h3>
+        <button onclick="closeModalRequest()" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Fecha del Cambio</label>
+          <input id="req-date" type="date" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Trabajador que sale (o no asiste)</label>
+          <select id="req-worker-out" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Trabajador sustituto (debe estar Libre)</label>
+          <select id="req-worker-in" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500"></select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Motivo / Observación</label>
+          <input id="req-reason" type="text" placeholder="Ej. Solicitud de cliente / Permiso urgente" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500" />
+        </div>
+      </div>
+
+      <div class="mt-5 flex gap-2">
+        <button onclick="closeModalRequest()" class="w-1/2 py-2.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-300 font-semibold text-sm">Cancelar</button>
+        <button onclick="submitShiftRequest()" class="w-1/2 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow">Enviar Solicitud</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Supabase & Lógica PWA -->
+  <script>
+    // Credenciales del usuario
+    const SUPABASE_URL = 'https://dwqhbsczmrlnqipvvjeb.supabase.co';
+    const SUPABASE_ANON = 'sb_publishable_3bEuZraEw8_zybY2jMc5Jw_xrO-vbCk';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    let currentPin = '';
+    let currentUser = null;
+    let workersList = [];
+    let requestsList = [];
+
+    // Formatear fecha local hoy
+    const todayStr = new Date().toISOString().split('T')[0];
+    document.getElementById('date-label').innerText = 'Fecha: ' + new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    document.getElementById('req-date').value = todayStr;
+
+    // Teclado PIN
+    function pressKey(num) {
+      if (currentPin.length < 4) {
+        currentPin += num;
+        updateDots();
+        if (currentPin.length === 4) {
+          setTimeout(verifyPin, 150);
+        }
+      }
+    }
+
+    function deleteLast() {
+      currentPin = currentPin.slice(0, -1);
+      updateDots();
+    }
+
+    function clearPin() {
+      currentPin = '';
+      updateDots();
+    }
+
+    function updateDots() {
+      for (let i = 0; i < 4; i++) {
+        const dot = document.getElementById('dot-' + i);
+        if (i < currentPin.length) {
+          dot.className = 'w-4 h-4 rounded-full bg-blue-500 border-2 border-blue-400 scale-110 transition-all';
+        } else {
+          dot.className = 'w-4 h-4 rounded-full border-2 border-slate-600 transition-all';
+        }
+      }
+      document.getElementById('login-error').classList.add('hidden');
+    }
+
+    async function verifyPin() {
+      const errEl = document.getElementById('login-error');
+      errEl.classList.add('hidden');
+
+      const { data, error } = await db.from('supervisores').select('*').eq('pin', currentPin).single();
+      if (error || !data) {
+        errEl.innerText = 'PIN no reconocido. Reintenta.';
+        errEl.classList.remove('hidden');
+        clearPin();
+        return;
+      }
+
+      currentUser = data;
+      localStorage.setItem('user_session', JSON.stringify(data));
+      showDashboard();
+    }
+
+    function showDashboard() {
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('view-dashboard').classList.remove('hidden');
+      document.getElementById('dash-user').innerText = currentUser.nombre;
+      document.getElementById('dash-faena').innerText = 'Faena: ' + currentUser.faena + ' (' + currentUser.rol.toUpperCase() + ')';
+      loadWorkers();
+      loadRequests();
+      initRealtime();
+    }
+
+    function logout() {
+      currentUser = null;
+      currentPin = '';
+      updateDots();
+      localStorage.removeItem('user_session');
+      document.getElementById('view-dashboard').classList.add('hidden');
+      document.getElementById('view-login').classList.remove('hidden');
+    }
+
+    function switchTab(tab) {
+      if (tab === 'workers') {
+        document.getElementById('tab-workers').classList.remove('hidden');
+        document.getElementById('tab-requests').classList.add('hidden');
+        document.getElementById('tab-btn-workers').className = 'pb-2 border-b-2 border-blue-500 text-blue-400';
+        document.getElementById('tab-btn-requests').className = 'pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+      } else {
+        document.getElementById('tab-workers').classList.add('hidden');
+        document.getElementById('tab-requests').classList.remove('hidden');
+        document.getElementById('tab-btn-workers').className = 'pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        document.getElementById('tab-btn-requests').className = 'pb-2 border-b-2 border-blue-500 text-blue-400';
+      }
+    }
+
+    async function loadWorkers() {
+      let query = db.from('trabajadores').select('*').order('codigo');
+      if (currentUser.faena !== 'Ambas') {
+        query = query.eq('faena', currentUser.faena);
+      }
+      const { data, error } = await query;
+      if (error) return;
+      workersList = data;
+
+      const container = document.getElementById('workers-list');
+      container.innerHTML = '';
+
+      workersList.forEach(w => {
+        const card = document.createElement('div');
+        card.className = 'p-3 bg-slate-800 rounded-xl border border-slate-700/80 flex items-center justify-between shadow-sm';
+        card.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-lg bg-slate-700 flex items-center justify-center font-bold text-xs text-blue-400 border border-slate-600">
+              ${w.codigo}
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white leading-tight">${w.nombre}</div>
+              <div class="text-xs text-slate-400">${w.puesto || 'Operador'} · <span class="text-slate-500">${w.faena}</span></div>
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded text-xs font-bold bg-emerald-900/60 text-emerald-300 border border-emerald-700/40">Activo</span>
+        `;
+        container.appendChild(card);
+      });
+
+      // Rellenar selects del modal
+      const outSelect = document.getElementById('req-worker-out');
+      const inSelect = document.getElementById('req-worker-in');
+      outSelect.innerHTML = workersList.map(w => `<option value="${w.id}">${w.nombre} (${w.codigo} - ${w.faena})</option>`).join('');
+      inSelect.innerHTML = workersList.map(w => `<option value="${w.id}">${w.nombre} (${w.codigo} - ${w.faena})</option>`).join('');
+    }
+
+    async function loadRequests() {
+      const { data, error } = await db.from('solicitudes_cambio')
+        .select('*, trabajador_sale:trabajador_sale_id(nombre, codigo), trabajador_entra:trabajador_entra_id(nombre, codigo), supervisor:supervisor_id(nombre)')
+        .order('id', { ascending: false });
+
+      if (error) return;
+      requestsList = data || [];
+
+      const pendingCount = requestsList.filter(r => r.estado === 'PENDIENTE').length;
+      const badge = document.getElementById('badge-requests');
+      if (pendingCount > 0) {
+        badge.innerText = pendingCount;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      const container = document.getElementById('requests-list');
+      if (requestsList.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-slate-500 text-sm">No hay solicitudes registradas.</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      requestsList.forEach(r => {
+        const isPending = r.estado === 'PENDIENTE';
+        const card = document.createElement('div');
+        card.className = 'p-3.5 bg-slate-800 rounded-xl border border-slate-700 space-y-2';
+        
+        let statusBadge = '';
+        if (r.estado === 'APROBADA') statusBadge = '<span class="text-xs bg-emerald-900 text-emerald-300 px-2 py-0.5 rounded font-bold">Aprobada</span>';
+        else if (r.estado === 'RECHAZADA') statusBadge = '<span class="text-xs bg-rose-900 text-rose-300 px-2 py-0.5 rounded font-bold">Rechazada</span>';
+        else statusBadge = '<span class="text-xs bg-amber-900 text-amber-300 px-2 py-0.5 rounded font-bold">Pendiente</span>';
+
+        card.innerHTML = `
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400">Fecha: <strong class="text-white">${r.fecha_turno}</strong></span>
+            ${statusBadge}
+          </div>
+          <div class="text-xs space-y-1">
+            <div><span class="text-rose-400 font-semibold">Sale / Descanso:</span> ${r.trabajador_sale?.nombre || 'ID ' + r.trabajador_sale_id}</div>
+            <div><span class="text-emerald-400 font-semibold">Entra / Reemplazo:</span> ${r.trabajador_entra?.nombre || 'ID ' + r.trabajador_entra_id}</div>
+            <div class="text-slate-400 italic">"${r.motivo || 'Sin observación'}"</div>
+            <div class="text-slate-500 text-[10px]">Solicitado por: ${r.supervisor?.nombre || 'Supervisor'}</div>
+          </div>
+          ${currentUser.rol === 'admin' && isPending ? `
+            <div class="flex gap-2 pt-2 border-t border-slate-700">
+              <button onclick="handleRequest(${r.id}, 'APROBADA')" class="flex-1 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-bold">Autorizar</button>
+              <button onclick="handleRequest(${r.id}, 'RECHAZADA')" class="flex-1 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded text-xs font-bold">Rechazar</button>
+            </div>
+          ` : ''}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function openModalRequest() { document.getElementById('modal-request').classList.remove('hidden'); }
+    function closeModalRequest() { document.getElementById('modal-request').classList.add('hidden'); }
+
+    async function submitShiftRequest() {
+      const date = document.getElementById('req-date').value;
+      const workerOut = document.getElementById('req-worker-out').value;
+      const workerIn = document.getElementById('req-worker-in').value;
+      const reason = document.getElementById('req-reason').value;
+
+      if (!date || !workerOut || !workerIn) {
+        alert('Por favor completa todos los campos.');
+        return;
+      }
+
+      const { error } = await db.from('solicitudes_cambio').insert([{
+        supervisor_id: currentUser.id,
+        fecha_turno: date,
+        trabajador_sale_id: workerOut,
+        trabajador_entra_id: workerIn,
+        motivo: reason,
+        estado: 'PENDIENTE'
+      }]);
+
+      if (error) {
+        alert('Error al enviar la solicitud: ' + error.message);
+      } else {
+        closeModalRequest();
+        loadRequests();
+        switchTab('requests');
+      }
+    }
+
+    async function handleRequest(requestId, newStatus) {
+      const { error } = await db.from('solicitudes_cambio').update({ estado: newStatus }).eq('id', requestId);
+      if (error) alert('Error: ' + error.message);
+      else loadRequests();
+    }
+
+    function initRealtime() {
+      db.channel('realtime_changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'solicitudes_cambio' }, () => {
+          loadRequests();
+        })
+        .subscribe();
+    }
+
+    // Registrar Service Worker para PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+    }
+
+    // Auto login si ya había sesión
+    const saved = localStorage.getItem('user_session');
+    if (saved) {
+      try {
+        currentUser = JSON.parse(saved);
+        showDashboard();
+      } catch (e) { localStorage.removeItem('user_session'); }
+    }
+  </script>
+</body>
+</html>
