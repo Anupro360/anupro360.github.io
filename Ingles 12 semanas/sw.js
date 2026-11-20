@@ -1,10 +1,12 @@
-const CACHE_NAME = 'ingles-12sem-v4';
+const CACHE_NAME = 'ingles-rapido-v2';
 const ASSETS = [
   './',
   './index.html',
   './data_p1.js',
   './data_p2.js',
   './data_p3.js',
+  './data_p4.js',
+  './data_p5.js',
   './manifest.json',
   './icon.png'
 ];
