@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#1e3a5f">
+<title>Inglés Rápido</title>
+
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Inglés Rápido">
+
+<style>
+:root {
+  --bg-body: #f4f7fa;
+  --bg-card: #ffffff;
+  --bg-subtle: #f8fafc;
+  --bg-pill: #e9eef4;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #475569;
+  --accent-primary: #1e3a5f;
+  --accent-blue: #0284c7;
+  --accent-warm: #b45309;
+  --warm-bg: #fef3c7;
+  --border-color: #cbd5e1;
+  --learned-bg: #f0fdf4;
+  --learned-border: #16a34a;
+  --review-bg: #fffbeb;
+  --review-border: #d97706;
+  --shadow-sm: 0 2px 8px rgba(15,23,42,0.05);
+  --font-scale: 1;
+}
+
+body.large-text {
+  --font-scale: 1.22;
+}
+
+body.dark-mode {
+  --bg-body: #0b1120;
+  --bg-card: #151e32;
+  --bg-subtle: #1e293b;
+  --bg-pill: #233047;
+  --text-primary: #f8fafc;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
+  --accent-primary: #38bdf8;
+  --accent-blue: #0ea5e9;
+  --accent-warm: #fbbf24;
+  --warm-bg: rgba(251,191,36,0.15);
+  --border-color: #334155;
+  --learned-bg: #0f291e;
+  --learned-border: #22c55e;
+  --review-bg: #291d0a;
+  --review-border: #f59e0b;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg-body);color:var(--text-primary);line-height:1.55;-webkit-tap-highlight-color:transparent;transition:background 0.25s,color 0.25s}
+.app{max-width:620px;margin:0 auto;min-height:100vh}
+
+/* BANNER INSTALACIÓN PWA */
+#install-banner{display:none;position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,0.97);backdrop-filter:blur(15px);border:1.5px solid #38bdf8;padding:20px 18px 16px;border-radius:20px;z-index:10000;width:92%;max-width:420px;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,0.45);animation:popUp 0.45s ease;color:white}
+@keyframes popUp{from{bottom:-200px;opacity:0}to{bottom:82px;opacity:1}}
+.install-close-btn{position:absolute;top:10px;right:14px;color:rgba(255,255,255,0.8);background:none;border:none;font-size:1.4rem;cursor:pointer;padding:4px}
+.install-body{text-align:center}
+.install-title{margin:0 0 6px;color:#fff;font-size:1.15rem;font-weight:800}
+.install-desc{color:#e2e8f0;font-size:0.9rem;margin-bottom:14px;line-height:1.45}
+.install-btn-action{background:linear-gradient(135deg,#0284c7,#1e3a5f);color:white;padding:13px;border-radius:12px;border:1px solid rgba(255,255,255,0.25);font-weight:700;width:100%;cursor:pointer;font-size:0.95rem;text-transform:uppercase;letter-spacing:0.5px}
+
+/* HEADER AMIGABLE Y LEGIBLE */
+.header{background:linear-gradient(135deg,#0f172a,#1e3a5f);padding:14px 16px;color:white;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.18)}
+.header-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.header h1{font-size:19px;font-weight:800;letter-spacing:-0.2px}
+.header-sub{font-size:12.5px;opacity:0.9;margin-top:2px;font-weight:600}
+.header-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tool-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:white;padding:8px 11px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;min-height:36px}
+.tool-btn.active-tool{background:#0284c7;border-color:#38bdf8}
+.tool-btn.phon{background:rgba(56,189,248,0.24);border-color:rgba(56,189,248,0.55);color:#e0f2fe}
+
+/* BUSCADOR DESPLEGABLE */
+.search-drawer{display:none;margin:12px 16px 0;position:relative;align-items:center}
+.search-drawer.open{display:flex}
+.search-input{width:100%;padding:12px 40px 12px 14px;border-radius:12px;border:2px solid var(--accent-blue);background:var(--bg-card);color:var(--text-primary);font-size:15px;outline:none;box-shadow:var(--shadow-sm)}
+.search-input::placeholder{color:var(--text-muted)}
+.search-clear{position:absolute;right:12px;background:none;border:none;color:var(--text-muted);font-size:18px;cursor:pointer;padding:4px}
+
+/* PANEL UNIFICADO DE CONTROLES Y PROGRESO */
+.unified-panel{background:var(--bg-card);margin:12px 16px 0;padding:12px 14px;border-radius:15px;border:1px solid var(--border-color);box-shadow:var(--shadow-sm)}
+.panel-row{display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap}
+.toggle-recall{display:flex;align-items:center;gap:6px;background:var(--bg-pill);border:1px solid var(--border-color);padding:6px 10px;border-radius:10px;color:var(--text-primary);font-size:12.5px;font-weight:700;cursor:pointer;min-height:36px}
+.recall-pill{padding:2px 7px;border-radius:6px;font-size:11px;font-weight:800;background:var(--bg-card);color:var(--text-muted)}
+.recall-pill.active{background:var(--accent-blue);color:white}
+
+.right-controls{display:flex;align-items:center;gap:6px}
+.font-btn{background:var(--bg-pill);border:1px solid var(--border-color);color:var(--text-primary);font-size:13px;font-weight:800;padding:6px 10px;border-radius:10px;cursor:pointer;min-height:36px}
+.font-btn.active{background:var(--accent-primary);color:white;border-color:var(--accent-primary)}
+body.dark-mode .font-btn.active{color:#0b1120}
+
+.speed-group{display:flex;background:var(--bg-pill);border:1px solid var(--border-color);border-radius:10px;padding:2px;min-height:36px}
+.speed-btn{border:none;background:none;color:var(--text-muted);font-size:12px;font-weight:700;padding:5px 9px;border-radius:8px;cursor:pointer}
+.speed-btn.active{background:var(--bg-card);color:var(--text-primary);box-shadow:0 1px 2px rgba(0,0,0,0.1)}
+
+.progress-inline{margin-top:11px;padding-top:10px;border-top:1px solid var(--border-color);display:flex;align-items:center;gap:10px}
+.progress-label{font-size:12.5px;font-weight:700;color:var(--text-muted);white-space:nowrap}
+.progress-bar-bg{flex:1;background:var(--bg-pill);border-radius:10px;height:8px;overflow:hidden}
+.progress-bar-fill{background:linear-gradient(90deg,#1e3a5f,#38bdf8);height:100%;border-radius:10px;transition:width 0.35s ease}
+.progress-val{font-size:12.5px;font-weight:800;color:var(--accent-primary);white-space:nowrap}
+
+/* SELECTOR DE SEMANA AMPLIO Y CLARO */
+.week-nav-box{display:flex;align-items:center;gap:8px;margin:12px 16px 0}
+.nav-arrow{width:44px;height:46px;border-radius:12px;border:1.5px solid var(--border-color);background:var(--bg-card);color:var(--text-primary);font-size:16px;font-weight:800;cursor:pointer;flex-shrink:0;box-shadow:var(--shadow-sm)}
+.nav-arrow:disabled{opacity:0.35;cursor:default}
+.week-select-wrap{flex:1;position:relative}
+.week-select{width:100%;height:46px;padding:0 34px 0 12px;border-radius:12px;border:1.5px solid var(--border-color);background:var(--bg-card);color:var(--text-primary);font-size:14px;font-weight:800;appearance:none;-webkit-appearance:none;outline:none;cursor:pointer;box-shadow:var(--shadow-sm)}
+.week-select-arrow{position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;font-size:12px;color:var(--text-muted)}
+
+/* DÍAS DE LA SEMANA */
+.day-scroll{display:flex;gap:7px;overflow-x:auto;padding:11px 16px 6px;scrollbar-width:none}
+.day-scroll::-webkit-scrollbar{display:none}
+.day-btn{flex:1;min-width:74px;min-height:40px;padding:8px 10px;border-radius:11px;border:1.5px solid var(--border-color);background:var(--bg-card);color:var(--text-secondary);font-weight:700;font-size:12.5px;cursor:pointer;transition:all 0.2s;text-align:center;white-space:nowrap}
+.day-btn.active{background:var(--accent-primary);color:white;border-color:var(--accent-primary);box-shadow:0 2px 6px rgba(30,58,95,0.22)}
+body.dark-mode .day-btn.active{color:#0b1120}
+
+/* CABECERA DE TEMA Y REGLA COLAPSABLE */
+.topic-header{margin:8px 16px 12px;padding:13px 15px;background:var(--bg-card);border-radius:14px;border:1px solid var(--border-color);box-shadow:var(--shadow-sm)}
+.topic-focus{font-size:calc(13.5px * var(--font-scale));color:var(--text-secondary);line-height:1.45}
+.rule-toggle-btn{margin-top:9px;background:var(--bg-pill);border:1px solid var(--border-color);color:var(--accent-primary);padding:7px 12px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;min-height:36px}
+.grammar-note{display:none;margin-top:10px;padding:11px 13px;background:var(--bg-subtle);border-radius:10px;border-left:3.5px solid var(--accent-blue);font-size:calc(13.5px * var(--font-scale));color:var(--text-secondary);line-height:1.55}
+.grammar-note.open{display:block}
+.grammar-note strong{color:var(--text-primary)}
+
+/* TARJETAS DE ESTUDIO AMPLIAS Y AMIGABLES */
+.phrase-card{background:var(--bg-card);margin:13px 16px;padding:17px;border-radius:16px;box-shadow:var(--shadow-sm);border:1.5px solid var(--border-color);transition:all 0.2s}
+.phrase-card.learned{background:var(--learned-bg);border-color:var(--learned-border)}
+.phrase-card.reviewing{background:var(--review-bg);border-color:var(--review-border)}
+.phrase-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.phrase-text{flex:1;cursor:pointer}
+.phrase-cat{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;margin-bottom:6px}
+.phrase-en{font-size:calc(18px * var(--font-scale));font-weight:800;color:var(--text-primary);line-height:1.42;margin-bottom:8px}
+.phrase-phon{display:inline-block;background:var(--warm-bg);color:var(--accent-warm);padding:4px 10px;border-radius:8px;font-size:calc(14.5px * var(--font-scale));font-weight:700;margin-bottom:8px;transition:filter 0.2s;line-height:1.4}
+.phrase-phon u{text-decoration:underline;text-decoration-thickness:2px}
+.phrase-es{font-size:calc(15px * var(--font-scale));color:var(--text-secondary);font-weight:600;line-height:1.45;transition:filter 0.2s}
+.blurred-text{filter:blur(6px);user-select:none;opacity:0.4}
+.reveal-hint{font-size:12px;color:var(--accent-blue);font-weight:700;margin-top:6px;display:block}
+
+.status-btn{background:var(--bg-pill);border:1.5px solid var(--border-color);border-radius:11px;padding:8px 12px;font-size:12.5px;font-weight:700;color:var(--text-muted);cursor:pointer;flex-shrink:0;min-height:40px}
+.status-btn.s1{background:#fef3c7;border-color:#d97706;color:#92400e}
+.status-btn.s2{background:#dcfce7;border-color:#16a34a;color:#14532d}
+body.dark-mode .status-btn.s1{background:#451a03;color:#fbbf24}
+body.dark-mode .status-btn.s2{background:#052e16;color:#4ade80}
+
+.context-box{margin-top:13px;padding:12px 14px;background:var(--bg-subtle);border-radius:12px;border:1px solid var(--border-color);font-size:calc(13.5px * var(--font-scale));display:none;line-height:1.55}
+.context-box.open{display:block}
+.context-row{margin-bottom:7px;color:var(--text-secondary)}
+.context-row:last-child{margin-bottom:0}
+.context-row strong{color:var(--text-primary)}
+.context-row u{text-decoration:underline;text-decoration-color:var(--accent-warm);text-decoration-thickness:2px;font-weight:700}
+
+.phrase-actions{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--border-color)}
+.btn-listen{background:var(--accent-primary);color:white;border:none;padding:10px 12px;border-radius:11px;font-weight:700;font-size:13.5px;cursor:pointer;flex:1.3;text-align:center;min-height:42px}
+body.dark-mode .btn-listen{color:#0b1120}
+.btn-repeat{background:var(--bg-pill);color:var(--text-primary);border:1px solid var(--border-color);padding:10px 10px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer;flex:0.7;text-align:center;min-height:42px}
+.btn-ctx{background:var(--bg-pill);color:var(--text-secondary);border:1px solid var(--border-color);padding:10px 10px;border-radius:11px;font-weight:700;font-size:13px;cursor:pointer;flex:1.1;text-align:center;min-height:42px}
+.btn-ctx.has-assoc{color:var(--accent-warm)}
+
+/* QUIZ Y CONSEJO ÚNICO */
+.quiz-cta{margin:15px 16px;padding:15px 16px;background:linear-gradient(135deg,#1e3a5f,#0284c7);color:white;border-radius:15px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 4px 14px rgba(2,132,199,0.22)}
+.quiz-cta-btn{background:white;color:#1e3a5f;border:none;padding:10px 15px;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;min-height:42px;white-space:nowrap}
+.single-tip{margin:15px 16px;padding:14px 16px;border-radius:14px;background:var(--bg-card);border:1px solid var(--border-color);box-shadow:var(--shadow-sm)}
+.single-tip .label{font-weight:800;font-size:12px;color:var(--accent-primary);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:5px}
+.single-tip .text{font-size:calc(13.5px * var(--font-scale));color:var(--text-secondary);line-height:1.5}
+
+/* BOTTOM NAV AMPLIA */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg-card);border-top:1.5px solid var(--border-color);display:flex;justify-content:space-around;padding:8px 0;z-index:100;max-width:620px;margin:0 auto}
+.nav-btn{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text-muted);font-size:12px;font-weight:700;cursor:pointer;padding:4px 16px;position:relative;min-height:46px}
+.nav-btn.active{color:var(--accent-primary)}
+.nav-badge{position:absolute;top:0;right:8px;background:#d97706;color:#fff;font-size:10px;font-weight:800;padding:1px 6px;border-radius:10px}
+.content-area{padding-bottom:92px}
+
+/* STATS */
+.rank-banner{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:white;margin:14px 16px 0;padding:16px;border-radius:16px}
+.rank-tag{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#38bdf8;font-weight:800}
+.rank-title{font-size:18px;font-weight:800;margin-top:3px}
+.rank-sub{font-size:13px;color:#e2e8f0;margin-top:4px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px}
+.stat-card{background:var(--bg-card);padding:15px;border-radius:14px;text-align:center;border:1px solid var(--border-color);box-shadow:var(--shadow-sm)}
+.stat-card .number{font-size:28px;font-weight:800;color:var(--accent-primary)}
+.stat-card .label{font-size:12px;color:var(--text-muted);margin-top:2px;font-weight:600}
+.week-detail{background:var(--bg-card);margin:8px 16px;padding:13px 15px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--border-color)}
+.week-detail .name{font-weight:700;font-size:13.5px}
+.week-detail .progress{font-size:13px;color:var(--text-muted);font-weight:700;white-space:nowrap}
+
+/* MODALES */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,0.82);backdrop-filter:blur(6px);z-index:9999;padding:14px;overflow-y:auto;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--bg-card);width:100%;max-width:520px;border-radius:18px;padding:18px;border:1px solid var(--border-color);max-height:86vh;overflow-y:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:9px;border-bottom:1px solid var(--border-color);position:sticky;top:0;background:var(--bg-card);z-index:5}
+.modal-head h2{font-size:16.5px;font-weight:800}
+.close-modal{background:var(--bg-pill);border:none;color:var(--text-primary);width:34px;height:34px;border-radius:50%;font-weight:700;font-size:15px;cursor:pointer}
+.rule-card{background:var(--bg-subtle);border:1px solid var(--border-color);border-radius:11px;padding:12px 13px;margin-bottom:10px;font-size:13.5px}
+.rule-card h4{color:var(--accent-primary);font-size:14px;margin-bottom:5px}
+.rule-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.rule-ex{background:var(--bg-card);padding:7px;border-radius:7px;border:1px solid var(--border-color);text-align:center;font-size:12px}
+.rule-ex b{display:block;color:var(--text-primary)}
+.rule-ex span{color:var(--accent-warm);font-weight:700}
+.sos-item{padding:13px;border-radius:12px;background:var(--bg-subtle);border:1px solid var(--border-color);margin-bottom:10px}
+.sos-tag{font-size:11px;font-weight:800;text-transform:uppercase;color:var(--accent-warm);margin-bottom:3px}
+.quiz-opt{width:100%;text-align:left;padding:13px;margin-top:9px;border-radius:11px;border:1.5px solid var(--border-color);background:var(--bg-subtle);color:var(--text-primary);font-weight:600;font-size:14.5px;cursor:pointer;min-height:46px}
+.quiz-opt.correct{background:#dcfce7;border-color:#16a34a;color:#14532d}
+.quiz-opt.wrong{background:#fee2e2;border-color:#ef4444;color:#7f1d1d}
+
+@keyframes slideIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.slide-in{animation:slideIn 0.2s ease}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>Inglés Rápido</h1>
+      <div class="header-sub">Avance: <span id="hl">0</span>/<span id="ht">0</span> (<span id="hp">0</span>%)</div>
+    </div>
+    <div class="header-tools">
+      <button class="tool-btn" id="searchToggleBtn" onclick="toggleSearchDrawer()">Buscar</button>
+      <button class="tool-btn phon" onclick="openPhonetics()">Fonética</button>
+      <button class="tool-btn" onclick="openSOS()">Claves</button>
+      <button class="tool-btn" onclick="toggleTheme()" id="themeBtn">Oscuro</button>
+    </div>
+  </div>
+</div>
+
+<!-- PÁGINA 1: ESTUDIAR -->
+<div id="mainPage" class="content-area">
+  <!-- BUSCADOR DESPLEGABLE -->
+  <div class="search-drawer" id="searchDrawer">
+    <input type="text" id="searchInput" class="search-input" placeholder="Escribe una palabra en inglés o español..." oninput="handleSearch()">
+    <button id="searchClear" class="search-clear" onclick="clearSearch()">✕</button>
+  </div>
+
+  <!-- PANEL UNIFICADO: CONTROLES + PROGRESO SEMANAL -->
+  <div class="unified-panel">
+    <div class="panel-row">
+      <button class="toggle-recall" onclick="toggleRecall()">
+        <span>Practicar</span>
+        <span class="recall-pill" id="recallPill">OFF</span>
+      </button>
+      <div class="right-controls">
+        <button class="font-btn" id="fontBtn" onclick="toggleLargeText()" title="Agrandar letra">A+</button>
+        <div class="speed-group">
+          <button class="speed-btn" id="spd075" onclick="setSpeed(0.75)">Lento</button>
+          <button class="speed-btn active" id="spd090" onclick="setSpeed(0.9)">Normal</button>
+        </div>
+      </div>
+    </div>
+    <div class="progress-inline" id="weekProgressRow">
+      <span class="progress-label">Sem <span id="pw">1</span></span>
+      <div class="progress-bar-bg"><div id="wpb" class="progress-bar-fill" style="width:0%"></div></div>
+      <span class="progress-val" id="wpt">0/0</span>
+    </div>
+  </div>
+
+  <!-- NAVEGACIÓN DE SEMANA Y DÍA -->
+  <div id="studyNavWrap">
+    <div class="week-nav-box">
+      <button class="nav-arrow" id="prevWeekBtn" onclick="stepWeek(-1)" aria-label="Semana anterior">◀</button>
+      <div class="week-select-wrap">
+        <select id="weekSelect" class="week-select" onchange="setWeek(Number(this.value))"></select>
+        <span class="week-select-arrow">▼</span>
+      </div>
+      <button class="nav-arrow" id="nextWeekBtn" onclick="stepWeek(1)" aria-label="Semana siguiente">▶</button>
+    </div>
+
+    <div class="day-scroll" id="ds"></div>
+    <div class="topic-header" id="wi"></div>
+  </div>
+
+  <!-- LISTADO DE TARJETAS -->
+  <div id="pc"></div>
+  <div id="quizCtaContainer"></div>
+
+  <!-- CONSEJO ÚNICO AL PIE -->
+  <div id="tipsWrap">
+    <div class="single-tip">
+      <div class="label">Consejo de Estudio</div>
+      <div class="text" id="tt"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PÁGINA 2: REPASO INTELIGENTE -->
+<div id="reviewPage" class="content-area" style="display:none">
+  <div class="topic-header" style="margin-top:14px">
+    <div style="font-weight:800;font-size:15.5px;margin-bottom:3px">Repaso Inteligente</div>
+    <div class="topic-focus">Tarjetas marcadas «Repasando» o estudiadas hace más de 3 días</div>
+  </div>
+  <div id="reviewList"></div>
+</div>
+
+<!-- PÁGINA 3: PROGRESO -->
+<div id="statsPage" class="content-area" style="display:none">
+  <div class="rank-banner">
+    <div class="rank-tag">Nivel de Avance</div>
+    <div class="rank-title" id="rankTitle">Nivel 1: Iniciación</div>
+    <div class="rank-sub" id="rankSub">Domina tus primeras 200 tarjetas para subir de nivel.</div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="number" id="st">0</div><div class="label">Tarjetas totales</div></div>
+    <div class="stat-card"><div class="number" id="sl">0</div><div class="label">Dominadas</div></div>
+    <div class="stat-card"><div class="number" id="sp">0%</div><div class="label">Progreso total</div></div>
+    <div class="stat-card"><div class="number" id="ss">0</div><div class="label">Días seguidos</div></div>
+  </div>
+  <div id="wsl"></div>
+</div>
+
+<!-- NAVEGACIÓN INFERIOR -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="showPage('main',event)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span>Estudiar</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('review',event)">
+    <span class="nav-badge" id="revBadge" style="display:none">0</span>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    <span>Repasar</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('stats',event)">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <span>Progreso</span>
+  </button>
+</div>
+</div>
+
+<!-- MODAL GUÍA DE PRONUNCIACIÓN FIGURADA -->
+<div class="modal-overlay" id="phonModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>Guía de Pronunciación Figurada</h2>
+      <button class="close-modal" onclick="closeModal('phonModal')">✕</button>
+    </div>
+    <div id="phonContent"></div>
+  </div>
+</div>
+
+<!-- MODAL FRASES CLAVE -->
+<div class="modal-overlay" id="sosModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>Frases Clave de Conversación</h2>
+      <button class="close-modal" onclick="closeModal('sosModal')">✕</button>
+    </div>
+    <div id="sosContent"></div>
+  </div>
+</div>
+
+<!-- MODAL QUIZ -->
+<div class="modal-overlay" id="quizModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>Reto Auditivo Rápido</h2>
+      <button class="close-modal" onclick="closeModal('quizModal')">✕</button>
+    </div>
+    <div id="quizContent"></div>
+  </div>
+</div>
+
+<!-- BANNER INSTALACIÓN -->
+<div id="install-banner">
+  <button onclick="closeInstallBanner()" class="install-close-btn">✕</button>
+  <div class="install-body">
+    <h3 class="install-title">Instalar Inglés Rápido</h3>
+    <p class="install-desc">Estudia sin conexión con audios, pronunciación figurada y asociación visual.</p>
+    <button id="btn-install-now" class="install-btn-action">INSTALAR APLICACIÓN</button>
+  </div>
+</div>
+
+<!-- CARGA MODULAR DE DATOS -->
+<script>window.DATA = {};</script>
+<script src="data_p1.js"></script>
+<script src="data_p2.js"></script>
+<script src="data_p3.js"></script>
+<script src="data_p4.js"></script>
+<script src="data_p5.js"></script>
+
+<script>
+let curWeek = 1, curDay = 1;
+let prog = {};
+let timestamps = {};
+let streak = 0, lastDate = null;
+let recallMode = false;
+let speechRate = 0.9;
+let selectedVoice = null;
+let searchQuery = '';
+let ruleOpen = false;
+
+function loadProg() {
+  try {
+    const a = localStorage.getItem('ep');
+    prog = a ? (JSON.parse(a) || {}) : {};
+    const ts = localStorage.getItem('ep_ts');
+    timestamps = ts ? (JSON.parse(ts) || {}) : {};
+    const b = localStorage.getItem('es');
+    if (b) streak = parseInt(b) || 0;
+    const c = localStorage.getItem('el');
+    if (c) lastDate = c;
+    if (localStorage.getItem('ep_dark') === '1') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('themeBtn').textContent = 'Claro';
+    }
+    if (localStorage.getItem('ep_large') === '1') {
+      document.body.classList.add('large-text');
+      document.getElementById('fontBtn').classList.add('active');
+    }
+  } catch (e) { prog = {}; timestamps = {}; }
+}
+
+function saveProg() {
+  try {
+    localStorage.setItem('ep', JSON.stringify(prog));
+    localStorage.setItem('ep_ts', JSON.stringify(timestamps));
+    localStorage.setItem('es', String(streak));
+    localStorage.setItem('el', lastDate || '');
+  } catch (e) {}
+}
+
+function makeKey(w, d, i) { return 'w' + w + '_d' + d + '_p' + i; }
+
+function getStatus(w, d, i) {
+  const val = prog[makeKey(w, d, i)];
+  if (val === true || val === 2) return 2;
+  if (val === 1) return 1;
+  return 0;
+}
+
+function cycleStatus(w, d, i) {
+  const k = makeKey(w, d, i);
+  const cur = getStatus(w, d, i);
+  const next = (cur + 1) % 3;
+  prog[k] = next === 2 ? true : (next === 1 ? 1 : false);
+  if (next > 0) timestamps[k] = Date.now();
+  if (navigator.vibrate) navigator.vibrate(25);
+
+  const t = new Date().toDateString();
+  if (lastDate !== t) {
+    if (lastDate === new Date(Date.now() - 86400000).toDateString()) streak++;
+    else streak = 1;
+    lastDate = t;
+  }
+  saveProg();
+  if (searchQuery) renderSearchResults();
+  else renderPhrases();
+  updateProgress();
+  renderWeekSelector();
+  if (document.getElementById('reviewPage').style.display === 'block') renderReviewList();
+}
+
+function initVoices() {
+  if (!('speechSynthesis' in window)) return;
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length) {
+    selectedVoice =
+      voices.find(v => v.name.includes('Google US English')) ||
+      voices.find(v => v.name.includes('Samantha')) ||
+      voices.find(v => v.lang === 'en-US') ||
+      voices.find(v => v.lang.startsWith('en'));
+  }
+}
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.onvoiceschanged = initVoices;
+  initVoices();
+}
+
+function speakText(txt) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const clean = txt
+      .replace(/[«»]/g, '')
+      .replace(/\?/g, '')
+      .replace(/\(.*?\)/g, '')
+      .replace(/\s*[\/|]\s*/g, '. ... ');
+    const u = new SpeechSynthesisUtterance(clean);
+    if (selectedVoice) u.voice = selectedVoice;
+    u.lang = 'en-US';
+    u.rate = speechRate;
+    u.pitch = 1;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+function speakTwice(txt) {
+  speakText(txt);
+  setTimeout(() => speakText(txt), speechRate < 0.8 ? 2800 : 2200);
+}
+
+function setSpeed(rate) {
+  speechRate = rate;
+  document.getElementById('spd075').classList.toggle('active', rate === 0.75);
+  document.getElementById('spd090').classList.toggle('active', rate === 0.9);
+}
+
+function toggleLargeText() {
+  const isLarge = document.body.classList.toggle('large-text');
+  localStorage.setItem('ep_large', isLarge ? '1' : '0');
+  document.getElementById('fontBtn').classList.toggle('active', isLarge);
+}
+
+function toggleRecall() {
+  recallMode = !recallMode;
+  const pill = document.getElementById('recallPill');
+  pill.textContent = recallMode ? 'ON' : 'OFF';
+  pill.classList.toggle('active', recallMode);
+  if (searchQuery) renderSearchResults();
+  else renderPhrases();
+}
+
+function revealCard(el) {
+  el.querySelectorAll('.blurred-text').forEach(node => node.classList.remove('blurred-text'));
+  const hint = el.querySelector('.reveal-hint');
+  if (hint) hint.style.display = 'none';
+}
+
+function toggleContext(id) {
+  const box = document.getElementById(id);
+  if (box) box.classList.toggle('open');
+}
+
+function toggleRuleNote() {
+  ruleOpen = !ruleOpen;
+  const note = document.getElementById('dayGrammarNote');
+  const btn = document.getElementById('ruleToggleBtn');
+  if (note) note.classList.toggle('open', ruleOpen);
+  if (btn) btn.textContent = ruleOpen ? 'Ocultar regla del día ▴' : 'Ver regla del día ▾';
+}
+
+function toggleTheme() {
+  const isDark = document.body.classList.toggle('dark-mode');
+  localStorage.setItem('ep_dark', isDark ? '1' : '0');
+  document.getElementById('themeBtn').textContent = isDark ? 'Claro' : 'Oscuro';
+}
+
+function getWeekKeys() {
+  return Object.keys(window.DATA).map(Number).sort((a, b) => a - b);
+}
+
+function getWeekProg(w) {
+  let t = 0, l = 0;
+  const days = window.DATA[w] ? Object.keys(window.DATA[w].p) : [];
+  days.forEach(d => {
+    const p = window.DATA[w].p[d] || [];
+    t += p.length;
+    for (let i = 0; i < p.length; i++) if (getStatus(w, d, i) === 2) l++;
+  });
+  return { t, l };
+}
+
+function getTotalProg() {
+  let t = 0, l = 0;
+  getWeekKeys().forEach(w => {
+    const x = getWeekProg(w);
+    t += x.t;
+    l += x.l;
+  });
+  return { t, l };
+}
+
+function getReviewItems() {
+  const items = [];
+  const threeDaysMs = 3 * 86400000;
+  const now = Date.now();
+  getWeekKeys().forEach(w => {
+    Object.keys(window.DATA[w].p).forEach(d => {
+      (window.DATA[w].p[d] || []).forEach((item, i) => {
+        const st = getStatus(w, d, i);
+        const k = makeKey(w, d, i);
+        const isOldMastered = st === 2 && timestamps[k] && (now - timestamps[k] > threeDaysMs);
+        if (st === 1 || isOldMastered) {
+          items.push({ w, d, i, item, reason: st === 1 ? 'Repasando' : 'Repaso (+3 días)' });
+        }
+      });
+    });
+  });
+  return items;
+}
+
+function toggleSearchDrawer() {
+  const drawer = document.getElementById('searchDrawer');
+  const btn = document.getElementById('searchToggleBtn');
+  const isOpen = drawer.classList.toggle('open');
+  btn.classList.toggle('active-tool', isOpen);
+  if (isOpen) {
+    document.getElementById('searchInput').focus();
+  } else {
+    clearSearch();
+  }
+}
+
+function handleSearch() {
+  const input = document.getElementById('searchInput');
+  searchQuery = input.value.trim().toLowerCase();
+
+  const navWrap = document.getElementById('studyNavWrap');
+  const tipsWrap = document.getElementById('tipsWrap');
+  const progRow = document.getElementById('weekProgressRow');
+  const cta = document.getElementById('quizCtaContainer');
+
+  if (searchQuery) {
+    navWrap.style.display = 'none';
+    tipsWrap.style.display = 'none';
+    progRow.style.display = 'none';
+    cta.innerHTML = '';
+    renderSearchResults();
+  } else {
+    navWrap.style.display = 'block';
+    tipsWrap.style.display = 'block';
+    progRow.style.display = 'flex';
+    renderPhrases();
+  }
+}
+
+function clearSearch() {
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  if (searchQuery) {
+    searchQuery = '';
+    handleSearch();
+  } else {
+    document.getElementById('searchDrawer').classList.remove('open');
+    document.getElementById('searchToggleBtn').classList.remove('active-tool');
+  }
+}
+
+function renderSearchResults() {
+  const c = document.getElementById('pc');
+  const results = [];
+  getWeekKeys().forEach(w => {
+    Object.keys(window.DATA[w].p).forEach(d => {
+      (window.DATA[w].p[d] || []).forEach((item, i) => {
+        const match =
+          item.e.toLowerCase().includes(searchQuery) ||
+          item.s.toLowerCase().includes(searchQuery) ||
+          item.h.toLowerCase().includes(searchQuery);
+        if (match) results.push({ w, d, i, item });
+      });
+    });
+  });
+
+  if (results.length === 0) {
+    c.innerHTML = `<div class="single-tip"><div class="label">Sin resultados</div><div class="text">No se encontraron tarjetas con "${searchQuery}".</div></div>`;
+    return;
+  }
+
+  c.innerHTML = results.slice(0, 60).map(obj =>
+    buildPhraseCardHTML(obj.item, obj.w, obj.d, obj.i, `Sem ${obj.w} · Día ${obj.d}`)
+  ).join('');
+}
+
+function renderWeekSelector() {
+  const sel = document.getElementById('weekSelect');
+  const weeks = getWeekKeys();
+  sel.innerHTML = weeks.map(w => {
+    const x = getWeekProg(w);
+    const doneMark = (x.l === x.t && x.t > 0) ? '✓ ' : '';
+    return `<option value="${w}" ${w === curWeek ? 'selected' : ''}>${doneMark}Sem ${w}: ${window.DATA[w].n} (${x.l}/${x.t})</option>`;
+  }).join('');
+
+  const idx = weeks.indexOf(curWeek);
+  document.getElementById('prevWeekBtn').disabled = idx <= 0;
+  document.getElementById('nextWeekBtn').disabled = idx >= weeks.length - 1;
+}
+
+function stepWeek(delta) {
+  const weeks = getWeekKeys();
+  const idx = weeks.indexOf(curWeek);
+  const nextIdx = idx + delta;
+  if (nextIdx >= 0 && nextIdx < weeks.length) {
+    setWeek(weeks[nextIdx]);
+  }
+}
+
+function renderDayTabs() {
+  const el = document.getElementById('ds');
+  const days = window.DATA[curWeek] ? Object.keys(window.DATA[curWeek].p).map(Number).sort((a,b)=>a-b) : [1,2,3,4,5];
+  el.innerHTML = days.map(d => {
+    const label = (window.DATA[curWeek].dayLabels && window.DATA[curWeek].dayLabels[d]) ? window.DATA[curWeek].dayLabels[d] : `Día ${d}`;
+    return `<button class="day-btn ${d === curDay ? 'active' : ''}" onclick="setDay(${d})">${label}</button>`;
+  }).join('');
+}
+
+function formatMultiText(str) {
+  return str.replace(/\s+\/\s+/g, ' <span style="opacity:0.45;font-weight:400">·</span> ');
+}
+
+function buildPhraseCardHTML(x, w, d, i, badgeLabel) {
+  const st = getStatus(w, d, i);
+  const escText = x.e.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  const cardCls = st === 2 ? 'learned' : (st === 1 ? 'reviewing' : '');
+  const btnCls = st === 2 ? 's2' : (st === 1 ? 's1' : '');
+  const btnTxt = st === 2 ? 'Dominada' : (st === 1 ? 'Repasando' : 'Marcar');
+  const blurCls = recallMode ? 'blurred-text' : '';
+  const ctxId = `ctx_${w}_${d}_${i}`;
+
+  const hasAssoc = Boolean(x.a || x.ctx || x.resp);
+  const btnLabel = x.a ? 'Asociación' : 'Regla';
+
+  let detailsHTML = '';
+  if (x.a) detailsHTML += `<div class="context-row"><strong>Asociación visual:</strong> ${x.a}</div>`;
+  if (x.ctx) detailsHTML += `<div class="context-row"><strong>Referencia:</strong> ${x.ctx}</div>`;
+  if (x.resp) detailsHTML += `<div class="context-row"><strong>Ejemplo:</strong> <em>${x.resp}</em></div>`;
+  if (!detailsHTML) detailsHTML = `<div class="context-row"><strong>Práctica:</strong> Pronuncia en voz alta 3 veces leyendo la fonética figurada como español y visualiza la escena durante 4 segundos.</div>`;
+
+  return `
+    <div class="phrase-card ${cardCls} slide-in">
+      <div class="phrase-header">
+        <div class="phrase-text" onclick="revealCard(this)">
+          ${badgeLabel ? `<div class="sos-tag">${badgeLabel}</div>` : (x.cat ? `<div class="phrase-cat">${x.cat}</div>` : '')}
+          <div class="phrase-en">${formatMultiText(x.e)}</div>
+          <div class="phrase-phon ${blurCls}">${formatMultiText(x.h)}</div>
+          <div class="phrase-es ${blurCls}">${formatMultiText(x.s)}</div>
+          ${recallMode ? `<span class="reveal-hint">Toca para ver la respuesta</span>` : ''}
+        </div>
+        <button class="status-btn ${btnCls}" onclick="cycleStatus(${w},${d},${i})">${btnTxt}</button>
+      </div>
+      <div class="context-box" id="${ctxId}">${detailsHTML}</div>
+      <div class="phrase-actions">
+        <button class="btn-listen" onclick="speakText('${escText}')">Escuchar</button>
+        <button class="btn-repeat" onclick="speakTwice('${escText}')">2x</button>
+        <button class="btn-ctx ${hasAssoc ? 'has-assoc' : ''}" onclick="toggleContext('${ctxId}')">${btnLabel}</button>
+      </div>
+    </div>`;
+}
+
+function renderPhrases() {
+  const c = document.getElementById('pc');
+  const w = window.DATA[curWeek];
+  if (!w) return;
+  const p = w.p[curDay] || [];
+  const rawNote = (w.dayNotes && w.dayNotes[curDay]) ? w.dayNotes[curDay] : '';
+
+  document.getElementById('wi').innerHTML = `
+    <div class="topic-focus">${w.f}</div>
+    ${rawNote ? `
+      <button id="ruleToggleBtn" class="rule-toggle-btn" onclick="toggleRuleNote()">${ruleOpen ? 'Ocultar regla del día ▴' : 'Ver regla del día ▾'}</button>
+      <div id="dayGrammarNote" class="grammar-note ${ruleOpen ? 'open' : ''}">${rawNote}</div>
+    ` : ''}
+  `;
+
+  let h = '';
+  let dayCompletedCount = 0;
+  p.forEach((x, i) => {
+    if (getStatus(curWeek, curDay, i) === 2) dayCompletedCount++;
+    h += buildPhraseCardHTML(x, curWeek, curDay, i, null);
+  });
+  c.innerHTML = h;
+
+  const cta = document.getElementById('quizCtaContainer');
+  if (p.length >= 3 && dayCompletedCount === p.length) {
+    cta.innerHTML = `
+      <div class="quiz-cta slide-in">
+        <div>
+          <div style="font-weight:800;font-size:14.5px">¡Día completado!</div>
+          <div style="font-size:12px;opacity:0.95">Pon a prueba tu oído sin leer</div>
+        </div>
+        <button class="quiz-cta-btn" onclick="openDailyQuiz()">Reto Auditivo</button>
+      </div>`;
+  } else {
+    cta.innerHTML = '';
+  }
+}
+
+function updateProgress() {
+  const x = getWeekProg(curWeek);
+  const y = getTotalProg();
+  document.getElementById('wpt').textContent = x.l + '/' + x.t;
+  document.getElementById('wpb').style.width = x.t > 0 ? (x.l / x.t * 100) + '%' : '0%';
+  document.getElementById('hl').textContent = y.l;
+  document.getElementById('ht').textContent = y.t;
+  document.getElementById('st').textContent = y.t;
+  document.getElementById('hp').textContent = y.t > 0 ? Math.round(y.l / y.t * 100) : 0;
+  document.getElementById('pw').textContent = curWeek;
+
+  if (typeof TIPS !== 'undefined') {
+    document.getElementById('tt').textContent = TIPS[(curWeek + curDay - 2) % TIPS.length];
+  }
+
+  const revCount = getReviewItems().length;
+  const badge = document.getElementById('revBadge');
+  badge.style.display = revCount > 0 ? 'inline-block' : 'none';
+  badge.textContent = revCount;
+}
+
+function renderReviewList() {
+  const container = document.getElementById('reviewList');
+  const items = getReviewItems();
+  if (items.length === 0) {
+    container.innerHTML = `<div class="single-tip"><div class="label">Todo al día</div><div class="text">No tienes tarjetas pendientes de repaso. Pulsa «Marcar» en cualquier tarjeta para pasarla a «Repasando».</div></div>`;
+    return;
+  }
+  container.innerHTML = items.map(obj =>
+    buildPhraseCardHTML(obj.item, obj.w, obj.d, obj.i, `Sem ${obj.w} · Día ${obj.d} · ${obj.reason}`)
+  ).join('');
+}
+
+function renderStats() {
+  const y = getTotalProg();
+  document.getElementById('sl').textContent = y.l;
+  document.getElementById('sp').textContent = y.t > 0 ? Math.round(y.l / y.t * 100) + '%' : '0%';
+  document.getElementById('ss').textContent = streak;
+
+  const rTitle = document.getElementById('rankTitle');
+  const rSub = document.getElementById('rankSub');
+  if (y.l < 200) {
+    rTitle.textContent = 'Nivel 1: Base Inicial';
+    rSub.textContent = `Domina ${200 - y.l} tarjetas más para ascender a Comunicación Básica.`;
+  } else if (y.l < 500) {
+    rTitle.textContent = 'Nivel 2: Comunicación Básica';
+    rSub.textContent = `Domina ${500 - y.l} tarjetas más para ascender a Conversación Fluida.`;
+  } else if (y.l < 850) {
+    rTitle.textContent = 'Nivel 3: Conversación Fluida';
+    rSub.textContent = `Domina ${850 - y.l} tarjetas más para alcanzar Dominio Completo.`;
+  } else {
+    rTitle.textContent = 'Nivel 4: Dominio Completo';
+    rSub.textContent = 'Has consolidado el vocabulario esencial y las estructuras clave del idioma.';
+  }
+
+  document.getElementById('wsl').innerHTML = getWeekKeys().map(w => {
+    const x = getWeekProg(w);
+    const p = x.t > 0 ? Math.round(x.l / x.t * 100) : 0;
+    return `<div class="week-detail"><div class="name">Sem ${w}: ${window.DATA[w].n}</div><div class="progress">${x.l}/${x.t} (${p}%)</div></div>`;
+  }).join('');
+}
+
+function openPhonetics() {
+  if (typeof PHONETICS_GUIDE_HTML !== 'undefined') {
+    document.getElementById('phonContent').innerHTML = PHONETICS_GUIDE_HTML;
+  }
+  document.getElementById('phonModal').classList.add('open');
+}
+
+function openSOS() {
+  if (typeof EMERGENCY_PHRASES !== 'undefined') {
+    document.getElementById('sosContent').innerHTML = EMERGENCY_PHRASES.map(item => {
+      const esc = item.e.replace(/'/g, "\\'");
+      return `
+        <div class="sos-item">
+          <div class="sos-tag">${item.tag}</div>
+          <div style="font-weight:800;font-size:16px;margin-bottom:4px">${item.e}</div>
+          <div style="font-size:13.5px;color:var(--accent-warm);font-weight:700;margin-bottom:3px">${item.h}</div>
+          <div style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">${item.s}</div>
+          <button class="btn-listen" style="padding:9px 12px;width:100%" onclick="speakText('${esc}')">Escuchar pronunciación</button>
+        </div>`;
+    }).join('');
+  }
+  document.getElementById('sosModal').classList.add('open');
+}
+
+function openDailyQuiz() {
+  const phrases = window.DATA[curWeek].p[curDay] || [];
+  if (phrases.length < 3) return;
+  const targetIdx = Math.floor(Math.random() * phrases.length);
+  const target = phrases[targetIdx];
+  const distractors = phrases.filter((_, idx) => idx !== targetIdx).sort(() => 0.5 - Math.random()).slice(0, 2);
+  const options = [target, ...distractors].sort(() => 0.5 - Math.random());
+  const escTarget = target.e.replace(/'/g, "\\'");
+
+  document.getElementById('quizContent').innerHTML = `
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:10px">Escucha el audio y elige su significado en español:</p>
+    <button class="btn-listen" style="width:100%;margin-bottom:12px" onclick="speakText('${escTarget}')">Reproducir Audio</button>
+    ${options.map(opt => `<button class="quiz-opt" onclick="checkQuizAnswer(this, ${opt.e === target.e})">${opt.s}</button>`).join('')}
+  `;
+  document.getElementById('quizModal').classList.add('open');
+  speakText(target.e);
+}
+
+function checkQuizAnswer(btn, isCorrect) {
+  if (isCorrect) {
+    btn.classList.add('correct');
+    if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+    setTimeout(() => closeModal('quizModal'), 850);
+  } else {
+    btn.classList.add('wrong');
+  }
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function setWeek(w) { curWeek = w; curDay = 1; renderWeekSelector(); renderDayTabs(); renderPhrases(); updateProgress(); }
+function setDay(d) { curDay = d; renderDayTabs(); renderPhrases(); updateProgress(); }
+
+function showPage(pageName, evt) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (evt) {
+    const btn = evt.currentTarget || (evt.target ? evt.target.closest('.nav-btn') : null);
+    if (btn) btn.classList.add('active');
+  }
+  document.getElementById('mainPage').style.display = pageName === 'main' ? 'block' : 'none';
+  document.getElementById('reviewPage').style.display = pageName === 'review' ? 'block' : 'none';
+  document.getElementById('statsPage').style.display = pageName === 'stats' ? 'block' : 'none';
+  if (pageName === 'main') updateProgress();
+  if (pageName === 'review') renderReviewList();
+  if (pageName === 'stats') renderStats();
+}
+
+loadProg();
+renderWeekSelector();
+renderDayTabs();
+renderPhrases();
+updateProgress();
+
+let deferredPrompt;
+const installBanner = document.getElementById('install-banner');
+const installBtn = document.getElementById('btn-install-now');
+
+function closeInstallBanner() {
+  if (installBanner) installBanner.style.display = 'none';
+  localStorage.setItem('pwa_banner_dismissed', String(Date.now()));
+}
+
+window.addEventListener('load', () => {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  const dismissedAt = parseInt(localStorage.getItem('pwa_banner_dismissed') || '0');
+  if (!isStandalone && installBanner && (Date.now() - dismissedAt > 7 * 86400000)) {
+    setTimeout(() => { installBanner.style.display = 'flex'; }, 1000);
+  }
+});
+
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') closeInstallBanner();
+      deferredPrompt = null;
+    } else {
+      alert("Para instalar la aplicación:\n\n• En Android (Chrome): Pulsa los 3 puntos superiores y selecciona 'Instalar aplicación'.\n\n• En iPhone (Safari): Pulsa Compartir y selecciona 'Agregar al inicio'.");
+    }
+  });
+}
+
+window.addEventListener('appinstalled', () => { closeInstallBanner(); deferredPrompt = null; });
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(() => {}); });
+}
+</script>
+</body>
+</html>
