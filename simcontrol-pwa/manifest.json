@@ -1,0 +1,17 @@
+{
+  "name": "SimControl RT - Registro de Capacitación",
+  "short_name": "SimControl RT",
+  "description": "Sistema rápido de registro de operadores y actividades en simuladores mineros",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#ea580c",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3063/3063822.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

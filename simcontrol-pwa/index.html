@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SimControl RT | Gestión Integral de Simuladores</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+            },
+            cat: {
+              500: '#eab308',
+              600: '#ca8a04',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <!-- SheetJS para exportar a Excel (.xlsx) -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+  <!-- Iconos Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200 min-h-screen flex flex-col">
+
+  <!-- BARRA SUPERIOR -->
+  <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-brand-600 text-white p-2 rounded-lg font-bold tracking-wider text-sm">
+          SIM-RT
+        </div>
+        <div>
+          <h1 class="font-bold text-base sm:text-lg leading-tight">Control de Entrenamiento</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400">SimControl 2025.2 • Radomiro Tomic</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Indicador Base de Datos Google -->
+        <span id="db-status-badge" class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+          <span id="db-status-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
+          <span id="db-status-text">Modo Local (Sin Google)</span>
+        </span>
+
+        <!-- BOTÓN MODO CLARO / OSCURO -->
+        <button id="theme-toggle" onclick="toggleTheme()" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-medium transition cursor-pointer">
+          <i id="theme-icon" data-lucide="sun" class="w-4 h-4 text-amber-500"></i>
+          <span id="theme-label">Modo Claro</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- NAVEGACIÓN PRINCIPAL -->
+    <nav class="max-w-7xl mx-auto px-4 flex gap-1 overflow-x-auto border-t border-slate-100 dark:border-slate-800/80">
+      <button onclick="switchTab('registro')" id="tab-registro" class="nav-btn flex items-center gap-2 px-4 py-3 text-sm font-semibold border-b-2 border-brand-600 text-brand-600 dark:text-brand-500 whitespace-nowrap cursor-pointer">
+        <i data-lucide="play-circle" class="w-4 h-4"></i> Sala Komatsu / Flota
+      </button>
+      <button onclick="switchTab('cat798')" id="tab-cat798" class="nav-btn flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-yellow-600 dark:hover:text-yellow-400 whitespace-nowrap cursor-pointer">
+        <i data-lucide="crown" class="w-4 h-4 text-yellow-500"></i> Caterpillar 798AC (Senior)
+      </button>
+      <button onclick="switchTab('historial')" id="tab-historial" class="nav-btn flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white whitespace-nowrap cursor-pointer">
+        <i data-lucide="history" class="w-4 h-4"></i> Bitácora y Excel
+      </button>
+      <button onclick="switchTab('operadores')" id="tab-operadores" class="nav-btn flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white whitespace-nowrap cursor-pointer">
+        <i data-lucide="users" class="w-4 h-4"></i> Operadores
+      </button>
+      <button onclick="switchTab('instructores')" id="tab-instructores" class="nav-btn flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white whitespace-nowrap cursor-pointer">
+        <i data-lucide="hard-hat" class="w-4 h-4"></i> Instructores
+      </button>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-1 space-y-6">
+
+    <!-- ============================================================== -->
+    <!-- BARRA DE SESIÓN ACTIVA EN VIVO (APARECE AL INICIAR UNA SESIÓN) -->
+    <!-- ============================================================== -->
+    <div id="banner-sesion-activa" class="hidden bg-emerald-950/90 border-2 border-emerald-500 text-white p-4 rounded-xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="relative flex h-3.5 w-3.5">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500"></span>
+        </span>
+        <div>
+          <div class="text-xs uppercase tracking-wider text-emerald-300 font-bold">Sesión en Curso en Simulador</div>
+          <div class="font-bold text-base" id="activa-info">Operador • Equipo</div>
+          <div class="text-xs text-emerald-200 font-mono" id="activa-tiempo">Hora Entrada: --:-- | Transcurrido: 0 min</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <button onclick="finalizarYGuardarSesion()" class="w-full md:w-auto px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold rounded-lg text-sm flex items-center justify-center gap-2 shadow transition cursor-pointer">
+          <i data-lucide="check-square" class="w-4 h-4"></i> Finalizar y Marcar Hora Salida
+        </button>
+        <button onclick="cancelarSesionActiva()" class="px-3 py-2.5 bg-rose-900/80 hover:bg-rose-800 text-rose-200 rounded-lg text-xs font-semibold cursor-pointer">
+          Descartar
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- PESTAÑA 1: SALA KOMATSU / FLOTA ESTÁNDAR                       -->
+    <!-- ============================================================== -->
+    <section id="view-registro" class="space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- COLUMNA IZQUIERDA (5 cols) -->
+        <div class="lg:col-span-5 space-y-5">
+          <!-- 1. Identificación Operador -->
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="font-bold text-base flex items-center gap-2">
+                <i data-lucide="search" class="w-4 h-4 text-brand-500"></i> 1. Operador (Flota Estándar)
+              </h2>
+              <button onclick="switchTab('operadores')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-medium cursor-pointer">
+                + Nuevo Alumno
+              </button>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                Ingresar N° SAP
+              </label>
+              <input type="text" id="input-sap" oninput="buscarPorSAP(this.value, 'STD')" placeholder="Ej: 450123..." 
+                class="w-full px-4 py-3 text-lg font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
+              <div id="sap-suggestions" class="mt-2 flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <div id="operador-card" class="p-3.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
+              <div class="text-xs text-slate-500 dark:text-slate-400">Operador Seleccionado:</div>
+              <div id="op-nombre" class="font-bold text-base">Ingrese un SAP para cargar datos...</div>
+              <div class="flex flex-wrap gap-4 text-xs text-slate-600 dark:text-slate-300 pt-1">
+                <span><strong>RUN:</strong> <span id="op-run" class="font-mono">-</span></span>
+                <span><strong>SAP:</strong> <span id="op-sap" class="font-mono">-</span></span>
+              </div>
+              <!-- Historial previo del operador -->
+              <div id="op-resumen-previo" class="hidden pt-2 mt-2 border-t border-slate-200 dark:border-slate-700 text-xs"></div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                Condición / Tipo de Capacitación
+              </label>
+              <select id="select-condicion" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium">
+                <option value="Operador Nuevo BEL">Operador Nuevo BEL</option>
+                <option value="Alumno en Práctica">Alumno en Práctica</option>
+                <option value="Operador Avezado / Con Experiencia">Operador Avezado / Con Experiencia</option>
+                <option value="Reconversión">Reconversión</option>
+                <option value="Homologación">Homologación</option>
+                <option value="Plazo Fijo">Operador Plazo Fijo</option>
+                <option value="Diagnóstico Anual">Diagnóstico Anual</option>
+                <option value="Plan CIP / Específico">Plan CIP / Entrenamiento Específico</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 2. Responsables y Control de Entrada -->
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <h2 class="font-bold text-base flex items-center gap-2">
+              <i data-lucide="clock" class="w-4 h-4 text-brand-500"></i> 2. Responsables y Control de Entrada
+            </h2>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                Instructor de Capacitación (Simulador)
+              </label>
+              <input type="text" id="input-instructor-cap" value="Instructor Capacitación (Titular)" 
+                class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/70 text-sm font-semibold text-brand-600 dark:text-brand-400" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                Instructor Encargado de Operadores (Área)
+              </label>
+              <select id="select-instructor-area" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm"></select>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3">
+              <div class="col-span-2">
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Fecha</label>
+                <input type="date" id="input-fecha" onchange="actualizarAnio()" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">Año</label>
+                <input type="text" id="input-anio" readonly class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/60 text-sm font-mono text-center" />
+              </div>
+            </div>
+
+            <!-- Botón Iniciar Sesión (Captura Hora Entrada) -->
+            <div class="pt-1">
+              <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-1.5">
+                <span>Hora Entrada: <strong id="display-hora-entrada" class="font-mono text-slate-900 dark:text-white">Pendiente</strong></span>
+                <span>Hora Salida: <strong id="display-hora-salida" class="font-mono text-slate-900 dark:text-white">Al finalizar</strong></span>
+              </div>
+              <button type="button" id="btn-iniciar-sesion" onclick="iniciarSesion('STD')" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-sm flex items-center justify-center gap-2 transition cursor-pointer">
+                <i data-lucide="play" class="w-4 h-4"></i> Iniciar Sesión en Cabina (Marcar Entrada)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: SIMULADOR, EQUIPO Y ACTIVIDADES (7 cols) -->
+        <div class="lg:col-span-7 space-y-5">
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+            <h2 class="font-bold text-base flex items-center gap-2">
+              <i data-lucide="monitor" class="w-4 h-4 text-brand-500"></i> 3. Simulador, Equipo y Trazabilidad de Actividades
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Simulador</label>
+                <select id="select-simulador" onchange="cargarEquipos()" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-semibold">
+                  <option value="SIM_A">Simulador A (13 Equipos)</option>
+                  <option value="SIM_B">Simulador B (8 Equipos)</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Equipo a Capacitar</label>
+                <select id="select-equipo" onchange="cargarPlanes()" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-semibold"></select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Plan de Estudio / Módulo</label>
+              <select id="select-plan" onchange="cargarActividades()" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium"></select>
+            </div>
+
+            <!-- Lista de Actividades con Contador de Reprobaciones + Cierres de Brechas -->
+            <div class="pt-1">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Escenarios (Registre intentos, cierres de brechas y aprobación)
+                </span>
+                <span id="contador-seleccion" class="text-xs font-semibold px-2 py-0.5 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400">
+                  0 registradas
+                </span>
+              </div>
+
+              <div id="lista-actividades" class="space-y-2.5 max-h-[430px] overflow-y-auto pr-1"></div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Observaciones Generales</label>
+              <textarea id="input-obs" rows="2" placeholder="Notas del desempeño, detalles de cierres de brechas..." class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm"></textarea>
+            </div>
+
+            <button onclick="finalizarYGuardarSesion()" class="w-full py-3.5 px-6 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-600/20 flex items-center justify-center gap-2 text-base transition cursor-pointer">
+              <i data-lucide="save" class="w-5 h-5"></i> Finalizar Sesión (Marcar Salida y Guardar en Google)
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- PESTAÑA 2: CATERPILLAR 798AC (FLOTA MAYOR / SENIOR)            -->
+    <!-- ============================================================== -->
+    <section id="view-cat798" class="hidden space-y-6">
+      <!-- Encabezado distintivo CAT 798AC -->
+      <div class="bg-gradient-to-r from-yellow-600/20 via-amber-500/10 to-transparent border border-yellow-500/40 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="bg-yellow-500 text-slate-950 p-2.5 rounded-lg font-black text-sm">CAT 798AC</div>
+          <div>
+            <h2 class="font-bold text-lg text-yellow-600 dark:text-yellow-400">Módulo Exclusivo Caterpillar 798AC (Operadores Senior)</h2>
+            <p class="text-xs text-slate-600 dark:text-slate-300">Gestión independiente de planes, módulos, cierres de brechas y operadores habilitados (+5 años experiencia).</p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="toggleSubVistaCat('operacion')" id="btn-cat-sub-op" class="px-3 py-2 rounded-lg bg-yellow-500 text-slate-950 font-bold text-xs cursor-pointer">
+            1. Evaluar Operador 798AC
+          </button>
+          <button onclick="toggleSubVistaCat('constructor')" id="btn-cat-sub-const" class="px-3 py-2 rounded-lg bg-slate-200 dark:bg-slate-800 font-bold text-xs cursor-pointer">
+            2. Crear Planes / Módulos / Brechas
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-VISTA A: OPERACIÓN Y EVALUACIÓN CAT 798AC -->
+      <div id="cat-sub-operacion" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 space-y-5">
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-yellow-500/30 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-base flex items-center gap-2">
+                <i data-lucide="user-check" class="w-4 h-4 text-yellow-500"></i> Operador Senior CAT 798AC
+              </h3>
+              <button onclick="switchTab('operadores')" class="text-xs text-yellow-600 dark:text-yellow-400 hover:underline font-medium cursor-pointer">
+                + Agregar Operador 798AC
+              </button>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Buscar SAP Operador 798AC</label>
+              <input type="text" id="cat-input-sap" oninput="buscarPorSAP(this.value, 'CAT')" placeholder="Ingrese SAP de operador 798AC..." 
+                class="w-full px-4 py-3 text-lg font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-yellow-500 focus:outline-none" />
+              <div id="cat-sap-suggestions" class="mt-2 flex flex-wrap gap-1.5"></div>
+            </div>
+
+            <div id="cat-operador-card" class="p-3.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
+              <div id="cat-op-nombre" class="font-bold text-base">Seleccione un operador habilitado para 798AC...</div>
+              <div class="flex gap-4 text-xs text-slate-500 dark:text-slate-400">
+                <span><strong>RUN:</strong> <span id="cat-op-run" class="font-mono">-</span></span>
+                <span><strong>SAP:</strong> <span id="cat-op-sap" class="font-mono">-</span></span>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Instructor Encargado de Área</label>
+              <select id="cat-select-instructor-area" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm"></select>
+            </div>
+
+            <button type="button" onclick="iniciarSesion('CAT')" class="w-full py-3 px-4 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold rounded-lg text-sm flex items-center justify-center gap-2 transition cursor-pointer">
+              <i data-lucide="play" class="w-4 h-4"></i> Iniciar Sesión CAT 798AC (Marcar Entrada)
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-5">
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-yellow-500/30 shadow-sm space-y-4">
+            <h3 class="font-bold text-base flex items-center gap-2">
+              <i data-lucide="layers" class="w-4 h-4 text-yellow-500"></i> Plan y Módulo CAT 798AC
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">1. Seleccionar Plan 798AC</label>
+                <select id="cat-select-plan" onchange="cargarModulosCat()" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-semibold"></select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">2. Seleccionar Módulo</label>
+                <select id="cat-select-modulo" onchange="cargarActividadesCat()" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-semibold"></select>
+              </div>
+            </div>
+
+            <!-- Lista de Actividades y Cierres de Brechas del Módulo 798AC -->
+            <div id="cat-lista-actividades" class="space-y-3 max-h-[420px] overflow-y-auto pr-1"></div>
+
+            <div>
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Observaciones Sesión 798AC</label>
+              <textarea id="cat-input-obs" rows="2" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm"></textarea>
+            </div>
+
+            <button onclick="finalizarYGuardarSesion()" class="w-full py-3.5 px-6 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold rounded-xl shadow-lg flex items-center justify-center gap-2 text-base transition cursor-pointer">
+              <i data-lucide="save" class="w-5 h-5"></i> Finalizar Sesión CAT 798AC y Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VISTA B: CONSTRUCTOR DE PLANES, MÓDULOS Y CIERRES DE BRECHAS CAT 798AC -->
+      <div id="cat-sub-constructor" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 bg-white dark:bg-slate-900 p-5 rounded-xl border border-yellow-500/40 shadow-sm space-y-4 h-fit">
+          <h3 class="font-bold text-base text-yellow-600 dark:text-yellow-400">Configurar Malla Curricular CAT 798AC</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Crea primero el Plan, luego el Módulo (ej. Módulo de Incendio) y agrega sus actividades y cierres de brechas.</p>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1">Nombre del Plan (Ej: Habilitación CAT 798AC)</label>
+            <input type="text" id="new-cat-plan" placeholder="Ej: Plan Operación Senior 798AC" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1">Nombre del Módulo (Ej: Módulo de Incendio)</label>
+            <input type="text" id="new-cat-modulo" placeholder="Ej: Módulo de Incendio" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1">Actividad Principal del Módulo</label>
+            <input type="text" id="new-cat-actividad" placeholder="Ej: Evaluación Control Incendio en Rampa" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1">Cierres de Brecha del Módulo (Uno por línea, ej. los 10 cierres)</label>
+            <textarea id="new-cat-brechas" rows="5" placeholder="CB 01 - Reconocimiento sistema AFEX&#10;CB 02 - Protocolo detención segura&#10;CB 03 - Activación manual supresión..." 
+              class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono"></textarea>
+          </div>
+
+          <button onclick="guardarEstructuraCat()" class="w-full py-2.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold rounded-lg text-sm transition cursor-pointer">
+            + Guardar Plan y Módulo en Base de Datos
+          </button>
+        </div>
+
+        <div class="lg:col-span-7 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <h3 class="font-bold text-base">Planes y Módulos Guardados para CAT 798AC</h3>
+          <div id="lista-estructura-cat" class="space-y-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- PESTAÑA 3: BITÁCORA E HISTORIAL                                -->
+    <!-- ============================================================== -->
+    <section id="view-historial" class="hidden space-y-5">
+      <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="font-bold text-lg">Bitácora Completa de Capacitaciones</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Incluye horas reales, intentos, reprobaciones, cierres de brechas y tiempos</p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <input type="text" id="filtro-historial" oninput="renderHistorial()" placeholder="Buscar SAP, Nombre o Equipo..." 
+              class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+            <button onclick="exportarExcel()" class="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition cursor-pointer">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Exportar Excel
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-sm">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50">
+                <th class="p-3">Fecha / Horario</th>
+                <th class="p-3">Operador</th>
+                <th class="p-3">Equipo / Plan</th>
+                <th class="p-3">Detalle Actividades, Intentos y Brechas</th>
+                <th class="p-3">Instructores</th>
+                <th class="p-3 text-right">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-historial" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- PESTAÑA 4: GESTIÓN DE OPERADORES (FLOTA ESTÁNDAR Y CAT 798AC)  -->
+    <!-- ============================================================== -->
+    <section id="view-operadores" class="hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 h-fit">
+          <h2 class="font-bold text-base flex items-center gap-2">
+            <i data-lucide="user-plus" class="w-4 h-4 text-brand-500"></i> Registrar Nuevo Operador
+          </h2>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Flota / Categoría *</label>
+            <select id="new-op-flota" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-bold">
+              <option value="STD">Flota Komatsu / Estándar</option>
+              <option value="CAT">Caterpillar 798AC (Operador Senior)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">N° SAP *</label>
+            <input type="text" id="new-op-sap" placeholder="Ej: 458921" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">RUN (ID SimControl) *</label>
+            <input type="text" id="new-op-run" placeholder="Ej: 14113209-1" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Nombre Completo *</label>
+            <input type="text" id="new-op-nombre" placeholder="APELLIDOS, NOMBRES" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm uppercase" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Empresa / Faena</label>
+            <input type="text" id="new-op-empresa" value="Codelco - Radomiro Tomic" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+          </div>
+          <button onclick="agregarOperador()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg text-sm transition cursor-pointer">
+            Guardar Operador
+          </button>
+        </div>
+
+        <div class="lg:col-span-8 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <h2 class="font-bold text-base">Base Maestra de Operadores</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 bg-slate-50 dark:bg-slate-800/50">
+                  <th class="p-3">Flota</th>
+                  <th class="p-3">SAP</th>
+                  <th class="p-3">RUN</th>
+                  <th class="p-3">Nombre Completo</th>
+                  <th class="p-3 text-right">Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-operadores" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- PESTAÑA 5: GESTIÓN DE INSTRUCTORES                             -->
+    <!-- ============================================================== -->
+    <section id="view-instructores" class="hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-4 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 h-fit">
+          <h2 class="font-bold text-base flex items-center gap-2">
+            <i data-lucide="hard-hat" class="w-4 h-4 text-brand-500"></i> Agregar Instructor de Área
+          </h2>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Nombre Completo *</label>
+            <input type="text" id="new-inst-nombre" placeholder="APELLIDOS, NOMBRES" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm uppercase" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">N° SAP</label>
+            <input type="text" id="new-inst-sap" placeholder="Ej: 320145" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1">Área / Turno *</label>
+            <input type="text" id="new-inst-area" placeholder="Ej: Operaciones Mina - Turno A" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+          </div>
+          <button onclick="agregarInstructor()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg text-sm transition cursor-pointer">
+            Guardar Instructor
+          </button>
+        </div>
+
+        <div class="lg:col-span-8 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+          <h2 class="font-bold text-base">Instructores Encargados por Área</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 bg-slate-50 dark:bg-slate-800/50">
+                  <th class="p-3">Nombre</th>
+                  <th class="p-3">SAP</th>
+                  <th class="p-3">Área / Turno</th>
+                  <th class="p-3 text-right">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-instructores" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL PARA REGISTRAR CIERRE DE BRECHAS EN UNA ACTIVIDAD -->
+  <div id="modal-brecha" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+        <h3 class="font-bold text-base flex items-center gap-2 text-amber-500">
+          <i data-lucide="wrench" class="w-4 h-4"></i> Registrar Cierre de Brechas
+        </h3>
+        <button onclick="cerrarModalBrecha()" class="text-slate-400 hover:text-white cursor-pointer">✕</button>
+      </div>
+      
+      <div class="text-xs text-slate-500 dark:text-slate-400">
+        Actividad: <strong id="modal-brecha-act" class="text-slate-900 dark:text-white"></strong>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold mb-1">Cierre de Brecha Realizado *</label>
+        <input type="text" id="modal-brecha-nombre" list="sugerencias-brechas" placeholder="Ej: CB-02 Uso de retardo en pendiente" 
+          class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+        <datalist id="sugerencias-brechas">
+          <option value="CB - Uso correcto de retardo dinámico (RSC)">
+          <option value="CB - Protocolo radial y autorización de ingreso">
+          <option value="CB - Acercamiento y aculatado en pala/cargador">
+          <option value="CB - Control de velocidad en circuito angosto">
+          <option value="CB - Gestión de alarmas críticas y detención segura">
+          <option value="CB - Descarga segura en chancador / botadero">
+        </datalist>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-semibold mb-1">Veces Realizado</label>
+          <input type="number" id="modal-brecha-veces" value="1" min="1" max="20" 
+            class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">Tiempo Invertido (Minutos)</label>
+          <input type="number" id="modal-brecha-minutos" value="15" min="1" max="300" 
+            class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="cerrarModalBrecha()" class="px-4 py-2 rounded-lg border border-slate-300 dark:border-slate-700 text-xs font-semibold cursor-pointer">Cancelar</button>
+        <button onclick="confirmarCierreBrecha()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs cursor-pointer">
+          + Agregar Cierre de Brecha
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICACIÓN FLOTANTE (TOAST) -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-xl shadow-2xl font-semibold text-sm transform translate-y-24 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i>
+    <span id="toast-msg">Guardado correctamente</span>
+  </div>
+
+  <!-- SDK DE GOOGLE FIREBASE (COMPATIBLE SIN COMPILACIÓN) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
