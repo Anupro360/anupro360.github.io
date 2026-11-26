@@ -1,5 +1,5 @@
 // ============================================================================
-// 1. CONEXIÓN A BASE DE DATOS EN GOOGLE (FIREBASE FIRESTORE) - ACTIVADA
+// 1. CONEXIÓN A BASE DE DATOS EN GOOGLE (FIREBASE FIRESTORE)
 // ============================================================================
 const USAR_FIREBASE = true;
 
@@ -17,7 +17,6 @@ if (USAR_FIREBASE && typeof firebase !== 'undefined') {
   try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
-    // Activa persistencia offline: guarda aunque se caiga el internet en el simulador
     db.enablePersistence().catch(() => {});
   } catch (e) {
     console.error("Error inicializando Firebase:", e);
@@ -25,7 +24,7 @@ if (USAR_FIREBASE && typeof firebase !== 'undefined') {
 }
 
 // ============================================================================
-// 2. CATÁLOGO REAL EXTRAÍDO DE SIMCONTROL (2 SIMULADORES / 21 EQUIPOS)
+// 2. CATÁLOGO COMPLETO DE SIMULADORES Y PLANES DE ESTUDIO (SIMCONTROL 2025.2)
 // ============================================================================
 const CATALOGO_SIMULADORES = {
   SIM_A: {
@@ -76,11 +75,23 @@ const PLANES_ESTUDIO = {
     "217 - Carga PH4100 Encajonada lado Der (Práctica)", "218 - Descarga Chancador óxido (Práctica)",
     "219 - Descarga Botadero Sur Norte 6 (Práctica)", "220 - Evaluación Final (Evaluación)"
   ],
+  "2023 - 100 - Re-Instrucción Operadores BEL": [
+    "101 - Diagnóstico Re-Instrucción (Evaluación)",
+    "102 - Cierre de Brechas Operación y Alarmas (Práctica)",
+    "103 - Cierre de Brechas Carguío y Descarga (Práctica)",
+    "104 - Evaluación Final Re-Instrucción BEL (Evaluación)"
+  ],
+  "2022 - 600 - Mantenedores (KOM930E4 / 930E3)": [
+    "601 - Reconocimiento Cabina y Controles (Práctica)",
+    "602 - Pruebas de Traslado y Frenado en Taller/Pista (Práctica)",
+    "603 - Diagnóstico de Fallas y Alarmas (Práctica)",
+    "604 - Evaluación Operación Mantenedores (Evaluación)"
+  ],
   "500 - Homologación KOM930E3 a 930E4 (501 al 504)": [
     "501 - DRT - Evaluación Diagnóstico (Evaluación)", "502 - DRT - Alarmas y Emergencias (Práctica)",
     "503 - DRT - Cuidado Neumáticos (Práctica)", "504 - DRT - Evaluación de Homologación (Evaluación)"
   ],
-  "700 - Homologación KOM930E4-SE a KOM930E5 (701 al 706)": [
+  "700 - Homologación KOM930E4-SE a KOM980E5 / 930E5 (701 al 706)": [
     "701 - Reconocimiento del Equipo y Movimientos Básicos (Práctica)",
     "702 - Práctica Traslado a Fondo Mina (Práctica)", "703 - Práctica Traslado a Chancado (Práctica)",
     "704 - Alarmas del Equipo (Práctica)", "705 - Emergencias DRT (Práctica)",
@@ -102,18 +113,18 @@ const PLANES_ESTUDIO = {
     "303 - DRT - Emergencias - OneTeam (Práctica)",
     "304 - DRT - Diagnóstico Final Emergencias - OneTeam (Evaluación)"
   ],
-  "CIP - Plan Eventos de Emergencia (301 al 304)": [
+  "CIP - Plan Eventos de Emergencia (KOM930E4 / KOM980E5)": [
     "301 - DRT - Diagnóstico Inicial Emergencias (Evaluación)",
     "302 - DRT - Práctica Emergencias (Vacío) (Práctica)",
     "303 - DRT - Práctica Emergencias (Cargado) (Práctica)",
     "304 - DRT - Diagnóstico Final (Evaluación)"
   ],
-  "CIP - Plan Invierno (305 al 307)": [
+  "CIP - Plan Invierno (KOM930E4 / KOM980E5)": [
     "305 - DRT - Diagnóstico Inicial Invierno (Evaluación)",
     "306 - DRT - Práctica Plan Invierno / Condiciones Climáticas (Práctica)",
     "307 - DRT - Diagnóstico Final Invierno (Evaluación)"
   ],
-  "CIP - Plan Pérdida Retardo y Emergencias (308 al 311)": [
+  "CIP - Plan Pérdida Retardo y Emergencias (KOM930E4 / KOM980E5)": [
     "308 - DRT - Diagnóstico Inicial Emergencias (Evaluación)",
     "309 - DRT - Práctica Emergencias (Vacío) (Práctica)",
     "310 - DRT - Práctica Emergencias (Cargado) (Práctica)",
@@ -131,7 +142,7 @@ const PLANES_ESTUDIO = {
     "303 - Circuito Angosto (Práctica)",
     "304 - Diagnóstico Final - Circuito Angosto & Alarmas (Evaluación)"
   ],
-  "CIP - Módulo Neumáticos (301 al 304)": [
+  "CIP - Módulo Neumáticos (KOM930E4 / KOM980E5)": [
     "301 - Diagnóstico Inicial Cuidado neumáticos (Evaluación)",
     "302 - Cuidado Neumáticos (Práctica)",
     "303 - Eventos de Emergencias (Práctica)",
@@ -142,28 +153,55 @@ const PLANES_ESTUDIO = {
     "302 - DRT - Práctica I Eficiencia Combustible (Práctica)",
     "303 - DRT - Práctica II Eficiencia Combustible (Práctica)",
     "304 - DRT - Evaluación Final Eficiencia de Combustible (Evaluación)"
+  ],
+  "LIEBHERR T282C / T282B - Plan Completo (500 al 570)": [
+    "500 - Operación LIEBHERR T282B/C - DRT (Práctica)",
+    "510 - Curso Operación Equipo - LIEBHERR (Práctica)",
+    "520 - Módulo Cuidado del Equipo - LIEBHERR (Práctica)",
+    "530 - Módulo de Seguridad - LIEBHERR (Práctica)",
+    "540 - Condiciones Climáticas - LIEBHERR (Práctica)",
+    "550 - Módulo de Optimización de Producción - LIEBHERR (Práctica)",
+    "560 - Evaluación Final - LIEBHERR (Evaluación)",
+    "570 - Cierre de Brechas - LIEBHERR (Práctica)"
+  ],
+  "020 / 580 - Homologación y Transformación Liebherr": [
+    "020 - Homologación LIEBHERR 282B a 282C-DRT V2 (Evaluación)",
+    "580 - Transformación Operador con Experiencia KOM930 a LIEBHERR T282B (Evaluación)",
+    "030 - Homologación Caterpillar a Komatsu - DRT (Evaluación)"
+  ],
+  "P&H 4100XPC - Planes Aprendiz, Experiencia y CIP": [
+    "040 - Homologación Pala 4100 A a Pala 4100XPC (Evaluación)",
+    "100 - P&H 4100XPC - Plan Operador Aprendiz Etapa I (Práctica)",
+    "200 - P&H 4100XPC - Plan Operador Aprendiz Etapa II y Experiencia (Evaluación)",
+    "300 - CIP - P&H 4100XPC - Medios de Comunicación (Práctica)",
+    "300 - CIP - P&H 4100XPC - Plan de Productividad (Evaluación)"
+  ],
+  "PC8000 / CAT 6060 - Planes Aprendiz y Experiencia": [
+    "100 - PC8000 - Operador Aprendiz (Dic 2025 / Ene 2026) (Práctica)",
+    "200 - PC8000 - Plan Operador con Experiencia (Evaluación)",
+    "400 - Excavadora Hidráulica CAT 6060BH (Evaluación)",
+    "200 - CAT6060 - Operador con Experiencia DRT (Evaluación)"
   ]
 };
 
 // ============================================================================
-// 3. ESTADO DE LA APLICACIÓN (SINCRONIZADO CON GOOGLE FIREBASE)
+// 3. ESTADO DE LA APLICACIÓN (SIN ALUMNOS FICTICIOS DE PRUEBA)
 // ============================================================================
-let operadores = JSON.parse(localStorage.getItem('sim_operadores')) || [
-  { sap: "450123", run: "14113209-1", nombre: "CASTILLO MOYANO, ELIAS SEBASTIAN", empresa: "Codelco - Radomiro Tomic", flota: "STD" },
-  { sap: "450890", run: "16452180-4", nombre: "ARAYA CONTRERAS, MARCO ANTONIO", empresa: "Codelco - Radomiro Tomic", flota: "STD" },
-  { sap: "798001", run: "13890452-3", nombre: "VALENZUELA TORO, HECTOR PATRICIO", empresa: "Codelco - Radomiro Tomic", flota: "CAT" }
-];
+let operadores = JSON.parse(localStorage.getItem('sim_operadores')) || [];
+// Limpiar automáticamente los 3 registros ficticios antiguos si quedaron en localStorage
+const SAPS_FICTICIOS = ["450123", "450890", "798001"];
+operadores = operadores.filter(o => !SAPS_FICTICIOS.includes(o.sap));
+localStorage.setItem('sim_operadores', JSON.stringify(operadores));
 
 let instructores = JSON.parse(localStorage.getItem('sim_instructores')) || [
-  { id: 1, nombre: "VILLEGAS PARDO, BRYAN ALEJANDRO", sap: "310455", area: "Operaciones Mina - Turno A" },
-  { id: 2, nombre: "ROJAS MENDEZ, CARLOS EDUARDO", sap: "310892", area: "Operaciones Mina - Turno B" }
+  { id: 1, nombre: "VILLEGAS PARDO, BRYAN ALEJANDRO", sap: "310455", area: "Operaciones Mina - Turno 1" }
 ];
 
 let planesCat798 = JSON.parse(localStorage.getItem('sim_planes_cat798')) || [
   {
     id: 101,
     plan: "Plan Habilitación Senior CAT 798AC",
-    modulo: "Módulo de Incendio (Ejemplo Base)",
+    modulo: "Módulo de Incendio",
     actividad: "Evaluación Control de Incendio y Evacuación 798AC",
     cierresBrecha: [
       "CB-01 Reconocimiento sistema supresión incendios",
@@ -183,8 +221,12 @@ let operadorSeleccionadoCat = null;
 let evaluacionesMap = {};
 let actividadBrechaTarget = null;
 
+// Paginación para +1.000 operadores
+let paginaActualOps = 1;
+const OPS_POR_PAGINA = 15;
+
 // ============================================================================
-// 4. INICIALIZACIÓN Y SINCRONIZACIÓN CON GOOGLE
+// 4. INICIALIZACIÓN Y SINCRONIZACIÓN CON GOOGLE CLOUD
 // ============================================================================
 document.addEventListener("DOMContentLoaded", () => {
   lucide.createIcons();
@@ -193,12 +235,21 @@ document.addEventListener("DOMContentLoaded", () => {
   cargarEquipos();
   renderInstructores();
   renderOperadores();
-  renderSugerenciasSAP();
   renderPlanesCat798();
   renderHistorial();
   restaurarSesionActiva();
   actualizarBadgeGoogle();
   if (db) sincronizarDesdeGoogle();
+
+  // Cerrar desplegables al hacer clic fuera
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#input-sap') && !e.target.closest('#sap-dropdown-std')) {
+      document.getElementById('sap-dropdown-std')?.classList.add('hidden');
+    }
+    if (!e.target.closest('#cat-input-sap') && !e.target.closest('#sap-dropdown-cat')) {
+      document.getElementById('sap-dropdown-cat')?.classList.add('hidden');
+    }
+  });
 });
 
 function actualizarBadgeGoogle() {
@@ -209,21 +260,22 @@ function actualizarBadgeGoogle() {
     badge.className = "inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800";
     dot.className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
     text.textContent = "Conectado a Google Cloud";
+  } else {
+    text.textContent = "Modo Local Offline";
   }
 }
 
 async function sincronizarDesdeGoogle() {
   if (!db) return;
   try {
+    // Borrar ficticios en Google si existieran
+    SAPS_FICTICIOS.forEach(sapFict => db.collection("operadores").doc(sapFict).delete().catch(() => {}));
+
     const snapOps = await db.collection("operadores").get();
     if (!snapOps.empty) {
-      operadores = snapOps.docs.map(d => d.data());
+      operadores = snapOps.docs.map(d => d.data()).filter(o => !SAPS_FICTICIOS.includes(o.sap));
       localStorage.setItem('sim_operadores', JSON.stringify(operadores));
       renderOperadores();
-      renderSugerenciasSAP();
-    } else {
-      // Sube los datos iniciales si la base en Google está vacía
-      operadores.forEach(op => guardarEnGoogle("operadores", op.sap, op));
     }
 
     const snapInst = await db.collection("instructores").get();
@@ -231,8 +283,6 @@ async function sincronizarDesdeGoogle() {
       instructores = snapInst.docs.map(d => d.data());
       localStorage.setItem('sim_instructores', JSON.stringify(instructores));
       renderInstructores();
-    } else {
-      instructores.forEach(inst => guardarEnGoogle("instructores", inst.id, inst));
     }
 
     const snapCat = await db.collection("planes_cat798").get();
@@ -240,8 +290,6 @@ async function sincronizarDesdeGoogle() {
       planesCat798 = snapCat.docs.map(d => d.data());
       localStorage.setItem('sim_planes_cat798', JSON.stringify(planesCat798));
       renderPlanesCat798();
-    } else {
-      planesCat798.forEach(p => guardarEnGoogle("planes_cat798", p.id, p));
     }
 
     const snapSes = await db.collection("sesiones").orderBy("id", "desc").get();
@@ -260,7 +308,16 @@ async function guardarEnGoogle(coleccion, docId, data) {
   try {
     await db.collection(coleccion).doc(String(docId)).set(data);
   } catch (e) {
-    console.error("Se guardó local, pendiente subir a Google:", e);
+    console.warn("Guardado local, pendiente sincronizar al recuperar señal:", e);
+  }
+}
+
+async function eliminarDeGoogle(coleccion, docId) {
+  if (!db) return;
+  try {
+    await db.collection(coleccion).doc(String(docId)).delete();
+  } catch (e) {
+    console.warn("Eliminado local, pendiente sincronizar:", e);
   }
 }
 
@@ -314,7 +371,7 @@ function toggleSubVistaCat(sub) {
 }
 
 // ============================================================================
-// 6. BÚSQUEDA POR SAP Y RESUMEN HISTÓRICO DEL OPERADOR
+// 6. BÚSQUEDA INTELIGENTE EN SALA (ESCALABLE A +1.000 OPERADORES)
 // ============================================================================
 function initFecha() {
   const hoy = new Date();
@@ -330,74 +387,135 @@ function actualizarAnio() {
   if (f) document.getElementById('input-anio').value = f.split('-')[0];
 }
 
-function renderSugerenciasSAP() {
-  const stdOps = operadores.filter(o => o.flota !== 'CAT').slice(0, 4);
-  document.getElementById('sap-suggestions').innerHTML = stdOps.map(op => `
-    <button type="button" onclick="seleccionarSAP('${op.sap}', 'STD')" class="text-xs px-2.5 py-1 rounded-md bg-slate-200 dark:bg-slate-800 hover:bg-brand-600 hover:text-white transition font-mono cursor-pointer">
-      ${op.sap} (${op.nombre.split(',')[0]})
-    </button>
-  `).join('');
+function buscarOperadorEnSala(valor, tipo) {
+  const q = valor.trim().toLowerCase();
+  const dropdownId = tipo === 'CAT' ? 'sap-dropdown-cat' : 'sap-dropdown-std';
+  const dropdown = document.getElementById(dropdownId);
 
-  const catOps = operadores.filter(o => o.flota === 'CAT').slice(0, 4);
-  document.getElementById('cat-sap-suggestions').innerHTML = catOps.map(op => `
-    <button type="button" onclick="seleccionarSAP('${op.sap}', 'CAT')" class="text-xs px-2.5 py-1 rounded-md bg-yellow-500/20 text-yellow-700 dark:text-yellow-300 hover:bg-yellow-500 hover:text-slate-950 transition font-mono cursor-pointer">
-      ${op.sap} (${op.nombre.split(',')[0]})
-    </button>
-  `).join('');
-}
-
-function seleccionarSAP(sap, tipo) {
-  if (tipo === 'CAT') {
-    document.getElementById('cat-input-sap').value = sap;
-    buscarPorSAP(sap, 'CAT');
-  } else {
-    document.getElementById('input-sap').value = sap;
-    buscarPorSAP(sap, 'STD');
-  }
-}
-
-function buscarPorSAP(valor, tipo) {
-  const q = valor.trim();
-  const op = operadores.find(o => o.sap === q);
-
-  if (tipo === 'CAT') {
-    operadorSeleccionadoCat = op || null;
-    document.getElementById('cat-op-nombre').textContent = op ? op.nombre : (q ? "SAP no encontrado en flota 798AC" : "Seleccione un operador habilitado para 798AC...");
-    document.getElementById('cat-op-run').textContent = op ? op.run : "-";
-    document.getElementById('cat-op-sap').textContent = op ? op.sap : "-";
+  if (!q) {
+    dropdown.classList.add('hidden');
+    limpiarSeleccionOperador(tipo);
     return;
   }
 
-  operadorSeleccionadoStd = op || null;
-  const resumenEl = document.getElementById('op-resumen-previo');
-  if (op) {
-    document.getElementById('op-nombre').textContent = op.nombre;
-    document.getElementById('op-run').textContent = op.run;
-    document.getElementById('op-sap').textContent = op.sap;
+  // Coincidencia exacta por SAP primero
+  const exacto = operadores.find(o => o.sap.toLowerCase() === q);
+  if (exacto) {
+    seleccionarOperadorObj(exacto, tipo);
+    dropdown.classList.add('hidden');
+    return;
+  }
 
-    const historialOp = sesiones.filter(s => s.sap === op.sap);
-    if (historialOp.length > 0) {
-      let totalApr = 0, totalRep = 0, totalBrechas = 0;
-      historialOp.forEach(s => s.actividades.forEach(a => {
-        if (a.estado === 'APROBADO') totalApr++;
-        totalRep += (a.reprobaciones || 0);
-        totalBrechas += (a.brechas || []).reduce((acc, b) => acc + Number(b.veces || 1), 0);
-      }));
-      resumenEl.classList.remove('hidden');
-      resumenEl.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-bold">✓ ${totalApr} Aprobadas</span> • <span class="text-rose-500 font-bold">✗ ${totalRep} Reprobaciones previas</span> • <span class="text-amber-500 font-bold">🔧 ${totalBrechas} Cierres de brecha</span>`;
-    } else {
-      resumenEl.classList.add('hidden');
-    }
+  // Filtrar lista desplegable (máximo 8 resultados para velocidad en celular)
+  const matches = operadores.filter(o =>
+    (tipo === 'CAT' ? o.flota === 'CAT' : true) &&
+    (o.sap.toLowerCase().includes(q) || o.nombre.toLowerCase().includes(q) || o.run.toLowerCase().includes(q))
+  ).slice(0, 8);
+
+  if (matches.length === 0) {
+    dropdown.innerHTML = `<div class="p-3 text-xs text-slate-500">Sin coincidencias. Agrégalo en "+ Nuevo Alumno".</div>`;
+    dropdown.classList.remove('hidden');
+    return;
+  }
+
+  dropdown.innerHTML = matches.map(op => `
+    <button type="button" onclick="seleccionarSAP('${op.sap}', '${tipo}')" 
+      class="w-full text-left px-3.5 py-2.5 hover:bg-brand-600 hover:text-white transition flex items-center justify-between gap-2 cursor-pointer">
+      <div>
+        <div class="font-bold text-xs sm:text-sm">${op.nombre}</div>
+        <div class="text-xs opacity-75 font-mono">SAP: ${op.sap} • RUN: ${op.run}</div>
+      </div>
+      <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 shrink-0">
+        ${op.turno || 'Sin Turno'}
+      </span>
+    </button>
+  `).join('');
+  dropdown.classList.remove('hidden');
+}
+
+function seleccionarSAP(sap, tipo) {
+  const op = operadores.find(o => o.sap === sap);
+  if (!op) return;
+  if (tipo === 'CAT') {
+    document.getElementById('cat-input-sap').value = op.sap;
+    document.getElementById('sap-dropdown-cat').classList.add('hidden');
   } else {
-    document.getElementById('op-nombre').textContent = q ? "SAP no encontrado (Regístrelo en '+ Nuevo Alumno')" : "Ingrese un SAP para cargar datos...";
+    document.getElementById('input-sap').value = op.sap;
+    document.getElementById('sap-dropdown-std').classList.add('hidden');
+  }
+  seleccionarOperadorObj(op, tipo);
+}
+
+function limpiarSeleccionOperador(tipo) {
+  if (tipo === 'CAT') {
+    operadorSeleccionadoCat = null;
+    document.getElementById('cat-op-nombre').textContent = "Busque un operador habilitado para 798AC...";
+    document.getElementById('cat-op-run').textContent = "-";
+    document.getElementById('cat-op-sap').textContent = "-";
+    document.getElementById('cat-op-turno-badge').classList.add('hidden');
+  } else {
+    operadorSeleccionadoStd = null;
+    document.getElementById('op-nombre').textContent = "Busque un operador por SAP o apellido...";
     document.getElementById('op-run').textContent = "-";
     document.getElementById('op-sap').textContent = "-";
-    resumenEl.classList.add('hidden');
+    document.getElementById('op-turno-badge').classList.add('hidden');
+    document.getElementById('op-resumen-previo').classList.add('hidden');
   }
 }
 
+function seleccionarOperadorObj(op, tipo) {
+  if (tipo === 'CAT') {
+    operadorSeleccionadoCat = op;
+    document.getElementById('cat-op-nombre').textContent = op.nombre;
+    document.getElementById('cat-op-run').textContent = op.run;
+    document.getElementById('cat-op-sap').textContent = op.sap;
+    const badge = document.getElementById('cat-op-turno-badge');
+    if (op.turno) {
+      badge.textContent = op.turno;
+      badge.classList.remove('hidden');
+    }
+    cargarActividadesCat();
+    return;
+  }
+
+  operadorSeleccionadoStd = op;
+  document.getElementById('op-nombre').textContent = op.nombre;
+  document.getElementById('op-run').textContent = op.run;
+  document.getElementById('op-sap').textContent = op.sap;
+
+  const badge = document.getElementById('op-turno-badge');
+  if (op.turno) {
+    badge.textContent = op.turno;
+    badge.classList.remove('hidden');
+    // Preseleccionar el turno del operador si coincide en la lista
+    const selTurno = document.getElementById('select-turno-sesion');
+    for (let opt of selTurno.options) {
+      if (opt.value === op.turno) selTurno.value = op.turno;
+    }
+  }
+
+  // Resumen histórico previo del operador
+  const resumenEl = document.getElementById('op-resumen-previo');
+  const historialOp = sesiones.filter(s => s.sap === op.sap);
+  if (historialOp.length > 0) {
+    let totalApr = 0, totalRep = 0, totalBrechas = 0;
+    historialOp.forEach(s => s.actividades.forEach(a => {
+      if (a.estado === 'APROBADO') totalApr++;
+      totalRep += (a.reprobaciones || 0);
+      totalBrechas += (a.brechas || []).reduce((acc, b) => acc + Number(b.veces || 1), 0);
+    }));
+    resumenEl.classList.remove('hidden');
+    resumenEl.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-bold">✓ ${totalApr} Aprobadas</span> • <span class="text-rose-500 font-bold">✗ ${totalRep} Reprobaciones</span> • <span class="text-amber-500 font-bold">🔧 ${totalBrechas} Cierres brecha</span>`;
+  } else {
+    resumenEl.classList.add('hidden');
+  }
+
+  // Refrescar lista de actividades para mostrar checks verdes de lo ya aprobado
+  cargarActividades();
+}
+
 // ============================================================================
-// 7. CONTROL DE SESIÓN EN VIVO (ENTRADA AL INICIAR / SALIDA AL FINALIZAR)
+// 7. SESIÓN EN VIVO (ENTRADA AL INICIAR / SALIDA AL FINALIZAR)
 // ============================================================================
 function obtenerHoraActualStr() {
   const ahora = new Date();
@@ -407,11 +525,12 @@ function obtenerHoraActualStr() {
 function iniciarSesion(flota) {
   const op = flota === 'CAT' ? operadorSeleccionadoCat : operadorSeleccionadoStd;
   if (!op) {
-    alert("⚠️ Primero ingresa un N° SAP válido antes de iniciar la sesión.");
+    alert("⚠️ Primero busca y selecciona un Operador por SAP o apellido.");
     return;
   }
 
   const equipo = flota === 'CAT' ? "Caterpillar 798AC" : document.getElementById('select-equipo').value;
+  const turnoSesion = flota === 'CAT' ? (op.turno || "Senior 798AC") : document.getElementById('select-turno-sesion').value;
   const horaEntrada = obtenerHoraActualStr();
 
   sesionActiva = {
@@ -419,6 +538,7 @@ function iniciarSesion(flota) {
     sap: op.sap,
     run: op.run,
     operador: op.nombre,
+    turno: turnoSesion,
     equipo,
     fecha: document.getElementById('input-fecha').value,
     anio: document.getElementById('input-anio').value,
@@ -463,7 +583,7 @@ function cancelarSesionActiva() {
 }
 
 // ============================================================================
-// 8. ACTIVIDADES, REPROBACIONES Y CIERRES DE BRECHAS
+// 8. ACTIVIDADES, SEMAFORIZACIÓN SIMCONTROL, REPROBACIONES Y BRECHAS
 // ============================================================================
 function cargarEquipos() {
   const simKey = document.getElementById('select-simulador').value;
@@ -482,20 +602,37 @@ function cargarActividades() {
   const planKey = document.getElementById('select-plan').value;
   const actividades = PLANES_ESTUDIO[planKey] || [];
   evaluacionesMap = {};
-  renderListaActividades('lista-actividades', actividades);
+  renderListaActividades('lista-actividades', actividades, operadorSeleccionadoStd?.sap);
 }
 
-function renderListaActividades(containerId, actividades) {
+function obtenerActividadesYaAprobadas(sap) {
+  if (!sap) return new Set();
+  const aprobadas = new Set();
+  sesiones.filter(s => s.sap === sap).forEach(s => {
+    s.actividades.forEach(a => {
+      if (a.estado === 'APROBADO') aprobadas.add(a.nombre);
+    });
+  });
+  return aprobadas;
+}
+
+function renderListaActividades(containerId, actividades, sapOperador) {
   const contenedor = document.getElementById(containerId);
+  const yaAprobadasSet = obtenerActividadesYaAprobadas(sapOperador);
   actualizarContador();
 
   contenedor.innerHTML = actividades.map((act, idx) => {
     const safeId = `${containerId}-${idx}`;
     const safeName = act.replace(/'/g, "\\'");
+    const yaAprobada = yaAprobadasSet.has(act);
+
     return `
-      <div id="card-${safeId}" class="p-3.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 space-y-2.5 transition">
+      <div id="card-${safeId}" class="p-3.5 rounded-xl border ${yaAprobada ? 'border-emerald-500/40 bg-emerald-950/10' : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50'} space-y-2.5 transition">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <span class="text-xs sm:text-sm font-semibold leading-snug">${act}</span>
+          <div class="space-y-1">
+            <span class="text-xs sm:text-sm font-semibold leading-snug block">${act}</span>
+            ${yaAprobada ? `<span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-500">✓ Aprobado anteriormente en historial</span>` : ''}
+          </div>
           <div class="flex flex-wrap items-center gap-1.5 shrink-0">
             <button type="button" onclick="registrarIntentoFallido('${safeId}', '${safeName}')" 
               class="px-2.5 py-1.5 rounded-md text-xs font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 hover:bg-rose-600 hover:text-white transition cursor-pointer">
@@ -606,7 +743,7 @@ function actualizarContador() {
 }
 
 // ============================================================================
-// 9. MÓDULO EXCLUSIVO CATERPILLAR 798AC (CONSTRUCTOR Y EVALUACIÓN)
+// 9. MÓDULO EXCLUSIVO CATERPILLAR 798AC
 // ============================================================================
 function guardarEstructuraCat() {
   const plan = document.getElementById('new-cat-plan').value.trim();
@@ -619,17 +756,8 @@ function guardarEstructuraCat() {
     return;
   }
 
-  const cierresBrecha = brechasRaw
-    ? brechasRaw.split('\n').map(l => l.trim()).filter(Boolean)
-    : [];
-
-  const nuevoItem = {
-    id: Date.now(),
-    plan,
-    modulo,
-    actividad,
-    cierresBrecha
-  };
+  const cierresBrecha = brechasRaw ? brechasRaw.split('\n').map(l => l.trim()).filter(Boolean) : [];
+  const nuevoItem = { id: Date.now(), plan, modulo, actividad, cierresBrecha };
 
   planesCat798.unshift(nuevoItem);
   localStorage.setItem('sim_planes_cat798', JSON.stringify(planesCat798));
@@ -662,7 +790,7 @@ function renderPlanesCat798() {
       </div>
       ${item.cierresBrecha.length > 0 ? `
         <div class="pt-2 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
-          <strong>${item.cierresBrecha.length} Cierres de brecha configurados:</strong>
+          <strong>${item.cierresBrecha.length} Cierres de brecha:</strong>
           <ul class="list-disc pl-4 mt-1 space-y-0.5">
             ${item.cierresBrecha.map(cb => `<li>${cb}</li>`).join('')}
           </ul>
@@ -676,7 +804,7 @@ function eliminarEstructuraCat(id) {
   if (!confirm("¿Eliminar este módulo de CAT 798AC?")) return;
   planesCat798 = planesCat798.filter(p => p.id !== id);
   localStorage.setItem('sim_planes_cat798', JSON.stringify(planesCat798));
-  if (db) db.collection("planes_cat798").doc(String(id)).delete().catch(() => {});
+  eliminarDeGoogle("planes_cat798", id);
   renderPlanesCat798();
 }
 
@@ -699,20 +827,20 @@ function cargarActividadesCat() {
   }
 
   evaluacionesMap = {};
-  renderListaActividades('cat-lista-actividades', [item.actividad]);
+  renderListaActividades('cat-lista-actividades', [item.actividad], operadorSeleccionadoCat?.sap);
 }
 
 // ============================================================================
-// 10. FINALIZAR SESIÓN (MARCA HORA SALIDA REAL Y GUARDA EN GOOGLE)
+// 10. FINALIZAR SESIÓN Y GUARDAR EN GOOGLE
 // ============================================================================
 function finalizarYGuardarSesion() {
   const esCat = sesionActiva ? sesionActiva.flota === 'CAT' : !document.getElementById('view-cat798').classList.contains('hidden');
   const op = sesionActiva
-    ? { sap: sesionActiva.sap, run: sesionActiva.run, nombre: sesionActiva.operador }
+    ? { sap: sesionActiva.sap, run: sesionActiva.run, nombre: sesionActiva.operador, turno: sesionActiva.turno }
     : (esCat ? operadorSeleccionadoCat : operadorSeleccionadoStd);
 
   if (!op) {
-    alert("⚠️ Debe seleccionar un Operador válido por SAP.");
+    alert("⚠️ Debe seleccionar un Operador válido.");
     return;
   }
 
@@ -725,6 +853,7 @@ function finalizarYGuardarSesion() {
   const horaEntrada = sesionActiva ? sesionActiva.horaEntrada : obtenerHoraActualStr();
   const horaSalida = obtenerHoraActualStr();
   const minutosCabina = sesionActiva ? Math.max(1, Math.round((Date.now() - sesionActiva.timestampInicio) / 60000)) : 0;
+  const turnoFinal = esCat ? (op.turno || "Senior 798AC") : document.getElementById('select-turno-sesion').value;
 
   const nuevaSesion = {
     id: Date.now(),
@@ -736,6 +865,7 @@ function finalizarYGuardarSesion() {
     sap: op.sap,
     run: op.run,
     operador: op.nombre,
+    turno: turnoFinal,
     condicion: esCat ? "Operador Senior CAT 798AC" : document.getElementById('select-condicion').value,
     simulador: esCat ? "Simulador CAT 798AC" : CATALOGO_SIMULADORES[document.getElementById('select-simulador').value].nombre,
     equipo: esCat ? "Caterpillar 798AC" : document.getElementById('select-equipo').value,
@@ -775,7 +905,7 @@ function finalizarYGuardarSesion() {
 }
 
 // ============================================================================
-// 11. BITÁCORA Y EXPORTACIÓN EXCEL DETALLADA
+// 11. BITÁCORA Y EXPORTACIÓN EXCEL
 // ============================================================================
 function renderHistorial() {
   const filtro = (document.getElementById('filtro-historial')?.value || '').toLowerCase();
@@ -784,7 +914,8 @@ function renderHistorial() {
   const filtradas = sesiones.filter(s =>
     s.sap.toLowerCase().includes(filtro) ||
     s.operador.toLowerCase().includes(filtro) ||
-    s.equipo.toLowerCase().includes(filtro)
+    s.equipo.toLowerCase().includes(filtro) ||
+    (s.turno || '').toLowerCase().includes(filtro)
   );
 
   if (filtradas.length === 0) {
@@ -801,6 +932,7 @@ function renderHistorial() {
       <td class="p-3">
         <div class="font-bold">${s.operador}</div>
         <div class="text-xs font-mono text-slate-500">SAP: ${s.sap} | RUN: ${s.run}</div>
+        <span class="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800">${s.turno || 'Sin Turno'}</span>
       </td>
       <td class="p-3">
         <div class="font-bold ${s.equipo.includes('798AC') ? 'text-yellow-600 dark:text-yellow-400' : 'text-brand-600 dark:text-brand-400'}">${s.equipo}</div>
@@ -841,7 +973,7 @@ function eliminarSesion(id) {
   if (!confirm("¿Eliminar este registro de la bitácora?")) return;
   sesiones = sesiones.filter(s => s.id !== id);
   localStorage.setItem('sim_sesiones', JSON.stringify(sesiones));
-  if (db) db.collection("sesiones").doc(String(id)).delete().catch(() => {});
+  eliminarDeGoogle("sesiones", id);
   renderHistorial();
 }
 
@@ -867,6 +999,7 @@ function exportarExcel() {
         "SAP Operador": s.sap,
         "RUN Operador": s.run,
         "Nombre Operador": s.operador,
+        "Turno / Grupo": s.turno || "-",
         "Condición / Flota": s.condicion,
         "Simulador": s.simulador,
         "Equipo": s.equipo,
@@ -891,10 +1024,20 @@ function exportarExcel() {
 }
 
 // ============================================================================
-// 12. CRUD OPERADORES E INSTRUCTORES
+// 12. CRUD OPERADORES (CREAR, EDITAR, ELIMINAR Y PAGINACIÓN +1000)
 // ============================================================================
-function agregarOperador() {
+function toggleOtroTurnoInput() {
+  const val = document.getElementById('new-op-turno').value;
+  document.getElementById('new-op-turno-otro').classList.toggle('hidden', val !== 'OTRO');
+}
+
+function guardarOperador() {
+  const originalSap = document.getElementById('edit-op-original-sap').value.trim();
   const flota = document.getElementById('new-op-flota').value;
+  const turnoSel = document.getElementById('new-op-turno').value;
+  const turnoOtro = document.getElementById('new-op-turno-otro').value.trim();
+  const turno = turnoSel === 'OTRO' ? (turnoOtro || 'Otros') : turnoSel;
+
   const sap = document.getElementById('new-op-sap').value.trim();
   const run = document.getElementById('new-op-run').value.trim();
   const nombre = document.getElementById('new-op-nombre').value.trim().toUpperCase();
@@ -904,46 +1047,173 @@ function agregarOperador() {
     alert("⚠️ SAP, RUN y Nombre son obligatorios.");
     return;
   }
-  if (operadores.some(o => o.sap === sap)) {
-    alert("⚠️ Ya existe un operador con ese N° SAP.");
+
+  // Si es registro nuevo o cambió el SAP, validar duplicados
+  if ((!originalSap || originalSap !== sap) && operadores.some(o => o.sap === sap)) {
+    alert("⚠️ Ya existe otro operador registrado con ese N° SAP.");
     return;
   }
 
-  const nuevoOp = { sap, run, nombre, empresa, flota };
-  operadores.unshift(nuevoOp);
-  localStorage.setItem('sim_operadores', JSON.stringify(operadores));
-  guardarEnGoogle("operadores", sap, nuevoOp);
+  const operadorData = { sap, run, nombre, empresa, flota, turno };
 
+  if (originalSap) {
+    // Modo Edición: reemplazar en el array
+    const idx = operadores.findIndex(o => o.sap === originalSap);
+    if (idx !== -1) operadores[idx] = operadorData;
+    // Si cambió el número SAP, eliminar el documento antiguo en Google Cloud
+    if (originalSap !== sap) {
+      eliminarDeGoogle("operadores", originalSap);
+    }
+    mostrarToast("Operador actualizado correctamente");
+  } else {
+    // Modo Creación
+    operadores.unshift(operadorData);
+    mostrarToast("Operador guardado en Google Cloud");
+  }
+
+  localStorage.setItem('sim_operadores', JSON.stringify(operadores));
+  guardarEnGoogle("operadores", sap, operadorData);
+
+  cancelarEdicionOperador();
+  renderOperadores();
+}
+
+function editarOperador(sap) {
+  const op = operadores.find(o => o.sap === sap);
+  if (!op) return;
+
+  document.getElementById('edit-op-original-sap').value = op.sap;
+  document.getElementById('new-op-flota').value = op.flota || 'STD';
+  document.getElementById('new-op-sap').value = op.sap;
+  document.getElementById('new-op-run').value = op.run;
+  document.getElementById('new-op-nombre').value = op.nombre;
+  document.getElementById('new-op-empresa').value = op.empresa || "Codelco - Radomiro Tomic";
+
+  const selTurno = document.getElementById('new-op-turno');
+  let encontradoEnSelect = false;
+  for (let opt of selTurno.options) {
+    if (opt.value === op.turno) {
+      selTurno.value = op.turno;
+      encontradoEnSelect = true;
+    }
+  }
+  if (!encontradoEnSelect && op.turno) {
+    selTurno.value = 'OTRO';
+    document.getElementById('new-op-turno-otro').value = op.turno;
+    document.getElementById('new-op-turno-otro').classList.remove('hidden');
+  } else {
+    document.getElementById('new-op-turno-otro').classList.add('hidden');
+  }
+
+  document.getElementById('form-op-titulo').innerHTML = `<i data-lucide="edit-3" class="w-4 h-4 text-amber-500"></i> Editando Operador (SAP: ${op.sap})`;
+  document.getElementById('btn-cancelar-edicion').classList.remove('hidden');
+  document.getElementById('btn-guardar-operador').textContent = "Actualizar Cambios en Google";
+  document.getElementById('btn-guardar-operador').className = "w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold rounded-lg text-sm transition cursor-pointer";
+  lucide.createIcons();
+
+  // Desplazar suavemente hacia el formulario (útil en celular)
+  document.getElementById('form-operador-box').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelarEdicionOperador() {
+  document.getElementById('edit-op-original-sap').value = "";
   document.getElementById('new-op-sap').value = "";
   document.getElementById('new-op-run').value = "";
   document.getElementById('new-op-nombre').value = "";
+  document.getElementById('new-op-turno').value = "Turno 1 (E-1)";
+  document.getElementById('new-op-turno-otro').value = "";
+  document.getElementById('new-op-turno-otro').classList.add('hidden');
+
+  document.getElementById('form-op-titulo').innerHTML = `<i data-lucide="user-plus" class="w-4 h-4 text-brand-500"></i> Registrar Nuevo Operador`;
+  document.getElementById('btn-cancelar-edicion').classList.add('hidden');
+  document.getElementById('btn-guardar-operador').textContent = "Guardar Operador";
+  document.getElementById('btn-guardar-operador').className = "w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg text-sm transition cursor-pointer";
+  lucide.createIcons();
+}
+
+function eliminarOperador(sap) {
+  const op = operadores.find(o => o.sap === sap);
+  if (!op) return;
+  if (!confirm(`¿Seguro que deseas eliminar a ${op.nombre} (SAP: ${sap})?`)) return;
+
+  operadores = operadores.filter(o => o.sap !== sap);
+  localStorage.setItem('sim_operadores', JSON.stringify(operadores));
+  eliminarDeGoogle("operadores", sap);
 
   renderOperadores();
-  renderSugerenciasSAP();
-  mostrarToast("Operador guardado en Google Cloud");
+  mostrarToast("Operador eliminado");
 }
 
 function renderOperadores() {
-  document.getElementById('tabla-operadores').innerHTML = operadores.map(o => `
-    <tr>
-      <td class="p-3">
-        <span class="px-2 py-0.5 rounded text-xs font-bold ${o.flota === 'CAT' ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400' : 'bg-brand-500/20 text-brand-600 dark:text-brand-400'}">
-          ${o.flota === 'CAT' ? 'CAT 798AC' : 'Komatsu / Std'}
-        </span>
-      </td>
-      <td class="p-3 font-mono font-bold">${o.sap}</td>
-      <td class="p-3 font-mono text-xs">${o.run}</td>
-      <td class="p-3 font-semibold">${o.nombre}</td>
-      <td class="p-3 text-right">
-        <button onclick="seleccionarSAP('${o.sap}', '${o.flota || 'STD'}'); switchTab('${o.flota === 'CAT' ? 'cat798' : 'registro'}');" 
-          class="px-3 py-1 bg-slate-800 dark:bg-slate-700 hover:bg-brand-600 text-white rounded text-xs font-semibold cursor-pointer">
-          Evaluar
-        </button>
-      </td>
-    </tr>
-  `).join('');
+  document.getElementById('badge-total-ops').textContent = operadores.length;
+  const filtro = (document.getElementById('filtro-operadores')?.value || '').toLowerCase();
+
+  const filtrados = operadores.filter(o =>
+    o.sap.toLowerCase().includes(filtro) ||
+    o.run.toLowerCase().includes(filtro) ||
+    o.nombre.toLowerCase().includes(filtro) ||
+    (o.turno || '').toLowerCase().includes(filtro)
+  );
+
+  document.getElementById('count-ops-filtrados').textContent = filtrados.length;
+
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / OPS_POR_PAGINA));
+  if (paginaActualOps > totalPaginas) paginaActualOps = totalPaginas;
+  const inicio = (paginaActualOps - 1) * OPS_POR_PAGINA;
+  const paginaSlice = filtrados.slice(inicio, inicio + OPS_POR_PAGINA);
+
+  const tbody = document.getElementById('tabla-operadores');
+  if (paginaSlice.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-500">No se encontraron operadores.</td></tr>`;
+  } else {
+    tbody.innerHTML = paginaSlice.map(o => `
+      <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+        <td class="p-3">
+          <span class="px-2 py-0.5 rounded text-[11px] font-bold block w-fit ${o.flota === 'CAT' ? 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400' : 'bg-brand-500/20 text-brand-600 dark:text-brand-400'}">
+            ${o.flota === 'CAT' ? 'CAT 798AC' : 'Komatsu / Std'}
+          </span>
+          <span class="text-[11px] text-slate-500 font-medium mt-0.5 block">${o.turno || 'Sin Turno'}</span>
+        </td>
+        <td class="p-3 font-mono font-bold">${o.sap}</td>
+        <td class="p-3 font-mono text-xs">${o.run}</td>
+        <td class="p-3 font-semibold">${o.nombre}</td>
+        <td class="p-3 text-right whitespace-nowrap space-x-1">
+          <button onclick="seleccionarSAP('${o.sap}', '${o.flota || 'STD'}'); switchTab('${o.flota === 'CAT' ? 'cat798' : 'registro'}');" 
+            class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-semibold cursor-pointer">
+            Evaluar
+          </button>
+          <button onclick="editarOperador('${o.sap}')" 
+            class="px-2.5 py-1 bg-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-500 hover:text-slate-950 rounded text-xs font-semibold cursor-pointer">
+            Editar
+          </button>
+          <button onclick="eliminarOperador('${o.sap}')" 
+            class="px-2.5 py-1 bg-rose-500/20 text-rose-500 hover:bg-rose-600 hover:text-white rounded text-xs font-semibold cursor-pointer">
+            Borrar
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Renderizar barra de paginación
+  const pagDiv = document.getElementById('paginacion-operadores');
+  if (filtrados.length > OPS_POR_PAGINA) {
+    pagDiv.innerHTML = `
+      <span>Mostrando ${inicio + 1} - ${Math.min(inicio + OPS_POR_PAGINA, filtrados.length)} de ${filtrados.length}</span>
+      <div class="flex gap-2">
+        <button onclick="paginaActualOps--; renderOperadores()" ${paginaActualOps === 1 ? 'disabled' : ''} class="px-3 py-1 rounded border border-slate-300 dark:border-slate-700 disabled:opacity-40 cursor-pointer">Anterior</button>
+        <span class="px-2 py-1 font-bold">Pág. ${paginaActualOps} / ${totalPaginas}</span>
+        <button onclick="paginaActualOps++; renderOperadores()" ${paginaActualOps === totalPaginas ? 'disabled' : ''} class="px-3 py-1 rounded border border-slate-300 dark:border-slate-700 disabled:opacity-40 cursor-pointer">Siguiente</button>
+      </div>
+    `;
+  } else {
+    pagDiv.innerHTML = `<span>Total: ${filtrados.length} operador(es)</span>`;
+  }
 }
 
+// ============================================================================
+// 13. CRUD INSTRUCTORES
+// ============================================================================
 function agregarInstructor() {
   const nombre = document.getElementById('new-inst-nombre').value.trim().toUpperCase();
   const sap = document.getElementById('new-inst-sap').value.trim() || "-";
@@ -987,7 +1257,7 @@ function renderInstructores() {
 function eliminarInstructor(id) {
   instructores = instructores.filter(i => i.id !== id);
   localStorage.setItem('sim_instructores', JSON.stringify(instructores));
-  if (db) db.collection("instructores").doc(String(id)).delete().catch(() => {});
+  eliminarDeGoogle("instructores", id);
   renderInstructores();
 }
 
