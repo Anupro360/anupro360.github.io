@@ -20,10 +20,6 @@
               500: '#f97316',
               600: '#ea580c',
               700: '#c2410c',
-            },
-            cat: {
-              500: '#eab308',
-              600: '#ca8a04',
             }
           }
         }
@@ -54,13 +50,13 @@
         <!-- Indicador Base de Datos Google -->
         <span id="db-status-badge" class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
           <span id="db-status-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
-          <span id="db-status-text">Modo Local (Sin Google)</span>
+          <span id="db-status-text">Conectando...</span>
         </span>
 
         <!-- BOTÓN MODO CLARO / OSCURO -->
         <button id="theme-toggle" onclick="toggleTheme()" class="flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-medium transition cursor-pointer">
           <i id="theme-icon" data-lucide="sun" class="w-4 h-4 text-amber-500"></i>
-          <span id="theme-label">Modo Claro</span>
+          <span id="theme-label" class="hidden sm:inline">Modo Claro</span>
         </button>
       </div>
     </div>
@@ -77,7 +73,7 @@
         <i data-lucide="history" class="w-4 h-4"></i> Bitácora y Excel
       </button>
       <button onclick="switchTab('operadores')" id="tab-operadores" class="nav-btn flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white whitespace-nowrap cursor-pointer">
-        <i data-lucide="users" class="w-4 h-4"></i> Operadores
+        <i data-lucide="users" class="w-4 h-4"></i> Operadores (<span id="badge-total-ops">0</span>)
       </button>
       <button onclick="switchTab('instructores')" id="tab-instructores" class="nav-btn flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 border-transparent text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white whitespace-nowrap cursor-pointer">
         <i data-lucide="hard-hat" class="w-4 h-4"></i> Instructores
@@ -88,9 +84,7 @@
   <!-- CONTENIDO PRINCIPAL -->
   <main class="max-w-7xl mx-auto w-full px-4 py-6 flex-1 space-y-6">
 
-    <!-- ============================================================== -->
-    <!-- BARRA DE SESIÓN ACTIVA EN VIVO (APARECE AL INICIAR UNA SESIÓN) -->
-    <!-- ============================================================== -->
+    <!-- BANNER DE SESIÓN ACTIVA EN VIVO -->
     <div id="banner-sesion-activa" class="hidden bg-emerald-950/90 border-2 border-emerald-500 text-white p-4 rounded-xl shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <span class="relative flex h-3.5 w-3.5">
@@ -132,40 +126,62 @@
               </button>
             </div>
 
-            <div>
+            <div class="relative">
               <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
-                Ingresar N° SAP
+                Buscar por N° SAP, RUN o Apellido
               </label>
-              <input type="text" id="input-sap" oninput="buscarPorSAP(this.value, 'STD')" placeholder="Ej: 450123..." 
-                class="w-full px-4 py-3 text-lg font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
-              <div id="sap-suggestions" class="mt-2 flex flex-wrap gap-1.5"></div>
+              <input type="text" id="input-sap" oninput="buscarOperadorEnSala(this.value, 'STD')" autocomplete="off" placeholder="Escribe SAP o Apellido..." 
+                class="w-full px-4 py-3 text-base font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
+              <!-- Desplegable dinámico de coincidencias (escalable a +1000 ops) -->
+              <div id="sap-dropdown-std" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg shadow-xl z-20 max-h-56 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700"></div>
             </div>
 
             <div id="operador-card" class="p-3.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1.5">
-              <div class="text-xs text-slate-500 dark:text-slate-400">Operador Seleccionado:</div>
-              <div id="op-nombre" class="font-bold text-base">Ingrese un SAP para cargar datos...</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-500 dark:text-slate-400">Operador Seleccionado:</span>
+                <span id="op-turno-badge" class="hidden text-xs font-bold px-2 py-0.5 rounded bg-brand-500/20 text-brand-600 dark:text-brand-400"></span>
+              </div>
+              <div id="op-nombre" class="font-bold text-base">Busque un operador por SAP o apellido...</div>
               <div class="flex flex-wrap gap-4 text-xs text-slate-600 dark:text-slate-300 pt-1">
                 <span><strong>RUN:</strong> <span id="op-run" class="font-mono">-</span></span>
                 <span><strong>SAP:</strong> <span id="op-sap" class="font-mono">-</span></span>
               </div>
-              <!-- Historial previo del operador -->
               <div id="op-resumen-previo" class="hidden pt-2 mt-2 border-t border-slate-200 dark:border-slate-700 text-xs"></div>
             </div>
 
-            <div>
-              <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
-                Condición / Tipo de Capacitación
-              </label>
-              <select id="select-condicion" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium">
-                <option value="Operador Nuevo BEL">Operador Nuevo BEL</option>
-                <option value="Alumno en Práctica">Alumno en Práctica</option>
-                <option value="Operador Avezado / Con Experiencia">Operador Avezado / Con Experiencia</option>
-                <option value="Reconversión">Reconversión</option>
-                <option value="Homologación">Homologación</option>
-                <option value="Plazo Fijo">Operador Plazo Fijo</option>
-                <option value="Diagnóstico Anual">Diagnóstico Anual</option>
-                <option value="Plan CIP / Específico">Plan CIP / Entrenamiento Específico</option>
-              </select>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                  Turno / Grupo Sesión
+                </label>
+                <select id="select-turno-sesion" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium">
+                  <option value="Turno 1 (E-1)">Turno 1 (E-1)</option>
+                  <option value="Turno 2 (E-2)">Turno 2 (E-2)</option>
+                  <option value="Turno 3 (E-3)">Turno 3 (E-3)</option>
+                  <option value="Turno 4 (E-4)">Turno 4 (E-4)</option>
+                  <option value="Pre Contrato / Aprendices">Pre Contrato / Aprendices</option>
+                  <option value="Plazo Fijo (PF)">Plazo Fijo (PF)</option>
+                  <option value="Mantenedores / Staff">Mantenedores / Staff</option>
+                  <option value="Otros">Otros</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+                  Condición / Tipo
+                </label>
+                <select id="select-condicion" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium">
+                  <option value="Operador Nuevo BEL">Operador Nuevo BEL</option>
+                  <option value="Alumno en Práctica">Alumno en Práctica</option>
+                  <option value="Operador Avezado / Con Experiencia">Operador Avezado / Experiencia</option>
+                  <option value="Reconversión / Transformación">Reconversión / Transformación</option>
+                  <option value="Homologación">Homologación</option>
+                  <option value="Re-Instrucción">Re-Instrucción</option>
+                  <option value="Plazo Fijo">Operador Plazo Fijo</option>
+                  <option value="Diagnóstico Anual">Diagnóstico Anual</option>
+                  <option value="Plan CIP / Específico">Plan CIP / Específico</option>
+                  <option value="Mantenedores">Mantenedores</option>
+                </select>
+              </div>
             </div>
           </div>
 
@@ -179,7 +195,7 @@
               <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
                 Instructor de Capacitación (Simulador)
               </label>
-              <input type="text" id="input-instructor-cap" value="Instructor Capacitación (Titular)" 
+              <input type="text" id="input-instructor-cap" value="CONTRERAS MUNOZ, GUILLERMO" 
                 class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/70 text-sm font-semibold text-brand-600 dark:text-brand-400" />
             </div>
 
@@ -201,7 +217,6 @@
               </div>
             </div>
 
-            <!-- Botón Iniciar Sesión (Captura Hora Entrada) -->
             <div class="pt-1">
               <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-1.5">
                 <span>Hora Entrada: <strong id="display-hora-entrada" class="font-mono text-slate-900 dark:text-white">Pendiente</strong></span>
@@ -240,11 +255,10 @@
               <select id="select-plan" onchange="cargarActividades()" class="w-full px-3 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium"></select>
             </div>
 
-            <!-- Lista de Actividades con Contador de Reprobaciones + Cierres de Brechas -->
             <div class="pt-1">
               <div class="flex items-center justify-between mb-2">
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                  Escenarios (Registre intentos, cierres de brechas y aprobación)
+                  Escenarios (Intentos, cierres de brechas y aprobación)
                 </span>
                 <span id="contador-seleccion" class="text-xs font-semibold px-2 py-0.5 rounded bg-brand-500/10 text-brand-600 dark:text-brand-400">
                   0 registradas
@@ -271,7 +285,6 @@
     <!-- PESTAÑA 2: CATERPILLAR 798AC (FLOTA MAYOR / SENIOR)            -->
     <!-- ============================================================== -->
     <section id="view-cat798" class="hidden space-y-6">
-      <!-- Encabezado distintivo CAT 798AC -->
       <div class="bg-gradient-to-r from-yellow-600/20 via-amber-500/10 to-transparent border border-yellow-500/40 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div class="flex items-center gap-3">
           <div class="bg-yellow-500 text-slate-950 p-2.5 rounded-lg font-black text-sm">CAT 798AC</div>
@@ -290,7 +303,7 @@
         </div>
       </div>
 
-      <!-- SUB-VISTA A: OPERACIÓN Y EVALUACIÓN CAT 798AC -->
+      <!-- SUB-VISTA A: OPERACIÓN CAT 798AC -->
       <div id="cat-sub-operacion" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div class="lg:col-span-5 space-y-5">
           <div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-yellow-500/30 shadow-sm space-y-4">
@@ -303,15 +316,19 @@
               </button>
             </div>
 
-            <div>
-              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Buscar SAP Operador 798AC</label>
-              <input type="text" id="cat-input-sap" oninput="buscarPorSAP(this.value, 'CAT')" placeholder="Ingrese SAP de operador 798AC..." 
-                class="w-full px-4 py-3 text-lg font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-yellow-500 focus:outline-none" />
-              <div id="cat-sap-suggestions" class="mt-2 flex flex-wrap gap-1.5"></div>
+            <div class="relative">
+              <label class="block text-xs font-semibold uppercase text-slate-500 mb-1">Buscar por SAP o Apellido (Flota 798AC)</label>
+              <input type="text" id="cat-input-sap" oninput="buscarOperadorEnSala(this.value, 'CAT')" autocomplete="off" placeholder="Escribe SAP o Apellido..." 
+                class="w-full px-4 py-3 text-base font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-yellow-500 focus:outline-none" />
+              <div id="sap-dropdown-cat" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg shadow-xl z-20 max-h-56 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-700"></div>
             </div>
 
             <div id="cat-operador-card" class="p-3.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 space-y-1">
-              <div id="cat-op-nombre" class="font-bold text-base">Seleccione un operador habilitado para 798AC...</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-slate-500">Operador 798AC:</span>
+                <span id="cat-op-turno-badge" class="hidden text-xs font-bold px-2 py-0.5 rounded bg-yellow-500/20 text-yellow-600 dark:text-yellow-400"></span>
+              </div>
+              <div id="cat-op-nombre" class="font-bold text-base">Busque un operador habilitado para 798AC...</div>
               <div class="flex gap-4 text-xs text-slate-500 dark:text-slate-400">
                 <span><strong>RUN:</strong> <span id="cat-op-run" class="font-mono">-</span></span>
                 <span><strong>SAP:</strong> <span id="cat-op-sap" class="font-mono">-</span></span>
@@ -346,7 +363,6 @@
               </div>
             </div>
 
-            <!-- Lista de Actividades y Cierres de Brechas del Módulo 798AC -->
             <div id="cat-lista-actividades" class="space-y-3 max-h-[420px] overflow-y-auto pr-1"></div>
 
             <div>
@@ -361,7 +377,7 @@
         </div>
       </div>
 
-      <!-- SUB-VISTA B: CONSTRUCTOR DE PLANES, MÓDULOS Y CIERRES DE BRECHAS CAT 798AC -->
+      <!-- SUB-VISTA B: CONSTRUCTOR CAT 798AC -->
       <div id="cat-sub-constructor" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
         <div class="lg:col-span-5 bg-white dark:bg-slate-900 p-5 rounded-xl border border-yellow-500/40 shadow-sm space-y-4 h-fit">
           <h3 class="font-bold text-base text-yellow-600 dark:text-yellow-400">Configurar Malla Curricular CAT 798AC</h3>
@@ -383,7 +399,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold mb-1">Cierres de Brecha del Módulo (Uno por línea, ej. los 10 cierres)</label>
+            <label class="block text-xs font-semibold mb-1">Cierres de Brecha del Módulo (Uno por línea)</label>
             <textarea id="new-cat-brechas" rows="5" placeholder="CB 01 - Reconocimiento sistema AFEX&#10;CB 02 - Protocolo detención segura&#10;CB 03 - Activación manual supresión..." 
               class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs font-mono"></textarea>
           </div>
@@ -408,10 +424,10 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 class="font-bold text-lg">Bitácora Completa de Capacitaciones</h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Incluye horas reales, intentos, reprobaciones, cierres de brechas y tiempos</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Incluye turnos, horas reales, intentos, reprobaciones, cierres de brechas y tiempos</p>
           </div>
           <div class="flex flex-wrap gap-2">
-            <input type="text" id="filtro-historial" oninput="renderHistorial()" placeholder="Buscar SAP, Nombre o Equipo..." 
+            <input type="text" id="filtro-historial" oninput="renderHistorial()" placeholder="Buscar SAP, Nombre, Turno o Equipo..." 
               class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
             <button onclick="exportarExcel()" class="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition cursor-pointer">
               <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Exportar Excel
@@ -424,7 +440,7 @@
             <thead>
               <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50">
                 <th class="p-3">Fecha / Horario</th>
-                <th class="p-3">Operador</th>
+                <th class="p-3">Operador / Turno</th>
                 <th class="p-3">Equipo / Plan</th>
                 <th class="p-3">Detalle Actividades, Intentos y Brechas</th>
                 <th class="p-3">Instructores</th>
@@ -438,28 +454,55 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- PESTAÑA 4: GESTIÓN DE OPERADORES (FLOTA ESTÁNDAR Y CAT 798AC)  -->
+    <!-- PESTAÑA 4: GESTIÓN DE OPERADORES (CREAR, EDITAR, ELIMINAR)     -->
     <!-- ============================================================== -->
     <section id="view-operadores" class="hidden space-y-5">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div class="lg:col-span-4 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 h-fit">
-          <h2 class="font-bold text-base flex items-center gap-2">
-            <i data-lucide="user-plus" class="w-4 h-4 text-brand-500"></i> Registrar Nuevo Operador
-          </h2>
+        <!-- Formulario Crear / Editar Operador -->
+        <div id="form-operador-box" class="lg:col-span-4 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 h-fit">
+          <div class="flex items-center justify-between">
+            <h2 id="form-op-titulo" class="font-bold text-base flex items-center gap-2">
+              <i data-lucide="user-plus" class="w-4 h-4 text-brand-500"></i> Registrar Nuevo Operador
+            </h2>
+            <button id="btn-cancelar-edicion" onclick="cancelarEdicionOperador()" class="hidden text-xs text-rose-500 hover:underline font-semibold cursor-pointer">
+              Cancelar Edición
+            </button>
+          </div>
+
+          <input type="hidden" id="edit-op-original-sap" value="" />
+
           <div>
             <label class="block text-xs font-semibold mb-1">Flota / Categoría *</label>
             <select id="new-op-flota" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-bold">
-              <option value="STD">Flota Komatsu / Estándar</option>
+              <option value="STD">Flota Komatsu / Palas / Estándar</option>
               <option value="CAT">Caterpillar 798AC (Operador Senior)</option>
             </select>
           </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1">Turno / Grupo Asignado *</label>
+            <select id="new-op-turno" onchange="toggleOtroTurnoInput()" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-medium">
+              <option value="Turno 1 (E-1)">Turno 1 (E-1)</option>
+              <option value="Turno 2 (E-2)">Turno 2 (E-2)</option>
+              <option value="Turno 3 (E-3)">Turno 3 (E-3)</option>
+              <option value="Turno 4 (E-4)">Turno 4 (E-4)</option>
+              <option value="Operadores Aprendices (Sin Experiencia)">Operadores Aprendices (Sin Experiencia)</option>
+              <option value="Plazo Fijo Con Experiencia (PF)">Plazo Fijo Con Experiencia (PF)</option>
+              <option value="Personal Komatsu Palas">Personal Komatsu Palas</option>
+              <option value="Operadores Mantenedores">Operadores Mantenedores</option>
+              <option value="Staff DRT">Staff DRT</option>
+              <option value="OTRO">Otro (Escribir Turno / Pre-Contrato)...</option>
+            </select>
+            <input type="text" id="new-op-turno-otro" placeholder="Ej: Pre Contrato 8 Turno 2..." class="hidden mt-2 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+          </div>
+
           <div>
             <label class="block text-xs font-semibold mb-1">N° SAP *</label>
-            <input type="text" id="new-op-sap" placeholder="Ej: 458921" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
+            <input type="text" id="new-op-sap" placeholder="Ej: 139791" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">RUN (ID SimControl) *</label>
-            <input type="text" id="new-op-run" placeholder="Ej: 14113209-1" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
+            <input type="text" id="new-op-run" placeholder="Ej: 13079151-7" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm font-mono" />
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Nombre Completo *</label>
@@ -469,27 +512,39 @@
             <label class="block text-xs font-semibold mb-1">Empresa / Faena</label>
             <input type="text" id="new-op-empresa" value="Codelco - Radomiro Tomic" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
           </div>
-          <button onclick="agregarOperador()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg text-sm transition cursor-pointer">
+          <button id="btn-guardar-operador" onclick="guardarOperador()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg text-sm transition cursor-pointer">
             Guardar Operador
           </button>
         </div>
 
+        <!-- Tabla Paginada y Buscador para +1.000 Operadores -->
         <div class="lg:col-span-8 bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <h2 class="font-bold text-base">Base Maestra de Operadores</h2>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="font-bold text-base">Base Maestra de Operadores (<span id="count-ops-filtrados">0</span>)</h2>
+              <p class="text-xs text-slate-500">Busca por SAP, RUN, Apellido o Turno para editar, eliminar o evaluar</p>
+            </div>
+            <input type="text" id="filtro-operadores" oninput="paginaActualOps=1; renderOperadores()" placeholder="🔍 Buscar SAP, RUN o Nombre..." 
+              class="px-3.5 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm w-full sm:w-64 focus:ring-2 focus:ring-brand-500 focus:outline-none" />
+          </div>
+
           <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse text-sm">
               <thead>
                 <tr class="border-b border-slate-200 dark:border-slate-800 text-xs uppercase text-slate-500 bg-slate-50 dark:bg-slate-800/50">
-                  <th class="p-3">Flota</th>
+                  <th class="p-3">Flota / Turno</th>
                   <th class="p-3">SAP</th>
                   <th class="p-3">RUN</th>
                   <th class="p-3">Nombre Completo</th>
-                  <th class="p-3 text-right">Acción</th>
+                  <th class="p-3 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody id="tabla-operadores" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
             </table>
           </div>
+
+          <!-- Controles de Paginación -->
+          <div id="paginacion-operadores" class="flex items-center justify-between pt-2 text-xs text-slate-500 dark:text-slate-400"></div>
         </div>
       </div>
     </section>
@@ -513,7 +568,7 @@
           </div>
           <div>
             <label class="block text-xs font-semibold mb-1">Área / Turno *</label>
-            <input type="text" id="new-inst-area" placeholder="Ej: Operaciones Mina - Turno A" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
+            <input type="text" id="new-inst-area" placeholder="Ej: Operaciones Mina - Turno 1" class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-sm" />
           </div>
           <button onclick="agregarInstructor()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-lg text-sm transition cursor-pointer">
             Guardar Instructor
@@ -541,7 +596,7 @@
 
   </main>
 
-  <!-- MODAL PARA REGISTRAR CIERRE DE BRECHAS EN UNA ACTIVIDAD -->
+  <!-- MODAL PARA REGISTRAR CIERRE DE BRECHAS -->
   <div id="modal-brecha" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-50 flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
@@ -597,7 +652,7 @@
     <span id="toast-msg">Guardado correctamente</span>
   </div>
 
-  <!-- SDK DE GOOGLE FIREBASE (COMPATIBLE SIN COMPILACIÓN) -->
+  <!-- SDK DE GOOGLE FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="app.js"></script>
